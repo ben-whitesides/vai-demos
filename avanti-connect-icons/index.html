@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVANTI Connect — Icon Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #060608;
+    --card: #0c0c10;
+    --elevated: #141418;
+    --border: #2a2a35;
+    --border-soft: #1a1a22;
+    --text: #e8e8ec;
+    --text-2: #8888a0;
+    --text-3: #555568;
+    --orange: #f7941e;
+    --green: #34d399;
+    --green-soft: #2bbf86;
+    --green-faint: rgba(52, 211, 153, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: #050505;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 50px 24px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .page-header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    letter-spacing: 0.02em;
+  }
+  .avanti {
+    color: var(--green);
+    font-weight: 700;
+  }
+  .page-header .lede {
+    color: var(--text-2);
+    margin-top: 12px;
+    font-size: 14px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+  .page-header .lede strong { color: var(--orange); }
+
+  /* Reference (current trophy) */
+  .reference {
+    margin-bottom: 50px;
+    text-align: center;
+  }
+  .reference h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--text-3);
+    margin-bottom: 16px;
+  }
+
+  /* Grid of options */
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+  @media (max-width: 900px) {
+    .options { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .options { grid-template-columns: 1fr; }
+  }
+
+  .option {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.2s;
+  }
+  .option:hover {
+    border-color: var(--green-soft);
+    transform: translateY(-2px);
+  }
+  .option-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .option-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.01em;
+    margin-bottom: 16px;
+  }
+
+  /* Phone nav bar mock — matches Badinho's screen */
+  .navbar {
+    background: var(--void);
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .back-arrow {
+    color: var(--text);
+    font-size: 22px;
+    line-height: 1;
+  }
+  .vai-y {
+    color: var(--orange);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    transform: rotate(180deg);
+    display: inline-block;
+  }
+  .avanti-pill {
+    background: var(--green);
+    color: #000;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 5px 14px;
+    border-radius: 100px;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .icon-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--orange);
+  }
+  .icon-btn.connect {
+    color: var(--green);
+  }
+  .icon-btn svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .clock svg {
+    color: var(--orange);
+  }
+
+  .rationale {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .rationale strong { color: var(--text); font-weight: 600; }
+
+  .pros-cons {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    font-size: 11px;
+  }
+  .pros, .cons {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.4;
+  }
+  .pros { background: rgba(52, 211, 153, 0.06); color: var(--green); }
+  .cons { background: rgba(247, 148, 30, 0.06); color: var(--orange); }
+
+  .label {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: -8px;
+    margin-bottom: 4px;
+  }
+
+  .footnote {
+    margin-top: 60px;
+    padding: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+  .footnote .pick {
+    color: var(--green);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1><span class="avanti">AVANTI</span> Connect — Icon Options</h1>
+      <p class="lede">
+        Current entry point uses a <strong>🏆 trophy</strong>, which reads as "achievements" or "leaderboard"
+        — wrong metaphor for a recruiting / coach-matching feature. Six alternatives below, each shown in the
+        same nav-bar context as the live screen.
+      </p>
+    </div>
+
+    <!-- Reference -->
+    <div class="reference">
+      <h2>Current — what we're replacing</h2>
+      <div style="max-width:340px;margin:0 auto">
+        <div class="navbar">
+          <div class="nav-left">
+            <span class="back-arrow">‹</span>
+            <span class="vai-y">Y</span>
+            <span class="avanti-pill">AVANTI</span>
+          </div>
+          <div class="nav-right">
+            <div class="icon-btn" style="color:var(--orange)" title="Trophy (current)">
+              <svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            </div>
+            <div class="icon-btn clock">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="label">trophy = "my wins" — wrong job</div>
+      </div>
+    </div>
+
+    <!-- Options grid -->
+    <div class="options">
+
+      <!-- Option 1: Whistle -->
+      <div class="option">
+        <div class="option-num">Option 01</div>
+        <div class="option-name">Whistle</div>
+        <div class="navbar">
+          <div class="nav-left">
+            <span class="back-arrow">‹</span>
+            <span class="vai-y">Y</span>
+            <span class="avanti-pill">AVANTI</span>
+          </div>
+          <div class="nav-right">
+            <div class="icon-btn connect">
+              <svg viewBox="0 0 24 24"><circle cx="9" cy="13" r="6"/><path d="M14.5 9.5 21 6"/><path d="M21 6v3"/><circle cx="9" cy="13" r="1.5" fill="currentColor"/></svg>
+            </div>
+            <div class="icon-btn clock">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="rationale">
+          <strong>Universal coach symbol.</strong> Athletes instantly know "this is the coach feature." Pairs with the AVANTI = AI coach branding.
+        </div>
+        <div class="pros-cons">
+          <div class="pros">+ Instant recognition<br>+ Coach = direct semantic</div>
+          <div class="cons">− Slightly playful<br>− Less premium feel</div>
+        </div>
+      </div>
+
+      <!-- Option 2: Radar -->
+      <div class="option">
+        <div class="option-num">Option 02</div>
+        <div class="option-name">Radar Pulse</div>
+        <div class="navbar">
+          <div class="nav-left">
+            <span class="back-arrow">‹</span>
+            <span class="vai-y">Y</span>
+            <span class="avanti-pill">AVANTI</span>
+          </div>
+          <div class="nav-right">
+            <div class="icon-btn connect">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 12 8 6"/><circle cx="12" cy="12" r="6" opacity="0.5"/><circle cx="12" cy="12" r="10" opacity="0.25"/></svg>
+            </div>
+            <div class="icon-btn clock">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="rationale">
+          <strong>"Scouts are looking at you."</strong> Futuristic, on-brand for AVANTI's AI/intelligence positioning. Says "this screen scans for opportunity."
+        </div>
+        <div class="pros-cons">
+          <div class="pros">+ Premium / futuristic<br>+ Unique to VAI</div>
+          <div class="cons">− Less obvious meaning<br>− Needs user to learn it</div>
+        </div>
+      </div>
+
+      <!-- Option 3: Compass -->
+      <div class="option">
+        <div class="option-num">Option 03</div>
+        <div class="option-name">Compass</div>
+        <div class="navbar">
+          <div class="nav-left">
+            <span class="back-arrow">‹</span>
+            <span class="vai-y">Y</span>
+            <span class="avanti-pill">AVANTI</span>
+          </div>
+          <div class="nav-right">
+            <div class="icon-btn connect">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <div class="icon-btn clock">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="rationale">
+          <strong>"Find your path."</strong> Recruiting is about direction — what college, what division, what fit. Compass nails that emotional beat without screaming "trophies."
+        </div>
+        <div class="pros-cons">
+          <div class="pros">+ Aspirational tone<br>+ Premium feel</div>
+          <div class="cons">− Not unique to recruiting<br>− Could mean "explore"</div>
+        </div>
+      </div>
+
+      <!-- Option 4: Connected nodes -->
+      <div class="option">
+        <div class="option-num">Option 04</div>
+        <div class="option-name">Network Nodes</div>
+        <div class="navbar">
+          <div class="nav-left">
+            <span class="back-arrow">‹</span>
+            <span class="vai-y">Y</span>
+            <span class="avanti-pill">AVANTI</span>
+          </div>
+          <div class="nav-right">
+            <div class="icon-btn connect">
+              <svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5" fill="currentColor"/><circle cx="18" cy="18" r="2.5" fill="currentColor"/><circle cx="12" cy="6" r="2.5" fill="currentColor"/><line x1="12" y1="8.5" x2="6" y2="15.5"/><line x1="12" y1="8.5" x2="18" y2="15.5"/><line x1="8.5" y1="18" x2="15.5" y2="18"/></svg>
+            </div>
+            <div class="icon-btn clock">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="rationale">
+          <strong>Literal "connect."</strong> Three nodes joined = athlete linking to coaches. Modern, abstract, premium. Doubles as a graph/network metaphor.
+        </div>
+        <div class="pros-cons">
+          <div class="pros">+ Literal "connect"<br>+ Most premium</div>
+          <div class="cons">− Abstract<br>− Looks like share icon</div>
+        </div>
+      </div>
+
+      <!-- Option 5: Person+ -->
+      <div class="option">
+        <div class="option-num">Option 05</div>
+        <div class="option-name">Person + Connect</div>
+        <div class="navbar">
+          <div class="nav-left">
+            <span class="back-arrow">‹</span>
+            <span class="vai-y">Y</span>
+            <span class="avanti-pill">AVANTI</span>
+          </div>
+          <div class="nav-right">
+            <div class="icon-btn connect">
+              <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            </div>
+            <div class="icon-btn clock">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="rationale">
+          <strong>The LinkedIn standard.</strong> Universal "add connection" icon — every user already knows what it means. Zero learning curve.
+        </div>
+        <div class="pros-cons">
+          <div class="pros">+ Zero learning<br>+ Universal</div>
+          <div class="cons">− Generic / boring<br>− Reads as "social"</div>
+        </div>
+      </div>
+
+      <!-- Option 6: AVANTI C mark -->
+      <div class="option">
+        <div class="option-num">Option 06</div>
+        <div class="option-name">"C" Mark</div>
+        <div class="navbar">
+          <div class="nav-left">
+            <span class="back-arrow">‹</span>
+            <span class="vai-y">Y</span>
+            <span class="avanti-pill">AVANTI</span>
+          </div>
+          <div class="nav-right">
+            <div class="icon-btn connect">
+              <svg viewBox="0 0 24 24"><path d="M17 7a7 7 0 1 0 0 10" stroke-width="2.5"/><path d="M14 12 L21 12" stroke-width="2.5"/><path d="M18 9 L21 12 L18 15" stroke-width="2.5"/></svg>
+            </div>
+            <div class="icon-btn clock">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="rationale">
+          <strong>Letterform + forward arrow.</strong> The "C" of Connect with motion — open arc on left, arrow piercing right. Custom to AVANTI Connect, becomes a wordless brand mark over time.
+        </div>
+        <div class="pros-cons">
+          <div class="pros">+ Custom / ownable<br>+ Forward / aspirational</div>
+          <div class="cons">− No instant meaning<br>− Needs label first time</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footnote">
+      <strong style="color:var(--text)">My pick:</strong>
+      <span class="pick">Option 04 — Network Nodes</span> is the strongest balance.
+      Premium, literal-enough for "connect," matches AVANTI's intelligence/AI positioning, and stands out from
+      every other generic-app icon.
+      <br><br>
+      <strong style="color:var(--text)">Safe bet:</strong>
+      <span style="color:var(--orange)">Option 05 — Person+</span> if you want zero user confusion on day one.
+      <br><br>
+      <strong style="color:var(--text)">Most distinctive:</strong>
+      <span style="color:var(--orange)">Option 06 — C Mark</span> if you want this icon to become the
+      <span class="avanti">AVANTI</span> Connect logo over time — like how the Apple Music ♪ became its own thing.
+      <br><br>
+      <span style="color:var(--text-3);font-family:'JetBrains Mono',monospace;font-size:11px">All icons rendered inline as SVG using brand tokens — no external assets needed for handoff.</span>
+    </div>
+  </div>
+</body>
+</html>
