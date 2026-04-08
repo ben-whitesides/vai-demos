@@ -132,6 +132,23 @@
     font-weight: 600;
     font-size: 22px;
     letter-spacing: 0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-title svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--green);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+  .nav-title svg circle {
+    fill: var(--green);
+    stroke: none;
   }
   .avanti {
     color: var(--green);
@@ -445,7 +462,17 @@
         <div class="screen">
           <div class="nav">
             <div class="back">‹</div>
-            <div class="nav-title"><span class="avanti">AVANTI</span> Connect</div>
+            <div class="nav-title">
+              <span><span class="avanti">AVANTI</span> Connect</span>
+              <svg viewBox="0 0 24 24" aria-label="AVANTI Connect mark">
+                <circle cx="6" cy="18" r="2.5"/>
+                <circle cx="18" cy="18" r="2.5"/>
+                <circle cx="12" cy="6" r="2.5"/>
+                <line x1="12" y1="8.5" x2="6" y2="15.5"/>
+                <line x1="12" y1="8.5" x2="18" y2="15.5"/>
+                <line x1="8.5" y1="18" x2="15.5" y2="18"/>
+              </svg>
+            </div>
           </div>
           <div class="subtitle">Find college coaches recruiting your sport.</div>
 
