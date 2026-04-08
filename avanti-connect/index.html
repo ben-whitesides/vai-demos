@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><span class="avanti">AVANTI</span> Connect — Refinement Mock</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Canonical VAI brand tokens — ~/Desktop/VAI Master/VAI Brand Assets/BRAND-INDEX.md */
+    --void: #060608;
+    --card: #0c0c10;
+    --elevated: #141418;
+    --surface-1: #1a1a20;
+    --surface-2: #222228;
+    --border: #2a2a35;
+    --border-soft: #1a1a22;
+    --text: #e8e8ec;
+    --text-2: #8888a0;
+    --text-3: #555568;
+    --orange: #f7941e;       /* Primary ~70% — buttons, CTAs */
+    --green: #34d399;        /* Secondary ~30% — AVANTI accent, active states */
+    --green-soft: #2bbf86;
+    --green-faint: rgba(52, 211, 153, 0.12);
+    --orange-faint: rgba(247, 148, 30, 0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    background: #050505;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border-soft);
+    padding-bottom: 30px;
+  }
+  .page-header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    letter-spacing: 0.02em;
+    color: var(--text);
+  }
+  .page-header p {
+    color: var(--text-2);
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  /* Phone frame */
+  .phone {
+    width: 380px;
+    background: var(--void);
+    border-radius: 40px;
+    border: 8px solid #1c1c1c;
+    box-shadow: 0 0 0 2px #0a0a0a, 0 30px 80px rgba(0,0,0,0.6);
+    overflow: hidden;
+    position: sticky;
+    top: 40px;
+  }
+  .status-bar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .notch {
+    width: 110px;
+    height: 28px;
+    background: #000;
+    border-radius: 0 0 14px 14px;
+    margin-top: -16px;
+  }
+  .status-icons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  /* App screen */
+  .screen {
+    padding: 0 24px 100px;
+    background:
+      radial-gradient(circle at 80% 70%, rgba(52, 211, 153, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 20% 10%, rgba(247, 148, 30, 0.04) 0%, transparent 40%),
+      var(--void);
+    min-height: 700px;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0 18px;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 24px;
+  }
+  .back {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    font-size: 22px;
+  }
+  .nav-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.01em;
+  }
+  .avanti {
+    color: var(--green);
+    font-weight: 700;
+  }
+  .subtitle {
+    color: var(--text-2);
+    font-size: 13px;
+    margin: -16px 0 24px 44px;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 28px;
+  }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .section-label {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+  .section-meta {
+    font-size: 12px;
+    color: var(--text-3);
+    font-weight: 500;
+  }
+  .select-all {
+    font-size: 12px;
+    color: var(--orange);
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .helper {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-top: 8px;
+  }
+
+  /* Pills */
+  .pill-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pill-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin: 0 -24px;
+    padding-left: 24px;
+    padding-right: 24px;
+    scrollbar-width: none;
+  }
+  .pill-scroll::-webkit-scrollbar { display: none; }
+  .pill {
+    padding: 9px 16px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    background: transparent;
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .pill:hover {
+    border-color: var(--green-soft);
+  }
+  .pill.active {
+    background: var(--green-faint);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* Search input */
+  .search {
+    position: relative;
+    margin-bottom: 12px;
+  }
+  .search input {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+  }
+  .search input::placeholder { color: var(--text-3); }
+  .search input:focus { border-color: var(--green-soft); }
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-3);
+    font-size: 16px;
+  }
+
+  /* Regions */
+  .region-group {
+    margin-top: 14px;
+  }
+  .region-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .region-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .region-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-3);
+  }
+  .region-states {
+    padding: 12px 0 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .state-pill {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    background: transparent;
+    color: var(--text-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .state-pill.active {
+    background: var(--green-faint);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* CTA — sticky bottom */
+  .cta-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 24px 36px;
+    background: linear-gradient(180deg, transparent 0%, var(--void) 30%);
+  }
+  .cta {
+    width: 100%;
+    padding: 16px;
+    background: var(--orange);
+    color: #0a0a0a;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cta:hover {
+    background: #ffa835;
+  }
+  .cta-meta {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 10px;
+  }
+
+  /* Notes column */
+  .notes h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.01em;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .change {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+  }
+  .change-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+  .change-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .change-body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  .change-body code {
+    background: #000;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--orange);
+  }
+  .delta {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-soft);
+    font-size: 12px;
+    display: flex;
+    gap: 18px;
+  }
+  .delta span:first-child { color: #ff6b6b; text-decoration: line-through; opacity: 0.7; }
+  .delta span:last-child { color: var(--orange); }
+
+  .brand-strip {
+    margin-top: 32px;
+    padding: 18px 22px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .brand-strip h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 14px;
+  }
+  .swatches {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .swatch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-2);
+  }
+  .chip {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1>AVANTI CONNECT — REFINEMENT</h1>
+      <p>Same screen, brand-aligned. Live mock on the left, change list on the right.</p>
+    </div>
+
+    <div class="grid">
+      <!-- PHONE MOCK -->
+      <div class="phone">
+        <div class="status-bar">
+          <span>9:41</span>
+          <div class="notch"></div>
+          <div class="status-icons">
+            <span>•••</span>
+            <span>📶</span>
+            <span>🔋</span>
+          </div>
+        </div>
+
+        <div class="screen">
+          <div class="nav">
+            <div class="back">‹</div>
+            <div class="nav-title"><span class="avanti">AVANTI</span> Connect</div>
+          </div>
+          <div class="subtitle">Find college coaches recruiting your sport.</div>
+
+          <!-- SPORT -->
+          <div class="section">
+            <div class="section-head">
+              <span class="section-label">Sport</span>
+            </div>
+            <div class="pill-scroll">
+              <button class="pill active">Basketball</button>
+              <button class="pill">Football</button>
+              <button class="pill">Baseball</button>
+              <button class="pill">Soccer</button>
+              <button class="pill">Lacrosse</button>
+              <button class="pill">Volleyball</button>
+              <button class="pill">Softball</button>
+              <button class="pill">Track &amp; Field</button>
+              <button class="pill">Wrestling</button>
+              <button class="pill">Hockey</button>
+              <button class="pill">Swimming</button>
+            </div>
+            <div class="helper">Swipe to see all sports</div>
+          </div>
+
+          <!-- DIVISION -->
+          <div class="section">
+            <div class="section-head">
+              <span class="section-label">NCAA Division</span>
+              <a class="select-all">All</a>
+            </div>
+            <div class="pill-row">
+              <button class="pill active">D-I</button>
+              <button class="pill active">D-II</button>
+              <button class="pill">D-III</button>
+              <button class="pill">NAIA</button>
+              <button class="pill">JUCO</button>
+            </div>
+          </div>
+
+          <!-- STATES -->
+          <div class="section">
+            <div class="section-head">
+              <span class="section-label">Location</span>
+              <a class="select-all">Nationwide</a>
+            </div>
+            <div class="search">
+              <span class="search-icon">⌕</span>
+              <input type="text" placeholder="Search states or regions">
+            </div>
+
+            <div class="region-group">
+              <div class="region-head">
+                <span class="region-name">West</span>
+                <span class="region-count">3 / 13</span>
+              </div>
+              <div class="region-states">
+                <button class="state-pill active">CA</button>
+                <button class="state-pill active">OR</button>
+                <button class="state-pill active">WA</button>
+                <button class="state-pill">NV</button>
+                <button class="state-pill">AZ</button>
+                <button class="state-pill">UT</button>
+                <button class="state-pill">CO</button>
+                <button class="state-pill">+6</button>
+              </div>
+            </div>
+
+            <div class="region-group">
+              <div class="region-head">
+                <span class="region-name">Southeast</span>
+                <span class="region-count">0 / 12</span>
+              </div>
+            </div>
+
+            <div class="region-group">
+              <div class="region-head">
+                <span class="region-name">Midwest</span>
+                <span class="region-count">0 / 12</span>
+              </div>
+            </div>
+
+            <div class="region-group">
+              <div class="region-head">
+                <span class="region-name">Northeast</span>
+                <span class="region-count">0 / 9</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA sticky -->
+        <div class="cta-wrap">
+          <button class="cta">Search Coaches</button>
+          <div class="cta-meta">3 sports • 2 divisions • 3 states</div>
+        </div>
+      </div>
+
+      <!-- NOTES -->
+      <div class="notes">
+        <h2>Simple Brand-Aligned Changes</h2>
+
+        <div class="change">
+          <div class="change-num">Change 01 — Sport List</div>
+          <div class="change-title">Real VAI sports, horizontal scroll</div>
+          <div class="change-body">
+            Badinho's mock has 3 sports (badminton, hockey, soccer) — wrong list, no scroll. Replace with VAI's actual core sports as a horizontally scrollable pill row. Active state uses gold tint, not solid fill.
+          </div>
+          <div class="delta">
+            <span>Badminton, Hockey, Soccer</span>
+            <span>Basketball, Football, Baseball, Soccer, Lacrosse, Volleyball, Softball, T&amp;F, Wrestling, Hockey, Swimming…</span>
+          </div>
+        </div>
+
+        <div class="change">
+          <div class="change-num">Change 02 — Division Clarity</div>
+          <div class="change-title">Label the section, expand to NAIA + JUCO</div>
+          <div class="change-body">
+            Current: unlabeled <code>I, II, III</code> circles. Cold user has no idea what these are. Label as <code>NCAA Division</code>, use <code>D-I / D-II / D-III</code> readable format, add NAIA + JUCO so non-NCAA athletes aren't excluded.
+          </div>
+          <div class="delta">
+            <span>I  II  III</span>
+            <span>D-I  D-II  D-III  NAIA  JUCO</span>
+          </div>
+        </div>
+
+        <div class="change">
+          <div class="change-num">Change 03 — Kill the State Wall</div>
+          <div class="change-title">Search + collapsible regions</div>
+          <div class="change-body">
+            The 50-dot state wall is the biggest UX problem. Visual noise on a phone, hard to tap accurately, no information density. Replace with: <br>
+            (a) Search bar at top — type <code>tex</code>, get Texas<br>
+            (b) Region groups (West, Southeast, Midwest, Northeast) collapsed by default<br>
+            (c) Per-region count (e.g. <code>3 / 13</code>) so user sees their selection at a glance<br>
+            (d) Top-right <code>Nationwide</code> shortcut — one tap selects all
+          </div>
+        </div>
+
+        <div class="change">
+          <div class="change-num">Change 04 — Correct Brand Tokens</div>
+          <div class="change-title">VAI Orange + AVANTI Green, not freelance hex</div>
+          <div class="change-body">
+            Pulled canonical tokens from <code>~/Desktop/VAI Master/VAI Brand Assets/BRAND-INDEX.md</code>. The orange in Badinho's mock is the right family but slightly off. Locked to:
+            <br><br>
+            • <code>#f7941e</code> VAI Orange — primary (~70%), section labels, CTA fill<br>
+            • <code>#34d399</code> VAI Green / <span class="avanti">AVANTI</span> green — secondary (~30%), active states, success<br>
+            • <code>#060608</code> Void Black — page background<br>
+            • <code>#0c0c10</code> Card Dark — surface elevation<br>
+            <br>
+            Also locked: <strong>black text on all colored buttons</strong> (per brand rule — never white on orange/green).
+          </div>
+        </div>
+
+        <div class="change">
+          <div class="change-num">Change 08 — <span class="avanti">AVANTI</span> = Always Green</div>
+          <div class="change-title">The word <span class="avanti">AVANTI</span> is always rendered in <span class="avanti">AVANTI</span> green</div>
+          <div class="change-body">
+            Brand rule: anywhere the word "<span class="avanti">AVANTI</span>" appears in product copy, marketing, or UI, it's rendered in <code>#34d399</code> at heavier weight. Treats the word like a logotype, not body text. Applied here on the screen header and in this notes column. Also picked up as the active-state color on filter pills and the green radial glow at 80% 70% on the phone screen background — same accent, two surfaces.
+          </div>
+        </div>
+
+        <div class="change">
+          <div class="change-num">Change 05 — Typography</div>
+          <div class="change-title">Oswald headings + JetBrains Mono numbers</div>
+          <div class="change-body">
+            Current screen uses default system font everywhere. Match the VAI brand: <strong>Oswald</strong> for the screen title, section labels, and CTA. <strong>JetBrains Mono</strong> for state codes (<code>CA / TX / NY</code>) and counts — gives the numeric data that surgical-instrument feel.
+          </div>
+        </div>
+
+        <div class="change">
+          <div class="change-num">Change 06 — Subhead + Selection Echo</div>
+          <div class="change-title">Tell the user what this screen does + what they've picked</div>
+          <div class="change-body">
+            Add a one-line subhead under the title: <em>"Find college coaches recruiting your sport."</em> Cold users need orientation in 1 sentence.
+            <br><br>
+            Above the CTA, show a tiny selection summary: <code>3 sports • 2 divisions • 3 states</code>. Cheap reassurance that the filters are working.
+          </div>
+        </div>
+
+        <div class="change">
+          <div class="change-num">Change 07 — CTA Polish</div>
+          <div class="change-title">Sticky bottom + gradient fade</div>
+          <div class="change-body">
+            Current CTA is a flat orange bar. Refined version: solid gold with black uppercase Oswald text, sticky to bottom of screen with a soft fade behind it so list content scrolls naturally underneath. Feels premium, not utility.
+          </div>
+        </div>
+
+        <div class="brand-strip">
+          <h3>Canonical Brand Tokens</h3>
+          <div class="swatches">
+            <div class="swatch"><div class="chip" style="background:#060608"></div>#060608 Void</div>
+            <div class="swatch"><div class="chip" style="background:#0c0c10"></div>#0c0c10 Card</div>
+            <div class="swatch"><div class="chip" style="background:#f7941e"></div>#f7941e Orange</div>
+            <div class="swatch"><div class="chip" style="background:#34d399"></div>#34d399 <span class="avanti">AVANTI</span> Green</div>
+            <div class="swatch"><div class="chip" style="background:#e8e8ec"></div>#e8e8ec Text</div>
+            <div class="swatch"><div class="chip" style="background:#8888a0"></div>#8888a0 Text-2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
