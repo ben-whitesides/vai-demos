@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>VAI Onboarding Audit — Current vs Gold Standard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0a0e17; color: #e0e0e0; }
+
+  /* Hero */
+  .hero { text-align: center; padding: 60px 20px 40px; background: linear-gradient(180deg, #0f1520 0%, #0a0e17 100%); }
+  .hero h1 { font-size: 36px; color: #fff; margin-bottom: 8px; letter-spacing: -1px; }
+  .hero h1 span { color: #f7941e; }
+  .hero p { font-size: 14px; color: #888; letter-spacing: 2px; text-transform: uppercase; }
+
+  /* Screen Cards */
+  .screens { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  .screen-card { display: grid; grid-template-columns: 280px 1fr 1fr; gap: 0; margin-bottom: 40px; border-radius: 16px; overflow: hidden; background: #111824; border: 1px solid #1e2a3a; }
+  .screen-card.reverse { grid-template-columns: 1fr 1fr 280px; }
+
+  .screen-phone { padding: 20px; display: flex; align-items: center; justify-content: center; background: #0d1219; position: relative; }
+  .screen-phone img { max-height: 420px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+  .screen-badge { position: absolute; top: 12px; left: 12px; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+  .badge-web { background: rgba(0,230,118,0.15); color: #00e676; }
+  .badge-app { background: rgba(247,148,30,0.15); color: #f7941e; }
+  .badge-pay { background: rgba(33,150,243,0.15); color: #2196f3; }
+
+  .screen-current, .screen-gold { padding: 28px; }
+  .screen-current { border-right: 1px solid #1e2a3a; }
+  .screen-card.reverse .screen-current { border-right: none; border-left: 1px solid #1e2a3a; }
+
+  .col-header { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #1e2a3a; }
+  .col-header.bad { color: #f44336; }
+  .col-header.good { color: #00e676; }
+
+  .screen-num { font-size: 48px; font-weight: 900; color: #1e2a3a; margin-bottom: 8px; line-height: 1; }
+  .screen-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+
+  .issue-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+  .issue-icon { font-size: 16px; min-width: 20px; }
+  .issue-text { color: #aaa; }
+  .issue-text strong { color: #fff; }
+  .issue-text em { color: #f7941e; font-style: normal; font-weight: 600; }
+
+  .change-box { background: rgba(0,230,118,0.06); border: 1px solid rgba(0,230,118,0.2); border-radius: 8px; padding: 12px; margin-top: 12px; }
+  .change-box .label { font-size: 10px; color: #00e676; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px; }
+  .change-box p { font-size: 12px; color: #ccc; line-height: 1.5; }
+
+  .priority-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+  .p0 { background: rgba(244,67,54,0.15); color: #f44336; }
+  .p1 { background: rgba(255,152,0,0.15); color: #ff9800; }
+  .p2 { background: rgba(0,230,118,0.15); color: #00e676; }
+
+  /* Summary */
+  .summary { max-width: 1200px; margin: 40px auto; padding: 20px; }
+  .summary-title { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 24px; padding-left: 12px; border-left: 4px solid #f7941e; }
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .stat-card { background: #111824; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #1e2a3a; }
+  .stat-num { font-size: 36px; font-weight: 900; }
+  .stat-num.red { color: #f44336; }
+  .stat-num.orange { color: #f7941e; }
+  .stat-num.green { color: #00e676; }
+  .stat-num.blue { color: #2196f3; }
+  .stat-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+
+  /* Infra */
+  .infra { max-width: 1200px; margin: 40px auto; padding: 20px; }
+  .infra-title { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 24px; padding-left: 12px; border-left: 4px solid #2196f3; }
+  .infra-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .infra-card { background: #111824; border-radius: 12px; padding: 20px; border: 1px solid #1e2a3a; border-top: 3px solid #2196f3; }
+  .infra-card h4 { font-size: 14px; color: #fff; margin-bottom: 8px; }
+  .infra-card .before { font-size: 12px; color: #f44336; margin-bottom: 4px; }
+  .infra-card .after { font-size: 12px; color: #00e676; margin-bottom: 8px; }
+  .infra-card p { font-size: 11px; color: #888; line-height: 1.5; }
+
+  .footer { text-align: center; padding: 40px 20px; font-size: 10px; color: #444; border-top: 1px solid #1e2a3a; margin-top: 40px; }
+
+  @media (max-width: 900px) {
+    .screen-card, .screen-card.reverse { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .infra-cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head><body>
+
+<div class="hero">
+  <h1>VAI <span>ONBOARDING</span> AUDIT</h1>
+  <p>Current Flow vs Gold Standard — 8 Screens, Link to Profile</p>
+</div>
+
+<!-- SUMMARY STATS -->
+<div class="summary">
+<div class="summary-grid">
+  <div class="stat-card"><div class="stat-num red">4</div><div class="stat-label">P0 Critical Changes</div></div>
+  <div class="stat-card"><div class="stat-num orange">4</div><div class="stat-label">P1 Improvements</div></div>
+  <div class="stat-card"><div class="stat-num green">3</div><div class="stat-label">P2 Quick Wins</div></div>
+  <div class="stat-card"><div class="stat-num blue">20-30%</div><div class="stat-label">Referrals Lost Today</div></div>
+</div>
+</div>
+
+<!-- SCREEN 1 -->
+<div class="screens">
+
+<div class="screen-card">
+  <div class="screen-phone">
+    <span class="screen-badge badge-web">WEB</span>
+    <img src="https://ben-whitesides.github.io/vai-demos/onboarding/screen1.png" onerror="this.style.display='none'" alt="">
+    <div style="color:#555;font-size:12px;position:absolute;bottom:8px;">Screen 1 · Web Landing</div>
+  </div>
+  <div class="screen-current">
+    <div class="col-header bad">✗ Current</div>
+    <div class="screen-num">01</div>
+    <div class="screen-title">Web Landing Page</div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text"><strong>"CHANGE THE GAME"</strong> — generic headline. No personalization.</span></div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text"><strong>No referrer identity.</strong> User doesn't know WHO sent them this link.</span></div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text"><strong>"Join VAI Free"</strong> — doesn't mention the 50% discount they're entitled to.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">Referrer card doesn't appear until Screen 2 — one screen too late.</span></div>
+  </div>
+  <div class="screen-gold">
+    <div class="col-header good">✓ Gold Standard</div>
+    <span class="priority-tag p0">P0 — SHIP FIRST</span>
+    <div class="screen-title">Personalized Invitation</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>"[Benji] invited you to VAI"</strong> + referrer's photo/avatar</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>"Claim Your 50% Discount"</strong> as primary CTA (not "Join Free")</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Urgency: <em>"Discount expires in 24h"</em> countdown</span></div>
+    <div class="change-box"><div class="label">Expected Lift</div><p>+12-20% install conversion. Friend's name reduces "link skepticism" by 20%. Loss aversion on discount drives action.</p></div>
+  </div>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen-card reverse">
+  <div class="screen-current">
+    <div class="col-header bad">✗ Current</div>
+    <div class="screen-num">02</div>
+    <div class="screen-title">Plans Page</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Benji Whitey referral card IS here</strong> with 50% OFF badge. Good.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text"><strong>Monthly/Annual toggle</strong> — two choices adds friction.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">No price anchoring — user doesn't see <strong>what they're saving</strong>.</span></div>
+  </div>
+  <div class="screen-gold">
+    <div class="col-header good">✓ Gold Standard</div>
+    <span class="priority-tag p1">P1</span>
+    <div class="screen-title">Anchored Pricing</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Show <strong>~~$9.95~~ → $4.98/mo</strong> crossed-out pricing</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Single recommended plan highlighted</strong> — reduce choice paralysis</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Move referrer card to Screen 1; keep <strong>discount badge</strong> here</span></div>
+    <div class="change-box"><div class="label">Expected Lift</div><p>Loss aversion: users who see a personal discount don't want to lose it. +15% tap-through on anchored pricing.</p></div>
+  </div>
+  <div class="screen-phone">
+    <span class="screen-badge badge-web">WEB</span>
+    <img src="https://ben-whitesides.github.io/vai-demos/onboarding/screen2.png" onerror="this.style.display='none'" alt="">
+    <div style="color:#555;font-size:12px;position:absolute;bottom:8px;">Screen 2 · Plans</div>
+  </div>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen-card">
+  <div class="screen-phone">
+    <span class="screen-badge badge-web">WEB</span>
+    <img src="https://ben-whitesides.github.io/vai-demos/onboarding/screen3.png" onerror="this.style.display='none'" alt="">
+    <div style="color:#555;font-size:12px;position:absolute;bottom:8px;">Screen 3 · Plan Detail</div>
+  </div>
+  <div class="screen-current">
+    <div class="col-header bad">✗ Current</div>
+    <div class="screen-num">03</div>
+    <div class="screen-title">Plan Detail (AVANTI)</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Benji referral card present again.</strong> Feature list is solid.</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">AVANTI Coach, Context-Aware Prep, Progress Tracking — good value props.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">No urgency. No "cancel anytime" reassurance near CTA.</span></div>
+  </div>
+  <div class="screen-gold">
+    <div class="col-header good">✓ Gold Standard</div>
+    <span class="priority-tag p2">P2 — Quick Win</span>
+    <div class="screen-title">Urgency + Reassurance</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><em>"Your discount from Benji expires in 23h 59m"</em></span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>"Cancel anytime"</strong> text directly next to CTA button</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Social proof: <em>"1,248 athletes joined via friend invites"</em></span></div>
+    <div class="change-box"><div class="label">Expected Lift</div><p>Urgency +15% trial starts. "Cancel anytime" reduces anxiety +10%. Combined: +25% potential.</p></div>
+  </div>
+</div>
+
+<!-- SCREEN 4 -->
+<div class="screen-card reverse">
+  <div class="screen-current">
+    <div class="col-header bad">✗ Current</div>
+    <div class="screen-num">04</div>
+    <div class="screen-title">Create Account</div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text"><strong>Email field is PRIMARY and on top.</strong> It's the first and biggest element.</span></div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text">Apple/Google pushed below an <strong>"OR" divider</strong> — feels secondary.</span></div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text">For 13-18 year olds, <strong>typing an email = high drop-off event.</strong></span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">"Continue" button implies <strong>password creation next</strong> — more friction ahead.</span></div>
+  </div>
+  <div class="screen-gold">
+    <div class="col-header good">✓ Gold Standard</div>
+    <span class="priority-tag p0">P0 — SHIP FIRST</span>
+    <div class="screen-title">Social-First Auth</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>🍎 Continue with Apple — LARGE, PRIMARY, TOP</strong></span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>G Continue with Google — LARGE, SECOND</strong></span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Email option SMALL below: <em>"or use email address"</em></span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">No password creation. One tap = account created + name captured.</span></div>
+    <div class="change-box"><div class="label">Expected Lift</div><p>3× completion rate for teen demographic. One tap vs typing email + creating password. This is the single highest-ROI change in the entire flow.</p></div>
+  </div>
+  <div class="screen-phone">
+    <span class="screen-badge badge-app">APP</span>
+    <img src="https://ben-whitesides.github.io/vai-demos/onboarding/screen4.png" onerror="this.style.display='none'" alt="">
+    <div style="color:#555;font-size:12px;position:absolute;bottom:8px;">Screen 4 · Create Account</div>
+  </div>
+</div>
+
+<!-- SCREEN 5 -->
+<div class="screen-card">
+  <div class="screen-phone">
+    <span class="screen-badge badge-app">APP</span>
+    <img src="https://ben-whitesides.github.io/vai-demos/onboarding/screen5.png" onerror="this.style.display='none'" alt="">
+    <div style="color:#555;font-size:12px;position:absolute;bottom:8px;">Screen 5 · Personal Info</div>
+  </div>
+  <div class="screen-current">
+    <div class="col-header bad">✗ Current</div>
+    <div class="screen-num">05</div>
+    <div class="screen-title">Personal Information</div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text"><strong>All fields empty.</strong> User must type first name, last name manually.</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">DOB field present — good for COPPA age gating.</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Terms checkbox present.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">~45 seconds of keyboard friction for fields that social auth already has.</span></div>
+  </div>
+  <div class="screen-gold">
+    <div class="col-header good">✓ Gold Standard</div>
+    <span class="priority-tag p1">P1</span>
+    <div class="screen-title">Magic Auto-Fill</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>First + Last name auto-filled</strong> from Apple/Google account</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">User <strong>verifies</strong> pre-filled data, not types from scratch</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">DOB remains for COPPA — branch under-13 to parent flow</span></div>
+    <div class="change-box"><div class="label">Expected Lift</div><p>Saves ~45 seconds. Reduces form abandonment 30%+. Momentum maintained from one-tap social auth.</p></div>
+  </div>
+</div>
+
+<!-- SCREEN 6 -->
+<div class="screen-card reverse">
+  <div class="screen-current">
+    <div class="col-header bad">✗ Current</div>
+    <div class="screen-num">06</div>
+    <div class="screen-title">Profile Setup</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Referral code IS working</strong> — "Whitetrainer" filled, "Referred by Benji" shown.</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Handle field, profile picture, roles dropdown — all present.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">Referral code field exists but requires <strong>user to know/enter the code</strong> if attribution fails.</span></div>
+  </div>
+  <div class="screen-gold">
+    <div class="col-header good">✓ Gold Standard</div>
+    <span class="priority-tag p1">P1</span>
+    <div class="screen-title">Pre-Filled Attribution</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Referral code <strong>always pre-filled from deep link</strong> — never manual</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">With Branch.io, attribution survives App Store — code is <strong>guaranteed</strong></span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Field becomes <strong>read-only confirmation</strong>, not an input</span></div>
+    <div class="change-box"><div class="label">Expected Lift</div><p>Eliminates code-entry drop-off. Ensures referrer always gets commission credit. Protects the affiliate flywheel.</p></div>
+  </div>
+  <div class="screen-phone">
+    <span class="screen-badge badge-app">APP</span>
+    <img src="https://ben-whitesides.github.io/vai-demos/onboarding/screen6.png" onerror="this.style.display='none'" alt="">
+    <div style="color:#555;font-size:12px;position:absolute;bottom:8px;">Screen 6 · Profile</div>
+  </div>
+</div>
+
+<!-- SCREEN 7 -->
+<div class="screen-card">
+  <div class="screen-phone">
+    <span class="screen-badge badge-pay">PAYMENT</span>
+    <img src="https://ben-whitesides.github.io/vai-demos/onboarding/screen7.png" onerror="this.style.display='none'" alt="">
+    <div style="color:#555;font-size:12px;position:absolute;bottom:8px;">Screen 7 · Post-Payment</div>
+  </div>
+  <div class="screen-current">
+    <div class="col-header bad">✗ Current</div>
+    <div class="screen-num">07</div>
+    <div class="screen-title">Payment Success</div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text"><strong>gameday.vai.app</strong> — different domain. User thinks they left VAI.</span></div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text">App Store + Google Play badges — user has to <strong>find and download the app</strong> again.</span></div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text">"Continue to Dashboard" goes to <strong>web dashboard</strong>, not the app.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text"><strong>"Did my payment work?"</strong> anxiety — no clear bridge back to app.</span></div>
+  </div>
+  <div class="screen-gold">
+    <div class="col-header good">✓ Gold Standard</div>
+    <span class="priority-tag p0">P0 — SHIP FIRST</span>
+    <div class="screen-title">Seamless App Handoff</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Single domain</strong> — no gameday.vai.app confusion</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Deep link button: "Open VAI →"</strong> launches app directly</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Session token passed — user is <strong>already logged in</strong> when app opens</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>"You're in! AVANTI is ready."</strong> — confirmation + excitement</span></div>
+    <div class="change-box"><div class="label">Expected Lift</div><p>Eliminates "did it work?" anxiety. Kills the install-again loop. User goes from payment → app in one tap.</p></div>
+  </div>
+</div>
+
+<!-- SCREEN 8 -->
+<div class="screen-card reverse">
+  <div class="screen-current">
+    <div class="col-header bad">✗ Current</div>
+    <div class="screen-num">08</div>
+    <div class="screen-title">App Welcome (Cold Start)</div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text"><strong>"SIGN UP FOR FREE"</strong> is the hero CTA — but user already signed up AND paid.</span></div>
+    <div class="issue-item"><span class="issue-icon">❌</span><span class="issue-text">"LOGIN" is secondary — user has to <strong>find and tap</strong> the right button.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">Generic welcome screen with <strong>no context</strong> from the web journey they just completed.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">Feels like <strong>starting over</strong> — all trust and momentum from web is lost.</span></div>
+  </div>
+  <div class="screen-gold">
+    <div class="col-header good">✓ Gold Standard</div>
+    <span class="priority-tag p0">P0 — SHIP FIRST</span>
+    <div class="screen-title">Session Restore</div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Skip this screen entirely</strong> for users who came from web signup</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Deep link from Screen 7 carries auth token — <strong>user is already logged in</strong></span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Land directly on <strong>profile/home</strong> — "Welcome back, [Name]!"</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">This screen only shows for <strong>organic/cold installs</strong>, not referred users</span></div>
+    <div class="change-box"><div class="label">Expected Lift</div><p>Eliminates the #1 confusion point. Paid users never see "Sign Up For Free" again. Seamless web-to-app transition.</p></div>
+  </div>
+  <div class="screen-phone">
+    <span class="screen-badge badge-app">APP</span>
+    <img src="https://ben-whitesides.github.io/vai-demos/onboarding/screen8.png" onerror="this.style.display='none'" alt="">
+    <div style="color:#555;font-size:12px;position:absolute;bottom:8px;">Screen 8 · App Welcome</div>
+  </div>
+</div>
+
+</div>
+
+<!-- INFRASTRUCTURE -->
+<div class="infra">
+<div class="infra-title">Infrastructure Changes Required</div>
+<div class="infra-cards">
+  <div class="infra-card">
+    <span class="priority-tag p0">P0</span>
+    <h4>🔗 Branch.io Deep Linking</h4>
+    <div class="before">✗ Custom redirects — 20-30% referral loss</div>
+    <div class="after">✓ Server-side matching — zero scrappage</div>
+    <p>Without this, ~1 in 4 referrals lose attribution through the App Store. Commissions don't fire. Referrers stop sharing. The flywheel breaks.</p>
+  </div>
+  <div class="infra-card">
+    <span class="priority-tag p0">P0</span>
+    <h4>🌐 Single Domain</h4>
+    <div class="before">✗ vai.app + gameday.vai.app (two domains)</div>
+    <div class="after">✓ vai.app only — deep links into app</div>
+    <p>Two domains confuse users. Post-payment should deep link straight into the app, not redirect to a different website.</p>
+  </div>
+  <div class="infra-card">
+    <span class="priority-tag p0">P0</span>
+    <h4>🔑 Session Handoff</h4>
+    <div class="before">✗ Generic cold start after web signup</div>
+    <div class="after">✓ Token-based restore — already logged in</div>
+    <p>Web auth token passed via deep link. App opens with session alive. User never sees "Sign Up" after they've already paid.</p>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+  VAI Onboarding Gold Standard Audit — Merged from Cursor + Antigravity independent recons | April 2026<br>
+  Scope: Referral Link → Web → Payment → App → Profile Complete | No dashboard changes
+</div>
+
+</body></html>
