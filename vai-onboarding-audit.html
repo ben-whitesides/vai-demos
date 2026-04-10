@@ -44,6 +44,11 @@
   .change-box { background: rgba(0,230,118,0.06); border: 1px solid rgba(0,230,118,0.2); border-radius: 8px; padding: 12px; margin-top: 12px; }
   .change-box .label { font-size: 10px; color: #00e676; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px; }
   .change-box p { font-size: 12px; color: #ccc; line-height: 1.5; }
+  .spec-box { background: rgba(33,150,243,0.06); border: 1px solid rgba(33,150,243,0.2); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .spec-box .label { font-size: 10px; color: #2196f3; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px; }
+  .spec-box ul { list-style: none; padding: 0; margin: 0; }
+  .spec-box li { font-size: 11px; color: #aaa; line-height: 1.5; padding: 3px 0; padding-left: 14px; position: relative; }
+  .spec-box li::before { content: "→"; position: absolute; left: 0; color: #2196f3; }
 
   .priority-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
   .p0 { background: rgba(244,67,54,0.15); color: #f44336; }
@@ -123,6 +128,11 @@
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>"Claim Your 50% Discount"</strong> as primary CTA (not "Join Free")</span></div>
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Urgency: <em>"Discount expires in 24h"</em> countdown</span></div>
     <div class="change-box"><div class="label">Expected Lift</div><p>+12-20% install conversion. Friend's name reduces "link skepticism" by 20%. Loss aversion on discount drives action.</p></div>
+    <div class="spec-box"><div class="label">How to Build</div><ul>
+      <li>Same page template — JS reads handle from <code>vai.app/share/HANDLE</code>, calls <code>GET /v1/users/public?handle=X</code>, injects name + avatar</li>
+      <li>Swap headline to <strong>"[Name] invited you to VAI"</strong>, CTA to <strong>"Claim Your 50% Discount →"</strong></li>
+      <li>Add countdown timer component (24h from first visit, stored in localStorage). Falls back to generic page if API call fails.</li>
+    </ul></div>
   </div>
 </div>
 
@@ -133,17 +143,22 @@
     <div class="screen-num">02</div>
     <div class="screen-title">Plans Page</div>
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Benji Whitey referral card IS here</strong> with 50% OFF badge. Good.</span></div>
-    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text"><strong>Monthly/Annual toggle</strong> — two choices adds friction.</span></div>
-    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">No price anchoring — user doesn't see <strong>what they're saving</strong>.</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Strikethrough pricing already works</strong> — $19.95 → $9.95. "MOST POPULAR" tag on VAI+.</span></div>
+    <div class="issue-item"><span class="issue-icon">⚠️</span><span class="issue-text">Scrolling page with all plans. Referrer card at top — good. Could emphasize the <strong>savings amount</strong> more ("You save $120/yr").</span></div>
   </div>
   <div class="screen-gold">
     <div class="col-header good">✓ Gold Standard</div>
     <span class="priority-tag p1">P1</span>
     <div class="screen-title">Anchored Pricing</div>
-    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Show <strong>~~$9.95~~ → $4.98/mo</strong> crossed-out pricing</span></div>
-    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>Single recommended plan highlighted</strong> — reduce choice paralysis</span></div>
-    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Move referrer card to Screen 1; keep <strong>discount badge</strong> here</span></div>
-    <div class="change-box"><div class="label">Expected Lift</div><p>Loss aversion: users who see a personal discount don't want to lose it. +15% tap-through on anchored pricing.</p></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Pricing anchoring <strong>already works</strong> — $19.95 → $9.95 strikethrough is live. Keep it.</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Add <strong>"You save $120/year"</strong> callout near the price to reinforce the savings amount</span></div>
+    <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Move referrer personalization UP to Screen 1 so trust transfers immediately on landing</span></div>
+    <div class="change-box"><div class="label">Expected Lift</div><p>Screen 2 is already strong. Main win: move referrer identity to Screen 1 so the trust transfer happens BEFORE they see plans. Savings callout reinforces the deal.</p></div>
+    <div class="spec-box"><div class="label">How to Build</div><ul>
+      <li>Screen 2 is mostly good as-is. Add a <strong>"You save $120/year"</strong> or <strong>"Save $10/mo with [Name]'s invite"</strong> line near the discounted price.</li>
+      <li>The referrer card currently lives here — once Screen 1 shows the referrer, this card becomes reinforcement (not the first introduction).</li>
+      <li>Consider auto-scrolling to the <strong>VAI+ "MOST POPULAR" card</strong> on page load so users don't have to scroll past the free tier to find it.</li>
+    </ul></div>
   </div>
   <div class="screen-phone">
     <span class="screen-badge badge-web">WEB</span>
@@ -175,6 +190,11 @@
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>"Cancel anytime"</strong> text directly next to CTA button</span></div>
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Social proof: <em>"1,248 athletes joined via friend invites"</em></span></div>
     <div class="change-box"><div class="label">Expected Lift</div><p>Urgency +15% trial starts. "Cancel anytime" reduces anxiety +10%. Combined: +25% potential.</p></div>
+    <div class="spec-box"><div class="label">How to Build</div><ul>
+      <li>Add <code>"Cancel anytime — no commitment"</code> text in small gray directly under the Get Started button</li>
+      <li>Add social proof line: <code>"1,248 athletes joined via friend invites this month"</code> — pull count from API or hardcode and update monthly</li>
+      <li>Urgency bar at top: <code>"Your 50% discount from [Name] expires in Xh Xm"</code> — same localStorage timer from Screen 1</li>
+    </ul></div>
   </div>
 </div>
 
@@ -198,6 +218,11 @@
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Email option SMALL below: <em>"or use email address"</em></span></div>
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">No password creation. One tap = account created + name captured.</span></div>
     <div class="change-box"><div class="label">Expected Lift</div><p>3× completion rate for teen demographic. One tap vs typing email + creating password. This is the single highest-ROI change in the entire flow.</p></div>
+    <div class="spec-box"><div class="label">How to Build</div><ul>
+      <li>Flip the layout: <strong>Apple Sign-In button → Google Sign-In button → then "OR" divider → small "Use email" link</strong>. Remove the email input field from this screen entirely.</li>
+      <li>Apple Sign-In is <strong>required by Apple</strong> if you offer any third-party social login. Make it full-width, dark style, top position.</li>
+      <li>Both Apple/Google SDKs return <strong>first name + last name + email</strong> — capture these for auto-fill on Screen 5. No password creation needed.</li>
+    </ul></div>
   </div>
   <div class="screen-phone">
     <span class="screen-badge badge-app">APP</span>
@@ -230,6 +255,11 @@
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">User <strong>verifies</strong> pre-filled data, not types from scratch</span></div>
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">DOB remains for COPPA — branch under-13 to parent flow</span></div>
     <div class="change-box"><div class="label">Expected Lift</div><p>Saves ~45 seconds. Reduces form abandonment 30%+. Momentum maintained from one-tap social auth.</p></div>
+    <div class="spec-box"><div class="label">How to Build</div><ul>
+      <li>On mount, check if <code>AppleAuth.fullName</code> or <code>GoogleSignIn.user.name</code> returned data — pre-fill First + Last fields with gray "verified" styling</li>
+      <li>Fields remain editable (user can override) but pre-populated saves the typing. Show subtle ✓ icon next to auto-filled fields.</li>
+      <li>DOB field stays manual — this is the COPPA age gate. If age &lt; 13 on submit, route to parent consent flow before proceeding.</li>
+    </ul></div>
   </div>
 </div>
 
@@ -251,6 +281,11 @@
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">With Branch.io, attribution survives App Store — code is <strong>guaranteed</strong></span></div>
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Field becomes <strong>read-only confirmation</strong>, not an input</span></div>
     <div class="change-box"><div class="label">Expected Lift</div><p>Eliminates code-entry drop-off. Ensures referrer always gets commission credit. Protects the affiliate flywheel.</p></div>
+    <div class="spec-box"><div class="label">How to Build</div><ul>
+      <li>Pass referral handle through deep link params or app state from web → app. On Screen 6 mount, check for stored referral handle and pre-fill the Referral Code field.</li>
+      <li>Make the field <strong>read-only with green checkmark</strong> when pre-filled. Show "Referred by [Name] — 50% off" confirmation text below.</li>
+      <li>Keep the field editable as fallback for users who arrive without attribution (organic installs). Manual entry is the backup, not the primary path.</li>
+    </ul></div>
   </div>
   <div class="screen-phone">
     <span class="screen-badge badge-app">APP</span>
@@ -284,6 +319,11 @@
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Session token passed — user is <strong>already logged in</strong> when app opens</span></div>
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text"><strong>"You're in! AVANTI is ready."</strong> — confirmation + excitement</span></div>
     <div class="change-box"><div class="label">Expected Lift</div><p>Eliminates "did it work?" anxiety. Kills the install-again loop. User goes from payment → app in one tap.</p></div>
+    <div class="spec-box"><div class="label">How to Build</div><ul>
+      <li>Replace <code>gameday.vai.app</code> success page with a <code>vai.app</code> page that uses <strong>Universal Links (iOS) / App Links (Android)</strong> to deep link into the app</li>
+      <li>Pass auth token + subscription status in the deep link payload. App receives it on open → auto-login → skip Screen 8 entirely.</li>
+      <li>Fallback: if app not installed, show App Store badge. But for users who ALREADY have the app (created account on Screens 4-6), the deep link opens it directly.</li>
+    </ul></div>
   </div>
 </div>
 
@@ -307,6 +347,11 @@
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">Land directly on <strong>profile/home</strong> — "Welcome back, [Name]!"</span></div>
     <div class="issue-item"><span class="issue-icon">✅</span><span class="issue-text">This screen only shows for <strong>organic/cold installs</strong>, not referred users</span></div>
     <div class="change-box"><div class="label">Expected Lift</div><p>Eliminates the #1 confusion point. Paid users never see "Sign Up For Free" again. Seamless web-to-app transition.</p></div>
+    <div class="spec-box"><div class="label">How to Build</div><ul>
+      <li>On app launch, check for <strong>deep link payload</strong> (auth token from Screen 7). If present → auto-login → navigate to home. Skip this screen entirely.</li>
+      <li>Only show Welcome/Sign Up/Login for <strong>organic installs</strong> (no deep link, no stored session). This becomes the fallback, not the default.</li>
+      <li>For returning users: check <strong>AsyncStorage/Keychain</strong> for existing session token on launch. If valid → straight to home. No login screen for anyone who's already authed.</li>
+    </ul></div>
   </div>
   <div class="screen-phone">
     <span class="screen-badge badge-app">APP</span>
