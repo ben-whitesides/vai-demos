@@ -547,15 +547,8 @@
 
 <!-- INFRASTRUCTURE -->
 <div class="infra">
-<div class="infra-title">Infrastructure Changes Required</div>
+<div class="infra-title">Infrastructure Changes</div>
 <div class="infra-cards">
-  <div class="infra-card">
-    <span class="priority-tag p0">P0</span>
-    <h4>🔗 Branch.io Deep Linking</h4>
-    <div class="before">✗ Custom redirects — 20-30% referral loss</div>
-    <div class="after">✓ Server-side matching — zero scrappage</div>
-    <p>Without this, ~1 in 4 referrals lose attribution through the App Store. Commissions don't fire. Referrers stop sharing. The flywheel breaks.</p>
-  </div>
   <div class="infra-card">
     <span class="priority-tag p0">P0</span>
     <h4>🌐 Single Domain</h4>
@@ -568,7 +561,14 @@
     <h4>🔑 Session Handoff</h4>
     <div class="before">✗ Generic cold start after web signup</div>
     <div class="after">✓ Token-based restore — already logged in</div>
-    <p>Web auth token passed via deep link. App opens with session alive. User never sees "Sign Up" after they've already paid.</p>
+    <p>Web auth token passed via deep link. App opens with session alive. User never sees "Sign Up" after they\'ve already paid.</p>
+  </div>
+  <div class="infra-card">
+    <span class="priority-tag p1">P1</span>
+    <h4>🛡 Referral Attribution</h4>
+    <div class="before">Current custom redirects (working)</div>
+    <div class="after">✓ Monitor attribution rate 30 days — upgrade to MMP only if needed</div>
+    <p>Current links work. Monitor referral code landing rate on Screen 6. If significant drop-off, evaluate Branch.io or equivalent then.</p>
   </div>
 </div>
 </div>
