@@ -55,6 +55,46 @@
   .p1 { background: rgba(255,152,0,0.15); color: #ff9800; }
   .p2 { background: rgba(0,230,118,0.15); color: #00e676; }
 
+  /* Phone Mockups */
+  .mockup-row { max-width: 1200px; margin: -20px auto 40px; padding: 0 20px; }
+  .mockup-label { text-align: center; font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #00e676; margin-bottom: 12px; font-weight: 700; }
+  .mockup-phone { width: 320px; margin: 0 auto; background: #0d1117; border-radius: 32px; padding: 16px; border: 2px solid #2a3a4a; box-shadow: 0 12px 48px rgba(0,0,0,0.6); }
+  .mockup-notch { width: 120px; height: 6px; background: #1a2233; border-radius: 3px; margin: 0 auto 12px; }
+  .mockup-screen { background: #111824; border-radius: 16px; padding: 20px; min-height: 460px; overflow: hidden; }
+  .m-logo { color: #f7941e; font-size: 22px; font-weight: 900; margin-bottom: 16px; letter-spacing: -1px; }
+  .m-badge { display: inline-flex; align-items: center; gap: 8px; background: #1a2a1a; border: 1px solid #2a4a2a; border-radius: 20px; padding: 6px 14px; margin-bottom: 14px; }
+  .m-avatar { width: 28px; height: 28px; border-radius: 50%; background: #f7941e; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #000; }
+  .m-badge-text { font-size: 12px; color: #ccc; }
+  .m-badge-text strong { color: #00e676; }
+  .m-headline { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 8px; }
+  .m-headline em { color: #f7941e; font-style: normal; }
+  .m-sub { font-size: 12px; color: #888; line-height: 1.5; margin-bottom: 16px; }
+  .m-btn { display: block; text-align: center; padding: 14px; border-radius: 25px; font-size: 14px; font-weight: 700; margin-bottom: 10px; cursor: default; }
+  .m-btn-primary { background: #f7941e; color: #000; }
+  .m-btn-apple { background: #fff; color: #000; }
+  .m-btn-google { background: #1a1a1a; color: #fff; border: 1px solid #444; }
+  .m-btn-outline { background: transparent; color: #888; border: 1px solid #333; font-size: 12px; }
+  .m-divider { text-align: center; color: #555; font-size: 11px; margin: 10px 0; }
+  .m-timer { text-align: center; font-size: 11px; color: #f44336; margin-bottom: 10px; }
+  .m-social-proof { text-align: center; font-size: 10px; color: #666; margin-top: 8px; }
+  .m-plan { border: 1px solid #2a4a2a; border-radius: 12px; padding: 14px; margin-bottom: 12px; position: relative; }
+  .m-plan.featured { border-color: #00e676; }
+  .m-plan-tag { position: absolute; top: -10px; right: 14px; background: #00e676; color: #000; font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .m-plan-name { font-size: 16px; font-weight: 700; color: #00e676; }
+  .m-plan-price { margin: 6px 0; }
+  .m-plan-price s { color: #666; font-size: 13px; }
+  .m-plan-price strong { color: #00e676; font-size: 24px; font-weight: 900; }
+  .m-plan-price span { color: #888; font-size: 12px; }
+  .m-plan-btn { display: block; text-align: center; padding: 10px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 10px; }
+  .m-plan-btn.green { background: #00e676; color: #000; }
+  .m-plan-btn.orange { background: #f7941e; color: #000; }
+  .m-field { background: #1a2233; border: 1px solid #2a3a4a; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .m-field-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .m-field-value { font-size: 13px; color: #fff; }
+  .m-field-check { color: #00e676; font-size: 14px; margin-left: auto; }
+  .m-success-icon { width: 60px; height: 60px; border-radius: 50%; background: rgba(0,230,118,0.15); border: 2px solid #00e676; display: flex; align-items: center; justify-content: center; margin: 20px auto 16px; font-size: 28px; }
+  .m-cancel { text-align: center; font-size: 10px; color: #666; margin-top: 6px; }
+
   /* Summary */
   .summary { max-width: 1200px; margin: 40px auto; padding: 20px; }
   .summary-title { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 24px; padding-left: 12px; border-left: 4px solid #f7941e; }
@@ -136,6 +176,21 @@
   </div>
 </div>
 
+
+<!-- MOCKUP 1 -->
+<div class="mockup-row">
+<div class="mockup-label">↓ Gold Standard Rendering — Screen 1</div>
+<div class="mockup-phone"><div class="mockup-notch"></div><div class="mockup-screen">
+  <div class="m-logo">✦ VAI</div>
+  <div class="m-badge"><div class="m-avatar">BW</div><div class="m-badge-text"><strong>Benji Whitey</strong> invited you!</div></div>
+  <div class="m-headline">Claim Your <em>50% Discount</em></div>
+  <div class="m-sub">Your friend gave you half off VAI+ — AI-powered coaching, training plans, and progress tracking.</div>
+  <div class="m-timer">⏱ Discount expires in 23h 42m</div>
+  <div class="m-btn m-btn-primary">ACTIVATE MY 50% OFF →</div>
+  <div class="m-btn m-btn-outline">View Plans</div>
+  <div class="m-social-proof">👥 1,248 athletes joined via friend invites this month</div>
+</div></div></div>
+
 <!-- SCREEN 2 -->
 <div class="screen-card reverse">
   <div class="screen-current">
@@ -167,6 +222,29 @@
   </div>
 </div>
 
+
+<!-- MOCKUP 2 -->
+<div class="mockup-row">
+<div class="mockup-label">↓ Gold Standard Rendering — Screen 2</div>
+<div class="mockup-phone"><div class="mockup-notch"></div><div class="mockup-screen">
+  <div class="m-logo">✦ VAI</div>
+  <div class="m-badge"><div class="m-avatar">BW</div><div class="m-badge-text"><strong>50% OFF</strong> from Benji</div></div>
+  <div class="m-plan featured">
+    <div class="m-plan-tag">MOST POPULAR</div>
+    <div class="m-plan-name">VAI+</div>
+    <div style="font-size:10px;color:#888;margin-bottom:6px">AI-Powered • AVANTI Coach included</div>
+    <div class="m-plan-price"><s>$19.95</s> <strong>$9.95</strong> <span>/mo</span></div>
+    <div style="font-size:10px;color:#00e676;margin-bottom:6px">You save $120/year with Benji's invite</div>
+    <div class="m-plan-btn green">Get VAI+ →</div>
+  </div>
+  <div class="m-plan">
+    <div class="m-plan-name" style="color:#f7941e">VAI Mentor</div>
+    <div class="m-plan-price"><s>$99.95</s> <strong style="color:#f7941e">$49.95</strong> <span>/mo</span></div>
+    <div class="m-plan-btn orange">Get Mentor</div>
+  </div>
+  <div class="m-cancel">Cancel anytime — no commitment</div>
+</div></div></div>
+
 <!-- SCREEN 3 -->
 <div class="screen-card">
   <div class="screen-phone">
@@ -197,6 +275,24 @@
     </ul></div>
   </div>
 </div>
+
+
+<!-- MOCKUP 3 -->
+<div class="mockup-row">
+<div class="mockup-label">↓ Gold Standard Rendering — Screen 3</div>
+<div class="mockup-phone"><div class="mockup-notch"></div><div class="mockup-screen">
+  <div class="m-logo">✦ VAI+</div>
+  <div class="m-badge"><div class="m-avatar">BW</div><div class="m-badge-text"><strong>50% OFF</strong> from Benji</div></div>
+  <div style="font-size:13px;color:#ccc;margin-bottom:12px">Everything you need to train smarter:</div>
+  <div style="font-size:12px;color:#aaa;margin-bottom:8px">✅ <strong style="color:#fff">AVANTI AI Coach</strong> — 1:1 personalized guidance</div>
+  <div style="font-size:12px;color:#aaa;margin-bottom:8px">✅ <strong style="color:#fff">Context-Aware Prep</strong> — tailored recovery plans</div>
+  <div style="font-size:12px;color:#aaa;margin-bottom:8px">✅ <strong style="color:#fff">Progress Tracking</strong> — AI-powered insights</div>
+  <div style="font-size:12px;color:#aaa;margin-bottom:14px">✅ <strong style="color:#fff">Unlimited Groups</strong> — connect your team</div>
+  <div class="m-timer">⏱ Your discount from Benji expires in 23h 42m</div>
+  <div class="m-btn m-btn-primary">GET STARTED →</div>
+  <div class="m-cancel">Cancel anytime — no commitment</div>
+  <div class="m-social-proof">👥 1,248 athletes joined via friend invites</div>
+</div></div></div>
 
 <!-- SCREEN 4 -->
 <div class="screen-card reverse">
@@ -231,6 +327,21 @@
   </div>
 </div>
 
+
+<!-- MOCKUP 4 -->
+<div class="mockup-row">
+<div class="mockup-label">↓ Gold Standard Rendering — Screen 4</div>
+<div class="mockup-phone"><div class="mockup-notch"></div><div class="mockup-screen">
+  <div class="m-logo" style="text-align:center;font-size:28px;margin:20px 0">VAI</div>
+  <div style="text-align:center;font-size:18px;font-weight:700;color:#fff;margin-bottom:6px">Create Your Account</div>
+  <div style="text-align:center;font-size:12px;color:#888;margin-bottom:24px">Join VAI today.</div>
+  <div class="m-btn m-btn-apple">🍎 Continue with Apple</div>
+  <div class="m-btn m-btn-google">G Continue with Google</div>
+  <div class="m-divider">— OR —</div>
+  <div style="text-align:center"><a style="color:#f7941e;font-size:12px;text-decoration:underline">Use email address instead</a></div>
+  <div style="margin-top:30px;text-align:center;font-size:10px;color:#555">Already have an account? <span style="color:#f7941e">Log in</span></div>
+</div></div></div>
+
 <!-- SCREEN 5 -->
 <div class="screen-card">
   <div class="screen-phone">
@@ -263,6 +374,26 @@
   </div>
 </div>
 
+
+<!-- MOCKUP 5 -->
+<div class="mockup-row">
+<div class="mockup-label">↓ Gold Standard Rendering — Screen 5</div>
+<div class="mockup-phone"><div class="mockup-notch"></div><div class="mockup-screen">
+  <div class="m-logo">✦ VAI</div>
+  <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px">Personal Information</div>
+  <div style="font-size:12px;color:#888;margin-bottom:16px">Let's start with some basic information.</div>
+  <div class="m-field-label">First Name</div>
+  <div class="m-field"><span class="m-field-value">Riley</span><span class="m-field-check">✓</span></div>
+  <div class="m-field-label">Last Name</div>
+  <div class="m-field"><span class="m-field-value">Whitesides</span><span class="m-field-check">✓</span></div>
+  <div class="m-field-label">Date of Birth</div>
+  <div class="m-field"><span class="m-field-value" style="color:#888">Select date...</span><span>📅</span></div>
+  <div style="font-size:10px;color:#666;margin:6px 0 12px">(Your date of birth is used to calculate your age.)</div>
+  <div style="font-size:11px;color:#aaa;margin-bottom:16px">☐ I agree to VAI's <span style="color:#f7941e">Terms and Conditions</span></div>
+  <div class="m-btn m-btn-primary">Next</div>
+  <div style="font-size:10px;color:#00e676;text-align:center;margin-top:8px">✓ Name auto-filled from your Apple account</div>
+</div></div></div>
+
 <!-- SCREEN 6 -->
 <div class="screen-card reverse">
   <div class="screen-current">
@@ -293,6 +424,28 @@
     <div style="color:#555;font-size:12px;position:absolute;bottom:8px;">Screen 6 · Profile</div>
   </div>
 </div>
+
+
+<!-- MOCKUP 6 -->
+<div class="mockup-row">
+<div class="mockup-label">↓ Gold Standard Rendering — Screen 6</div>
+<div class="mockup-phone"><div class="mockup-notch"></div><div class="mockup-screen">
+  <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px">Profile</div>
+  <div style="font-size:12px;color:#888;margin-bottom:12px">Pick a profile picture and handle.</div>
+  <div style="width:50px;height:50px;border-radius:50%;background:#333;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff">RW</div>
+  <div style="text-align:center;font-size:13px;color:#fff;margin-bottom:12px">Riley Whitesides</div>
+  <div class="m-field-label">Handle</div>
+  <div class="m-field"><span style="color:#888">@</span><span class="m-field-value">rileywhitesides</span></div>
+  <div class="m-field-label">Referral Code</div>
+  <div class="m-field" style="border-color:#2a4a2a"><span class="m-field-value">Whitetrainer</span><span class="m-field-check">✓</span></div>
+  <div style="font-size:10px;color:#00e676;margin:-6px 0 10px">Referred by Benji — 50% off future subscription!</div>
+  <div class="m-field-label">Roles</div>
+  <div class="m-field"><span class="m-field-value" style="color:#888">Select your roles</span><span>▾</span></div>
+  <div style="display:flex;gap:10px;margin-top:14px">
+    <div class="m-btn m-btn-outline" style="flex:1;padding:10px">Back</div>
+    <div class="m-btn m-btn-primary" style="flex:1;padding:10px">Finish</div>
+  </div>
+</div></div></div>
 
 <!-- SCREEN 7 -->
 <div class="screen-card">
@@ -326,6 +479,20 @@
     </ul></div>
   </div>
 </div>
+
+
+<!-- MOCKUP 7 -->
+<div class="mockup-row">
+<div class="mockup-label">↓ Gold Standard Rendering — Screen 7</div>
+<div class="mockup-phone"><div class="mockup-notch"></div><div class="mockup-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+  <div class="m-logo" style="font-size:28px;margin-bottom:16px">✦ VAI</div>
+  <div class="m-success-icon">✓</div>
+  <div style="font-size:22px;font-weight:800;color:#fff;margin-bottom:8px">You're In!</div>
+  <div style="font-size:13px;color:#888;margin-bottom:6px">Your subscription is active.</div>
+  <div style="font-size:13px;color:#888;margin-bottom:24px">AVANTI, your AI-powered coach, is ready.</div>
+  <div class="m-btn m-btn-primary" style="width:100%">OPEN VAI APP →</div>
+  <div style="font-size:10px;color:#555;margin-top:12px">vai.app — no second website needed</div>
+</div></div></div>
 
 <!-- SCREEN 8 -->
 <div class="screen-card reverse">
@@ -361,6 +528,22 @@
 </div>
 
 </div>
+
+
+<!-- MOCKUP 8 -->
+<div class="mockup-row">
+<div class="mockup-label">↓ Gold Standard Rendering — Screen 8</div>
+<div class="mockup-phone"><div class="mockup-notch"></div><div class="mockup-screen">
+  <div class="m-logo">✦ VAI</div>
+  <div class="m-badge"><div class="m-avatar" style="background:#00e676;color:#000;font-size:9px">VAI+</div><div class="m-badge-text">Welcome back, <strong>Riley!</strong></div></div>
+  <div style="font-size:14px;color:#888;margin-bottom:16px">Your profile is ready. AVANTI is warming up.</div>
+  <div style="background:#1a2a1a;border:1px solid #2a4a2a;border-radius:12px;padding:14px;margin-bottom:12px">
+    <div style="font-size:10px;color:#00e676;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">AVANTI Says</div>
+    <div style="font-size:13px;color:#fff">"Ready to start training, Riley? Let's set up your first workout."</div>
+  </div>
+  <div class="m-btn m-btn-primary">START FIRST WORKOUT →</div>
+  <div style="font-size:10px;color:#555;text-align:center;margin-top:12px">Session restored — no login needed</div>
+</div></div></div>
 
 <!-- INFRASTRUCTURE -->
 <div class="infra">
