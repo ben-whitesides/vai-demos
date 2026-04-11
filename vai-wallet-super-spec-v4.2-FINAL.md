@@ -1264,6 +1264,14 @@ Send money to any VAI user. Stripe SDK handles the payment execution.
 - `"wallet_only"` — fail if wallet balance insufficient
 - `"card_only"` — charge card directly, skip wallet
 
+**Amount bounds:**
+- Minimum: 100 cents ($1.00)
+- Maximum per transaction: 1,000,000 cents ($10,000.00)
+- Maximum per 24h per user: 2,500,000 cents ($25,000.00)
+- Validation: reject requests outside bounds with 400 error + dollar-formatted message
+
+**Rate limit:** Maximum 20 send requests per 24 hours per user. Returns 429 with `next_eligible_at`.
+
 **Response 201 (wallet-only, no card needed):**
 ```json
 {
@@ -1353,6 +1361,20 @@ Called by mobile after Stripe PaymentSheet completes successfully.
   "status_display": "Sent"
 }
 ```
+
+#### Split Payment Failure & Expiry Path (AWAITING_CARD)
+
+When `POST /v1/wallet/send` returns `AWAITING_CARD`, the wallet portion has already been transferred via Treasury OutboundPayment. If the card portion fails, the wallet portion must be reversed.
+
+**Mechanism:**
+1. When `AWAITING_CARD` is returned, create a `wallet_holds` row with `hold_type = 'SEND_PAYMENT'`, `amount_cents = wallet_portion`, `expires_at = NOW() + 30 minutes`.
+2. If `POST /v1/wallet/send/{id}/confirm` succeeds → release hold, mark payment COMPLETED.
+3. If `POST /v1/wallet/send/{id}/confirm` reports failure → reverse wallet portion via Treasury OutboundPayment (recipient FA → sender FA), release hold, mark payment FAILED, notify sender: "Payment cancelled. Your wallet balance has been restored."
+4. If 30 minutes pass with no confirm call (user closed app, lost connection) → background worker detects expired hold, reverses wallet portion, marks payment EXPIRED, notifies sender.
+
+**Key constraint:** The wallet portion Treasury OutboundPayment is NOT truly "spent" until the card portion confirms. The hold prevents the recipient from cashing out the wallet portion during the AWAITING_CARD window.
+
+> **Security note on stripe_client_secret and stripe_ephemeral_key:** These are short-lived, single-use Stripe tokens. stripe_client_secret is scoped to a single PaymentIntent. Ephemeral key TTL: 1 hour (Stripe default). These values MUST NOT be logged server-side or client-side. Transport: HTTPS only.
 
 #### `GET /v1/wallet/recent-recipients`
 
@@ -1503,7 +1525,7 @@ Mentor cancels a pending invoice.
 }
 ```
 
-### 9.5 Wallet Settings
+### 9.6 Wallet Settings
 
 #### `GET /v1/wallet/settings`
 
@@ -1550,7 +1572,7 @@ Returns user's wallet settings and JIT activation prompt state (read-only).
 > **Backend mapping:** DB columns use `notify_commission_available`, `notify_clawback`, `notify_cashout_complete`. The API DTO layer maps these to the user-friendly names above. Mobile clients ONLY see the friendly names. This mapping lives in `WalletSettingsMapper.cs`.
 ```
 
-### 9.6 Wallet Onboarding
+### 9.7 Wallet Onboarding
 
 #### `POST /v1/wallet/activate`
 
@@ -1587,7 +1609,7 @@ Check wallet activation status.
 }
 ```
 
-### 9.7 Admin Endpoints
+### 9.8 Admin Endpoints
 
 #### `GET /v1/admin/payouts`
 
@@ -1629,7 +1651,7 @@ System health dashboard for ops.
 }
 ```
 
-### 9.8 Endpoint Summary Table
+### 9.9 Endpoint Summary Table
 
 | Method | Endpoint | Auth | Purpose |
 |--------|----------|------|---------|
@@ -1656,7 +1678,7 @@ System health dashboard for ops.
 | GET | `/v1/admin/commissions/audit-log` | Admin | Daily audit results |
 | GET | `/v1/admin/wallet/health` | Admin | System health |
 
-### 9.9 Authorization Rules
+### 9.10 Authorization Rules
 
 - **GET /v1/invoices:** Returns ONLY invoices where the authenticated user is either the buyer (`user_id`) or the mentor (`mentor_user_id`). Server filters by JWT `user_id`. Returns `403` if user attempts to access an invoice they are not party to.
 - **POST /v1/invoices (create):** Only users with active Mentor tier can create invoices. Returns `403` for Basic/Plus users.
@@ -1744,6 +1766,7 @@ The background worker must be idempotent — processing the same event twice pro
 
 | Action | Limit |
 |--------|-------|
+| Send money | 20 per 24 hours per user |
 | Cashout requests | 1 per 24 hours per user |
 | Payout account changes | 3 per 24 hours |
 | Invoice creation | 10 per 24 hours per mentor |
@@ -2482,4 +2505,4 @@ User A shares with 4 friends who subscribe to Plus:
 
 ---
 
-*End of spec (Version 4.1 | CODEBASE-ALIGNED). This document is the single source of truth for the VAI Wallet system architecture. All implementation questions should reference this spec first.*
+*End of spec (Version 4.2 FINAL | STRIPE SDK-FIRST | AUDIT-REMEDIATED). This document is the single source of truth for the VAI Wallet system architecture. All implementation questions should reference this spec first.*
