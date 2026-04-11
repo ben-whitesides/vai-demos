@@ -1,11 +1,55 @@
-# VAI Wallet Activation Prompt Flag — PR Spec for Francis
+# ⚠️ SUPERSEDED — Historical Reference Only
 
-**Status:** Audit-approved (9.5/9.0/8.0 across Security/Logic/Quality)  
-**Source:** Cursor Phases 1-3 delivery + isolation fix  
-**Target:** vai-app main repo  
-**Date:** 2026-04-10  
-**Spec version:** vai-wallet-super-spec-v4.2-FINAL.md (Stripe SDK-first, audit-remediated)  
-**NOTE:** Section 5 (Payments) has been completely rewritten since Phases 1-3. Phase 4+ uses Stripe SDK-first architecture — no custom sagas. See updated build prompt for Phase 4 details.
+> **This document is SUPERSEDED as of 2026-04-11.**
+>
+> The `activation_prompt_*` isolation fix described below is **still correct** and **is already applied in the sandbox** at `~/Desktop/vai-api-sep`. However, between 2026-04-10 and 2026-04-11, the sandbox picked up a full remediation layer PLUS Phase 4 Send Money that this document does not describe.
+>
+> **Do NOT build a PR from this document alone.** It covers only the activation_prompt isolation fix (~4 lines of code) as it existed on 2026-04-10. The current sandbox has hundreds of additional lines of code spanning the remediation layer and Phase 4.
+>
+> **Canonical source of truth:** [`vai-wallet-super-spec-v4.2-FINAL.md`](./vai-wallet-super-spec-v4.2-FINAL.md)
+>
+> **What changed after this document was written:**
+>
+> | Layer | Added 2026-04-10 → 2026-04-11 | Affects |
+> |-------|-------------------------------|---------|
+> | **Remediation layer** | `status_display` field on transactions; notification field renames (DB `notify_commission_available` → API `new_earnings`, DB `notify_clawback` → API `earning_reversed` via `WalletSettingsMapper.cs`); cashout error messages formatted in dollars not raw cents; `RecentRecipientsService`; `RecipientResolutionService`; `WalletPayQrPayloadValidator`; `GetReservedCentsAsync` includes `SEND_PAYMENT` holds; `WRITTEN_OFF` filtered from commission transaction union; `WalletUsd.Format` helper; full Section 8.7 jargon scrub (no "commission"/"clawback"/"KYC" in user-facing strings); migration 056 | Phases 1-3 code (transactions, settings, cashout, activation) |
+> | **Phase 4 Send Money** | `SendMoneyService` + `ISendMoneyService`; `WalletPaymentRepository` + `IWalletPaymentRepository`; `WalletSendMoneyController` with `POST /v1/wallet/send` + `POST /v1/wallet/send/{id}/confirm`; `GET /v1/wallet/recent-recipients`; `GET /v1/wallet/resolve-recipient`; `WalletException` with structured extras; `SendMoneyStatusDisplay`; 4 new DTOs under `DTOs/SendMoney/`; 4 new Stripe SDK methods in `StripeService` (Treasury `OutboundPayment`, `PaymentIntent` with `TransferData`/`ApplicationFeeAmount`/`SetupFutureUsage`, `EphemeralKeyService`, `GetPlatformPaymentIntentAsync`); migrations 057 + 058 (the second drops and recreates the anonymous CHECK constraint on `wallet_holds.hold_type` to add `SEND_PAYMENT`); `GetReservedCentsAsync` already includes `SEND_PAYMENT` | New Phase 4 surface |
+> | **Option B push notifications** | 2 new constants in `NotificationActivityType.cs` (`PaymentSent`, `PaymentReceived`); `IUserActivityEventService` injected into `SendMoneyService`; 2 private helpers `FirePaymentSentNotificationAsync` + `FirePaymentReceivedNotificationAsync`; fires at both COMPLETED branches (wallet-only in `SendAsync`, card-confirmed in `ConfirmAsync`); matches `PaymentsService.cs:1320-1352` precedent exactly; wrapped in try/catch with `LogWarning` only — never rolls back money movement | New on top of Phase 4 |
+>
+> **Audit history (14 rounds, 15 blockers found, 15 blockers fixed):**
+> - Masters R1: FAIL → 6 blockers fixed
+> - Haiku R1: FAIL → 3 blockers fixed
+> - Cursor R1: FAIL → 4 blockers fixed
+> - Masters R2: FAIL → 2 new blockers fixed (migration 058 for SEND_PAYMENT hold_type, sweep clobber race fixed via `TryExpireAwaitingCardAsync`)
+> - Cursor R3: PASS + 1 follow-up fixed (confirm hold-release ordering)
+> - Haiku R3: PASS + 2 advisories fixed (PI metadata validation on replay, sweep LIMIT 25 → 100)
+> - **Masters R3 (BINDING): PASS — Security 9.0 / Logic 8.5 / Quality 9.0**
+> - Backend plug-in compatibility: SEAMLESS (within snapshot)
+> - Mobile + infra plug-in compatibility: MINOR FRICTION with 1 blocker (push notifications, fixed via Option B) + 1 ops gate (Stripe Dashboard Payment Methods, Ben handling)
+> - Option B push notifications build: +124 LOC, 0 compile errors, matches PaymentsService precedent
+> - Masters lightweight re-audit on Option B: PASS — Security 8.8 / Logic 9.2 / Quality 9.0
+>
+> **Francis's build workflow (per Appendix F of the v4.2 super-spec):**
+>
+> 1. Run the pre-merge `git diff` command against your live `main` for 7 shared files
+> 2. Copy new files from `~/Desktop/vai-api-sep` to your live `vai-api` repo
+> 3. Apply minimal diffs to shared files (additive only)
+> 4. Run migrations 057 + 058 in order (057 FIRST — 058 depends on `wallet_holds` existing)
+> 5. `dotnet build` — should be 0 errors
+> 6. Open PR on feature branch (NOT main)
+>
+> **Everything below this banner describes the 2026-04-10 isolation fix as originally written. It is retained for audit trail but does NOT reflect the current sandbox state.**
+
+---
+
+# VAI Wallet Activation Prompt Flag — PR Spec for Francis (2026-04-10 Historical)
+
+**Status:** Audit-approved (9.5/9.0/8.0 across Security/Logic/Quality) — HISTORICAL
+**Source:** Cursor Phases 1-3 delivery + isolation fix
+**Target:** vai-app main repo
+**Date:** 2026-04-10
+**Spec version (current):** [`vai-wallet-super-spec-v4.2-FINAL.md`](./vai-wallet-super-spec-v4.2-FINAL.md) — Stripe SDK-first, audit-remediated
+**Superseded:** 2026-04-11 — see banner above
 
 ---
 

@@ -1,5 +1,9 @@
 # VAI Wallet Backend Build Prompt -- Cursor
 
+> **⚠️ STATUS: HISTORICAL (2026-04-11)**
+>
+> This build prompt was written before Cursor built the Phase 4 code. The build is **COMPLETE** as of 2026-04-11 and lives in `~/Desktop/vai-api-sep`. All 14 audit rounds are done (PASS). This doc is retained for audit trail only. For the current PR handoff, use [`vai-wallet-super-spec-v4.2-FINAL.md`](./vai-wallet-super-spec-v4.2-FINAL.md) Appendix F.
+
 ## THIS IS A BUILD TASK, NOT A DESIGN TASK
 
 The spec is done. The architecture is locked. Your job is to BUILD the C#/.NET backend implementation. Do not redesign, do not question architectural decisions, do not propose alternatives. Implement exactly what the spec says.
