@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAI Wallet - Screen Preview</title>
+<title>VAI Wallet - Gold Standard Screens</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -14,44 +14,45 @@
   }
   h1 {
     text-align: center;
-    font-size: 28px;
+    font-size: 32px;
     color: #F7941E;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     font-weight: 700;
   }
   .page-subtitle {
     text-align: center;
     color: #A8A29E;
     font-size: 14px;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
   }
+
   .screens-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 40px;
+    gap: 60px;
   }
+
   .screen-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+
   .screen-label {
     color: #F7941E;
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .screen-sublabel {
-    color: #57534E;
-    font-size: 11px;
     margin-bottom: 16px;
+    min-width: 380px;
+    text-align: center;
   }
+
   .phone-frame {
-    width: 375px;
-    height: 812px;
+    width: 380px;
+    height: 820px;
     background: #0C0A09;
     border-radius: 40px;
     border: 3px solid #333;
@@ -59,6 +60,7 @@
     position: relative;
     box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
   }
+
   .status-bar {
     height: 44px;
     background: #0C0A09;
@@ -69,112 +71,72 @@
     font-size: 14px;
     font-weight: 600;
     color: #FAFAF9;
-  }
-  .status-bar .time { font-size: 15px; font-weight: 600; }
-  .status-bar .icons { display: flex; gap: 6px; font-size: 12px; }
-  .screen-content {
-    padding: 0;
-    overflow-y: auto;
-    max-height: 756px;
+    border-bottom: 1px solid #2A2623;
   }
 
-  /* ── Shared Component Styles ── */
+  .screen-content {
+    height: 776px;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
   .card {
     background: #151210;
-    margin: 0 16px 0 16px;
     border-radius: 16px;
     padding: 20px;
     border: 1px solid #2A2623;
+    margin-bottom: 16px;
   }
-  .card-12 {
-    background: #151210;
-    margin: 0 16px;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid #2A2623;
-  }
-  .section-title {
-    color: #57534E;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1.2px;
-    margin-bottom: 0;
-  }
-  .divider {
-    height: 1px;
-    background: #2A2623;
-    margin: 12px 0;
-  }
-  .row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .text-primary { color: #FAFAF9; }
-  .text-secondary { color: #A8A29E; }
-  .text-tertiary { color: #57534E; }
-  .text-green { color: #34D399; }
-  .text-orange { color: #F7941E; }
-  .text-red { color: #EF4444; }
-  .text-teal { color: #5EEAD4; }
-  .fw-700 { font-weight: 700; }
-  .fw-600 { font-weight: 600; }
-  .fw-500 { font-weight: 500; }
-  .fs-10 { font-size: 10px; }
-  .fs-11 { font-size: 11px; }
-  .fs-12 { font-size: 12px; }
-  .fs-13 { font-size: 13px; }
-  .fs-14 { font-size: 14px; }
-  .fs-15 { font-size: 15px; }
-  .fs-16 { font-size: 16px; }
-  .fs-18 { font-size: 18px; }
-  .fs-20 { font-size: 20px; }
-  .fs-24 { font-size: 24px; }
-  .fs-28 { font-size: 28px; }
-  .fs-32 { font-size: 32px; }
-  .fs-36 { font-size: 36px; }
-  .fs-48 { font-size: 48px; }
 
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+  .card.balance {
+    background: linear-gradient(135deg, #2A1810 0%, #1A1210 100%);
+    border-color: #F7941E;
+    padding: 24px;
   }
-  .badge-pending { background: rgba(247,148,30,0.13); color: #F7941E; }
-  .badge-available { background: rgba(52,211,153,0.13); color: #34D399; }
-  .badge-completed { background: rgba(52,211,153,0.13); color: #34D399; }
-  .badge-adjusted { background: rgba(239,68,68,0.13); color: #EF4444; }
-  .badge-settling { background: rgba(94,234,212,0.13); color: #5EEAD4; }
-  .badge-default { background: rgba(247,148,30,0.13); color: #F7941E; }
-  .badge-verified { background: rgba(52,211,153,0.13); color: #34D399; }
-  .badge-recommended { background: rgba(52,211,153,0.13); color: #34D399; }
+
+  .balance-amount {
+    font-size: 36px;
+    font-weight: 700;
+    color: #F7941E;
+    margin-bottom: 20px;
+  }
+
+  .balance-label {
+    font-size: 12px;
+    color: #A8A29E;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+  }
 
   .btn-primary {
     background: #F7941E;
     color: #FAFAF9;
-    border: none;
-    border-radius: 12px;
-    padding: 16px;
-    font-size: 17px;
-    font-weight: 700;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
   }
+
   .btn-secondary {
-    background: #151210;
-    color: #FAFAF9;
+    background: #1A1714;
     border: 1px solid #2A2623;
-    border-radius: 12px;
-    padding: 14px 48px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
+    color: #FAFAF9;
   }
-  .btn-disabled { opacity: 0.4; }
 
   .tx-row {
     display: flex;
@@ -183,1512 +145,496 @@
     padding: 14px 0;
     border-bottom: 1px solid #2A2623;
   }
-  .tx-row:last-child { border-bottom: none; }
-  .tx-left { flex: 1; margin-right: 12px; }
-  .tx-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
 
-  .progress-bar-bg {
-    height: 8px;
-    background: #1A1714;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    border-radius: 4px;
+  .tx-row:last-child {
+    border-bottom: none;
   }
 
-  .quick-actions {
-    display: flex;
-    gap: 12px;
-    margin: 16px 16px 0;
-  }
-  .quick-action-btn {
+  .tx-left {
     flex: 1;
-    background: #1A1714;
-    border: 1px solid #2A2623;
-    border-radius: 12px;
-    padding: 16px 0;
-    text-align: center;
   }
-  .quick-action-btn.primary { border-color: rgba(247,148,30,0.38); }
-  .quick-action-icon { font-size: 24px; margin-bottom: 6px; }
-  .quick-action-label { color: #FAFAF9; font-size: 13px; font-weight: 600; }
+
+  .tx-name {
+    color: #FAFAF9;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .tx-time {
+    color: #57534E;
+    font-size: 12px;
+  }
+
+  .tx-amount {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .tx-amount.plus {
+    color: #34D399;
+  }
+
+  .tx-amount.minus {
+    color: #EF4444;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+
+  .badge-pending {
+    background: rgba(247, 148, 30, 0.2);
+    color: #F7941E;
+  }
 
   .filter-bar {
     display: flex;
     gap: 8px;
-    padding: 12px 16px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #2A2623;
   }
+
   .filter-tab {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: 20px;
+    padding: 6px 12px;
+    border-radius: 16px;
     background: #151210;
     border: 1px solid #2A2623;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: #A8A29E;
   }
+
   .filter-tab.active {
-    background: rgba(247,148,30,0.13);
+    background: rgba(247, 148, 30, 0.2);
     border-color: #F7941E;
     color: #F7941E;
   }
-  .filter-count {
-    font-size: 11px;
-    font-weight: 700;
-    color: #57534E;
-  }
-  .filter-tab.active .filter-count { color: #FFB347; }
 
-  .tx-icon-circle {
-    width: 36px;
-    height: 36px;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: 700;
-    margin-right: 12px;
-    flex-shrink: 0;
-  }
-
-  .method-card {
-    background: #151210;
-    border: 1px solid #2A2623;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
-    position: relative;
-  }
-  .method-card.selected {
-    border-color: #F7941E;
-    background: rgba(247,148,30,0.06);
-  }
-  .selected-dot {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 12px;
-    height: 12px;
-    border-radius: 6px;
-    background: #F7941E;
-  }
-
-  .confirm-card {
-    background: #151210;
-    border: 1px solid #2A2623;
-    border-radius: 16px;
-    padding: 20px;
-  }
-  .confirm-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-  }
-
-  .success-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 60px 24px 40px;
-  }
-  .success-circle {
-    width: 80px;
-    height: 80px;
-    border-radius: 40px;
-    background: rgba(52,211,153,0.13);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 24px;
-  }
-  .success-check {
-    color: #34D399;
-    font-size: 40px;
-    font-weight: 700;
-  }
-
-  .avatar-circle {
-    width: 44px;
-    height: 44px;
-    border-radius: 22px;
-    background: #1A1714;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 12px;
-    flex-shrink: 0;
-    font-size: 16px;
-    font-weight: 700;
-    color: #FAFAF9;
-  }
-  .avatar-small {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    background: #1A1714;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 12px;
-    flex-shrink: 0;
-    font-size: 14px;
-    font-weight: 700;
-    color: #FAFAF9;
-  }
-
-  .mentor-row {
-    display: flex;
-    align-items: center;
-    background: #151210;
-    border: 1px solid #2A2623;
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 8px;
-  }
-
-  .invoice-banner {
-    background: rgba(247,148,30,0.06);
-    border: 1px solid rgba(247,148,30,0.19);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 24px;
-  }
-
-  .toggle-row-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px;
-  }
-  .toggle-switch {
-    width: 44px;
-    height: 24px;
-    border-radius: 12px;
-    position: relative;
-    flex-shrink: 0;
-  }
-  .toggle-switch.on { background: rgba(247,148,30,0.38); }
-  .toggle-switch.off { background: #1A1714; }
-  .toggle-knob {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    position: absolute;
-    top: 2px;
-  }
-  .toggle-switch.on .toggle-knob { right: 2px; background: #F7941E; }
-  .toggle-switch.off .toggle-knob { left: 2px; background: #57534E; }
-
-  .settings-card {
-    background: #151210;
-    margin: 0 16px;
-    border-radius: 12px;
-    border: 1px solid #2A2623;
-    padding: 4px;
-  }
-  .settings-divider {
-    height: 1px;
-    background: #2A2623;
-    margin: 0 12px;
-  }
-
-  .account-card {
-    background: #151210;
-    margin: 0 16px 8px;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid #2A2623;
-  }
-  .account-icon-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-    background: #1A1714;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 12px;
-    font-size: 18px;
-    font-weight: 700;
-    color: #FAFAF9;
-    flex-shrink: 0;
-  }
-  .account-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid #2A2623;
-  }
-  .action-btn {
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-  }
-  .action-btn.set-default { background: #1A1714; color: #F7941E; }
-  .action-btn.remove { background: rgba(239,68,68,0.06); color: #EF4444; }
-
-  .add-account-btn {
-    margin: 8px 16px 0;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px dashed rgba(247,148,30,0.25);
-    text-align: center;
-    color: #F7941E;
-    font-size: 15px;
-    font-weight: 600;
-  }
-
-  .threshold-options {
+  .avatar-bar {
     display: flex;
     gap: 8px;
-    margin-top: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #2A2623;
   }
-  .threshold-opt {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
     background: #1A1714;
-    border: 1px solid #2A2623;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    color: #A8A29E;
-  }
-  .threshold-opt.selected {
-    border-color: #F7941E;
-    background: rgba(247,148,30,0.08);
-    color: #F7941E;
-  }
-
-  .info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px;
-  }
-
-  .input-field {
-    background: #151210;
-    border: 1px solid #2A2623;
-    border-radius: 10px;
-    padding: 12px 14px;
-    color: #FAFAF9;
-    font-size: 15px;
-    width: 100%;
-  }
-  .input-label {
-    color: #A8A29E;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .input-group { margin-bottom: 16px; }
-
-  .hero-badge {
-    display: inline-block;
-    background: rgba(52,211,153,0.13);
-    padding: 6px 14px;
-    border-radius: 20px;
-    color: #34D399;
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 16px;
-  }
-
-  .feature-row {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 16px;
-  }
-  .feature-icon {
-    font-size: 24px;
-    margin-right: 14px;
-    margin-top: 2px;
-    flex-shrink: 0;
-  }
-
-  .next-step-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-  .next-step-bullet {
-    width: 28px;
-    height: 28px;
-    border-radius: 14px;
-    background: rgba(247,148,30,0.13);
-    color: #F7941E;
-    font-size: 14px;
-    font-weight: 700;
+    border: 2px solid #2A2623;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 12px;
+    font-size: 20px;
     flex-shrink: 0;
   }
 
-  .tier-node { margin-bottom: 20px; position: relative; }
-  .connector-line {
-    position: absolute;
-    left: 11px;
-    top: -16px;
-    width: 2px;
-    height: 16px;
-    background: #2A2623;
-  }
-  .tier-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .tier-dot {
-    width: 24px;
-    height: 24px;
-    border-radius: 12px;
-    margin-right: 12px;
-    flex-shrink: 0;
-  }
-  .tier-bar-bg {
-    height: 6px;
-    background: #1A1714;
-    border-radius: 3px;
-    margin-left: 36px;
-    overflow: hidden;
-  }
-  .tier-bar-fill { height: 100%; border-radius: 3px; }
-  .tier-stats {
-    display: flex;
-    gap: 16px;
-    margin-left: 36px;
-    margin-top: 6px;
-  }
-  .top-earners {
-    margin-left: 36px;
-    margin-top: 8px;
+  .keypad {
     background: #151210;
+    border: 1px solid #2A2623;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+
+  .keypad-display {
+    background: #0C0A09;
     border-radius: 8px;
-    padding: 10px;
-    border: 1px solid #2A2623;
-  }
-  .top-earner-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
+    padding: 16px;
+    text-align: right;
+    margin-bottom: 16px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #F7941E;
   }
 
-  .hold-row {
+  .keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .keypad-btn {
+    background: #0C0A09;
+    border: 1px solid #2A2623;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #FAFAF9;
+    cursor: pointer;
+  }
+
+  .pending-item {
+    background: #151210;
+    border: 1px solid #2A2623;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .pending-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #151210;
-    border-radius: 10px;
-    padding: 14px;
     margin-bottom: 8px;
-    border: 1px solid #2A2623;
   }
 
-  .kyc-notice {
-    background: #151210;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid #2A2623;
-    margin-bottom: 24px;
+  .pending-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
   }
 
-  .security-note {
-    background: #151210;
-    border-radius: 10px;
-    padding: 12px;
+  .mini-btn {
+    flex: 1;
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
     border: 1px solid #2A2623;
-    margin-bottom: 20px;
+    background: #0C0A09;
+    color: #A8A29E;
   }
 
-  .message-input {
-    background: #151210;
-    border: 1px solid #2A2623;
-    border-radius: 10px;
-    padding: 14px;
+  .mini-btn.primary {
+    background: #F7941E;
     color: #FAFAF9;
-    font-size: 14px;
-    min-height: 80px;
-    width: 100%;
-    resize: none;
-    font-family: inherit;
+    border-color: #F7941E;
   }
 
-  .receipt-card {
-    background: #151210;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid #2A2623;
-    width: 100%;
-    margin-bottom: 24px;
+  .timer {
+    font-size: 11px;
+    color: #F7941E;
+    font-weight: 600;
   }
-  .receipt-row {
+
+  .receiving-account {
+    background: #151210;
+    border: 1px solid #2A2623;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
+    align-items: center;
   }
 
-  .source-breakdown {
-    background: #151210;
-    border-radius: 10px;
-    padding: 14px;
-    border: 1px solid #2A2623;
-    margin-top: 16px;
+  .account-info {
+    flex: 1;
+  }
+
+  .account-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #FAFAF9;
+    margin-bottom: 4px;
+  }
+
+  .account-handle {
+    font-size: 12px;
+    color: #57534E;
+  }
+
+  .account-actions {
+    display: flex;
+    gap: 8px;
+    font-size: 11px;
+  }
+
+  .account-actions span {
+    color: #57534E;
+    cursor: pointer;
+  }
+
+  .divider-thick {
+    height: 2px;
+    background: #2A2623;
+    margin: 20px 0;
   }
 </style>
 </head>
 <body>
 
-<h1>VAI Wallet Screens</h1>
-<p class="page-subtitle">7 screens -- React Native component preview -- April 2026</p>
+<h1>💳 VAI Wallet — Gold Standard Screens</h1>
+<p class="page-subtitle">Updated layout for Badinho mobile team — Build reference</p>
 
-<div class="screens-container">
-
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 1: Wallet Home -->
-<!-- ────────────────────────────────────────────────────────────── -->
+<!-- SCREEN 1: HOME / WALLET TAB -->
 <div class="screen-wrapper">
-  <div class="screen-label">1. Wallet Home</div>
-  <div class="screen-sublabel">Main wallet dashboard</div>
+  <div class="screen-label">Screen 1: Home / Wallet Tab</div>
   <div class="phone-frame">
     <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
+      <span style="font-size: 15px; font-weight: 600;">9:41</span>
+      <span>📶 📡 🔋</span>
     </div>
     <div class="screen-content">
-      <!-- Balance Card -->
-      <div class="card" style="margin-top:16px;">
-        <div class="section-title" style="margin-bottom:16px; letter-spacing:1.5px;">YOUR EARNINGS</div>
-        <div class="row" style="margin-bottom:8px;">
-          <span class="text-secondary fs-16">Available</span>
-          <span class="text-green fs-24 fw-700">$89.00</span>
-        </div>
-        <div class="row" style="margin-bottom:8px;">
-          <span class="text-secondary fs-16">Pending</span>
-          <span class="text-orange fs-24 fw-700">$38.50</span>
-        </div>
-        <div class="divider"></div>
-        <div class="row">
-          <span class="text-secondary fs-16">Lifetime</span>
-          <span class="text-primary fs-24 fw-700">$1,204.00</span>
-        </div>
-        <div style="color:#57534E; font-size:13px; margin-top:8px;">Next available: $38.50 on Apr 23, 2026</div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="quick-actions">
-        <div class="quick-action-btn primary">
-          <div class="quick-action-icon">&#128184;</div>
-          <div class="quick-action-label">Cash Out</div>
-        </div>
-        <div class="quick-action-btn">
-          <div class="quick-action-icon">&#128179;</div>
-          <div class="quick-action-label">Pay</div>
-        </div>
-        <div class="quick-action-btn">
-          <div class="quick-action-icon">&#128228;</div>
-          <div class="quick-action-label">Send</div>
+      <!-- Balance Card at TOP -->
+      <div class="card balance">
+        <div class="balance-label">💳 Wallet Balance</div>
+        <div class="balance-amount">$2,450.00</div>
+        <div class="btn-group">
+          <button class="btn btn-primary">Send</button>
+          <button class="btn btn-secondary">Cashout</button>
         </div>
       </div>
 
-      <!-- Subscription Progress -->
-      <div class="card-12" style="margin-top:16px;">
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" style="width:64.9%; background:#34D399;"></div>
+      <div style="font-size: 12px; color: #57534E; font-weight: 600; margin: 20px 0 12px 0; text-transform: uppercase;">Latest Transactions</div>
+
+      <div class="tx-row">
+        <div class="tx-left">
+          <div class="tx-name">✓ John Doe</div>
+          <div class="tx-time">Yesterday</div>
         </div>
-        <div style="color:#A8A29E; font-size:13px; margin-top:8px;">$6.46 / $9.95</div>
-        <div style="color:#57534E; font-size:13px; margin-top:4px;">Earn $3.49 more to pay your subscription for free!</div>
+        <div class="tx-amount plus">+$500</div>
       </div>
 
-      <!-- This Month -->
-      <div class="card-12" style="margin-top:16px;">
-        <div class="section-title">THIS MONTH</div>
-        <div class="row" style="margin-top:10px;">
-          <span class="text-secondary fs-14">Earned</span>
-          <span class="text-green fs-14 fw-600">+$14.96</span>
+      <div class="tx-row">
+        <div class="tx-left">
+          <div class="tx-name">⏳ Sarah Smith<span class="badge badge-pending">PENDING</span></div>
+          <div class="tx-time">2 days ago · Expires in 5 days</div>
         </div>
-        <div class="row" style="margin-top:10px;">
-          <span class="text-secondary fs-14">Cashed Out</span>
-          <span class="text-primary fs-14 fw-600">$0.00</span>
-        </div>
-        <div class="row" style="margin-top:10px;">
-          <span class="text-secondary fs-14">Subscription</span>
-          <span class="text-red fs-14 fw-600">-$9.95</span>
-        </div>
+        <div class="tx-amount minus">-$250</div>
       </div>
 
-      <!-- Recent Activity -->
-      <div style="margin:24px 16px 0;">
-        <div class="section-title" style="margin-bottom:0;">RECENT ACTIVITY</div>
-        <div class="tx-row">
-          <div class="tx-left">
-            <div class="text-primary fs-14 fw-500">L1 commission -- @jake_lifts subscribed to Plus</div>
-            <div class="tx-meta">
-              <span class="badge badge-pending">PENDING</span>
-              <span class="text-tertiary fs-12">Apr 9, 2026</span>
-            </div>
-          </div>
-          <span class="text-green fs-16 fw-700">+$4.99</span>
+      <div class="tx-row">
+        <div class="tx-left">
+          <div class="tx-name">✓ Team Fee</div>
+          <div class="tx-time">4 days ago</div>
         </div>
-        <div class="tx-row">
-          <div class="tx-left">
-            <div class="text-primary fs-14 fw-500">L2 from @coach_mike</div>
-            <div class="tx-meta">
-              <span class="badge badge-available">AVAILABLE</span>
-              <span class="text-tertiary fs-12">Apr 8, 2026</span>
-            </div>
-          </div>
-          <span class="text-green fs-16 fw-700">+$2.00</span>
-        </div>
-        <div class="tx-row">
-          <div class="tx-left">
-            <div class="text-primary fs-14 fw-500">Commission adjusted — subscriber cancelled</div>
-            <div class="tx-meta">
-              <span class="badge badge-adjusted">ADJUSTED</span>
-              <span class="text-tertiary fs-12">Apr 7, 2026</span>
-            </div>
-          </div>
-          <span class="text-red fs-16 fw-700">-$1.50</span>
-        </div>
-        <div class="tx-row">
-          <div class="tx-left">
-            <div class="text-primary fs-14 fw-500">Cashout to Venmo @yourhandle</div>
-            <div class="tx-meta">
-              <span class="badge badge-completed">COMPLETED</span>
-              <span class="text-tertiary fs-12">Mar 28, 2026</span>
-            </div>
-          </div>
-          <span class="text-red fs-16 fw-700">-$45.00</span>
-        </div>
-        <div class="tx-row" style="border-bottom:none;">
-          <div class="tx-left">
-            <div class="text-primary fs-14 fw-500">Subscription auto-paid from wallet</div>
-            <div class="tx-meta">
-              <span class="badge badge-completed">COMPLETED</span>
-              <span class="text-tertiary fs-12">Apr 1, 2026</span>
-            </div>
-          </div>
-          <span class="text-red fs-16 fw-700">-$9.95</span>
-        </div>
+        <div class="tx-amount minus">-$100</div>
       </div>
-      <div style="height:40px;"></div>
+
+      <div style="margin-top: 16px;">
+        <button class="btn btn-secondary" style="width: 100%;">View All Transactions</button>
+      </div>
+
+      <div class="filter-bar" style="margin-top: 20px;">
+        <div class="filter-tab active">Due</div>
+        <div class="filter-tab">Paid</div>
+        <div class="filter-tab">Awaiting</div>
+        <div class="filter-tab">Received</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 2: Transaction History -->
-<!-- ────────────────────────────────────────────────────────────── -->
+<!-- SCREEN 2: SEND FLOW - ENTRY POINT -->
 <div class="screen-wrapper">
-  <div class="screen-label">2. Transaction History</div>
-  <div class="screen-sublabel">Full transaction list with filters</div>
+  <div class="screen-label">Screen 2: Send Money Entry</div>
   <div class="phone-frame">
     <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
+      <span style="font-size: 15px; font-weight: 600;">9:41</span>
+      <span>📶 📡 🔋</span>
     </div>
     <div class="screen-content">
-      <div style="padding:16px 16px 8px;">
-        <div class="text-primary fs-24 fw-700">Transaction History</div>
+      <!-- Quick Access Avatars -->
+      <div style="margin-bottom: 16px;">
+        <div style="font-size: 12px; color: #57534E; font-weight: 600; margin-bottom: 8px; text-transform: uppercase;">Quick Access</div>
+        <div class="avatar-bar">
+          <div class="avatar">J</div>
+          <div class="avatar">S</div>
+          <div class="avatar">C</div>
+          <div class="avatar">+</div>
+        </div>
       </div>
 
+      <div style="margin-bottom: 16px;">
+        <div style="font-size: 12px; color: #57534E; font-weight: 600; margin-bottom: 8px;">or Search</div>
+        <input type="text" placeholder="Name, phone, email..." style="background: #151210; border: 1px solid #2A2623; border-radius: 8px; padding: 12px; width: 100%; color: #FAFAF9; font-size: 14px;">
+      </div>
+
+      <!-- Numeric Keypad -->
+      <div class="keypad">
+        <div style="font-size: 12px; color: #57534E; font-weight: 600; margin-bottom: 12px; text-transform: uppercase;">Amount</div>
+        <div class="keypad-display">$0.00</div>
+        <div class="keypad-grid">
+          <div class="keypad-btn">7</div>
+          <div class="keypad-btn">8</div>
+          <div class="keypad-btn">9</div>
+          <div class="keypad-btn">4</div>
+          <div class="keypad-btn">5</div>
+          <div class="keypad-btn">6</div>
+          <div class="keypad-btn">1</div>
+          <div class="keypad-btn">2</div>
+          <div class="keypad-btn">3</div>
+          <div class="keypad-btn">0</div>
+          <div class="keypad-btn">.</div>
+          <div class="keypad-btn">⌫</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 12px;">
+        <button class="btn btn-primary">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 3: CONFIRM + REVIEW -->
+<div class="screen-wrapper">
+  <div class="screen-label">Screen 3: Confirm Payment</div>
+  <div class="phone-frame">
+    <div class="status-bar">
+      <span style="font-size: 15px; font-weight: 600;">9:41</span>
+      <span>📶 📡 🔋</span>
+    </div>
+    <div class="screen-content">
+      <div class="card">
+        <div style="font-size: 12px; color: #57534E; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Send</div>
+        <div style="font-size: 28px; color: #F7941E; font-weight: 700; margin-bottom: 20px;">$250.00</div>
+
+        <div style="font-size: 12px; color: #57534E; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">To</div>
+        <div style="font-size: 16px; color: #FAFAF9; font-weight: 700; margin-bottom: 20px;">John Doe (@johndoe)</div>
+
+        <div style="font-size: 12px; color: #57534E; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Note</div>
+        <div style="font-size: 14px; color: #A8A29E; margin-bottom: 20px; font-style: italic;">Weekly coaching fee</div>
+
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 12px 0; border-top: 1px solid #2A2623;">
+          <span style="color: #57534E;">From Balance</span>
+          <span style="color: #FAFAF9; font-weight: 600;">$2,450</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+          <span style="color: #57534E;">Fee</span>
+          <span style="color: #FAFAF9; font-weight: 600;">$0</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-top: 1px solid #2A2623; padding-top: 12px;">
+          <span style="color: #FAFAF9; font-weight: 700;">Total</span>
+          <span style="color: #F7941E; font-weight: 700; font-size: 18px;">$250.00</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <div style="text-align: center; margin-bottom: 16px;">
+          <div style="font-size: 12px; color: #57534E; margin-bottom: 8px;">🔐 Biometric Required</div>
+        </div>
+        <button class="btn btn-primary">Confirm with Face ID</button>
+        <button class="btn btn-secondary" style="margin-top: 12px;">Use PIN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4: LEDGER TAB -->
+<div class="screen-wrapper">
+  <div class="screen-label">Screen 4: Ledger — Awaiting</div>
+  <div class="phone-frame">
+    <div class="status-bar">
+      <span style="font-size: 15px; font-weight: 600;">9:41</span>
+      <span>📶 📡 🔋</span>
+    </div>
+    <div class="screen-content">
       <div class="filter-bar">
-        <div class="filter-tab active">All <span class="filter-count">10</span></div>
-        <div class="filter-tab">Earned <span class="filter-count">4</span></div>
-        <div class="filter-tab">Spent <span class="filter-count">3</span></div>
-        <div class="filter-tab">Cashouts <span class="filter-count">2</span></div>
+        <div class="filter-tab">Due</div>
+        <div class="filter-tab">Paid</div>
+        <div class="filter-tab active">Awaiting</div>
+        <div class="filter-tab">Received</div>
       </div>
 
-      <div style="padding:0 16px;">
-        <!-- Row 1 -->
-        <div class="tx-row" style="gap:12px;">
-          <div class="tx-icon-circle" style="background:rgba(52,211,153,0.09);color:#34D399;">&#8593;</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-14 fw-500">L1 commission -- @jake_lifts subscribed to Plus</div>
-            <div class="tx-meta">
-              <span class="badge badge-pending">PENDING</span>
-              <span class="text-tertiary fs-11">Apr 9, 2026 at 2:30 PM</span>
-            </div>
-            <div class="text-orange fs-11" style="margin-top:2px;">Available Apr 23</div>
+      <!-- Pending Item 1 -->
+      <div class="pending-item">
+        <div class="pending-header">
+          <div>
+            <div class="tx-name">⏳ Sarah Smith</div>
+            <div class="tx-time">Pending Acceptance</div>
           </div>
-          <span class="text-green fs-16 fw-700">+$2.49</span>
+          <div class="tx-amount minus">-$250</div>
         </div>
-        <!-- Row 2 -->
-        <div class="tx-row" style="gap:12px;">
-          <div class="tx-icon-circle" style="background:rgba(52,211,153,0.09);color:#34D399;">&#8593;</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-14 fw-500">L1 commission -- @sarah_runs subscribed to Mentor</div>
-            <div class="tx-meta">
-              <span class="badge badge-available">AVAILABLE</span>
-              <span class="text-tertiary fs-11">Apr 8, 2026 at 10:15 AM</span>
-            </div>
-          </div>
-          <span class="text-green fs-16 fw-700">+$12.49</span>
+        <div style="font-size: 11px; color: #F7941E; margin: 8px 0;">
+          <span class="timer">⏰ Expires in 5 days</span>
         </div>
-        <!-- Row 3 -->
-        <div class="tx-row" style="gap:12px;">
-          <div class="tx-icon-circle" style="background:rgba(52,211,153,0.09);color:#34D399;">&#8593;</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-14 fw-500">L2 from @coach_mike</div>
-            <div class="tx-meta">
-              <span class="badge badge-available">AVAILABLE</span>
-              <span class="text-tertiary fs-11">Apr 7, 2026 at 4:45 PM</span>
-            </div>
-          </div>
-          <span class="text-green fs-16 fw-700">+$1.00</span>
-        </div>
-        <!-- Row 4 -->
-        <div class="tx-row" style="gap:12px;">
-          <div class="tx-icon-circle" style="background:rgba(239,68,68,0.09);color:#EF4444;">&#8593;</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-14 fw-500">Commission adjusted — subscriber cancelled</div>
-            <div class="tx-meta">
-              <span class="badge badge-adjusted">ADJUSTED</span>
-              <span class="text-tertiary fs-11">Apr 7, 2026 at 8:00 AM</span>
-            </div>
-          </div>
-          <span class="text-red fs-16 fw-700">-$1.50</span>
-        </div>
-        <!-- Row 5 -->
-        <div class="tx-row" style="gap:12px;">
-          <div class="tx-icon-circle" style="background:rgba(239,68,68,0.09);color:#EF4444;">&#8595;</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-14 fw-500">Cashout to Venmo @yourhandle</div>
-            <div class="tx-meta">
-              <span class="badge badge-completed">COMPLETED</span>
-              <span class="text-tertiary fs-11">Mar 28, 2026 at 9:45 AM</span>
-            </div>
-          </div>
-          <span class="text-red fs-16 fw-700">-$45.00</span>
-        </div>
-        <!-- Row 6 -->
-        <div class="tx-row" style="gap:12px;">
-          <div class="tx-icon-circle" style="background:rgba(239,68,68,0.09);color:#EF4444;">&#9851;</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-14 fw-500">Subscription auto-paid from wallet</div>
-            <div class="tx-meta">
-              <span class="badge badge-completed">COMPLETED</span>
-              <span class="text-tertiary fs-11">Apr 1, 2026 at 12:00 AM</span>
-            </div>
-          </div>
-          <span class="text-red fs-16 fw-700">-$9.95</span>
-        </div>
-        <!-- Row 7 -->
-        <div class="tx-row" style="gap:12px;">
-          <div class="tx-icon-circle" style="background:rgba(239,68,68,0.09);color:#EF4444;">&#8594;</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-14 fw-500">Payment to @coach_elite -- March sessions</div>
-            <div class="tx-meta">
-              <span class="badge badge-completed">COMPLETED</span>
-              <span class="text-tertiary fs-11">Mar 25, 2026 at 3:20 PM</span>
-            </div>
-          </div>
-          <span class="text-red fs-16 fw-700">-$50.00</span>
-        </div>
-        <!-- Row 8 -->
-        <div class="tx-row" style="gap:12px; border-bottom:none;">
-          <div class="tx-icon-circle" style="background:rgba(52,211,153,0.09);color:#34D399;">&#8593;</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-14 fw-500">L3 from @newbie_gains</div>
-            <div class="tx-meta">
-              <span class="badge badge-settling">SETTLING</span>
-              <span class="text-tertiary fs-11">Mar 20, 2026 at 12:00 PM</span>
-            </div>
-          </div>
-          <span class="text-green fs-16 fw-700">+$0.50</span>
-        </div>
-      </div>
-      <div style="height:40px;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 3: Cash Out Flow (showing all 4 steps) -->
-<!-- ────────────────────────────────────────────────────────────── -->
-<div class="screen-wrapper">
-  <div class="screen-label">3. Cash Out Flow</div>
-  <div class="screen-sublabel">Amount + Method + Confirm + Success</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
-    </div>
-    <div class="screen-content">
-      <!-- Step 1: Amount -->
-      <div style="padding:16px;">
-        <div class="text-primary fs-28 fw-700">Cash Out</div>
-        <div class="text-secondary fs-15" style="margin-bottom:32px;">Available: $89.00</div>
-        <div style="display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
-          <span class="text-primary" style="font-size:48px;font-weight:300;margin-right:4px;">$</span>
-          <span class="text-primary" style="font-size:48px;font-weight:700;">89.00</span>
-        </div>
-        <div style="text-align:center;margin-bottom:24px;">
-          <span style="display:inline-block;padding:8px 16px;border-radius:20px;background:#1A1714;border:1px solid #2A2623;color:#F7941E;font-size:14px;font-weight:600;">Cash out max</span>
-        </div>
-        <button class="btn-primary">Choose Destination</button>
-      </div>
-
-      <div class="divider" style="margin:8px 16px 16px;"></div>
-
-      <!-- Step 2: Method Selection (compact) -->
-      <div style="padding:0 16px;">
-        <div class="text-orange fs-16 fw-600" style="margin-bottom:8px;">Step 2: Select Destination</div>
-        <div class="text-secondary fs-15" style="margin-bottom:16px;">Where should we send your money?</div>
-
-        <div class="method-card selected">
-          <div class="selected-dot"></div>
-          <div style="margin-bottom:8px;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-              <span class="text-primary fs-16 fw-600">Venmo</span>
-              <span class="badge badge-recommended">RECOMMENDED</span>
-            </div>
-            <div class="text-secondary fs-14">@your****</div>
-          </div>
-          <div class="row">
-            <span class="text-tertiary fs-13">No fee</span>
-            <span class="text-tertiary fs-13">Instant</span>
-          </div>
-        </div>
-
-        <div class="method-card">
-          <div style="margin-bottom:8px;">
-            <div class="text-primary fs-16 fw-600" style="margin-bottom:4px;">PayPal</div>
-            <div class="text-secondary fs-14">you***@gmail.com</div>
-          </div>
-          <div class="row">
-            <span class="text-tertiary fs-13">$0.25 fee</span>
-            <span class="text-tertiary fs-13">1-2 business days</span>
-          </div>
-        </div>
-
-        <div class="method-card">
-          <div style="margin-bottom:8px;">
-            <div class="text-primary fs-16 fw-600" style="margin-bottom:4px;">Bank Account</div>
-            <div class="text-orange fs-14">Link Bank Account</div>
-          </div>
-          <div class="row">
-            <span class="text-tertiary fs-13">$0.25 fee</span>
-            <span class="text-tertiary fs-13">3-5 business days</span>
-          </div>
+        <div class="pending-actions">
+          <button class="mini-btn">Resend</button>
+          <button class="mini-btn">Cancel</button>
         </div>
       </div>
 
-      <div class="divider" style="margin:16px;"></div>
-
-      <!-- Step 3: Confirm (compact) -->
-      <div style="padding:0 16px;">
-        <div class="text-orange fs-16 fw-600" style="margin-bottom:12px;">Step 3: Confirm Cashout</div>
-        <div class="confirm-card">
-          <div class="confirm-row">
-            <span class="text-secondary fs-15">Amount</span>
-            <span class="text-primary fs-15 fw-600">$89.00</span>
+      <!-- Pending Item 2 -->
+      <div class="pending-item">
+        <div class="pending-header">
+          <div>
+            <div class="tx-name">⏳ Coach Payment</div>
+            <div class="tx-time">Pending Payment</div>
           </div>
-          <div class="confirm-row">
-            <span class="text-secondary fs-15">Destination</span>
-            <span class="text-primary fs-15 fw-600">Venmo</span>
-          </div>
-          <div class="confirm-row">
-            <span class="text-secondary fs-15">Account</span>
-            <span class="text-primary fs-15 fw-600">@your****</span>
-          </div>
-          <div class="divider" style="margin:8px 0;"></div>
-          <div class="confirm-row">
-            <span class="text-secondary fs-15">Fee</span>
-            <span class="text-green fs-15 fw-600">FREE</span>
-          </div>
-          <div class="confirm-row" style="margin-bottom:0;">
-            <span class="text-secondary fs-15 fw-700">You receive</span>
-            <span class="text-green fs-20 fw-700">$89.00</span>
-          </div>
-          <div style="text-align:center;margin-top:8px;">
-            <span class="text-tertiary fs-13">Estimated arrival: Instant</span>
-          </div>
+          <div class="tx-amount minus">-$100</div>
         </div>
-        <div style="padding:16px 0;">
-          <button class="btn-primary">Confirm $89.00</button>
+        <div style="font-size: 11px; color: #F7941E; margin: 8px 0;">
+          <span class="timer">⏰ Requested 1 week ago</span>
         </div>
-      </div>
-      <div style="height:40px;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 3b: Cash Out Success State -->
-<!-- ────────────────────────────────────────────────────────────── -->
-<div class="screen-wrapper">
-  <div class="screen-label">3b. Cash Out Success</div>
-  <div class="screen-sublabel">Confirmation screen</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
-    </div>
-    <div class="screen-content">
-      <div class="success-container">
-        <div class="success-circle">
-          <span class="success-check">&#10003;</span>
+        <div class="pending-actions">
+          <button class="mini-btn primary">Pay Now</button>
+          <button class="mini-btn">Ignore</button>
         </div>
-        <div class="text-primary fs-24 fw-700" style="margin-bottom:8px;">Money is on the way!</div>
-        <div class="text-green fs-36 fw-700" style="margin-bottom:8px;">$89.00</div>
-        <div class="text-secondary fs-16" style="margin-bottom:4px;">Sent to Venmo</div>
-        <div class="text-tertiary fs-14" style="margin-bottom:40px;">Estimated arrival: Instant</div>
-        <button class="btn-secondary">Done</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 4: Earnings Breakdown -->
-<!-- ────────────────────────────────────────────────────────────── -->
+<!-- SCREEN 5: RECEIVING ACCOUNTS -->
 <div class="screen-wrapper">
-  <div class="screen-label">4. Earnings Breakdown</div>
-  <div class="screen-sublabel">5-level affiliate tree + pending holds</div>
+  <div class="screen-label">Screen 5: Receiving Accounts</div>
   <div class="phone-frame">
     <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
+      <span style="font-size: 15px; font-weight: 600;">9:41</span>
+      <span>📶 📡 🔋</span>
     </div>
     <div class="screen-content">
-      <div style="padding:16px 16px 8px;">
-        <div class="text-primary fs-24 fw-700">Earnings Breakdown</div>
-      </div>
+      <div style="font-size: 14px; color: #FAFAF9; font-weight: 600; margin-bottom: 16px;">Where others can send you money:</div>
 
-      <!-- Toggle -->
-      <div style="margin:8px 16px 0;background:#151210;border-radius:10px;padding:4px;border:1px solid #2A2623;display:flex;">
-        <div style="flex:1;padding:10px;text-align:center;border-radius:8px;background:rgba(247,148,30,0.15);color:#F7941E;font-size:14px;font-weight:600;">This Month</div>
-        <div style="flex:1;padding:10px;text-align:center;border-radius:8px;color:#A8A29E;font-size:14px;font-weight:600;">Lifetime</div>
-      </div>
-
-      <!-- Summary Card -->
-      <div class="card" style="margin-top:16px;text-align:center;">
-        <div class="text-green fs-36 fw-700" style="margin-bottom:4px;">$48.96</div>
-        <div class="text-secondary fs-14" style="margin-bottom:20px;">Earned This Month</div>
-        <div style="display:flex;align-items:center;justify-content:center;">
-          <div style="text-align:center;padding:0 24px;">
-            <div class="text-primary fs-22 fw-700">28</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">Total Referrals</div>
-          </div>
-          <div style="width:1px;height:32px;background:#2A2623;"></div>
-          <div style="text-align:center;padding:0 24px;">
-            <div class="text-primary fs-22 fw-700">15</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">Active</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5-Level Tree -->
-      <div style="margin:24px 16px 0;">
-        <div class="section-title" style="margin-bottom:16px;">AFFILIATE TREE</div>
-
-        <!-- Level 1 -->
-        <div class="tier-node">
-          <div class="tier-header">
-            <div class="tier-dot" style="background:#34D399;"></div>
-            <div style="flex:1;">
-              <div class="text-primary fs-16 fw-600">Level 1</div>
-              <div class="text-tertiary fs-12">25% commission</div>
-            </div>
-            <span class="text-green fs-18 fw-700">$29.96</span>
-          </div>
-          <div class="tier-bar-bg">
-            <div class="tier-bar-fill" style="width:100%;background:#34D399;"></div>
-          </div>
-          <div class="tier-stats">
-            <span class="text-tertiary fs-12">6 referrals</span>
-            <span class="text-tertiary fs-12">4 active</span>
-          </div>
-          <div class="top-earners">
-            <div class="top-earner-row"><span class="text-secondary fs-13">@jake_lifts</span><span class="text-green fs-13 fw-600">$12.49</span></div>
-            <div class="top-earner-row"><span class="text-secondary fs-13">@sarah_runs</span><span class="text-green fs-13 fw-600">$9.98</span></div>
-            <div class="top-earner-row"><span class="text-secondary fs-13">@coach_mike</span><span class="text-green fs-13 fw-600">$4.99</span></div>
-          </div>
-        </div>
-
-        <!-- Level 2 -->
-        <div class="tier-node">
-          <div class="connector-line"></div>
-          <div class="tier-header">
-            <div class="tier-dot" style="background:#5EEAD4;"></div>
-            <div style="flex:1;">
-              <div class="text-primary fs-16 fw-600">Level 2</div>
-              <div class="text-tertiary fs-12">10% commission</div>
-            </div>
-            <span class="text-teal fs-18 fw-700">$12.00</span>
-          </div>
-          <div class="tier-bar-bg">
-            <div class="tier-bar-fill" style="width:40%;background:#5EEAD4;"></div>
-          </div>
-          <div class="tier-stats">
-            <span class="text-tertiary fs-12">8 referrals</span>
-            <span class="text-tertiary fs-12">5 active</span>
-          </div>
-        </div>
-
-        <!-- Level 3 -->
-        <div class="tier-node">
-          <div class="connector-line"></div>
-          <div class="tier-header">
-            <div class="tier-dot" style="background:#F7941E;"></div>
-            <div style="flex:1;">
-              <div class="text-primary fs-16 fw-600">Level 3</div>
-              <div class="text-tertiary fs-12">5% commission</div>
-            </div>
-            <span class="text-orange fs-18 fw-700">$4.50</span>
-          </div>
-          <div class="tier-bar-bg">
-            <div class="tier-bar-fill" style="width:15%;background:#F7941E;"></div>
-          </div>
-          <div class="tier-stats">
-            <span class="text-tertiary fs-12">7 referrals</span>
-            <span class="text-tertiary fs-12">3 active</span>
-          </div>
-        </div>
-
-        <!-- Level 4 -->
-        <div class="tier-node">
-          <div class="connector-line"></div>
-          <div class="tier-header">
-            <div class="tier-dot" style="background:#FFB347;"></div>
-            <div style="flex:1;">
-              <div class="text-primary fs-16 fw-600">Level 4</div>
-              <div class="text-tertiary fs-12">3% commission</div>
-            </div>
-            <span style="color:#FFB347;" class="fs-18 fw-700">$1.80</span>
-          </div>
-          <div class="tier-bar-bg">
-            <div class="tier-bar-fill" style="width:6%;background:#FFB347;"></div>
-          </div>
-          <div class="tier-stats">
-            <span class="text-tertiary fs-12">5 referrals</span>
-            <span class="text-tertiary fs-12">2 active</span>
-          </div>
-        </div>
-
-        <!-- Level 5 -->
-        <div class="tier-node">
-          <div class="connector-line"></div>
-          <div class="tier-header">
-            <div class="tier-dot" style="background:#A8A29E;"></div>
-            <div style="flex:1;">
-              <div class="text-primary fs-16 fw-600">Level 5</div>
-              <div class="text-tertiary fs-12">2% commission</div>
-            </div>
-            <span class="text-secondary fs-18 fw-700">$0.70</span>
-          </div>
-          <div class="tier-bar-bg">
-            <div class="tier-bar-fill" style="width:2.3%;background:#A8A29E;"></div>
-          </div>
-          <div class="tier-stats">
-            <span class="text-tertiary fs-12">2 referrals</span>
-            <span class="text-tertiary fs-12">1 active</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pending Holds -->
-      <div style="margin:24px 16px 0;">
-        <div class="row" style="margin-bottom:4px;">
-          <span class="section-title">PENDING HOLDS</span>
-          <span class="text-orange fs-13 fw-600">$15.98 pending</span>
-        </div>
-        <div class="text-tertiary fs-12" style="margin-bottom:12px;line-height:16px;">Commissions are held for 14 days before becoming available for cash out.</div>
-
-        <div class="hold-row">
-          <div style="flex:1;margin-right:12px;">
-            <div class="text-primary fs-13 fw-500">L1 -- @jake_lifts Plus subscription</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">13 days left -- Apr 23</div>
-          </div>
-          <span class="text-orange fs-15 fw-700">$2.49</span>
-        </div>
-        <div class="hold-row">
-          <div style="flex:1;margin-right:12px;">
-            <div class="text-primary fs-13 fw-500">L1 -- @sarah_runs Mentor subscription</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">15 days left -- Apr 25</div>
-          </div>
-          <span class="text-orange fs-15 fw-700">$12.49</span>
-        </div>
-        <div class="hold-row">
-          <div style="flex:1;margin-right:12px;">
-            <div class="text-primary fs-13 fw-500">L2 -- @fit_jessica Plus subscription</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">10 days left -- Apr 20</div>
-          </div>
-          <span class="text-orange fs-15 fw-700">$1.00</span>
-        </div>
-      </div>
-      <div style="height:40px;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 5: Make Payment -->
-<!-- ────────────────────────────────────────────────────────────── -->
-<div class="screen-wrapper">
-  <div class="screen-label">5. Make Payment</div>
-  <div class="screen-sublabel">Invoice + mentor select + payment flow</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
-    </div>
-    <div class="screen-content">
-      <div style="padding:16px;">
-        <div class="text-primary fs-24 fw-700" style="margin-bottom:4px;">Make Payment</div>
-        <div class="text-secondary fs-15" style="margin-bottom:20px;">Select a mentor to pay</div>
-
-        <!-- Invoice Banner -->
-        <div class="invoice-banner">
-          <div class="row" style="margin-bottom:6px;">
-            <span class="text-orange fs-11 fw-700" style="letter-spacing:1px;">INVOICE</span>
-            <span class="text-orange fs-20 fw-700">$150.00</span>
-          </div>
-          <div class="text-primary fs-14" style="margin-bottom:4px;">March coaching -- 4 sessions</div>
-          <div class="text-tertiary fs-12" style="margin-bottom:12px;">Due Apr 15, 2026</div>
-          <button class="btn-primary" style="padding:10px;font-size:15px;">Pay $150.00</button>
-        </div>
-
-        <!-- Mentor List -->
-        <div class="section-title" style="letter-spacing:1.2px;margin-bottom:12px;">YOUR MENTORS</div>
-
-        <div class="mentor-row">
-          <div class="avatar-circle">CE</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-15 fw-600">Coach Elite</div>
-            <div class="text-tertiary fs-13">@coach_elite</div>
-          </div>
-          <span class="text-tertiary fs-18">&gt;</span>
-        </div>
-
-        <div class="mentor-row">
-          <div class="avatar-circle">SJ</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-15 fw-600">Sarah Johnson</div>
-            <div class="text-tertiary fs-13">@strength_sarah</div>
-          </div>
-          <span class="text-tertiary fs-18">&gt;</span>
-        </div>
-
-        <div class="mentor-row">
-          <div class="avatar-circle">MC</div>
-          <div style="flex:1;">
-            <div class="text-primary fs-15 fw-600">Marcus Chen</div>
-            <div class="text-tertiary fs-13">@nutrition_pro</div>
-          </div>
-          <span class="text-tertiary fs-18">&gt;</span>
-        </div>
-      </div>
-
-      <div class="divider" style="margin:0 16px 16px;"></div>
-
-      <!-- Amount + Source breakdown for selected mentor -->
-      <div style="padding:0 16px;">
-        <div class="text-orange fs-16 fw-600" style="margin-bottom:8px;">Pay @coach_elite</div>
-        <div class="text-orange fs-13" style="margin-bottom:16px;">Invoice: March coaching -- 4 sessions -- $150.00</div>
-
-        <div style="display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
-          <span class="text-primary" style="font-size:40px;font-weight:300;margin-right:4px;">$</span>
-          <span class="text-primary" style="font-size:40px;font-weight:700;">150.00</span>
-        </div>
-
-        <div class="source-breakdown">
-          <div class="row" style="margin-bottom:6px;">
-            <span class="text-secondary fs-14">From wallet</span>
-            <span class="text-green fs-14 fw-600">$89.00</span>
-          </div>
-          <div class="row" style="margin-bottom:6px;">
-            <span class="text-secondary fs-14">From card</span>
-            <span class="text-primary fs-14 fw-600">$61.00</span>
-          </div>
-          <div class="text-tertiary fs-12" style="margin-top:4px;">Wallet balance: $89.00</div>
-        </div>
-
-        <!-- Payment Methods — Stripe PaymentSheet surfaces these automatically -->
-        <div style="margin-top:16px;padding:12px;background:#151210;border-radius:12px;border:1px solid #2A2623;">
-          <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1px;margin-bottom:10px;">CARD PORTION PAID WITH</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
-            <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:#0C0A09;border-radius:8px;border:1px solid #2A2623;">
-              <span style="font-size:14px;">&#128179;</span>
-              <span class="text-primary fs-12 fw-600">Visa &bull;&bull;&bull;&bull; 4242</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:#FFFFFF;border-radius:8px;">
-              <span style="font-size:14px;">&#63743;</span>
-              <span style="color:#000;font-size:12px;font-weight:700;">Pay</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:#FFFFFF;border-radius:8px;">
-              <span style="color:#4285F4;font-size:13px;font-weight:700;">G</span>
-              <span style="color:#000;font-size:12px;font-weight:600;">Pay</span>
-            </div>
-          </div>
-          <div class="text-tertiary fs-11" style="line-height:15px;">Stripe PaymentSheet shows saved cards, Apple Pay, and Google Pay based on device. Face ID / Touch ID confirms the payment.</div>
-        </div>
-
-        <div style="margin-top:20px;">
-          <div class="text-secondary fs-13" style="margin-bottom:8px;">Message (optional)</div>
-          <textarea class="message-input" readonly>Thanks for the coaching!</textarea>
-          <div class="text-tertiary fs-11" style="text-align:right;margin-top:4px;">25/200</div>
-        </div>
-
-        <div style="padding:24px 0;">
-          <button class="btn-primary">Review Payment</button>
-        </div>
-      </div>
-      <div style="height:40px;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 6: Wallet Settings -->
-<!-- ────────────────────────────────────────────────────────────── -->
-<div class="screen-wrapper">
-  <div class="screen-label">6. Wallet Settings</div>
-  <div class="screen-sublabel">Payout methods, auto-cashout, notifications</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
-    </div>
-    <div class="screen-content">
-      <div style="padding:16px 16px 8px;">
-        <div class="text-primary fs-24 fw-700">Wallet Settings</div>
-      </div>
-
-      <!-- Payout Methods -->
-      <div class="section-title" style="padding:24px 16px 12px;letter-spacing:1.2px;">PAYOUT METHODS</div>
-
-      <div class="account-card">
-        <div style="display:flex;align-items:flex-start;">
-          <div class="account-icon-circle">V</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-              <span class="text-primary fs-16 fw-600">Venmo</span>
-              <span class="badge badge-default">DEFAULT</span>
-              <span class="badge badge-verified">VERIFIED</span>
-            </div>
-            <div class="text-secondary fs-14" style="margin-top:4px;">@your****</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">Linked Mar 15, 2026</div>
-          </div>
+      <div class="receiving-account">
+        <div class="account-info">
+          <div class="account-name">✓ PayPal Account</div>
+          <div class="account-handle">ben@vai.app</div>
         </div>
         <div class="account-actions">
-          <span class="action-btn remove">Remove</span>
+          <span>Edit</span>
+          <span>Remove</span>
         </div>
       </div>
 
-      <div class="account-card">
-        <div style="display:flex;align-items:flex-start;">
-          <div class="account-icon-circle">P</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-              <span class="text-primary fs-16 fw-600">PayPal</span>
-              <span class="badge badge-verified">VERIFIED</span>
-            </div>
-            <div class="text-secondary fs-14" style="margin-top:4px;">you***@gmail.com</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">Linked Mar 20, 2026</div>
-          </div>
+      <div class="receiving-account">
+        <div class="account-info">
+          <div class="account-name">✓ Venmo Account</div>
+          <div class="account-handle">@bensheltey</div>
         </div>
         <div class="account-actions">
-          <span class="action-btn set-default">Set as Default</span>
-          <span class="action-btn remove">Remove</span>
+          <span>Edit</span>
+          <span>Remove</span>
         </div>
       </div>
 
-      <div class="add-account-btn">+ Link New Account</div>
-
-      <!-- Auto-Cashout -->
-      <div class="section-title" style="padding:24px 16px 12px;letter-spacing:1.2px;">AUTO-CASHOUT</div>
-      <div class="settings-card">
-        <div class="toggle-row-item">
-          <div style="flex:1;margin-right:12px;">
-            <div class="text-primary fs-15 fw-600">Auto-cashout</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;line-height:16px;">Automatically cash out when your available balance reaches a threshold</div>
-          </div>
-          <div class="toggle-switch off"><div class="toggle-knob"></div></div>
+      <div class="receiving-account">
+        <div class="account-info">
+          <div class="account-name">⏳ Stripe Connect Express</div>
+          <div class="account-handle">Pending Onboarding</div>
         </div>
+        <button class="mini-btn" style="padding: 4px 8px;">Setup</button>
       </div>
 
-      <!-- Subscription -->
-      <div class="section-title" style="padding:24px 16px 12px;letter-spacing:1.2px;">SUBSCRIPTION</div>
-      <div class="settings-card">
-        <div class="toggle-row-item">
-          <div style="flex:1;margin-right:12px;">
-            <div class="text-primary fs-15 fw-600">Pay subscription from wallet</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;line-height:16px;">Automatically use wallet balance to cover your monthly subscription</div>
-          </div>
-          <div class="toggle-switch on"><div class="toggle-knob"></div></div>
-        </div>
+      <div style="margin-top: 16px;">
+        <button class="btn btn-secondary" style="width: 100%;">+ Add New Account</button>
       </div>
 
-      <!-- Notifications -->
-      <div class="section-title" style="padding:24px 16px 12px;letter-spacing:1.2px;">NOTIFICATIONS</div>
-      <div class="settings-card">
-        <div class="toggle-row-item">
-          <div style="flex:1;margin-right:12px;">
-            <div class="text-primary fs-15 fw-600">New earnings</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">Get notified when you earn a commission</div>
-          </div>
-          <div class="toggle-switch on"><div class="toggle-knob"></div></div>
-        </div>
-        <div class="settings-divider"></div>
-        <div class="toggle-row-item">
-          <div style="flex:1;margin-right:12px;">
-            <div class="text-primary fs-15 fw-600">Cashout updates</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">Get notified when a cashout completes</div>
-          </div>
-          <div class="toggle-switch on"><div class="toggle-knob"></div></div>
-        </div>
-        <div class="settings-divider"></div>
-        <div class="toggle-row-item">
-          <div style="flex:1;margin-right:12px;">
-            <div class="text-primary fs-15 fw-600">Pending releases</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">Get notified when held commissions become available</div>
-          </div>
-          <div class="toggle-switch on"><div class="toggle-knob"></div></div>
-        </div>
-        <div class="settings-divider"></div>
-        <div class="toggle-row-item">
-          <div style="flex:1;margin-right:12px;">
-            <div class="text-primary fs-15 fw-600">Clawback alerts</div>
-            <div class="text-tertiary fs-12" style="margin-top:2px;">Get notified about commission adjustments</div>
-          </div>
-          <div class="toggle-switch on"><div class="toggle-knob"></div></div>
-        </div>
-      </div>
-
-      <!-- Account -->
-      <div class="section-title" style="padding:24px 16px 12px;letter-spacing:1.2px;">ACCOUNT</div>
-      <div class="settings-card">
-        <div class="info-row">
-          <span class="text-secondary fs-14">Wallet Status</span>
-          <span class="text-green fs-14 fw-600">Active</span>
-        </div>
-        <div class="settings-divider"></div>
-        <div class="info-row">
-          <span class="text-secondary fs-14">KYC Verification</span>
-          <span class="text-green fs-14 fw-600">Verified</span>
-        </div>
-        <div class="settings-divider"></div>
-        <div class="info-row">
-          <span class="text-secondary fs-14">Min. Cashout</span>
-          <span class="text-primary fs-14 fw-600">$25.00</span>
-        </div>
-        <div class="settings-divider"></div>
-        <div class="info-row">
-          <span class="text-secondary fs-14">Cashout Limit</span>
-          <span class="text-primary fs-14 fw-600">1 per 24 hours</span>
-        </div>
-      </div>
-      <div style="height:40px;"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 7: Wallet Activation -->
-<!-- ────────────────────────────────────────────────────────────── -->
-<div class="screen-wrapper">
-  <div class="screen-label">7. Wallet Activation</div>
-  <div class="screen-sublabel">Intro + features + CTA</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
-    </div>
-    <div class="screen-content">
-      <div style="padding:0 16px;">
-        <!-- Hero -->
-        <div style="text-align:center;padding-top:24px;padding-bottom:20px;">
-          <div class="hero-badge">You have $8.50 waiting</div>
-          <div class="text-primary" style="font-size:28px;font-weight:700;line-height:34px;margin-bottom:10px;">Activate Your<br>VAI Wallet</div>
-          <div class="text-secondary fs-14" style="line-height:20px;max-width:300px;margin:0 auto;">Your network is paying you. Set up your wallet to cash out earnings and send payments.</div>
-        </div>
-
-        <!-- Balance Preview -->
-        <div style="background:#151210;border-radius:16px;padding:16px;text-align:center;border:1px solid #2A2623;margin-bottom:18px;">
-          <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1.2px;margin-bottom:4px;">PENDING EARNINGS</div>
-          <div class="text-green fs-32 fw-700" style="margin-bottom:2px;">$8.50</div>
-          <div class="text-tertiary fs-12">This money is waiting for you. Activate to unlock it.</div>
-        </div>
-
-        <!-- Features -->
-        <div style="margin-bottom:18px;">
-          <div class="section-title" style="letter-spacing:1.2px;margin-bottom:12px;">WHAT YOU GET</div>
-          <div class="feature-row">
-            <span class="feature-icon">&#128176;</span>
-            <div>
-              <div class="text-primary fs-14 fw-600" style="margin-bottom:2px;">Cash Out Anytime</div>
-              <div class="text-tertiary fs-12" style="line-height:16px;">Withdraw to Venmo or bank. No fees with Venmo.</div>
-            </div>
-          </div>
-          <div class="feature-row">
-            <span class="feature-icon">&#128202;</span>
-            <div>
-              <div class="text-primary fs-14 fw-600" style="margin-bottom:2px;">5-Level Earnings</div>
-              <div class="text-tertiary fs-12" style="line-height:16px;">Earn commissions on 5 levels of referrals.</div>
-            </div>
-          </div>
-          <div class="feature-row">
-            <span class="feature-icon">&#129309;</span>
-            <div>
-              <div class="text-primary fs-14 fw-600" style="margin-bottom:2px;">Send &amp; Receive</div>
-              <div class="text-tertiary fs-12" style="line-height:16px;">Pay anyone via Apple Pay, Google Pay, or saved card.</div>
-            </div>
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #2A2623;">
+        <div style="font-size: 12px; color: #57534E; font-weight: 600; margin-bottom: 12px;">Coming Soon</div>
+        <div class="receiving-account" style="opacity: 0.6;">
+          <div class="account-info">
+            <div class="account-name">Bank Transfer (ACH)</div>
           </div>
         </div>
-
-        <!-- Verify Notice -->
-        <div class="kyc-notice">
-          <div class="text-primary fs-13 fw-600" style="margin-bottom:4px;">Quick Verification Required</div>
-          <div class="text-tertiary fs-12" style="line-height:16px;">Verify your identity (2 minutes). Powered by Stripe.</div>
-        </div>
-
-        <!-- CTA -->
-        <button class="btn-primary" style="margin-bottom:10px;font-size:17px;">Activate Wallet</button>
-        <div class="text-tertiary fs-11" style="text-align:center;">30 days to activate, then weekly reminders.</div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 7b: Verify Identity -->
-<!-- ────────────────────────────────────────────────────────────── -->
-<div class="screen-wrapper">
-  <div class="screen-label">7b. Verify Identity</div>
-  <div class="screen-sublabel">Stripe-hosted verification form</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
-    </div>
-    <div class="screen-content">
-      <div style="padding:20px 16px 0;">
-        <div class="text-orange fs-18 fw-700" style="margin-bottom:4px;">Verify Your Identity</div>
-        <div class="text-secondary fs-13" style="line-height:18px;margin-bottom:18px;">Required by financial regulations. Your data is secured by Stripe. VAI never sees your SSN.</div>
-
-        <div style="display:flex;gap:10px;">
-          <div style="flex:1;">
-            <div class="input-group">
-              <div class="input-label">First Name</div>
-              <div class="input-field" style="color:#57534E;">John</div>
-            </div>
-          </div>
-          <div style="flex:1;">
-            <div class="input-group">
-              <div class="input-label">Last Name</div>
-              <div class="input-field" style="color:#57534E;">Doe</div>
-            </div>
-          </div>
-        </div>
-        <div class="input-group">
-          <div class="input-label">Date of Birth</div>
-          <div class="input-field" style="color:#57534E;">MM/DD/YYYY</div>
-        </div>
-        <div class="input-group">
-          <div class="input-label">Last 4 of SSN</div>
-          <div class="input-field" style="color:#57534E;">****</div>
-        </div>
-
-        <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1px;margin-top:6px;margin-bottom:10px;">ADDRESS</div>
-
-        <div class="input-group">
-          <div class="input-label">Street Address</div>
-          <div class="input-field" style="color:#57534E;">123 Main St</div>
-        </div>
-        <div style="display:flex;gap:10px;">
-          <div style="flex:2;">
-            <div class="input-group">
-              <div class="input-label">City</div>
-              <div class="input-field" style="color:#57534E;">Denver</div>
-            </div>
-          </div>
-          <div style="flex:1;">
-            <div class="input-group">
-              <div class="input-label">State</div>
-              <div class="input-field" style="color:#57534E;">CO</div>
-            </div>
-          </div>
-        </div>
-        <div class="input-group">
-          <div class="input-label">ZIP Code</div>
-          <div class="input-field" style="color:#57534E;">80202</div>
-        </div>
-
-        <div class="security-note" style="margin-bottom:14px;">
-          <div class="text-tertiary fs-11" style="line-height:15px;">Encrypted and sent directly to Stripe. VAI does not store your SSN.</div>
-        </div>
-
-        <button class="btn-primary">Verify &amp; Activate</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ────────────────────────────────────────────────────────────── -->
-<!-- SCREEN 7c: Wallet Approved -->
-<!-- ────────────────────────────────────────────────────────────── -->
-<div class="screen-wrapper">
-  <div class="screen-label">7c. Wallet Approved</div>
-  <div class="screen-sublabel">Success state + next steps</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span class="time">9:41</span>
-      <span class="icons">&#9679; &#9679; &#9679;</span>
-    </div>
-    <div class="screen-content">
-      <div style="padding:0 16px;">
-        <div style="text-align:center;padding:40px 0 24px;">
-          <div class="success-circle" style="margin:0 auto 20px;">
-            <span class="success-check">&#10003;</span>
-          </div>
-          <div class="text-primary" style="font-size:28px;font-weight:700;margin-bottom:8px;">Wallet Activated!</div>
-          <div class="text-secondary fs-15" style="line-height:22px;max-width:300px;margin:0 auto;">Your identity is verified and your VAI Wallet is live.</div>
-        </div>
-
-        <div style="background:#151210;border-radius:14px;padding:18px;border:1px solid #2A2623;text-align:center;margin-bottom:20px;">
-          <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1px;margin-bottom:4px;">PENDING EARNINGS</div>
-          <div class="text-green fs-32 fw-700" style="margin-bottom:4px;">$8.50</div>
-          <div class="text-tertiary fs-12" style="line-height:16px;">Available after the 14-day hold period.</div>
-        </div>
-
-        <div style="margin-bottom:20px;">
-          <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1px;margin-bottom:12px;">NEXT STEPS</div>
-          <div class="next-step-row">
-            <div class="next-step-bullet">1</div>
-            <div class="text-primary fs-13" style="flex:1;">Link a payout method (Venmo recommended)</div>
-          </div>
-          <div class="next-step-row">
-            <div class="next-step-bullet">2</div>
-            <div class="text-primary fs-13" style="flex:1;">Keep sharing your link to grow earnings</div>
-          </div>
-          <div class="next-step-row">
-            <div class="next-step-bullet">3</div>
-            <div class="text-primary fs-13" style="flex:1;">Cash out once you reach $25 available</div>
-          </div>
-        </div>
-
-        <button class="btn-primary">Go to Wallet</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div><!-- end screens-container -->
 
 </body>
 </html>

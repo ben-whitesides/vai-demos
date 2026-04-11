@@ -1,8 +1,7 @@
-# VAI Wallet System — Merged Architecture Spec
-## Version 4.2 FINAL | CODEBASE-ALIGNED | APPROVED FOR BUILD
+# VAI Wallet System — Architecture Spec
 ## Implementation-Ready for C#/.NET Backend + React Native/Expo Mobile
 
-> **Status:** APPROVED SPEC — This document enables correct first-time implementation.
+> **Status:** This document enables correct first-time implementation.
 >
 > **Audience:** Francis Terrero (C#/.NET backend), Badinho (React Native/Expo mobile), Ben Whitesides (product owner)
 >
@@ -16,7 +15,7 @@
 2. [Commission Lifecycle & State Machine](#2-commission-lifecycle--state-machine)
 3. [Clawback Mechanism](#3-clawback-mechanism)
 4. [Cashout Flow](#4-cashout-flow)
-5. [User-to-Mentor Payment Flow](#5-user-to-mentor-payment-flow)
+5. [Payments — Stripe SDK-First Architecture](#5-payments--stripe-sdk-first-architecture)
 6. [Subscription-from-Wallet Flow](#6-subscription-from-wallet-flow)
 7. [$14.95 Fee Logic](#7-1495-fee-logic)
 8. [Mobile App UX](#8-mobile-app-ux)
@@ -99,7 +98,7 @@ The one exception: **Pending balance** is a derived PostgreSQL query because the
 
 **Why $5?** Avoids identity verification friction for the ~100K users who may sign up, share once, and never earn meaningful commissions. Only users who demonstrate real earning activity are asked to verify identity.
 
-**JIT Activation Cap:** Users who hit $5 in accrued commissions have 30 days to complete identity verification and wallet activation. After 30 days, a reminder is sent weekly. After 90 days with no activation, commissions are frozen (no new accruals) until activation completes. Funds are never forfeited — they remain in Platform FA attributed to the user. The freeze is lifted immediately upon successful activation, and all frozen commissions resume normal state machine progression.
+**JIT Activation Cap:** Users who hit $5 in accrued commissions have 30 days to complete identity verification and wallet activation. After 30 days, a reminder is sent weekly. After 90 days with no activation, commissions are frozen (no new accruals) until activation completes. **For legitimate unactivated users, funds are never forfeited** — they remain in Platform FA attributed to the user until activation, or indefinitely if the user never activates. The freeze is lifted immediately upon successful activation, and all frozen commissions resume normal state machine progression. **Banned and deleted accounts are governed by §11.3 Account States, not this paragraph** — their pending-commission disposition (forfeiture or 90-day held-then-released per legal review) follows the Suspended/Banned/Deleted rules in §11.3, not the "never forfeited" guarantee above.
 
 > **IMPORTANT — Identity Verification Requirement:** Stripe Treasury requires identity verification (internally: KYC/CIP — these terms are backend-only, NEVER shown in UI) before a Financial Account can be activated. Users MUST complete this step before their FA is live and money can settle to it. The activation prompt should say: **"Verify your identity to start cashing out"** — never mention KYC, CIP, or compliance terminology.
 
@@ -247,7 +246,7 @@ The webhook handler must be idempotent — receiving `invoice.paid` twice for th
 
 The current codebase processes referral compensation via SubscriptionsV1Controller -> HandleWebhookEventAsync -> TriggerReferralProcessing -> ReferralCompensationService.ProcessReferralCompensationAsync. This pipeline fires on customer.subscription.created (among other events) and uses subscription price/period, not invoice idempotency. The wallet commission engine does NOT replace this pipeline immediately. Migration path: Shadow Phase: New commission engine processes invoice.paid webhooks and writes to commission_ledger with is_shadow=true. These rows are NOT used for money movement — they exist only for comparison against Bruno's manual calculations. The existing ReferralCompensationService continues to handle all real money. Daily comparison job diffs shadow rows against Bruno's outputs. Production Phase: After 14-day validation, commission_ledger becomes the source of truth, ReferralCompensationService is deprecated. The authoritative flip from shadow to production is controlled by the single-writer feature flag defined in Section 12.2 (wallet_commission_engine_active). The Production Phase begins when wallet_commission_engine_active is flipped to true per §12.2 (corresponding to the Phase 3 → Phase 4 boundary in §12.3). The "14-day validation" referenced here corresponds to Section 12.3 Phase 1 exit criteria.
 
-**Shadow promotion:** When transitioning from Shadow Phase to Production Phase, existing shadow rows are promoted via `UPDATE commission_ledger SET is_shadow = false WHERE is_shadow = true AND [criteria]`. This is NOT a delete-and-reinsert — the unique constraint on `(source_invoice_id, builder_user_id, affiliate_level)` prevents duplicate inserts. New rows created after the flag flip are written directly with `is_shadow = false`.
+**Shadow rows are NOT promoted.** When transitioning from Shadow Phase to Production Phase (via the `wallet_commission_engine_active` feature flag flip — see §12.3), existing shadow rows remain in `commission_ledger` with `is_shadow = true` as an immutable audit trail of the shadow period. Production rows are written with `is_shadow = false` from the moment the flag flips true. All balance queries, settlement logic, clawback triggers, cashout calculations, and fee assessment queries filter on `is_shadow = false`. Reports may opt in to include shadow rows for reconciliation (see §12.3 Phase 1 exit criteria: "14-day match against Bruno"). Keeping shadow rows as immutable audit avoids the atomicity, idempotency, and race conditions of a bulk UPDATE-based promotion, and preserves the single-writer rule from §12.2.
 
 ---
 
@@ -317,6 +316,32 @@ Send push notifications for commissions that became available, clawbacks process
 **Job 5 — Debt Recovery (2:30 AM MT):**
 For users with `CLAWBACK_PENDING` commissions and `OUTSTANDING` debt older than 90 days with no offsetting earnings, transition to `WRITTEN_OFF`.
 
+**Job 6 — Expired Hold Sweep (every 5 minutes):**
+Sweeps expired `SEND_PAYMENT` holds created by the Screen 5 split-payment flow (§5.3, §9.4). The 30-minute AWAITING_CARD window is the safety net that prevents a sender's wallet portion from being stuck if the card portion never confirms (user closes app, loses connection, PaymentSheet cancelled).
+
+**Schedule:** Runs every 5 minutes via Hangfire recurring job OR a dedicated `IHostedService` timer. Francis's choice — match the cron infrastructure pattern already used in vai-api (`LedgerHostedService` et al.). Timezone: `America/Denver` (matches all other jobs in §3.4).
+
+**Query (runs inside a single DB transaction per hold for idempotency):**
+```sql
+SELECT wh.id AS hold_id,
+       wh.user_id AS sender_user_id,
+       wh.amount_cents AS wallet_cents,
+       wh.stripe_reference_id AS wallet_payment_id
+FROM wallet_holds wh
+WHERE wh.status = 'ACTIVE'
+  AND wh.hold_type = 'SEND_PAYMENT'
+  AND wh.expires_at <= NOW();
+```
+
+**For each expired hold, execute in order:**
+1. **Reverse the wallet portion via Stripe Treasury OutboundPayment:** from the recipient's FinancialAccount back to the sender's FinancialAccount, `amount = wallet_cents`. Use idempotency key `expire_{wallet_payment_id}`. If the Stripe call fails (network error, Treasury downtime), **do not** mark the hold or payment EXPIRED — leave the hold in `ACTIVE` status so the next 5-minute tick retries. Partial failures must never leave the sender's balance deducted without restoration.
+2. **Update `wallet_payments`:** `SET status = 'EXPIRED', expired_at = NOW(), updated_at = NOW() WHERE id = wallet_payment_id`.
+3. **Update `wallet_holds`:** `SET status = 'EXPIRED' WHERE id = hold_id`.
+4. **Push notification to sender** (§3.5): `"Payment to @{recipient_handle} cancelled — your balance has been restored."`
+5. **Log to `reconciliation_runs`** (Appendix B): record `job_name = 'expired_hold_sweep'`, `processed_count`, `failures` for audit.
+
+**Why a dedicated job and not embedded in Jobs 1-5:** The 30-minute window is much shorter than the daily cadence of Jobs 1-5 (which run at 1:00-2:30 AM MT). A payment initiated at 2:00 PM would hold funds for 11 hours before the next daily sweep. A 5-minute cadence keeps the worst-case wallet-portion lockup time to ~5 minutes past expiry.
+
 **Fee Assessment (3:00 AM MT on 1st of each month):**
 Run the $14.95 fee assessment for the previous month (see Section 7).
 
@@ -361,9 +386,11 @@ This prevents wrongful reversal on disputes that are later won by VAI.
 | **Venmo** | PayPal Payouts API (`recipient_type: "PHONE"` or `"EMAIL"`) | $0 to user (VAI absorbs) | Instant to Venmo balance | VAI files 1099-NEC (see 4.6) | **PRIMARY — push users here** | ✅ Front and center |
 | **Bank (ACH)** | `Stripe.Treasury.OutboundTransfer` to linked `ExternalAccount` | $0.25/txn | 2-3 business days | Stripe Connect handles 1099 | Secondary | ✅ Shown |
 | **Stripe Autopay** | Scheduled automatic `OutboundTransfer` | $0.25/txn | 2-3 business days | Stripe Connect handles 1099 | Optional (user-enabled) | ✅ In settings |
-| **PayPal** | PayPal Payouts API | $0.25/txn | Instant to PayPal balance | VAI files 1099-NEC (see 4.6) | **SILENT FAILOVER ONLY** | ❌ NEVER in UI |
+| **PayPal** | PayPal Payouts API | $0.25/txn | Instant to PayPal balance | VAI files 1099-NEC (see 4.6) | **SILENT FAILOVER ONLY** | ❌ NEVER in cashout UI¹ |
 
-> **PayPal = Infrastructure Only.** PayPal integration exists as a redundancy layer if Stripe Connect is ever disrupted. It is NEVER shown as a cashout option in the mobile UI. The integration stays maintained and tested, but invisible to users. If Stripe Connect goes down, PayPal can be activated as a failover via feature flag — no code deployment needed, just config change.
+> **PayPal = Infrastructure Only (for CASHOUT).** PayPal integration exists as a redundancy layer if Stripe Connect is ever disrupted for the cashout path. It is NEVER shown as a cashout option in the mobile cashout UI. The integration stays maintained and tested, but invisible to users. If Stripe Connect goes down, PayPal can be activated as a failover via feature flag — no code deployment needed, just config change.
+>
+> ¹ **Scope note on PayPal appearances in the app:** The "NEVER in cashout UI" rule in this table applies only to **cashout** (money going OUT from the user's VAI wallet to external rails). PayPal DOES appear as a first-class **Receiving Account** in the Settings → Receiving Accounts screen (see §8.5.2) where event organizers link their PayPal/Venmo merchant account to receive event payments from attendees. That is an **inbound** payout-rail setup for existing VAI merchants and has no relationship to the wallet cashout flow described here. The two uses of the PayPal integration — inbound merchant receiving account (visible in §8.5.2) and outbound silent cashout failover (hidden per this row) — share the same PayPal/Venmo API credentials but serve distinct user journeys.
 
 ### 4.1.1 PayPal/Venmo Funding Source
 
@@ -382,7 +409,7 @@ User taps "Cash Out" in wallet tab
 Select amount (default: full available balance)
     │
     ▼
-Select destination: Venmo / PayPal / Bank
+Select destination: Venmo / Bank
     │
     ▼
 If no payout account linked → "Link [Method]" flow
@@ -546,10 +573,12 @@ Mentors can still create payment requests. This is a separate flow from Screen 5
 
 ### 5.5 Platform Fee
 
-VAI takes a platform fee on payments (configurable, suggest 5-10%):
-- **Card payments:** `application_fee_amount` on PaymentIntent — Stripe deducts automatically
-- **Wallet-to-wallet:** Fee deducted from transfer amount before crediting recipient FA
-- Fee is transparent to sender: "Fee: $X.XX" shown on confirmation screen
+VAI takes a platform fee on P2P payments and mentor invoices. The rate is versioned in `fee_policies.platform_fee_rate_bps` — **current default: 500 basis points (5%)** — see Decision #25 for rationale and Appendix B for the `fee_policies` schema.
+
+- **Card payments:** `application_fee_amount` on PaymentIntent — Stripe deducts automatically before the destination charge transfers to the recipient's connected account.
+- **Wallet-to-wallet:** Fee deducted from transfer amount before crediting recipient FA. Calculated as `FLOOR(amount_cents × platform_fee_rate_bps / 10000)`. Stored on the `wallet_payments` row as `platform_fee_cents` at capture time so historical records preserve the rate in effect at payment time (versioned-policy rule per Decision #10).
+- **Transparency to sender:** "Fee: $X.XX" shown on confirmation screen (§5.3 Send Money Flow). Fee is always in the sender's currency, never hidden, never applied after confirmation.
+- **Rate changes:** Write a new `fee_policies` row with updated `platform_fee_rate_bps` and the new `effective_date`. Old row gets `superseded_date` set. In-flight payments honor the rate at their `created_at` timestamp.
 
 ### 5.6 Stripe React Native Integration (Badinho)
 
@@ -631,7 +660,7 @@ const { isPlatformPaySupported, confirmPlatformPayPayment } = usePlatformPay();
 | Endpoint | Purpose | Stripe SDK Call |
 |----------|---------|----------------|
 | `POST /v1/wallet/send` | Screen 5 send money | `Treasury.OutboundPayment` (wallet) or `PaymentIntent.create` (card) |
-| `GET /v1/wallet/recent-recipients` | Screen 5 recent contacts | DB query only (no Stripe call) |
+| `GET /v1/wallet/frequent-contacts` | Screen 5 quick-access avatars | DB query only (no Stripe call) |
 | `GET /v1/wallet/resolve-recipient?handle={handle}` | QR code + search resolution | DB query + check `wallet_accounts` |
 | `POST /v1/invoices` | Mentor creates payment request | DB only (no Stripe call until paid) |
 | `POST /v1/invoices/{id}/pay` | Client pays invoice | Same Stripe flow as `/v1/wallet/send` |
@@ -754,6 +783,51 @@ Free users who earn significant recurring commissions use VAI's payment infrastr
 | Sum of commissions earned in current calendar month > $50.00 (5000 cents) recurring | Yes |
 | "Recurring" means commissions from subscriptions active for 2+ consecutive months | Yes |
 
+**Recurring Commission — Concrete SQL Definition**
+
+A commission row in `commission_ledger` qualifies as "recurring" for the fee assessment if and only if:
+
+1. Its `status` is in `('AVAILABLE', 'SETTLING', 'PARTIALLY_REVERSED')` — past the hold period and not fully clawed back.
+2. The same `(builder_user_id, source_subscription_id)` pair has **at least one prior commission row** dated at least `(recurring_months_required - 1)` calendar months earlier — proving the subscription has been active across multiple months.
+
+The monthly Fee Assessment cron (§3.4, 3:00 AM MT on 1st) runs this exact query per user being assessed:
+
+```sql
+-- Parameters:
+--   $user_id                   = builder_user_id being assessed
+--   $assessment_month          = DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 month')
+--                                (the month being evaluated — always the previous month)
+--   $recurring_months_required = fee_policies.recurring_months_required (default 2,
+--                                pulled from the most recent non-superseded fee_policies row)
+
+SELECT COALESCE(SUM(cl.commission_amount_cents), 0) AS recurring_monthly_cents
+FROM commission_ledger cl
+WHERE cl.builder_user_id = $user_id
+  AND cl.status IN ('AVAILABLE', 'SETTLING', 'PARTIALLY_REVERSED')
+  AND DATE_TRUNC('month', cl.created_at) = $assessment_month
+  AND EXISTS (
+      SELECT 1
+      FROM commission_ledger cl_prior
+      WHERE cl_prior.source_subscription_id = cl.source_subscription_id
+        AND cl_prior.builder_user_id       = cl.builder_user_id
+        AND DATE_TRUNC('month', cl_prior.created_at)
+            <= $assessment_month - (INTERVAL '1 month' * ($recurring_months_required - 1))
+  );
+```
+
+**How to read the query:** For each commission in the assessment month, confirm a prior commission exists on the same subscription from at least `(recurring_months_required - 1)` calendar months earlier. For the default `recurring_months_required = 2`, that's "at least one prior commission from 1+ calendar months before the assessment month." This proves the subscription has been active and paying for 2+ consecutive months.
+
+**Fee trigger:** If the query returns `recurring_monthly_cents > threshold_cents` (default 5000 = $50.00), the user crosses the trigger and the $14.95 fee is assessed per §7.3.
+
+**Index support:** The existing `idx_cl_source_subscription ON commission_ledger(source_subscription_id)` supports the correlated subquery. No new indexes required.
+
+**Performance:** O(n × m) where n = commissions in the assessment month for the user, m = prior commissions per subscription. Bounded by typical affiliate tree sizes (< 100 active subscriptions per user across all levels). Sub-100ms execution even for heavy earners.
+
+**Edge cases:**
+- A subscription that had a commission last month but was refunded mid-month this month → still counted if the prior-month row exists with qualifying status.
+- A subscription that was canceled and re-subscribed → treated as a new subscription_id by Stripe; the clock restarts. Not "recurring" until 2+ months under the new subscription.
+- A level-2+ commission (from a downline's subscription) → counts the same as a level-1. The query doesn't filter by `affiliate_level`.
+
 ### 7.3 Fee Schedule
 
 - **Assessment:** 1st of each month for previous month's activity
@@ -803,46 +877,60 @@ This is a conversion mechanism, not just a fee. The math: $14.95 fee vs $9.95 Pl
 
 ### 8.1 Wallet Tab — Home Screen
 
+**Layout:** Balance-first design (Apple Cash / Revolut pattern). Balance card at TOP with primary actions, followed by latest transactions and ledger tabs.
+
 ```
 ┌──────────────────────────────────────────┐
-│              YOUR EARNINGS               │
+│  💳 Wallet                            ⚙️  │
+├──────────────────────────────────────────┤
 │                                          │
-│   Available        $89.00                │
-│   Pending          $38.50                │
-│   ───────────────────────                │
-│   Lifetime         $1,204.00             │
+│  ┌────────────────────────────────────┐  │
+│  │  Wallet Balance                   │  │
+│  │  $2,450.00                        │  │
+│  │                                   │  │
+│  │  [Send]         [Cashout]         │  │
+│  └────────────────────────────────────┘  │
 │                                          │
-│   ┌────────────────────────────────────┐ │
-│   │  [ CASH OUT $89.00 ]              │ │
-│   └────────────────────────────────────┘ │
+│  Latest Transactions (3 items)           │
+│  ───────────────────────────────         │
+│  ✓ John Doe          +$500               │
+│    Yesterday                             │
+│  ⏳ Sarah Smith      -$250  [PENDING]   │
+│    2 days ago · Expires in 5 days        │
+│  ✓ Team Fee          -$100               │
+│    4 days ago                            │
 │                                          │
-│   Next available: $38.50 on Apr 23       │
+│  [View All Transactions]                 │
 │                                          │
-│ ┌────────────────────────────────────┐   │
-│ │ ████████████░░░░  $6.46 / $9.95   │   │
-│ │ Earn $3.49 more to pay your       │   │
-│ │ subscription for free!             │   │
-│ └────────────────────────────────────┘   │
+│  ┌────────────────────────────────────┐  │
+│  │ Progress: ████████░░  $6.46/$9.95 │  │
+│  │ Earn $3.49 more to unlock...      │  │
+│  └────────────────────────────────────┘  │
 │                                          │
 ├──────────────────────────────────────────┤
-│  RECENT ACTIVITY                         │
-│                                          │
-│  ↑ $4.99  @jake_lifts signed up         │
-│    PENDING · Available Apr 23            │
-│                                          │
-│  ↑ $2.00  L2 from @coach_mike           │
-│    AVAILABLE · Cash out now              │
-│                                          │
-│  ↓ -$1.50 Earning reversed               │
-│    @old_subscriber cancelled             │
-│                                          │
-│  ✓ $45.00 Paid to Venmo                 │
-│    Mar 28, 2026                          │
-│                                          │
-│  ↓ -$9.95 Subscription auto-paid        │
-│    From wallet · Apr 1, 2026             │
+│  [Due] [Paid] [Awaiting] [Received]     │
+│  (4 tabs, scrollable ledger below)       │
 └──────────────────────────────────────────┘
 ```
+
+**Layout Elements:**
+1. Balance card is TOP element (below status bar)
+2. Send & Cashout buttons are on the card itself (primary + secondary)
+3. Latest 3 transactions appear below balance card with state indicators
+4. Progress bar (subscription coverage) below latest transactions
+5. Ledger tabs appear below all of the above, ledger content scrolls below tabs
+6. Gear icon (⚙️) in top-right links to Receiving Accounts (Settings → Receiving Accounts)
+
+**Data Requirements:**
+- `wallet.balance` (total available balance)
+- `recent_transactions(limit=3)` (latest 3 from all transaction types)
+- `subscription_progress` (for progress bar)
+- All transaction state indicators (✓ Completed, ⏳ Pending with expiration timers)
+
+**Button Styling:**
+- **[Send]** button: Orange (#F7941E), 48% width, primary emphasis
+- **[Cashout]** button: Bordered style, 48% width, secondary
+- Both: 14px padding, 15px font, 700 weight, 12px gap
 
 ### 8.2 Progress Bar (Retention Feature)
 
@@ -894,62 +982,101 @@ The progress bar shows how close the user is to earning enough to cover their su
 
 ### 8.5 Make Payment Flow (Screen 5)
 
-**Design pattern:** Mirrors Venmo/Zelle/Apple Pay simplicity. No invoice complexity visible to user.
+**Design pattern:** Two-tap rule (Venmo avatars + Cash App keypad). Industry-leading simplicity. No invoice complexity.
 
-**Screen 5 — Make Payment:**
+**Screen 5 Entry Point — Send Money:**
 
 ```
 ┌──────────────────────────────────────────┐
-│              MAKE PAYMENT                │
+│  Send Money                            ✕  │
+├──────────────────────────────────────────┤
 │                                          │
-│  RECENT                                  │
-│  ┌──────────────────────────────────┐    │
-│  │ SJ  Sarah Johnson               │    │
-│  │ MC  Marcus Chen                  │    │
-│  │ CE  Coach Elite                  │    │
-│  └──────────────────────────────────┘    │
-│  [ Search ] [ QR Scan ]                  │
+│  Quick Access (Frequent Contacts)        │
+│  [J]  [S]  [C]  [+]                      │
+│   Tap to select recipient                │
 │                                          │
-│  ─────────────────────────               │
-│  Pay @coach_elite                        │
-│  Coaching · 4 sessions · Equipment       │
+├──────────────────────────────────────────┤
+│  Or Search                               │
+│  [Search by name, phone, email]          │
 │                                          │
-│         $150.00                          │
+├──────────────────────────────────────────┤
+│  Amount Entry (Numeric Keypad)           │
 │                                          │
-│  From wallet         $89.00              │
-│  From card           $61.00              │
+│         $0.00                            │
 │                                          │
-│  Message: Thanks for the coaching!       │
+│    [7] [8] [9] [⌫]                      │
+│    [4] [5] [6] [C]                      │
+│    [1] [2] [3] [.]                      │
+│        [0]     [00]                      │
 │                                          │
-│  ┌────────────────────────────────────┐  │
-│  │       [ Review Payment ]          │  │
-│  └────────────────────────────────────┘  │
+├──────────────────────────────────────────┤
+│  [Continue]          [Cancel]            │
 └──────────────────────────────────────────┘
 ```
 
-**Screen 5 Flow — Step by Step:**
+**Screen 5 Flow — Two-Tap Rule (Step by Step):**
 
-1. **Pick recipient** — Recent recipients row (big avatars, 1 tap) + search bar + QR scan button
-2. **Amount** — Big number input, numeric keypad, no clutter
-3. **What's it for?** — Sport emoji category picker (🏀 Coaching / 🏋️ Equipment / ⚽ Snacks / 🏆 Event Fee / 👥 Team Dues / Other) + optional text note
-4. **Confirm** — Recipient, amount, category. One "Send" button. Face ID if available.
-5. **Done** — "Sent to [Name]" + category emoji. Back to wallet.
+1. **Tap 1: Pick recipient** — Frequent contacts avatars at top (ordered by `last_transaction_timestamp DESC`, limit 3) + [+] to add new, or search/manual entry
+2. **Tap 2: Enter amount** — Large numeric keypad (Cash App style). Display $X.XX. Auto-focus [Continue] when amount > $0
+3. **Navigate** — [Continue] → Screen 5B (Confirm + Review) with recipient + amount pre-filled
+4. **Confirm** — Recipient, amount, category (optional), note. Face ID/biometric. One "Send" button.
+5. **Done** — Success screen "Sent to [Name]" + category emoji. Back to wallet.
 
-**Key patterns stolen from payment apps:**
+**Frequent Contacts Query (NEW Endpoint):**
 
-| From | Pattern | For VAI |
-|------|---------|---------|
-| Venmo | Recent recipients pinned at top | Coach, teammates, team mom = 1 tap |
-| Venmo | Sport emoji memo picker | ✅ Coaching, 🏋️ Snacks, 🏆 Event Fee, 🏋️ Equipment |
-| Zelle | QR code scan for sideline payments | In-person team events |
-| Apple | Big amount, biometric confirm | 3 taps max for repeat payments |
-| All | Minimal confirmation: recipient + amount + note. That's it. | Clean, fast |
+Backend provides `GET /v1/wallet/frequent-contacts` (limit=4):
+- Returns most recent 3 contacts + [+] placeholder
+- Ordered by `last_transaction_timestamp DESC`
+- Fields: id, name, handle, avatar
 
-**UX Rules:**
-- No "mentor" language. No "invoice" complexity. Any user pays any user. Fast.
-- Category picker is OPTIONAL — defaults to none if skipped
-- Wallet balance auto-applied first, card covers remainder (same saga logic as Section 5.5)
-- QR code encodes `vai.app/pay/@handle` deep link
+**Numeric Keypad Behavior:**
+
+| Input | Behavior |
+|-------|----------|
+| Number tap | Append digit (max 8), format display as $X.XX |
+| [⌫] | Backspace — remove last digit |
+| [C] | Clear — reset to $0.00 |
+| [.] | Insert decimal (if not present) |
+| [00] | Append two zeros (for $10 → $1000 quick jump) |
+| Amount > $0 | Highlight [Continue] button (orange) |
+
+**Category Picker (Screen 5B, post-amount):**
+
+Sport emoji categories (OPTIONAL — defaults to none if skipped):
+- 🏀 Coaching
+- 🏋️ Equipment  
+- ⚽ Snacks
+- 🏆 Event Fee
+- 👥 Team Dues
+- 💬 Other (free text)
+
+**Confirmation Screen (Screen 5C):**
+
+Minimal surface:
+- **Send:** $250.00
+- **To:** John Doe (@johndoe)
+- **Note:** Weekly coaching fee [optional]
+- **From Balance:** $89.00 (wallet pays first, card covers remainder per Section 5.3 split-payment flow)
+- **Fee:** $0
+- **Total:** $250.00
+
+[Biometric required — Face ID or PIN fallback]
+
+**Key Gold Standard Patterns:**
+
+| From | Pattern | VAI Implementation |
+|------|---------|-------------------|
+| Venmo | Frequent contacts pinned at top | 3 avatars (J, S, C) + [+] |
+| Cash App | Large numeric keypad | 12-button grid, $X.XX display |
+| Apple Cash | Biometric primary, PIN fallback | Face ID required, PIN option |
+| Revolut | Balance-first layout | Wallet balance shown, card as backup |
+| All leaders | Minimal confirm: who/what/amount | No "mentor" or "invoice" language |
+
+**UX Principles:**
+- **Two-tap rule:** Frequent contact → Amount → Auto-advance to confirm. ~2 taps for repeat payment.
+- **No mentor complexity:** Any user can pay any user. No invoices visible.
+- **Wallet balance first:** User's wallet pays first if available; card covers remainder (Section 5.3 split-payment flow).
+- **QR code deep link:** Encodes `vai.app/pay/@handle`
 
 ### 8.5.1 Pay Invoice Flow (Mentor-Initiated)
 
@@ -960,38 +1087,159 @@ The progress bar shows how close the user is to earning enough to cover their su
 5. Confirmation screen
 6. Success/failure result
 
+### 8.5.2 Receiving Accounts Screen (Settings → Receiving Accounts) — Gold Standard
+
+**Access:** Gear icon (⚙️) on Wallet Tab OR Settings → "Receiving Accounts"
+
+**Purpose:** Where others can send you money. Shows all payout methods with status + edit/remove affordances.
+
+**Screen Layout:**
+
+```
+┌──────────────────────────────────────────┐
+│  Receiving Accounts                    ✕  │
+├──────────────────────────────────────────┤
+│                                          │
+│  Where others can send you money:        │
+│                                          │
+│  ┌────────────────────────────────────┐  │
+│  │ ✓ PayPal Account                  │  │
+│  │   ben@vai.app                     │  │
+│  │   [Edit]  [Remove]                │  │
+│  └────────────────────────────────────┘  │
+│                                          │
+│  ┌────────────────────────────────────┐  │
+│  │ ✓ Venmo Account                   │  │
+│  │   @bensheltey                     │  │
+│  │   [Edit]  [Remove]                │  │
+│  └────────────────────────────────────┘  │
+│                                          │
+│  ┌────────────────────────────────────┐  │
+│  │ ⏳ Stripe Connect Express         │  │
+│  │   Pending Onboarding              │  │
+│  │   [Complete Setup]                │  │
+│  └────────────────────────────────────┘  │
+│                                          │
+│  [+ Add New Account]                     │
+│                                          │
+├──────────────────────────────────────────┤
+│  Coming Soon                             │
+│  ┌────────────────────────────────────┐  │
+│  │ Bank Transfer (ACH)               │  │
+│  │ [Coming Soon]                     │  │
+│  └────────────────────────────────────┘  │
+└──────────────────────────────────────────┘
+```
+
+**Account Cards — State Indicators (Gold Standard):**
+
+| Status | Icon | Label | Actions |
+|--------|------|-------|---------|
+| **Active** | ✓ | Account name + identifier | [Edit] [Remove] |
+| **Pending Onboarding** | ⏳ | Account type + "Pending Onboarding" | [Complete Setup] |
+| **Coming Soon** | — | Account type (grayed out) | (no action) |
+
+**Button Behaviors:**
+
+- **[Edit]:** Text button (gray, 11px). Navigate to edit screen for that account. Allow rename or re-verify.
+- **[Remove]:** Text button (gray, 11px). Show confirmation: "This will remove [Account]. You can always add it back." Delete from payout destinations.
+- **[Complete Setup]:** Mini button (gray border). Open Stripe Connect Express onboarding flow (iframe or deep link).
+- **[+ Add New Account]:** Full-width secondary button (14px padding, margin-top 16px). Opens account type picker (PayPal / Venmo / Stripe / ACH when available).
+
+**Data Source:**
+
+`GET /v1/wallet/payout-accounts` returns:
+```json
+{
+  "accounts": [
+    {
+      "id": "pa_xyz789",
+      "method": "venmo",
+      "identifier_masked": "@your****",
+      "status": "verified",
+      "is_default": true,
+      "created_at": "2026-03-15T10:00:00Z"
+    }
+  ]
+}
+```
+
+**UI Rules:**
+
+- Status indicators (✓ Active, ⏳ Pending) appear inline with account name
+- Edit/Remove are one-tap operations from the card
+- [Coming Soon] section visually separated (divider + muted styling) — grayed out, no action buttons
+- No "PayPal" label in UI (PayPal is silent fallback only per Section 4.1)
+
 ### 8.6 Status Display Mapping (MANDATORY)
 
 Backend status enum values MUST be mapped to user-friendly text before reaching the mobile client. The API returns BOTH fields: `status` (for internal logic) and `status_display` (for UI rendering).
 
-| Backend Status | `status_display` Value | Context |
-|----------------|----------------------|---------|
-| **Commission States** | | |
-| `ACCRUED_PENDING` | `"Pending — available [hold_until date]"` | Earned, in hold period |
-| `HELD_PLATFORM` | `"Pending — processing"` | Platform processing |
-| `RELEASE_SCHEDULED` | `"Available soon"` | Hold released, transfer queued |
-| `SETTLING` | `"Processing"` | Transfer in flight to user wallet |
-| `AVAILABLE` | `"Available"` | Ready to cash out |
-| `PARTIALLY_REVERSED` | `"Earning adjusted"` | Partial clawback after settlement |
-| `FULLY_REVERSED` | `"Earning reversed"` | Full clawback applied |
-| `GARNISHED` | `"Applied to balance"` | Funds offset against outstanding debt |
-| `CLAWBACK_PENDING` | `"On hold — under review"` | Post-payout debt, awaiting recovery |
-| `WRITTEN_OFF` | _(never shown — filter at API level)_ | Debt written off after 90 days |
-| **Cashout States** | | |
-| `PROCESSING` | `"Processing"` | Cashout in flight |
-| `COMPLETED` | `"Completed"` | Cashout/payment done |
-| `FAILED` | `"Failed"` | Transaction failed |
-| `QUEUED_LIQUIDITY` | `"Processing"` | Queued for next payout batch |
-| **Payment States** | | |
-| `PAID` | `"Paid"` | Payment settled |
-| `AWAITING_CARD` | `"Complete payment"` | Card needed via PaymentSheet |
-| `CREATED` | `"Pending"` | Invoice/request awaiting payment |
-| `CANCELLED` | `"Cancelled"` | Payment request cancelled |
-| **Send Money States** | | |
-| `COMPLETED` | `"Sent"` | Send money completed |
-| `AWAITING_CARD` | `"Complete payment"` | PaymentSheet needed |
+**CRITICAL: Pending State Visibility**
 
-**Mobile client MUST use `status_display`, NEVER render `status` directly.**
+Gemma's Gold Standard research identified pending state visibility as the #1 UX gap in payment apps. Users heavily penalize missing indicators. The mobile client MUST display:
+1. ⏳ **Pending icon** (hourglass) next to transaction row
+2. **Explicit state label** ("Pending Acceptance" vs. "Pending Payment")
+3. **Expiration timer** ("Expires in 5 days")
+4. **Action buttons** ([Resend/Cancel] for sent, [Pay Now/Ignore] for requests)
+
+| Backend Status | `status_display` Value | UI Icon | UI Actions | Context |
+|----------------|----------------------|---------|-----------|---------|
+| **Commission States** | | | | |
+| `ACCRUED_PENDING` | `"Pending — available [hold_until date]"` | ⏳ | (view) | Earned, in hold period |
+| `HELD_PLATFORM` | `"Pending — processing"` | ⏳ | (view) | Platform processing |
+| `RELEASE_SCHEDULED` | `"Available soon"` | ⏳ | (view) | Hold released, queued |
+| `SETTLING` | `"Processing"` | ⏳ | (view) | Transfer in flight |
+| `AVAILABLE` | `"Available"` | ✓ | [Cash Out] | Ready to cash out |
+| `PARTIALLY_REVERSED` | `"Earning adjusted"` | ↓ | (view) | Partial clawback |
+| `FULLY_REVERSED` | `"Earning reversed"` | ↓ | (view) | Full clawback applied |
+| `GARNISHED` | `"Applied to balance"` | ↓ | (view) | Offset against debt |
+| `CLAWBACK_PENDING` | `"On hold — under review"` | ⏳ | (view) | Post-payout debt |
+| `WRITTEN_OFF` | _(never shown — filter at API level)_ | — | — | Written off after 90d |
+| **Cashout States** | | | | |
+| `PROCESSING` | `"Processing"` | ⏳ | (view) | Cashout in flight |
+| `COMPLETED` | `"Completed"` | ✓ | (view) | Cashout done |
+| `FAILED` | `"Failed"` | ✗ | [Retry] | Transaction failed |
+| `QUEUED_LIQUIDITY` | `"Processing"` | ⏳ | (view) | Next batch queue |
+| **Payment/Send Money States** — **PENDING VISIBILITY CRITICAL** | | | | |
+| `CREATED` / pending sent | `"Pending Acceptance"` | ⏳ | [Resend] [Cancel] | Sent, awaiting recipient acceptance (expires in N days) |
+| `CREATED` / pending requested | `"Pending Payment"` | ⏳ | [Pay Now] [Ignore] | Request sent, awaiting payer action |
+| `PAID` / `COMPLETED` | `"Sent"` / `"Paid"` | ✓ | (view) | Payment settled |
+| `AWAITING_CARD` | `"Complete payment"` | ⚠️ | [Retry] | Card needed via PaymentSheet |
+| `CANCELLED` | `"Cancelled"` | — | — | Payment cancelled |
+| `EXPIRED` | `"Payment expired"` | ✗ | (view) | 30-minute AWAITING_CARD window closed. Wallet portion automatically restored to sender. Background worker marks and notifies. See §5.3 Send Money Flow for full expiry lifecycle. |
+| `FAILED` | `"Payment failed"` | ✗ | [Retry] | Card declined or processor error. Wallet portion restored. |
+
+**Pending Transactions — Detailed Rendering (Gold Standard):**
+
+For "Pending Acceptance" (user sent, recipient hasn't accepted yet):
+```
+┌────────────────────────────────────┐
+│ ⏳ Sarah Smith                      │
+│    Pending Acceptance              │
+│ -$250                              │
+│ ⏰ Expires in 5 days                │
+│ [Resend] [Cancel]                  │
+└────────────────────────────────────┘
+```
+
+For "Pending Payment" (user received a request, hasn't paid yet):
+```
+┌────────────────────────────────────┐
+│ ⏳ Coach Payment                    │
+│    Pending Payment                 │
+│ -$100                              │
+│ ⏰ Requested 1 week ago             │
+│ [Pay Now] [Ignore]                 │
+└────────────────────────────────────┘
+```
+
+**Mobile client MUST:**
+1. Use `status_display` for all user-facing labels (NEVER render raw `status` enum)
+2. Display ⏳ icon for any pending state
+3. Show expiration timers for time-sensitive pending items
+4. Render action buttons (Resend/Cancel/Pay Now/Ignore) on pending rows
+5. Format buttons as mini-style (8px padding, gray border)
 
 ### 8.7 UI Language Scrub Rules
 
@@ -1037,6 +1285,18 @@ Mobile implementation: use the existing Axios newApiInstance with NEW_API_URL ba
 
 All endpoints are under `/v1/wallet/` prefix. Authentication via existing JWT token. All monetary amounts are **integer cents** with explicit `currency` field.
 
+### Idempotency (applies to ALL mutating endpoints)
+
+Every `POST` / `PUT` / `DELETE` endpoint accepts an `idempotency_key` string (either in the request body or as an `Idempotency-Key` header). Rules:
+
+- **Cache TTL:** 24 hours from first successful request. Duplicate calls with the same key within 24h return the **exact original response** (same status code, same body, same headers). After 24h, a reused key is treated as a new request.
+- **Scope:** Keys are scoped per authenticated user. Two different users can use the same key string without collision.
+- **Key format:** Recommended `{action}_{user_id}_{YYYYMMDD}_{n}` — e.g. `send_user123_20260411_1`, `cashout_user123_20260411_1`. Any string ≤ 128 chars works; the format is a readability convention, not a validation rule.
+- **Error responses:** 4xx and 5xx responses are **also cached** for the 24-hour window. Do not assume a new attempt will re-try the operation — change the key if you want fresh behavior.
+- **Storage:** Backend persists `(user_id, idempotency_key)` → cached response in Redis with 24h TTL. On cache miss, the operation executes and the response is cached.
+
+Monetary error messages MUST format as `$X.XX` (always 2 decimal places) regardless of the underlying cents value. Do not abbreviate `$75` to `$75` — always `$75.00`.
+
 ### 9.1 Balance & Dashboard
 
 #### `GET /v1/wallet/balance`
@@ -1064,6 +1324,47 @@ Returns the user's current wallet state.
   }
 }
 ```
+
+#### `GET /v1/wallet/frequent-contacts` (NEW — Gold Standard)
+
+Returns most recent contacts for quick-access avatars on Screen 5 (Send Money).
+
+**Query params:** `limit` (default 4, max 4)
+
+**Response 200:**
+```json
+{
+  "contacts": [
+    {
+      "id": "user_abc123",
+      "name": "John Doe",
+      "handle": "johndoe",
+      "avatar": "https://cdn.vai.app/avatars/johndoe.png",
+      "last_transaction_timestamp": "2026-04-09T14:30:00Z"
+    },
+    {
+      "id": "user_def456",
+      "name": "Sarah Smith",
+      "handle": "sarahsmith",
+      "avatar": "https://cdn.vai.app/avatars/sarahsmith.png",
+      "last_transaction_timestamp": "2026-04-07T10:15:00Z"
+    },
+    {
+      "id": "user_ghi789",
+      "name": "Coach Elite",
+      "handle": "coach_elite",
+      "avatar": "https://cdn.vai.app/avatars/coach_elite.png",
+      "last_transaction_timestamp": "2026-04-05T09:00:00Z"
+    }
+  ]
+}
+```
+
+**Mobile Usage:** Display as 3 circular avatars + [+] add new in Screen 5 Send Money entry point. Ordered by `last_transaction_timestamp DESC`.
+
+**Cache:** 1-hour TTL recommended (refreshed on open).
+
+---
 
 #### `GET /v1/wallet/transactions`
 
@@ -1274,7 +1575,17 @@ Send money to any VAI user. Stripe SDK handles the payment execution.
 
 **Rate limit:** Maximum 20 send requests per 24 hours per user. Returns 429 with `next_eligible_at`.
 
-**Response 201 (wallet-only, no card needed):**
+**Completion semantics for wallet-only payments (synchronous):**
+
+For wallet-only payments (both parties on the VAI platform, sender has sufficient balance), the Stripe Treasury `OutboundPayment` call between the sender's FinancialAccount and the recipient's FinancialAccount is **synchronous within the same platform**. The API call resolves with the transfer already posted. The backend persists the `wallet_payments` row with `status = 'COMPLETED'` and returns the 201 immediately — no waiting on a downstream webhook, no intermediate `PROCESSING` state.
+
+The `treasury.outbound_payment.posted` webhook still fires afterward but is a **confirmation-only no-op**: the handler verifies the row already exists in `COMPLETED` state and records the webhook event in `webhook_log` for audit. It does not mutate state.
+
+If Stripe ever changes same-platform OutboundPayment semantics to async (unlikely but possible on a future API version), the handler migrates to a two-step flow: return `status = 'PROCESSING'` on the 201, then transition to `COMPLETED` on the webhook. This is a single-file change in `WalletSendMoneyController` — not an architectural shift.
+
+Card-needed responses (§5.3 split-payment path) remain async — the PaymentIntent confirmation happens client-side via PaymentSheet, so the 201 returns `AWAITING_CARD` and the final `COMPLETED` transition waits on `POST /v1/wallet/send/{id}/confirm` (see Split Payment Failure & Expiry Path below).
+
+**Response 201 (wallet-only, no card needed — returns `COMPLETED` synchronously):**
 ```json
 {
   "payment_id": "pay_abc123",
@@ -1382,26 +1693,7 @@ When `POST /v1/wallet/send` returns `AWAITING_CARD`, the wallet portion has alre
 
 > **Security note on stripe_client_secret and stripe_ephemeral_key:** These are short-lived, single-use Stripe tokens. stripe_client_secret is scoped to a single PaymentIntent. Ephemeral key TTL: 1 hour (Stripe default). These values MUST NOT be logged server-side or client-side. Transport: HTTPS only.
 
-#### `GET /v1/wallet/recent-recipients`
-
-Returns most recent payment recipients for quick-select on Screen 5.
-
-**Response 200:**
-```json
-{
-  "recipients": [
-    {
-      "user_id": "user_abc",
-      "handle": "coach_elite",
-      "display_name": "Coach Elite",
-      "avatar_url": "https://cdn.vai.app/avatars/coach_elite.jpg",
-      "last_paid_at": "2026-04-05T14:30:00Z"
-    }
-  ]
-}
-```
-
-Max 10 results. Ordered by most recent payment. Cached 5 minutes per user.
+> **Recipient quick-access:** Frequent contacts for Screen 5 avatar bar are served by `GET /v1/wallet/frequent-contacts` — see §9.1 for the canonical endpoint definition. This is the single endpoint for recent-recipient lookup; do not create a parallel `recent-recipients` route.
 
 #### `GET /v1/wallet/resolve-recipient?handle={handle}`
 
@@ -1666,7 +1958,7 @@ System health dashboard for ops.
 | GET | `/v1/wallet/summary` | User | Monthly earnings summary (see 9.1) |
 | POST | `/v1/wallet/send` | User | Send money to any user (Screen 5) |
 | POST | `/v1/wallet/send/{id}/confirm` | User | Confirm card payment after PaymentSheet |
-| GET | `/v1/wallet/recent-recipients` | User | Top 10 recent payment recipients |
+| GET | `/v1/wallet/frequent-contacts` | User | Top 4 quick-access avatars for Screen 5 (see §9.1) |
 | GET | `/v1/wallet/resolve-recipient` | User | Resolve @handle or QR payload to user |
 | POST | `/v1/wallet/cashout` | User | Initiate cashout (Venmo or Bank) |
 | GET | `/v1/wallet/payout-accounts` | User | List linked accounts |
@@ -1755,7 +2047,7 @@ The background worker must be idempotent — processing the same event twice pro
 - Verify Stripe webhook signatures using `Stripe-Signature` header
 - Verify PayPal webhook signatures using PayPal's verification endpoint
 - All webhook handlers must be idempotent (use idempotency keys / unique constraints)
-- Log every webhook received with full payload (for audit trail)
+- Log every webhook received (for audit trail) with redaction of short-lived secrets. The logging helper MUST strip the following fields before persistence: `client_secret`, `ephemeral_key`, `api_key`, `secret_key`, and any field whose JSON key matches the regex `/secret$/i` or `/_key$/i`. Use a central `RedactLogPayload()` helper at the logging boundary so no per-call discipline is required. This satisfies the "`stripe_client_secret` and `stripe_ephemeral_key` MUST NOT be logged" constraint from §9.4 — the full non-secret webhook body is preserved for audit, secret fields are scrubbed to `"[REDACTED]"`.
 - Webhook endpoint must respond within 5 seconds (signature check + queue write only, no business logic)
 
 ---
@@ -2060,6 +2352,7 @@ Every major architectural choice and **why**.
 | 22 | **1099-NEC filing responsibility is VAI's** | VAI is the payor for affiliate commissions. Stripe Connect Express handles W-9 collection and 1099-NEC generation for the Stripe payout rail. For PayPal/Venmo payouts, VAI must independently track cumulative amounts and file 1099-NEC for recipients exceeding $600/year. Venmo does NOT issue 1099-K on VAI's behalf for payouts made via Payouts API. | Assume Venmo handles tax reporting (rejected: incorrect — Venmo 1099-K applies to personal Venmo volume, not platform payouts) |
 | 23 | **Provisional dispute hold, not immediate clawback** | Disputes may be won by the merchant. Immediate clawback on dispute creation wrongfully reverses commissions for disputes that are later resolved in VAI's favor. Provisional hold blocks settlement/cashout without reversing. Finalize only on `charge.dispute.closed`. | Immediate clawback on dispute (rejected: wrongful reversal on won disputes) |
 | 24 | **FTC affiliate disclosure required in app** | Any screen showing earnings, share links, or commission rates must include disclosure language per FTC Endorsement Guidelines (16 CFR Part 255). Users must understand they earn commissions from referrals. Exact copy to be approved by counsel before launch. Non-compliance risks FTC enforcement action. | No disclosure (rejected: FTC compliance risk), disclosure only at signup (rejected: must be proximate to material connection per guidelines) |
+| 25 | **Platform fee rate: 5% (500 bps), versioned in `fee_policies`** | A fixed, concrete rate eliminates the "suggest 5-10%" ambiguity that would cause backend (Francis) and mobile (Badinho) to independently pick different defaults and ship a fee that's wrong in production. 5% sits at the low end of P2P/platform-payment industry norms (Venmo instant transfer 1.5-1.75%, Cash App instant 0.5-1.75%, Stripe merchant 2.9%+$0.30, PayPal Goods & Services 2.9%+$0.30). A fresh platform attracting mentors and P2P users should start at the low end to avoid pushback; the `platform_fee_rate_bps` column versions the rate alongside the $14.95 threshold so business can change it by inserting a new `fee_policies` row, never a code deploy (same principle as Decision #10). | 10% (rejected: too high for a launch platform — mentor pushback risk), variable by tier (rejected: billing complexity for no clear benefit), hardcoded in code (rejected: violates versioned-policy-table principle of Decision #10) |
 
 ---
 
@@ -2204,6 +2497,7 @@ CREATE TABLE vai_invoices (
     amount_cents        INTEGER NOT NULL,
     currency            VARCHAR(3) NOT NULL DEFAULT 'USD',
     description         TEXT,
+    category            VARCHAR(30),                          -- Optional category tag sent in POST /v1/invoices request (e.g. "coaching", "training", "consultation"). Matches wallet_payments.category.
     status              VARCHAR(30) NOT NULL DEFAULT 'CREATED'
                         CHECK (status IN ('CREATED', 'PAYMENT_IN_PROGRESS', 'WALLET_DEBITED', 'CARD_CHARGED', 'TRANSFER_COMPLETE', 'PAID', 'WALLET_REVERSED', 'FAILED', 'CANCELLED', 'EXPIRED')),
     due_date            DATE,
@@ -2221,25 +2515,74 @@ CREATE INDEX idx_vi_mentor ON vai_invoices(mentor_user_id, status);
 CREATE INDEX idx_vi_client ON vai_invoices(client_user_id, status);
 ```
 
+### wallet_payments
+
+P2P payment records for the Send Money flow (Screen 5). Each row represents a single payment from sender to recipient, tracking the split-payment lifecycle (wallet portion + card portion), Stripe object IDs, status history, and idempotency. NOT a money ledger — Stripe Treasury (for the wallet portion) and Stripe PaymentIntent (for the card portion) are the monetary source of truth. This table is the orchestration record linking sender, recipient, Stripe objects, and state transitions.
+
+```sql
+CREATE TABLE wallet_payments (
+    id                          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    sender_user_id              UUID NOT NULL REFERENCES users(id),
+    recipient_user_id           UUID NOT NULL REFERENCES users(id),
+    amount_cents                INTEGER NOT NULL,
+    wallet_cents                INTEGER NOT NULL DEFAULT 0,
+    card_cents                  INTEGER NOT NULL DEFAULT 0,
+    platform_fee_cents          INTEGER NOT NULL DEFAULT 0,
+    currency                    VARCHAR(3) NOT NULL DEFAULT 'USD',
+    category                    VARCHAR(30),
+    note                        TEXT,
+    status                      VARCHAR(30) NOT NULL DEFAULT 'CREATED'
+                                CHECK (status IN ('CREATED', 'PAYMENT_IN_PROGRESS', 'WALLET_DEBITED', 'AWAITING_CARD', 'CARD_CHARGED', 'TRANSFER_COMPLETE', 'PAID', 'WALLET_REVERSED', 'FAILED', 'CANCELLED', 'EXPIRED')),
+    stripe_payment_intent_id    VARCHAR(255),
+    stripe_outbound_payment_id  VARCHAR(255),
+    idempotency_key             VARCHAR(255) NOT NULL UNIQUE,
+    error_code                  VARCHAR(50),
+    error_message               TEXT,
+    created_at                  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at                  TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    completed_at                TIMESTAMP WITH TIME ZONE,
+    expired_at                  TIMESTAMP WITH TIME ZONE,
+
+    CONSTRAINT chk_wp_amount_positive CHECK (amount_cents > 0),
+    CONSTRAINT chk_wp_portions_non_negative CHECK (wallet_cents >= 0 AND card_cents >= 0 AND platform_fee_cents >= 0),
+    CONSTRAINT chk_wp_no_self_payment CHECK (sender_user_id != recipient_user_id)
+);
+
+CREATE INDEX idx_wp_sender ON wallet_payments(sender_user_id, created_at DESC);
+CREATE INDEX idx_wp_recipient ON wallet_payments(recipient_user_id, created_at DESC);
+CREATE INDEX idx_wp_status_awaiting ON wallet_payments(status)
+    WHERE status IN ('AWAITING_CARD', 'PAYMENT_IN_PROGRESS');
+CREATE INDEX idx_wp_stripe_pi ON wallet_payments(stripe_payment_intent_id)
+    WHERE stripe_payment_intent_id IS NOT NULL;
+```
+
+> **Notes:**
+> - **Status enum** matches the split-payment lifecycle in §5.3 and §9.4: `CREATED` → `PAYMENT_IN_PROGRESS` → `WALLET_DEBITED` → `AWAITING_CARD` → `CARD_CHARGED` → `TRANSFER_COMPLETE` → `PAID`. Terminal failure states: `FAILED`, `CANCELLED`, `EXPIRED`, `WALLET_REVERSED`.
+> - **`EXPIRED`** is set by Job 6 — Expired Hold Sweep (§3.4) when a `wallet_holds` row with `hold_type = 'SEND_PAYMENT'` exceeds 30 minutes without confirmation. At that point the wallet portion is reversed via Treasury OutboundPayment (recipient FA → sender FA), the hold is marked EXPIRED, and the `wallet_payments` row transitions to `EXPIRED`.
+> - **`idempotency_key`** is UNIQUE at the table level, preventing duplicate send attempts. Matches the 24-hour idempotency TTL rules in §9 intro.
+> - **`chk_wp_no_self_payment`** prevents senders from paying themselves at the database layer — enforced even if the API layer authorization check is bypassed.
+> - **`platform_fee_cents`** is stored at capture time so historical rows preserve the fee rate in effect when the payment was made (per Decision #10, versioned fee policy).
+
 ### fee_policies
 
 Versioned policy table for the $14.95 fee.
 
 ```sql
 CREATE TABLE fee_policies (
-    id                      SERIAL PRIMARY KEY,
-    fee_amount_cents        INTEGER NOT NULL,
-    threshold_cents         INTEGER NOT NULL,
-    waiver_tiers            JSONB NOT NULL DEFAULT '["PLUS", "MENTOR"]',
+    id                        SERIAL PRIMARY KEY,
+    fee_amount_cents          INTEGER NOT NULL,         -- $14.95 monthly fee for Basic users earning > threshold
+    threshold_cents           INTEGER NOT NULL,         -- $50 recurring monthly earning threshold
+    waiver_tiers              JSONB NOT NULL DEFAULT '["PLUS", "MENTOR"]',
     recurring_months_required INTEGER NOT NULL DEFAULT 2,
-    effective_date          DATE NOT NULL,
-    superseded_date         DATE,
-    created_at              TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+    platform_fee_rate_bps     INTEGER NOT NULL DEFAULT 500,   -- Platform fee on P2P and invoice payments, in basis points. 500 = 5%. See §5.5 and Decision #25.
+    effective_date            DATE NOT NULL,
+    superseded_date           DATE,
+    created_at                TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
 -- Seed the initial policy
-INSERT INTO fee_policies (fee_amount_cents, threshold_cents, effective_date)
-VALUES (1495, 5000, '2026-05-01');
+INSERT INTO fee_policies (fee_amount_cents, threshold_cents, platform_fee_rate_bps, effective_date)
+VALUES (1495, 5000, 500, '2026-05-01');
 ```
 
 ### fee_assessments
@@ -2293,12 +2636,12 @@ User wallet preferences and JIT activation prompt state. Stores auto-pay, auto-c
 ```sql
 CREATE TABLE wallet_user_settings (
     id                              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id                         INT NOT NULL UNIQUE REFERENCES users(id),
+    user_id                         UUID NOT NULL UNIQUE REFERENCES users(id),
     auto_pay_subscription           BOOLEAN NOT NULL DEFAULT false,
     auto_cashout_enabled            BOOLEAN NOT NULL DEFAULT false,
     auto_cashout_threshold_cents    INTEGER,
     auto_cashout_frequency          VARCHAR(20) CHECK (auto_cashout_frequency IN ('daily', 'weekly', 'monthly')),
-    auto_cashout_payout_account_id  UUID REFERENCES wallet_payout_accounts(id),
+    auto_cashout_payout_account_id  UUID REFERENCES payout_accounts(id),
     notify_commission_available     BOOLEAN NOT NULL DEFAULT true,
     notify_clawback                 BOOLEAN NOT NULL DEFAULT true,
     notify_cashout_complete         BOOLEAN NOT NULL DEFAULT true,
@@ -2328,7 +2671,7 @@ CREATE TABLE wallet_holds (
     amount_cents        INTEGER NOT NULL,
     currency            VARCHAR(3) NOT NULL DEFAULT 'USD',
     hold_type           VARCHAR(30) NOT NULL
-                        CHECK (hold_type IN ('CASHOUT_RESERVE', 'SUBSCRIPTION_BRIDGE', 'FEE_DEDUCTION', 'INVOICE_PAYMENT')),
+                        CHECK (hold_type IN ('CASHOUT_RESERVE', 'SUBSCRIPTION_BRIDGE', 'FEE_DEDUCTION', 'INVOICE_PAYMENT', 'SEND_PAYMENT')),
     stripe_reference_id VARCHAR(255),
     status              VARCHAR(20) NOT NULL DEFAULT 'ACTIVE'
                         CHECK (status IN ('ACTIVE', 'RELEASED', 'EXPIRED')),
@@ -2403,9 +2746,11 @@ CREATE TABLE reconciliation_runs (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     run_date            DATE NOT NULL,
     job_name            VARCHAR(50) NOT NULL,
-    charges_checked     INTEGER NOT NULL DEFAULT 0,
-    discrepancies_found INTEGER NOT NULL DEFAULT 0,
-    actions_taken       JSONB,
+    charges_checked     INTEGER NOT NULL DEFAULT 0,    -- Used by Job 3 (Late Refund/Dispute Reconciliation Scan)
+    discrepancies_found INTEGER NOT NULL DEFAULT 0,    -- Used by Job 3
+    actions_taken       JSONB,                         -- Used by Job 3
+    processed_count     INTEGER NOT NULL DEFAULT 0,    -- Used by Job 6 (Expired Hold Sweep) and any sweep-style job — number of rows processed in the run
+    failures            JSONB,                         -- Used by Job 6 and other sweep jobs — array of {row_id, error_code, error_message} for any row that failed to process
     started_at          TIMESTAMP NOT NULL DEFAULT NOW(),
     completed_at        TIMESTAMP,
     status              VARCHAR(20) NOT NULL DEFAULT 'RUNNING'
@@ -2528,9 +2873,9 @@ The following decisions are product/architectural choices that belong to Badinho
 - (c) Nested in the Profile stack
 - (d) Other — please propose
 
-**Tommy's suggestion:** (b). Modal over Wallet tab. Send is a wallet action, not a top-level tab. Keeps the bottom tab bar clean.
+**Recommendation:** (b). Modal over Wallet tab. Send is a wallet action, not a top-level tab. Keeps the bottom tab bar clean.
 
-**Ben's answer:** _____
+**Decision:** _____
 
 ---
 
@@ -2539,9 +2884,9 @@ The following decisions are product/architectural choices that belong to Badinho
 
 Do these coexist or does Phase 4 refactor the Gameday payment components?
 
-**Tommy's suggestion:** Coexist. Gameday flows stay on the legacy API in Phase 4. A Phase 5 refactor can migrate Gameday to PlatformPay across the board. Don't expand Phase 4 scope.
+**Recommendation:** Coexist. Gameday flows stay on the legacy API in Phase 4. A Phase 5 refactor can migrate Gameday to PlatformPay across the board. Don't expand Phase 4 scope.
 
-**Ben's answer:** _____
+**Decision:** _____
 
 ---
 
@@ -2551,18 +2896,18 @@ Do these coexist or does Phase 4 refactor the Gameday payment components?
 - (b) `react-native-vision-camera` — more powerful, more complex
 - (c) `expo-barcode-scanner` — deprecated in Expo 53, replaced by `expo-camera`
 
-**Tommy's suggestion:** (a) `expo-camera`. Expo module, no native config, simplest path.
+**Recommendation:** (a) `expo-camera`. Expo module, no native config, simplest path.
 
-**Ben's answer:** _____
+**Decision:** _____
 
 ---
 
 ### F4 — External deep link handling for `https://vai.app/pay/@handle`
 **Question:** If a user scans the VAI QR with the iOS Camera app (not VAI's in-app scanner), the URL opens in Safari, not the app. Does Phase 4 ship with Universal Links (iOS) + App Links (Android) configured, or is external QR scan deferred to a later phase?
 
-**Tommy's suggestion:** Defer to Phase 4b. The in-app scanner is enough for Phase 4 launch. Universal Links need domain ownership verification + `apple-app-site-association` file + `assetlinks.json` — non-trivial infra work.
+**Recommendation:** Defer to Phase 4b. The in-app scanner is enough for Phase 4 launch. Universal Links need domain ownership verification + `apple-app-site-association` file + `assetlinks.json` — non-trivial infra work.
 
-**Ben's answer:** _____
+**Decision:** _____
 
 ---
 
@@ -2578,57 +2923,19 @@ Do these coexist or does Phase 4 refactor the Gameday payment components?
 ### F6 — App crash recovery between SendAsync and ConfirmAsync
 **Question:** Backend has self-healing sweep for expired holds. Mobile side: if app crashes after `POST /send` returns `AWAITING_CARD` but before user completes PaymentSheet, the `payment_id` is lost client-side. Backend reverses the hold at 30min, but user sees "payment vanished" with no explanation.
 
-**Tommy's suggestion:** Persist `payment_id` + `stripe_client_secret` in Zustand persist storage keyed by `idempotency_key`. On app reopen, if an `AWAITING_CARD` record exists, show "Resume payment to @handle?" banner.
+**Recommendation:** Persist `payment_id` + `stripe_client_secret` in Zustand persist storage keyed by `idempotency_key`. On app reopen, if an `AWAITING_CARD` record exists, show "Resume payment to @handle?" banner.
 
-**Ben's answer:** _____
+**Decision:** _____
 
 ---
 
 ### F7 — Legacy `ApplePayButton` deprecation path
 **Question:** The legacy `ApplePayButton` (non-PlatformPay API) still ships in Stripe RN 0.53.1 but is deprecated. When does VAI migrate fully to `PlatformPayButton` across all payment flows (Gameday, subscriptions, wallet)?
 
-**Tommy's suggestion:** Tracked as a Phase 5 tech debt ticket. Not blocking Phase 4.
+**Recommendation:** Tracked as a Phase 5 tech debt ticket. Not blocking Phase 4.
 
-**Ben's answer:** _____
-
----
-
-## Appendix F — Francis Handoff: Pre-Merge Diff Check
-
-Before copying files from the Phase 4 sandbox (`~/Desktop/vai-api-sep`) into the live `vai-api` repo, run this diff to confirm the shared files haven't drifted:
-
-```bash
-git diff HEAD -- \
-  Vai.Api/Features/Wallet/Data/WalletRepository.cs \
-  Vai.Api/Features/Wallet/Data/IWalletRepository.cs \
-  Vai.Api/Features/Wallet/Models/WalletModels.cs \
-  Vai.Api/Infrastructure/Services/StripeService.cs \
-  Vai.Api/Infrastructure/Services/IStripeService.cs \
-  Vai.Api/Features/Wallet/WalletDependencyResolution.cs \
-  Vai.Api/Infrastructure/DependencyResolution.cs
-```
-
-If those diffs are additive-only (Phase 4 additions on top of what Francis has), proceed:
-1. Add `057_CreateWalletPayments.sql` and `058_AddSendPaymentHoldType.sql` to `Vai.Database/Scripts/`
-2. Add the new files under `Vai.Api/Features/Wallet/`:
-   - `Services/SendMoney/SendMoneyService.cs`
-   - `Services/SendMoney/ISendMoneyService.cs`
-   - `Services/SendMoney/WalletException.cs`
-   - `Services/SendMoney/SendMoneyStatusDisplay.cs`
-   - `Data/WalletPaymentRepository.cs` + `IWalletPaymentRepository.cs`
-   - `DTOs/SendMoney/*.cs` (all new DTOs)
-   - `Models/WalletPayment.cs`
-   - `WalletSendMoneyController.cs`
-3. Apply the minimal diffs to:
-   - `WalletDependencyResolution.cs` (4 new `AddScoped` registrations + `AddMemoryCache`)
-   - `WalletRepository.cs` (`GetReservedCentsAsync` includes `SEND_PAYMENT` in IN clause with `expires_at` filter)
-   - `StripeService.cs` + `IStripeService.cs` (4 new methods: `CreateOutboundPaymentAsync`, `CreatePaymentIntentWithTransferAsync`, `CreateEphemeralKeyForPlatformCustomerAsync`, `GetPlatformPaymentIntentAsync`)
-4. Run `dotnet build` — should be 0 errors
-5. Run migrations 057 + 058 in order
-6. Deploy
-
-If any shared file has diverged, resolve the conflicts manually before proceeding. Contact Ben if unsure.
+**Decision:** _____
 
 ---
 
-*End of spec (Version 4.2 FINAL | STRIPE SDK-FIRST | AUDIT-REMEDIATED). This document is the single source of truth for the VAI Wallet system architecture. All implementation questions should reference this spec first.*
+*End of spec. This document is the single source of truth for the VAI Wallet system architecture. All implementation questions should reference this spec first.*
