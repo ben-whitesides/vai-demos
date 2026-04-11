@@ -288,13 +288,301 @@ Examples: `src/components/Gameday/Payments/StripeCheckout.tsx`, `StripePaymentBu
 
 ## Wallet-relevant dependencies (quick list)
 
-**Backend (`Vai.Api.csproj`):** `Stripe.net`, `Dapper`, `Npgsql.EntityFrameworkCore.PostgreSQL`, `Microsoft.AspNetCore.Authentication.JwtBearer`, AWS SDK (S3, SES, SNS, **Scheduler**), `StackExchange.Redis`, Stream SDKs, `RazorLight`, `Auth0.ManagementApi`.
+**Backend (`Vai.Api.csproj`):** `Stripe.net` **50.1.0** (pinned line 39), `Dapper`, `Npgsql.EntityFrameworkCore.PostgreSQL`, `Microsoft.AspNetCore.Authentication.JwtBearer`, AWS SDK (S3, SES, SNS, **Scheduler**), `StackExchange.Redis`, Stream SDKs, `RazorLight`, `Auth0.ManagementApi`.
 
-**Mobile (`package.json`):** `@stripe/stripe-react-native`, `axios`, `@apollo/client`, `@tanstack/react-query`, `zustand`, `react-native-auth0`, `nativewind`, `tailwindcss`, `@react-native-firebase/messaging`, `react-native-onesignal`, `@react-navigation/*`, `expo` 53 / RN 0.79.
+**Mobile (`package.json`):** `@stripe/stripe-react-native` **0.53.1**, `axios`, `@apollo/client`, `@tanstack/react-query`, `zustand`, `react-native-auth0`, `nativewind`, `tailwindcss`, `@react-native-firebase/messaging`, `react-native-onesignal`, `@react-navigation/*`, `expo` 53 / RN 0.79.
 
 ---
 
-## Obi-Wan — oversight checklist (before you treat this as “done”)
+## Part C — VAI Wallet Feature (added 2026-04-11)
+
+**This section is NEW as of 2026-04-11. It documents the `Features/Wallet/` structure built over 14 audit rounds and Masters R3 binding PASS.**
+
+### C1. Folder structure — `Vai.Api/Features/Wallet/`
+
+```
+Vai.Api/Features/Wallet/
+├── WalletDependencyResolution.cs         (feature DI registration)
+├── WalletV1Controller.cs                 (balance, transactions, cashout, payout-accounts, settings, activate, status, recent-recipients, resolve-recipient)
+├── WalletSendMoneyController.cs          (Phase 4 — POST /send, POST /send/{id}/confirm)
+├── WalletAdminController.cs              (admin payouts, audit-log, health)
+├── WalletWebhookController.cs            (Stripe webhook entrypoint for wallet events)
+├── WalletHostedService.cs                (cron-based release holds + settlement)
+├── WalletWebhookProcessorHostedService.cs (background webhook queue processor)
+├── WalletStripeEventTypes.cs             (event type constants)
+├── Controllers/                          (empty in current sandbox — consolidated at feature root)
+├── Data/
+│   ├── IWalletRepository.cs              (includes CreateWalletHoldAsync, ReleaseActiveHoldByReferenceAsync, GetReservedCentsAsync — SEND_PAYMENT aware)
+│   ├── WalletRepository.cs               (Dapper + parameterized SQL)
+│   ├── IWalletPaymentRepository.cs       (Phase 4 — InsertPaymentAsync, GetPaymentByIdempotencyKeyAsync sender-scoped, UpdatePaymentStatusAsync, CountSendsSinceAsync, SumSendsSinceAsync, OldestCountedSendAtAsync, GetExpiredAwaitingCardForSenderAsync, TryExpireAwaitingCardAsync)
+│   └── WalletPaymentRepository.cs
+├── DTOs/
+│   ├── WalletBalanceResponse.cs
+│   ├── TransactionHistoryResponse.cs     (status_display field — mobile renders this, NEVER raw status)
+│   ├── WalletSettingsResponse.cs         (notifications: new_earnings, earning_reversed, cashout_complete)
+│   ├── WalletSettingsUpdateRequest.cs    (same field names as response — GET/PUT consistency enforced)
+│   ├── WalletSettingsMapper.cs           (maps DB columns notify_commission_available → new_earnings, notify_clawback → earning_reversed)
+│   ├── CashoutRequest.cs
+│   ├── CashoutResponse.cs
+│   ├── RecentRecipientResponse.cs        (remediation layer)
+│   ├── ResolveRecipientResponse.cs       (remediation layer)
+│   └── SendMoney/
+│       ├── SendMoneyRequest.cs           (recipient_handle, amount_cents, currency, category, note, payment_source, idempotency_key)
+│       ├── SendMoneyResponse.cs          (payment_id, status, status_display, amount_cents, recipient, payment_breakdown, stripe_client_secret, stripe_customer_id, stripe_ephemeral_key, category, note, created_at)
+│       ├── SendMoneyConfirmRequest.cs
+│       └── SendMoneyConfirmResponse.cs
+├── Helpers/
+│   ├── WalletStatusDisplayHelper.cs      (maps all status enums to user-facing strings)
+│   ├── WalletUsd.cs                      (WalletUsd.Format(int cents) → "$75.00")
+│   └── WalletPayQrPayloadValidator.cs    (strict regex ^https://vai\.app/pay/@[a-zA-Z0-9_]+$, no amount from QR)
+├── Models/
+│   ├── WalletModels.cs                   (WalletAccount, WalletHoldInsert with Id/UserId/AmountCents/HoldType/StripeReferenceId/ExpiresAt, WalletUserSettingsRow, etc.)
+│   ├── CommissionLedger.cs
+│   ├── DebtRecord.cs
+│   ├── PayoutAccount.cs
+│   ├── PayoutRequest.cs
+│   ├── VaiInvoice.cs
+│   └── WalletPayment.cs                  (Phase 4 — sender_user_id, recipient_user_id, amount_cents, currency, category, note, status, status_display, payment_source, wallet_cents, card_cents, platform_fee_cents, stripe_payment_intent_id, stripe_outbound_payment_id, idempotency_key, created_at, completed_at)
+└── Services/
+    ├── WalletActivationService.cs        (Connect Express + Treasury FA provisioning at $5 JIT threshold)
+    ├── WalletBalanceService.cs           (reads raw Treasury cash + GetReservedCentsAsync — SEND_PAYMENT holds included)
+    ├── WalletCashoutService.cs           (Venmo/Bank routing, $25 min, dollar-formatted error messages)
+    ├── WalletCommissionCalculator.cs     (5-level affiliate math, 5.5%/2.5%/1%/0.5%/0.25%)
+    ├── WalletCronService.cs              (release holds + settlement cron)
+    ├── WalletStripeEventProcessor.cs     (invoice.paid, charge.refunded, disputes, payout.* handlers)
+    ├── WalletTreasuryService.cs          (FinancialAccount reads, v1 StripeClient)
+    ├── WalletPayoutAccountService.cs
+    ├── PaypalWalletPayoutService.cs      (silent failover rail — never shown in UI per Section 8.7)
+    ├── RecentRecipientsService.cs        (top 10, IMemoryCache 5-min TTL)
+    ├── IRecentRecipientsService.cs
+    ├── RecipientResolutionService.cs     (handle + QR payload → payable user object, wallet_active check)
+    ├── IRecipientResolutionService.cs
+    └── SendMoney/                        (Phase 4 subdirectory)
+        ├── ISendMoneyService.cs
+        ├── SendMoneyService.cs           (~580 LOC orchestrator — thin wrapper around Stripe SDK, no custom saga)
+        ├── WalletException.cs            (structured Extras dict for error responses like next_eligible_at)
+        └── SendMoneyStatusDisplay.cs     (SendMoney-specific status_display mappings)
+```
+
+### C2. Wallet endpoints (full API surface)
+
+| Method | Route | Controller | Purpose |
+|--------|-------|-----------|---------|
+| GET | `/v1/wallet/balance` | WalletV1 | Balance breakdown |
+| GET | `/v1/wallet/transactions` | WalletV1 | History (status_display included) |
+| GET | `/v1/wallet/summary` | WalletV1 | Monthly earnings summary |
+| **POST** | **`/v1/wallet/send`** | **WalletSendMoney** | **Phase 4 — send money to any user** |
+| **POST** | **`/v1/wallet/send/{id}/confirm`** | **WalletSendMoney** | **Phase 4 — confirm card portion after PaymentSheet** |
+| **GET** | **`/v1/wallet/recent-recipients`** | **WalletV1** | **Remediation — top 10 recent recipients** |
+| **GET** | **`/v1/wallet/resolve-recipient`** | **WalletV1** | **Remediation — resolve handle or QR payload** |
+| POST | `/v1/wallet/cashout` | WalletV1 | Initiate cashout |
+| GET | `/v1/wallet/payout-accounts` | WalletV1 | List linked accounts |
+| POST | `/v1/wallet/payout-accounts` | WalletV1 | Add payout account |
+| DELETE | `/v1/wallet/payout-accounts/{id}` | WalletV1 | Remove payout account |
+| PUT | `/v1/wallet/payout-accounts/{id}/default` | WalletV1 | Set default |
+| POST | `/v1/invoices` | WalletV1 | Create payment request (mentor-initiated) |
+| GET | `/v1/invoices` | WalletV1 | List sent/received requests |
+| GET | `/v1/invoices/{id}` | WalletV1 | Request detail |
+| POST | `/v1/invoices/{id}/pay` | WalletV1 | Pay request (same Stripe flow as /send) |
+| POST | `/v1/invoices/{id}/cancel` | WalletV1 | Cancel request |
+| GET | `/v1/wallet/settings` | WalletV1 | Get wallet settings (notifications use new field names) |
+| PUT | `/v1/wallet/settings` | WalletV1 | Update wallet settings (GET/PUT field names aligned) |
+| POST | `/v1/wallet/activate` | WalletV1 | Start wallet onboarding |
+| GET | `/v1/wallet/status` | WalletV1 | Check wallet status |
+| GET | `/v1/admin/payouts` | WalletAdmin | List payout requests (admin) |
+| POST | `/v1/admin/payouts/{id}/approve` | WalletAdmin | Approve flagged payout |
+| POST | `/v1/admin/payouts/{id}/reject` | WalletAdmin | Reject payout |
+| GET | `/v1/admin/commissions/audit-log` | WalletAdmin | Daily audit results |
+| GET | `/v1/admin/wallet/health` | WalletAdmin | System health |
+
+### C3. Stripe SDK extensions to `Infrastructure/Services/StripeService.cs`
+
+Phase 4 added 4 new methods to `IStripeService` / `StripeService` (all using v1 `_stripeClient`, NOT v2 HTTP preview):
+
+```csharp
+// Treasury FA-to-FA transfer (wallet-to-wallet send portion)
+Task<OutboundPayment> CreateOutboundPaymentAsync(
+    string sourceFaId, string destFaId, int amountCents, string description,
+    string sourceConnectedAccountId, string idempotencyKey, CancellationToken ct);
+
+// PaymentIntent with transfer_data (card portion → destination charge to recipient's Connect account)
+Task<PaymentIntent> CreatePaymentIntentWithTransferAsync(
+    int amountCents, string customerId, string destinationConnectAccountId,
+    int platformFeeCents, string setupFutureUsage,
+    IReadOnlyDictionary<string, string>? metadata, CancellationToken ct);
+
+// Ephemeral key for platform customer (unlocks saved cards in mobile PaymentSheet)
+Task<EphemeralKey> CreateEphemeralKeyForPlatformCustomerAsync(
+    string customerId, CancellationToken ct);
+
+// Retrieve PaymentIntent from platform account (verify succeeded before executing wallet portion)
+Task<PaymentIntent?> GetPlatformPaymentIntentAsync(
+    string paymentIntentId, CancellationToken ct);
+```
+
+**Stripe.net 50.1.0 API verification:** All types used (`OutboundPaymentService`, `OutboundPaymentCreateOptions`, `PaymentIntentCreateOptions.TransferData`, `PaymentIntentCreateOptions.AutomaticPaymentMethods`, `PaymentIntentCreateOptions.SetupFutureUsage`, `PaymentIntentCreateOptions.ApplicationFeeAmount`, `EphemeralKeyCreateOptions.Customer`, `RequestOptions.StripeAccount`) are confirmed present in the pinned 50.1.0 version.
+
+### C4. Stripe migrations added
+
+All in `Vai.Database/Scripts/`:
+
+| File | Purpose |
+|------|---------|
+| `054_WalletTreasurySchema.sql` | Base Treasury schema: commission_ledger, debt_records, wallet_accounts, wallet_holds (with inline anonymous CHECK constraint on hold_type), wallet_payout_accounts, wallet_payout_requests, webhook_events, webhook_log |
+| `055_AddWalletActivationPromptFlag.sql` | activation_prompt_* columns on wallet_user_settings |
+| `056_AddInvoiceCategory.sql` | Remediation — category column on vai_invoices + bootstraps vai_invoices table if missing |
+| `057_CreateWalletPayments.sql` | Phase 4 — wallet_payments table + composite unique index `(sender_user_id, idempotency_key)` + sender_status index for sweep query |
+| `058_AddSendPaymentHoldType.sql` | Phase 4 — DO block: discovers anonymous CHECK constraint on wallet_holds.hold_type via pg_constraint, drops it, recreates as named `wallet_holds_hold_type_check` with SEND_PAYMENT added |
+
+**Migration 058 pattern (anonymous constraint rediscovery):**
+```sql
+DO $$
+DECLARE
+    constraint_name TEXT;
+BEGIN
+    SELECT c.conname INTO constraint_name
+    FROM pg_constraint c
+    JOIN pg_class t ON c.conrelid = t.oid
+    WHERE t.relname = 'wallet_holds'
+      AND c.contype = 'c'
+      AND pg_get_constraintdef(c.oid) LIKE '%hold_type%';
+
+    IF constraint_name IS NOT NULL THEN
+        EXECUTE format('ALTER TABLE wallet_holds DROP CONSTRAINT %I', constraint_name);
+    END IF;
+
+    ALTER TABLE wallet_holds
+        ADD CONSTRAINT wallet_holds_hold_type_check
+        CHECK (hold_type IN ('CASHOUT_RESERVE', 'SUBSCRIPTION_BRIDGE', 'FEE_DEDUCTION', 'INVOICE_PAYMENT', 'SEND_PAYMENT'));
+END $$;
+```
+
+Safe on fresh install (054 → 058) AND re-run (058 → 058 rebuilds its own named constraint).
+
+### C5. Push notification pipeline (Option B — inline pattern)
+
+**Wired via existing `IUserActivityEventService.PublishActivityAsync` pipeline** — matches `PaymentsService.cs:1320-1352` precedent exactly. No new `INotificationService` subsystem was created.
+
+**Pipeline:** `IUserActivityEventService.PublishActivityAsync(UserActivityEventModel)` → `SnsService.PublishEventAsync("user-activity-topic")` → OneSignal/FCM fan-out
+
+**2 new activity types added to `Vai.Api/Features/Management/Modules/Common/Types/NotificationActivityType.cs`:**
+```csharp
+public const string PaymentSent = "payment_sent";
+public const string PaymentReceived = "payment_received";
+```
+
+**`IUserActivityEventService` is globally registered in `Infrastructure/DependencyResolution.cs:226`** — feature-level DI registration not required.
+
+**`SendMoneyService` injects `IUserActivityEventService` + `IUserRepository`** (for lazy-loading sender/recipient entities in ConfirmAsync where they're not in scope).
+
+**Fire sites:**
+1. Wallet-only SendAsync COMPLETED branch — after `UpdatePaymentStatusAsync("COMPLETED", ...)` and in-memory row mutation
+2. ConfirmAsync COMPLETED branch — after the final UpdatePaymentStatusAsync and best-effort hold release
+
+**Both helpers wrapped in try/catch → LogWarning → return.** Never throw. Never roll back money movement.
+
+**PII envelope (eventArgs JSON):**
+- ✅ `PaymentId` (opaque server-generated ID)
+- ✅ `AmountCents` (user already knows the amount they sent)
+- ✅ `Category` (whitelist-validated enum)
+- ✅ `FirstName` (sender or recipient, one per event — not both)
+- ❌ Never: last4, Stripe PI/PM/customer IDs, emails, exact balances, last names, handles without consent
+
+### C6. Apple Pay / Google Pay — ZERO backend code
+
+Stripe's React Native SDK (`@stripe/stripe-react-native 0.53.1`) handles native wallets automatically when mobile passes `customerId` + `customerEphemeralKeySecret` + `paymentIntentClientSecret` to `initPaymentSheet()`. PaymentSheet shows saved cards + Apple Pay + Google Pay + Link based on device capability. **The only backend code is passing the 3 Stripe fields in the SendMoneyResponse.**
+
+**⚠️ HIDDEN DEPENDENCY — OPS GATE:** `AutomaticPaymentMethods.Enabled = true` in the backend only honors what's toggled in **Stripe Dashboard → Settings → Payment Methods** on the platform account. If only "Card" is enabled in the dashboard, Apple Pay / Google Pay silently do NOT appear in mobile PaymentSheet. This is invisible in code — it's a Stripe platform config gate. Must be included in pre-launch ops checklists.
+
+### C7. Jargon scrub rules (Section 8.7 of v4.2 spec — enforced in code)
+
+**NEVER in user-facing strings (error messages, push notifications, response descriptions, DTO field names):**
+
+| Backend term | User-facing replacement |
+|-------------|------------------------|
+| commission | earning |
+| clawback | reversed |
+| KYC / CIP / Know Your Customer | "verify your identity" |
+| Connect Express account | (invisible — "your wallet") |
+| Treasury FA / Financial Account | "your wallet" or "your account" |
+| OutboundPayment / OutboundTransfer | (invisible — "money is on the way") |
+| PaymentIntent / PI | (invisible — "payment processing") |
+| saga / compensating transaction | (invisible — user sees success or failure) |
+| raw cents in errors | dollars via `WalletUsd.Format()` → "$75.00" |
+| backend status enum (ACCRUED_PENDING, RELEASE_SCHEDULED, etc.) | `status_display` field |
+
+**Backend ALWAYS returns both `status` (internal enum) and `status_display` (user-facing text) on transaction responses.** Mobile MUST render `status_display`, NEVER raw `status`. Section 8.6 of the v4.2 spec has the full mapping table.
+
+### C8. Error response patterns
+
+All `WalletException` errors get mapped to structured JSON response bodies via `MapWalletError` on the controllers:
+
+```csharp
+private static IActionResult MapWalletError(WalletException ex)
+{
+    var body = new Dictionary<string, object?>
+    {
+        ["error"] = ex.Code,
+        ["message"] = ex.Message
+    };
+    if (ex.Extras != null)
+    {
+        foreach (var kv in ex.Extras)
+            body[kv.Key] = kv.Value;
+    }
+
+    return ex.Code switch
+    {
+        "USER_NOT_FOUND" => new NotFoundObjectResult(body),
+        "NOT_FOUND" => new NotFoundObjectResult(body),
+        "FORBIDDEN" => new ObjectResult(body) { StatusCode = StatusCodes.Status403Forbidden },
+        "RATE_LIMITED" => new ObjectResult(body) { StatusCode = StatusCodes.Status429TooManyRequests },
+        "WALLET_TRANSFER_FAILED_AFTER_CARD" => new ObjectResult(body) { StatusCode = StatusCodes.Status502BadGateway },
+        _ => new BadRequestObjectResult(body)
+    };
+}
+```
+
+**`WalletException` supports structured Extras dict** for fields like `next_eligible_at` on 429 responses (computed from `MIN(created_at) + 24h` of counted rows).
+
+### C9. Money movement correctness rules (locked in via 14-round audit arc)
+
+These are hard rules. Violating any of them fails the Masters audit:
+
+1. **Money is truth. Notifications are best-effort.** All notification code wrapped in try/catch → LogWarning → return. Never roll back money movement.
+2. **Use existing pipelines, not new subsystems.** `IUserActivityEventService.PublishActivityAsync` is the proven notification path. Don't build parallel abstractions.
+3. **Race-safe state transitions via compare-and-swap SQL.** Use `TryExpireAwaitingCardAsync` pattern: `UPDATE ... WHERE status = 'EXPECTED'` + return affected row count. Caller checks rows > 0.
+4. **Reserved balance includes ALL active hold types + expires_at filter.** `GetReservedCentsAsync` queries `hold_type IN (...) AND (expires_at IS NULL OR expires_at > NOW())`.
+5. **Option C inline self-healing sweep** (no background worker) for 30-min TTL state machines. Runs at top of "new request" handler before main logic.
+6. **Idempotency replay must re-issue short-lived Stripe secrets** (client_secret + ephemeral key) if the row is in AWAITING_CARD and the PI is still alive.
+7. **Sender-scoped idempotency lookup** via composite unique index `(sender_user_id, idempotency_key)` — prevents cross-tenant metadata disclosure.
+8. **Confirm after PI verification, not from client signal.** Re-fetch PI from Stripe, verify `pi.Status == "succeeded"` AND `pi.Id == row.StripePaymentIntentId` BEFORE executing wallet portion.
+9. **Partial failure state for confirm-side money loss.** Distinct status (`PARTIAL_FAILURE`) + distinct error code (`WALLET_TRANSFER_FAILED_AFTER_CARD`) mapped to HTTP 502.
+10. **Update ledger BEFORE non-essential side effects.** Update `status = 'COMPLETED'` first, then release hold in try/catch. Silent corruption if reversed.
+
+Full patterns documented in `~/.claude/projects/-Users-benjaminwhitesides/memory/mastery/vai-dotnet-stripe-mastery.md`.
+
+### C10. Audit arc summary
+
+**14 audit rounds. 15 blockers found. 15 blockers fixed. Masters R3 binding PASS: Security 9.0 / Logic 8.5 / Quality 9.0.**
+
+| Round | Auditor | Verdict |
+|-------|---------|---------|
+| R1 Masters | Opus | FAIL — 6 blockers (status_display, notifications, 429, idempotency, rate limit, PI substitution) |
+| R1 Haiku | Haiku | FAIL — 3 blockers |
+| R1 Cursor | GPT-5 | FAIL — 4 blockers |
+| R2 Masters | Opus | FAIL — 2 new (migration 058, sweep race) |
+| R3 Cursor | GPT-5 | PASS + 1 follow-up |
+| R3 Haiku | Haiku | PASS + 2 advisories |
+| **R3 Masters** | **Opus (binding)** | **PASS 9.0 / 8.5 / 9.0** |
+| R3 Backend plug-in | Opus | SEAMLESS in snapshot |
+| R3 Mobile + infra plug-in | Opus | MINOR FRICTION (1 blocker B1, 1 ops gate B2) |
+| R4 Council (5 models) | Multi | Converged on Option B |
+| R4 Masters advisory | Opus | Option B inline pattern |
+| R4 Build | Opus | +124 LOC, 0 errors |
+| R4 Masters lightweight | Opus | PASS 8.8 / 9.2 / 9.0 |
+
+---
 
 1. **Re-pull after your PR base changes** — this recon is a point-in-time snapshot of `main`.
 2. **Confirm secrets/config** — Stripe/PayPal/AWS sections must exist in real deployed settings; the sample `appsettings.json` alone is insufficient.
