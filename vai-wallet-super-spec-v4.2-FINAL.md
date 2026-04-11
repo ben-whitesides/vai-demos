@@ -1333,14 +1333,18 @@ Send money to any VAI user. Stripe SDK handles the payment execution.
 >
 > **The result: Most users tap once.** Any user who subscribed to VAI already has a card on file. PaymentSheet shows it. One tap + biometric = payment complete.
 
-**Error 400:**
-```json
-{
-  "error": "INSUFFICIENT_BALANCE",
-  "message": "Your wallet balance is $89.00. Total payment is $150.00. Card will cover $61.00.",
-  "available_cents": 8900
-}
-```
+**Error Responses for POST /v1/wallet/send:**
+
+| HTTP | Error Code | Message Example | When |
+|------|-----------|-----------------|------|
+| 400 | `INSUFFICIENT_BALANCE` | "Your wallet balance is $89.00. Total is $150.00. Card will cover $61.00." | `wallet_only` and balance too low |
+| 400 | `AMOUNT_TOO_LOW` | "Minimum payment is $1.00." | amount_cents < 100 |
+| 400 | `AMOUNT_TOO_HIGH` | "Maximum payment is $10,000.00 per transaction." | amount_cents > 1,000,000 |
+| 400 | `DAILY_LIMIT_EXCEEDED` | "You've reached the $25,000.00 daily send limit." | 24h cumulative > 2,500,000 |
+| 404 | `USER_NOT_FOUND` | "No VAI user found with that handle." | invalid recipient_handle |
+| 400 | `WALLET_INACTIVE` | "Recipient hasn't activated their wallet yet." | recipient has no wallet_accounts |
+| 400 | `SELF_PAYMENT` | "You can't send money to yourself." | sender == recipient |
+| 429 | `RATE_LIMITED` | "Maximum 20 sends per 24 hours. Try again at 3:00 PM." | > 20 sends/24h |
 
 #### `POST /v1/wallet/send/{payment_id}/confirm`
 
@@ -1656,18 +1660,22 @@ System health dashboard for ops.
 | Method | Endpoint | Auth | Purpose |
 |--------|----------|------|---------|
 | GET | `/v1/wallet/balance` | User | Current balance breakdown |
-| GET | `/v1/wallet/transactions` | User | Transaction history |
-| GET | `/v1/wallet/summary` | User | Monthly summary |
-| POST | `/v1/wallet/cashout` | User | Initiate cashout |
+| GET | `/v1/wallet/transactions` | User | Transaction history (status_display included) |
+| GET | `/v1/wallet/summary` | User | Monthly earnings summary (see 9.1) |
+| POST | `/v1/wallet/send` | User | Send money to any user (Screen 5) |
+| POST | `/v1/wallet/send/{id}/confirm` | User | Confirm card payment after PaymentSheet |
+| GET | `/v1/wallet/recent-recipients` | User | Top 10 recent payment recipients |
+| GET | `/v1/wallet/resolve-recipient` | User | Resolve @handle or QR payload to user |
+| POST | `/v1/wallet/cashout` | User | Initiate cashout (Venmo or Bank) |
 | GET | `/v1/wallet/payout-accounts` | User | List linked accounts |
 | POST | `/v1/wallet/payout-accounts` | User | Add payout account |
 | DELETE | `/v1/wallet/payout-accounts/{id}` | User | Remove payout account |
 | PUT | `/v1/wallet/payout-accounts/{id}/default` | User | Set default |
-| POST | `/v1/invoices` | Mentor | Create invoice |
-| GET | `/v1/invoices` | User | List invoices |
-| GET | `/v1/invoices/{id}` | User | Get invoice detail |
-| POST | `/v1/invoices/{id}/pay` | User | Pay invoice |
-| POST | `/v1/invoices/{id}/cancel` | Mentor | Cancel invoice |
+| POST | `/v1/invoices` | Mentor | Create payment request |
+| GET | `/v1/invoices` | User | List sent/received requests |
+| GET | `/v1/invoices/{id}` | User | Get request detail |
+| POST | `/v1/invoices/{id}/pay` | User | Pay request (same Stripe flow as send) |
+| POST | `/v1/invoices/{id}/cancel` | Mentor | Cancel request |
 | GET | `/v1/wallet/settings` | User | Get wallet settings |
 | PUT | `/v1/wallet/settings` | User | Update wallet settings |
 | POST | `/v1/wallet/activate` | User | Start wallet onboarding |
