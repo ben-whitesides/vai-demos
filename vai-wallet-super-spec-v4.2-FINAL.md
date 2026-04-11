@@ -662,6 +662,7 @@ These features come FREE through Stripe SDK + native OS. No VAI code required.
 |-------------|--------|---------------|
 | **Stripe Connect (Express)** | ✅ Already active in vai-api | None — existing integration |
 | **Treasury capability** | ❓ Must be requested | Request `capabilities[treasury][requested]=true` on VAI's platform account. Stripe reviews platform compliance (AML/KYC program, use case). Approval typically 1-2 weeks. |
+| **Stripe Dashboard → Payment Methods** | ❗ **CRITICAL** — must be toggled ON | Stripe Dashboard → Settings → Payment Methods: **enable Card, Apple Pay, Google Pay, Link** on the platform account. `automatic_payment_methods: { enabled: true }` in code only honors what the dashboard has enabled. If only "Card" is toggled on, Apple Pay / Google Pay silently don't appear in PaymentSheet — the entire "native wallets for free" premise breaks in production. |
 | **Apple Pay merchant registration** | ❓ Must be configured | Register Apple Pay merchant ID in Stripe Dashboard → Settings → Payment Methods → Apple Pay. Upload Apple Pay certificate. One-time setup, ~30 minutes. |
 | **Google Pay merchant registration** | ✅ Automatic via Stripe | Stripe handles Google Pay merchant registration for Connect platforms. No separate registration needed. |
 | **Connected account Treasury capability** | 🔄 Per-user at activation | When user hits $5 threshold → `capabilities[treasury][requested]=true` on their Connected Account. Stripe collects identity verification (our "Verify your identity" flow). |
@@ -669,10 +670,11 @@ These features come FREE through Stripe SDK + native OS. No VAI code required.
 
 **Pre-launch checklist for Ben:**
 1. [ ] Request Treasury capability on VAI platform account (Stripe Dashboard or API)
-2. [ ] Configure Apple Pay merchant ID + certificate in Stripe Dashboard
-3. [ ] Verify VAI's Stripe account has `transfers`, `treasury` capabilities active
-4. [ ] Test in Stripe test mode before going live (all SDK calls work in test mode)
-5. [ ] Submit for Stripe review (they review platform compliance, not code)
+2. [ ] **Stripe Dashboard → Settings → Payment Methods: enable Card, Apple Pay, Google Pay, Link on platform account** (without this, native wallets silently fail in production)
+3. [ ] Configure Apple Pay merchant ID + certificate in Stripe Dashboard
+4. [ ] Verify VAI's Stripe account has `transfers`, `treasury` capabilities active
+5. [ ] Test in Stripe test mode before going live (all SDK calls work in test mode)
+6. [ ] Submit for Stripe review (they review platform compliance, not code)
 
 **Timeline:** Request Treasury access NOW. Code can be built in parallel. Stripe approval and code completion should converge. No code changes needed after approval — same SDK calls work in test and live mode.
 
@@ -2510,6 +2512,122 @@ User A shares with 4 friends who subscribe to Plus:
 | Redis provider flag + health probes | Francis | P3 |
 | `user_identities` table (if not exists) -- maps Auth0 `sub` + Cognito `user_pool_id` to canonical `users.id` UUID. Required for wallet user resolution. | Francis | P0 |
 | Auto-cashout feature | Francis + Badinho | P3 |
+
+---
+
+---
+
+## Appendix E — Open Questions for Badinho (Mobile Implementation)
+
+The following decisions are product/architectural choices that belong to Badinho, not architectural gaps in the spec. Please answer inline in the PR or in a reply on Slack before starting Screen 5 work.
+
+### F1 — Navigation entry point for Screen 5
+**Question:** Where does "Make Payment" live in the nav hierarchy?
+- (a) New bottom tab next to Gameday / Feeds / Search / Profile
+- (b) Modal over the Wallet tab (accessed from a "Send" button on the Wallet home screen)
+- (c) Nested in the Profile stack
+- (d) Other — please propose
+
+**Tommy's suggestion:** (b). Modal over Wallet tab. Send is a wallet action, not a top-level tab. Keeps the bottom tab bar clean.
+
+**Ben's answer:** _____
+
+---
+
+### F2 — `StripeCheckout.tsx` coexistence with new `PlatformPayButton`
+**Question:** The existing Gameday payment flow uses `src/components/Gameday/Payments/StripeCheckout.tsx` + `ApplePayButton` (pre-PlatformPay API, deprecated but still valid in Stripe RN 0.53.1). Phase 4 introduces a new `WalletSendScreen.tsx` using `PlatformPayButton` + `usePlatformPay` (the current unified API).
+
+Do these coexist or does Phase 4 refactor the Gameday payment components?
+
+**Tommy's suggestion:** Coexist. Gameday flows stay on the legacy API in Phase 4. A Phase 5 refactor can migrate Gameday to PlatformPay across the board. Don't expand Phase 4 scope.
+
+**Ben's answer:** _____
+
+---
+
+### F3 — QR scanner dependency
+**Question:** Build bible confirms zero existing QR scanner components in `vai-mobile-react-native`. Screen 5 needs one for the "Scan QR" button in the recipient picker. Which camera lib?
+- (a) `expo-camera` — native Expo module, trivial install, matches Expo 53 repo
+- (b) `react-native-vision-camera` — more powerful, more complex
+- (c) `expo-barcode-scanner` — deprecated in Expo 53, replaced by `expo-camera`
+
+**Tommy's suggestion:** (a) `expo-camera`. Expo module, no native config, simplest path.
+
+**Ben's answer:** _____
+
+---
+
+### F4 — External deep link handling for `https://vai.app/pay/@handle`
+**Question:** If a user scans the VAI QR with the iOS Camera app (not VAI's in-app scanner), the URL opens in Safari, not the app. Does Phase 4 ship with Universal Links (iOS) + App Links (Android) configured, or is external QR scan deferred to a later phase?
+
+**Tommy's suggestion:** Defer to Phase 4b. The in-app scanner is enough for Phase 4 launch. Universal Links need domain ownership verification + `apple-app-site-association` file + `assetlinks.json` — non-trivial infra work.
+
+**Ben's answer:** _____
+
+---
+
+### F5 — Auth0 token refresh during AWAITING_CARD window
+**Question:** The backend holds wallet portions for 30 minutes in `AWAITING_CARD` state. Auth0 JWT tokens often have ~1 hour TTL. Does Badinho's existing Axios interceptor auto-refresh on 401, or does Phase 4 need to add it?
+
+**Action needed:** Badinho to verify and confirm `src/api/base.ts` interceptor handles refresh. If not, Phase 4 must add it (or document the limitation).
+
+**Ben's answer:** _____
+
+---
+
+### F6 — App crash recovery between SendAsync and ConfirmAsync
+**Question:** Backend has self-healing sweep for expired holds. Mobile side: if app crashes after `POST /send` returns `AWAITING_CARD` but before user completes PaymentSheet, the `payment_id` is lost client-side. Backend reverses the hold at 30min, but user sees "payment vanished" with no explanation.
+
+**Tommy's suggestion:** Persist `payment_id` + `stripe_client_secret` in Zustand persist storage keyed by `idempotency_key`. On app reopen, if an `AWAITING_CARD` record exists, show "Resume payment to @handle?" banner.
+
+**Ben's answer:** _____
+
+---
+
+### F7 — Legacy `ApplePayButton` deprecation path
+**Question:** The legacy `ApplePayButton` (non-PlatformPay API) still ships in Stripe RN 0.53.1 but is deprecated. When does VAI migrate fully to `PlatformPayButton` across all payment flows (Gameday, subscriptions, wallet)?
+
+**Tommy's suggestion:** Tracked as a Phase 5 tech debt ticket. Not blocking Phase 4.
+
+**Ben's answer:** _____
+
+---
+
+## Appendix F — Francis Handoff: Pre-Merge Diff Check
+
+Before copying files from the Phase 4 sandbox (`~/Desktop/vai-api-sep`) into the live `vai-api` repo, run this diff to confirm the shared files haven't drifted:
+
+```bash
+git diff HEAD -- \
+  Vai.Api/Features/Wallet/Data/WalletRepository.cs \
+  Vai.Api/Features/Wallet/Data/IWalletRepository.cs \
+  Vai.Api/Features/Wallet/Models/WalletModels.cs \
+  Vai.Api/Infrastructure/Services/StripeService.cs \
+  Vai.Api/Infrastructure/Services/IStripeService.cs \
+  Vai.Api/Features/Wallet/WalletDependencyResolution.cs \
+  Vai.Api/Infrastructure/DependencyResolution.cs
+```
+
+If those diffs are additive-only (Phase 4 additions on top of what Francis has), proceed:
+1. Add `057_CreateWalletPayments.sql` and `058_AddSendPaymentHoldType.sql` to `Vai.Database/Scripts/`
+2. Add the new files under `Vai.Api/Features/Wallet/`:
+   - `Services/SendMoney/SendMoneyService.cs`
+   - `Services/SendMoney/ISendMoneyService.cs`
+   - `Services/SendMoney/WalletException.cs`
+   - `Services/SendMoney/SendMoneyStatusDisplay.cs`
+   - `Data/WalletPaymentRepository.cs` + `IWalletPaymentRepository.cs`
+   - `DTOs/SendMoney/*.cs` (all new DTOs)
+   - `Models/WalletPayment.cs`
+   - `WalletSendMoneyController.cs`
+3. Apply the minimal diffs to:
+   - `WalletDependencyResolution.cs` (4 new `AddScoped` registrations + `AddMemoryCache`)
+   - `WalletRepository.cs` (`GetReservedCentsAsync` includes `SEND_PAYMENT` in IN clause with `expires_at` filter)
+   - `StripeService.cs` + `IStripeService.cs` (4 new methods: `CreateOutboundPaymentAsync`, `CreatePaymentIntentWithTransferAsync`, `CreateEphemeralKeyForPlatformCustomerAsync`, `GetPlatformPaymentIntentAsync`)
+4. Run `dotnet build` — should be 0 errors
+5. Run migrations 057 + 058 in order
+6. Deploy
+
+If any shared file has diverged, resolve the conflicts manually before proceeding. Contact Ben if unsure.
 
 ---
 
