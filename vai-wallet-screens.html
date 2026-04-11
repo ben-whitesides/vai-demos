@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI Wallet Screens — v4.2 Spec</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0e1a; color: #e8e8e8; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif; }
+
+  .header { text-align: center; padding: 40px 20px 20px; }
+  .header h1 { color: #f0a030; font-size: 28px; font-weight: 700; }
+  .header p { color: #888; font-size: 14px; margin-top: 8px; }
+  .header .badge { display: inline-block; background: #1a2235; border: 1px solid #f0a030; color: #f0a030; padding: 4px 12px; border-radius: 12px; font-size: 11px; margin-top: 12px; }
+
+  .screens-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; padding: 20px 40px 60px; }
+
+  .phone { width: 320px; background: #111827; border-radius: 32px; border: 2px solid #1f2937; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .phone-notch { height: 36px; background: #111827; display: flex; align-items: center; justify-content: center; padding: 8px 24px 0; }
+  .phone-notch .time { font-size: 12px; font-weight: 600; color: #e8e8e8; }
+  .phone-notch .icons { margin-left: auto; font-size: 10px; color: #888; }
+  .phone-screen { padding: 12px 16px 24px; min-height: 580px; }
+  .phone-label { text-align: center; padding: 12px; color: #f0a030; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; }
+
+  .screen-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+  .screen-subtitle { font-size: 12px; color: #6b7280; margin-bottom: 12px; }
+
+  .balance-card { background: linear-gradient(135deg, #1a2235 0%, #0f1729 100%); border: 1px solid #2a3a55; border-radius: 16px; padding: 20px; margin-bottom: 16px; text-align: center; }
+  .balance-amount { font-size: 36px; font-weight: 700; color: #f0a030; }
+  .balance-label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+  .balance-row { display: flex; justify-content: space-between; margin-top: 12px; padding-top: 12px; border-top: 1px solid #2a3a55; }
+  .balance-item { text-align: center; flex: 1; }
+  .balance-item .val { font-size: 16px; font-weight: 600; color: #e8e8e8; }
+  .balance-item .lbl { font-size: 10px; color: #6b7280; margin-top: 2px; }
+
+  .btn-primary { background: #f0a030; color: #0a0e1a; border: none; border-radius: 12px; padding: 14px 24px; font-size: 15px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 12px; text-align: center; }
+  .btn-secondary { background: transparent; border: 1px solid #f0a030; color: #f0a030; border-radius: 12px; padding: 10px 16px; font-size: 13px; font-weight: 600; width: 100%; margin-top: 8px; text-align: center; }
+  .btn-disabled { background: #2a3a55; color: #6b7280; border-radius: 12px; padding: 14px 24px; font-size: 15px; font-weight: 700; width: 100%; margin-top: 12px; text-align: center; }
+
+  .progress-bar { background: #1a2235; border-radius: 8px; padding: 12px; margin-top: 12px; }
+  .progress-track { background: #2a3a55; border-radius: 4px; height: 8px; overflow: hidden; }
+  .progress-fill { background: #f0a030; height: 8px; border-radius: 4px; }
+  .progress-text { font-size: 11px; color: #6b7280; margin-top: 6px; }
+
+  .tx-list { margin-top: 16px; }
+  .tx-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #1f2937; }
+  .tx-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; margin-right: 10px; flex-shrink: 0; }
+  .tx-icon.credit { background: #0d3320; color: #34d399; }
+  .tx-icon.debit { background: #3b1320; color: #f87171; }
+  .tx-icon.success { background: #1a2235; color: #f0a030; }
+  .tx-info { flex: 1; }
+  .tx-info .name { font-size: 13px; font-weight: 600; color: #e8e8e8; }
+  .tx-info .status { font-size: 10px; color: #6b7280; margin-top: 2px; }
+  .tx-amount { font-size: 14px; font-weight: 600; }
+  .tx-amount.pos { color: #34d399; }
+  .tx-amount.neg { color: #f87171; }
+
+  .section-label { font-size: 11px; font-weight: 700; color: #6b7280; letter-spacing: 1px; text-transform: uppercase; margin: 16px 0 8px; }
+
+  .recipient-row { display: flex; gap: 12px; margin-bottom: 16px; overflow-x: auto; }
+  .recipient { text-align: center; flex-shrink: 0; }
+  .recipient .avatar { width: 48px; height: 48px; border-radius: 50%; background: #2a3a55; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #f0a030; border: 2px solid #f0a030; }
+  .recipient .rname { font-size: 10px; color: #e8e8e8; margin-top: 4px; width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .amount-input { text-align: center; margin: 20px 0; }
+  .amount-input .dollar { font-size: 42px; font-weight: 700; color: #f0a030; }
+
+  .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1f2937; }
+  .detail-row .dlabel { font-size: 13px; color: #6b7280; }
+  .detail-row .dvalue { font-size: 13px; color: #e8e8e8; font-weight: 600; }
+
+  .category-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .pill { background: #1a2235; border: 1px solid #2a3a55; border-radius: 20px; padding: 6px 12px; font-size: 12px; color: #e8e8e8; cursor: pointer; }
+  .pill.active { background: #f0a030; color: #0a0e1a; border-color: #f0a030; font-weight: 600; }
+
+  .input-field { background: #1a2235; border: 1px solid #2a3a55; border-radius: 10px; padding: 12px; font-size: 13px; color: #e8e8e8; width: 100%; margin-bottom: 8px; }
+
+  .payment-method { display: flex; align-items: center; padding: 12px; background: #1a2235; border: 1px solid #2a3a55; border-radius: 12px; margin-bottom: 8px; }
+  .payment-method.selected { border-color: #f0a030; }
+  .pm-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px; flex-shrink: 0; }
+  .pm-info { flex: 1; }
+  .pm-info .pm-name { font-size: 13px; font-weight: 600; color: #e8e8e8; }
+  .pm-info .pm-detail { font-size: 10px; color: #6b7280; }
+  .pm-badge { background: #0d3320; color: #34d399; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+
+  .success-screen { text-align: center; padding-top: 60px; }
+  .success-check { width: 80px; height: 80px; border-radius: 50%; background: #0d3320; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 36px; }
+  .success-amount { font-size: 32px; font-weight: 700; color: #f0a030; margin: 12px 0 4px; }
+  .success-text { font-size: 14px; color: #6b7280; }
+
+  .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #1f2937; }
+  .setting-label { font-size: 13px; color: #e8e8e8; }
+  .toggle { width: 40px; height: 22px; border-radius: 11px; position: relative; }
+  .toggle.on { background: #f0a030; }
+  .toggle.off { background: #2a3a55; }
+  .toggle .knob { width: 18px; height: 18px; border-radius: 50%; background: #fff; position: absolute; top: 2px; }
+  .toggle.on .knob { right: 2px; }
+  .toggle.off .knob { left: 2px; }
+
+  .status-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+  .status-badge.active { background: #0d3320; color: #34d399; }
+  .status-badge.verified { background: #0d2733; color: #38bdf8; }
+
+  .level-row { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #1f2937; }
+  .level-dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
+  .level-info { flex: 1; }
+  .level-name { font-size: 12px; color: #e8e8e8; }
+  .level-handles { font-size: 10px; color: #6b7280; }
+  .level-amount { font-size: 14px; font-weight: 600; color: #34d399; }
+
+  .tab-bar { display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #1f2937; margin-top: auto; }
+  .tab-bar span { font-size: 10px; color: #6b7280; text-align: center; }
+  .tab-bar span.active-tab { color: #f0a030; }
+
+  .divider { height: 1px; background: #1f2937; margin: 16px 0; }
+
+  .note-box { background: #0d2733; border: 1px solid #1a3a4a; border-radius: 8px; padding: 10px; margin: 12px 0; }
+  .note-box p { font-size: 11px; color: #38bdf8; }
+
+  .new-badge { display: inline-block; background: #f0a030; color: #0a0e1a; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+
+  .screen-number { display: inline-block; background: #f0a030; color: #0a0e1a; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 800; text-align: center; line-height: 22px; margin-right: 6px; }
+
+  .footer { text-align: center; padding: 40px 20px; color: #4b5563; font-size: 12px; border-top: 1px solid #1f2937; margin-top: 40px; }
+  .footer a { color: #f0a030; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>VAI Wallet Screens</h1>
+  <p>Spec v4.2 | Stripe SDK-First | Audit-Remediated</p>
+  <div class="badge">Apple Pay + Google Pay + Saved Cards + Venmo Cashout</div>
+</div>
+
+<div class="screens-container">
+
+<!-- SCREEN 1: Wallet Home -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">1</span> WALLET HOME</div>
+  <div class="phone-screen">
+    <div class="balance-card">
+      <div class="balance-label">Your Earnings</div>
+      <div class="balance-amount">$89.00</div>
+      <div class="balance-row">
+        <div class="balance-item"><div class="val">$38.50</div><div class="lbl">Pending</div></div>
+        <div class="balance-item"><div class="val">$1,204</div><div class="lbl">Lifetime</div></div>
+      </div>
+    </div>
+    <div class="btn-primary">Cash Out $89.00</div>
+    <div style="text-align:center;margin-top:8px;font-size:11px;color:#6b7280;">Next available: $38.50 on Apr 23</div>
+    <div class="progress-bar">
+      <div class="progress-track"><div class="progress-fill" style="width:65%"></div></div>
+      <div class="progress-text">Earn $3.49 more to pay your subscription for free!</div>
+    </div>
+    <div class="section-label">Recent Activity</div>
+    <div class="tx-list">
+      <div class="tx-item">
+        <div class="tx-icon credit">&#8593;</div>
+        <div class="tx-info"><div class="name">@jake_lifts signed up</div><div class="status">Pending — available Apr 23</div></div>
+        <div class="tx-amount pos">+$4.99</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon credit">&#8593;</div>
+        <div class="tx-info"><div class="name">L2 from @coach_mike</div><div class="status">Available</div></div>
+        <div class="tx-amount pos">+$2.00</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon debit">&#8595;</div>
+        <div class="tx-info"><div class="name">Earning reversed</div><div class="status">@old_subscriber cancelled</div></div>
+        <div class="tx-amount neg">-$1.50</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon success">&#10003;</div>
+        <div class="tx-info"><div class="name">Paid to Venmo</div><div class="status">Completed &middot; Mar 28</div></div>
+        <div class="tx-amount neg">-$45.00</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon debit">&#8595;</div>
+        <div class="tx-info"><div class="name">Subscription auto-paid</div><div class="status">From wallet &middot; Apr 1</div></div>
+        <div class="tx-amount neg">-$9.95</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2: Cashout Destination -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">2</span> CASH OUT</div>
+  <div class="phone-screen">
+    <div class="screen-title">Cash Out $89.00</div>
+    <div class="section-label">Select Destination</div>
+    <div class="payment-method selected">
+      <div class="pm-icon" style="background:#3b82f6;color:#fff;">V</div>
+      <div class="pm-info">
+        <div class="pm-name">Venmo <span class="pm-badge">$0 FEE</span></div>
+        <div class="pm-detail">@your_venmo &middot; Instant</div>
+      </div>
+    </div>
+    <div class="payment-method">
+      <div class="pm-icon" style="background:#1a2235;color:#6b7280;">&#9679;</div>
+      <div class="pm-info">
+        <div class="pm-name">Bank Account</div>
+        <div class="pm-detail">Chase &middot;&middot;&middot;&middot; 4589 &middot; 2-3 days</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="detail-row"><span class="dlabel">Amount</span><span class="dvalue">$89.00</span></div>
+    <div class="detail-row"><span class="dlabel">Fee</span><span class="dvalue" style="color:#34d399;">$0.00</span></div>
+    <div class="detail-row"><span class="dlabel">You receive</span><span class="dvalue" style="color:#f0a030;">$89.00</span></div>
+    <div class="btn-primary">Confirm Cash Out</div>
+    <div style="text-align:center;margin-top:12px;font-size:10px;color:#6b7280;">Limit: 1 cashout per 24 hours</div>
+  </div>
+</div>
+
+<!-- SCREEN 3: Cashout Success -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">3</span> SUCCESS</div>
+  <div class="phone-screen">
+    <div class="success-screen">
+      <div class="success-check">&#10003;</div>
+      <div class="screen-title" style="text-align:center;">Money is on the way!</div>
+      <div class="success-amount">$89.00</div>
+      <div class="success-text">Sent to Venmo @your_venmo</div>
+      <div class="success-text" style="margin-top:4px;">Arriving instantly</div>
+      <div class="btn-primary" style="margin-top:40px;">Done</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4: Earnings Breakdown -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">4</span> EARNINGS BREAKDOWN</div>
+  <div class="phone-screen">
+    <div class="screen-title">Earnings Breakdown</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <div class="pill active">This Month</div>
+      <div class="pill">Lifetime</div>
+    </div>
+    <div class="balance-card">
+      <div class="balance-amount">$48.96</div>
+      <div class="balance-label">Earned This Month</div>
+      <div style="font-size:11px;color:#34d399;margin-top:4px;">&#8593; 28 referrals active</div>
+    </div>
+    <div class="section-label">Affiliate Levels</div>
+    <div class="level-row">
+      <div class="level-dot" style="background:#f0a030;"></div>
+      <div class="level-info"><div class="level-name">Level 1 (25%)</div><div class="level-handles">@jake_lifts, @sarah_runs, @coach_mike</div></div>
+      <div class="level-amount">$29.96</div>
+    </div>
+    <div class="level-row">
+      <div class="level-dot" style="background:#3b82f6;"></div>
+      <div class="level-info"><div class="level-name">Level 2 (10%)</div><div class="level-handles">@fit_daily, @gym_pro</div></div>
+      <div class="level-amount">$12.00</div>
+    </div>
+    <div class="level-row">
+      <div class="level-dot" style="background:#8b5cf6;"></div>
+      <div class="level-info"><div class="level-name">Level 3 (5%)</div><div class="level-handles">@track_star</div></div>
+      <div class="level-amount">$4.50</div>
+    </div>
+    <div class="level-row">
+      <div class="level-dot" style="background:#ec4899;"></div>
+      <div class="level-info"><div class="level-name">Level 4 (3%)</div><div class="level-handles">@swim_fast</div></div>
+      <div class="level-amount">$1.80</div>
+    </div>
+    <div class="level-row">
+      <div class="level-dot" style="background:#6b7280;"></div>
+      <div class="level-info"><div class="level-name">Level 5 (2%)</div><div class="level-handles">@ball_life</div></div>
+      <div class="level-amount">$0.70</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 5: Make Payment (NEW) -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">5</span> MAKE PAYMENT <span class="new-badge">NEW</span></div>
+  <div class="phone-screen">
+    <div class="screen-title">Send Money</div>
+    <div class="section-label">Recent</div>
+    <div class="recipient-row">
+      <div class="recipient"><div class="avatar">SJ</div><div class="rname">Sarah J.</div></div>
+      <div class="recipient"><div class="avatar">MC</div><div class="rname">Marcus C.</div></div>
+      <div class="recipient"><div class="avatar">CE</div><div class="rname">Coach E.</div></div>
+      <div class="recipient"><div class="avatar">TM</div><div class="rname">Team Mom</div></div>
+      <div class="recipient"><div class="avatar" style="background:transparent;border-style:dashed;font-size:18px;">+</div><div class="rname">Search</div></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <input class="input-field" style="flex:1;" placeholder="Search or scan QR..." readonly>
+      <div style="width:44px;height:44px;background:#1a2235;border:1px solid #2a3a55;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">&#9744;</div>
+    </div>
+    <div style="text-align:center;font-size:13px;color:#6b7280;margin-bottom:4px;">Pay @coach_elite</div>
+    <div class="amount-input"><span class="dollar">$150.00</span></div>
+    <div class="section-label">What's it for?</div>
+    <div class="category-pills">
+      <div class="pill active">&#127936; Coaching</div>
+      <div class="pill">&#127947; Equipment</div>
+      <div class="pill">&#127942; Event Fee</div>
+      <div class="pill">&#127944; Snacks</div>
+      <div class="pill">&#128101; Team Dues</div>
+      <div class="pill">Other</div>
+    </div>
+    <input class="input-field" placeholder="Add a note (optional)" readonly>
+    <div class="btn-primary">Review Payment</div>
+  </div>
+</div>
+
+<!-- SCREEN 6: Payment Confirmation -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">6</span> PAYMENT REVIEW <span class="new-badge">NEW</span></div>
+  <div class="phone-screen">
+    <div class="screen-title">Confirm Payment</div>
+    <div style="text-align:center;margin:16px 0;">
+      <div class="recipient" style="display:inline-block;">
+        <div class="avatar" style="width:64px;height:64px;font-size:20px;margin:0 auto;">CE</div>
+        <div style="font-size:14px;font-weight:600;color:#e8e8e8;margin-top:8px;">Coach Elite</div>
+        <div style="font-size:11px;color:#6b7280;">@coach_elite</div>
+      </div>
+    </div>
+    <div class="amount-input" style="margin:12px 0;"><span class="dollar">$150.00</span></div>
+    <div style="text-align:center;margin-bottom:16px;"><span class="pill active">&#127936; Coaching</span></div>
+    <div class="divider"></div>
+    <div class="detail-row"><span class="dlabel">From wallet</span><span class="dvalue">$89.00</span></div>
+    <div class="detail-row"><span class="dlabel">From card</span><span class="dvalue">$61.00</span></div>
+    <div class="detail-row"><span class="dlabel">Fee</span><span class="dvalue">$0.75</span></div>
+    <div class="detail-row"><span class="dlabel">Note</span><span class="dvalue" style="font-weight:400;">Thanks for the coaching!</span></div>
+    <div class="divider"></div>
+    <div class="note-box">
+      <p>&#128274; Your saved Visa &middot;&middot;&middot;&middot; 4242 will be used for the $61.00 card portion. You can also use Apple Pay or Google Pay.</p>
+    </div>
+    <div class="btn-primary">Send $150.00</div>
+    <div style="text-align:center;margin-top:8px;font-size:10px;color:#6b7280;">Face ID required to confirm</div>
+  </div>
+</div>
+
+<!-- SCREEN 7: Payment Sheet (Stripe SDK) -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">7</span> PAYMENT SHEET <span class="new-badge">STRIPE SDK</span></div>
+  <div class="phone-screen">
+    <div style="height:120px;"></div>
+    <div style="background:#1f2937;border-radius:16px 16px 0 0;padding:20px;min-height:400px;">
+      <div style="width:40px;height:4px;background:#4b5563;border-radius:2px;margin:0 auto 16px;"></div>
+      <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">Pay $61.00</div>
+      <div style="font-size:12px;color:#6b7280;margin-bottom:20px;">Card portion &middot; Wallet covers $89.00</div>
+
+      <div class="payment-method selected" style="background:#000;border-color:#fff;">
+        <div class="pm-icon" style="background:#000;color:#fff;font-size:20px;">&#63743;</div>
+        <div class="pm-info">
+          <div class="pm-name" style="color:#fff;">Apple Pay</div>
+          <div class="pm-detail" style="color:#aaa;">Visa &middot;&middot;&middot;&middot; 4242 &middot; Apple Cash</div>
+        </div>
+      </div>
+
+      <div class="payment-method" style="background:#1a2235;">
+        <div class="pm-icon" style="background:#4285f4;color:#fff;font-size:12px;font-weight:700;">G</div>
+        <div class="pm-info">
+          <div class="pm-name">Google Pay</div>
+          <div class="pm-detail">Visa &middot;&middot;&middot;&middot; 4242</div>
+        </div>
+      </div>
+
+      <div class="payment-method" style="background:#1a2235;">
+        <div class="pm-icon" style="background:#1a2235;color:#3b82f6;font-size:16px;">&#9679;</div>
+        <div class="pm-info">
+          <div class="pm-name">Visa &middot;&middot;&middot;&middot; 4242 <span style="font-size:10px;color:#34d399;">SAVED</span></div>
+          <div class="pm-detail">Expires 08/27</div>
+        </div>
+      </div>
+
+      <div class="payment-method" style="background:#1a2235;">
+        <div class="pm-icon" style="background:#1a2235;color:#6b7280;font-size:16px;">+</div>
+        <div class="pm-info">
+          <div class="pm-name">Add new card</div>
+          <div class="pm-detail">Scan or type card number</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:16px;font-size:10px;color:#6b7280;">
+        Powered by Stripe &middot; Secured with biometric
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 8: Payment Success -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">8</span> PAYMENT SUCCESS <span class="new-badge">NEW</span></div>
+  <div class="phone-screen">
+    <div class="success-screen">
+      <div class="success-check">&#10003;</div>
+      <div class="screen-title" style="text-align:center;">Sent!</div>
+      <div class="success-amount">$150.00</div>
+      <div class="success-text">to Coach Elite @coach_elite</div>
+      <div style="margin-top:16px;"><span class="pill active">&#127936; Coaching</span></div>
+      <div style="margin-top:16px;font-size:12px;color:#6b7280;">
+        $89.00 from wallet<br>
+        $61.00 from Visa &middot;&middot;&middot;&middot; 4242
+      </div>
+      <div class="btn-primary" style="margin-top:40px;">Done</div>
+      <div class="btn-secondary">Send Again</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 9: Wallet Settings -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">9</span> WALLET SETTINGS</div>
+  <div class="phone-screen">
+    <div class="screen-title">Wallet Settings</div>
+    <div class="section-label">Subscription</div>
+    <div class="setting-row">
+      <span class="setting-label">Pay subscription from wallet</span>
+      <div class="toggle on"><div class="knob"></div></div>
+    </div>
+    <div class="section-label">Notifications</div>
+    <div class="setting-row">
+      <span class="setting-label">New earnings</span>
+      <div class="toggle on"><div class="knob"></div></div>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Cashout updates</span>
+      <div class="toggle on"><div class="knob"></div></div>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Pending releases</span>
+      <div class="toggle on"><div class="knob"></div></div>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Earning reversed</span>
+      <div class="toggle on"><div class="knob"></div></div>
+    </div>
+    <div class="section-label">Account</div>
+    <div class="setting-row">
+      <span class="setting-label">Wallet Status</span>
+      <span class="status-badge active">Active</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Identity</span>
+      <span class="status-badge verified">Verified</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Min. Cashout</span>
+      <span style="font-size:13px;color:#e8e8e8;">$25.00</span>
+    </div>
+    <div class="setting-row">
+      <span class="setting-label">Cashout Limit</span>
+      <span style="font-size:13px;color:#e8e8e8;">1 per 24 hours</span>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 10: Wallet Activation -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">10</span> WALLET ACTIVATION</div>
+  <div class="phone-screen">
+    <div class="success-screen" style="padding-top:40px;">
+      <div style="width:80px;height:80px;border-radius:50%;background:#1a2235;border:2px solid #f0a030;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px;">&#128176;</div>
+      <div class="screen-title" style="text-align:center;">Your network is earning you money!</div>
+      <div style="margin:16px 0;">
+        <div class="balance-card">
+          <div class="balance-label">Pending Earnings</div>
+          <div class="balance-amount">$8.50</div>
+          <div style="font-size:11px;color:#6b7280;margin-top:4px;">From 3 referrals</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:#6b7280;margin-bottom:20px;line-height:1.5;">
+        Verify your identity to activate your wallet and start cashing out.
+      </div>
+      <div class="btn-primary">Verify My Identity</div>
+      <div style="text-align:center;margin-top:12px;font-size:10px;color:#6b7280;">
+        Takes about 2 minutes &middot; Powered by Stripe
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 11: Transaction History -->
+<div class="phone">
+  <div class="phone-notch"><span class="time">9:41</span><span class="icons">5G</span></div>
+  <div class="phone-label"><span class="screen-number">11</span> TRANSACTION HISTORY</div>
+  <div class="phone-screen">
+    <div class="screen-title">Transaction History</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+      <div class="pill active">All</div>
+      <div class="pill">Earnings</div>
+      <div class="pill">Cashouts</div>
+      <div class="pill">Payments</div>
+    </div>
+    <div class="tx-list">
+      <div class="tx-item">
+        <div class="tx-icon credit">&#8593;</div>
+        <div class="tx-info"><div class="name">@jake_lifts signed up</div><div class="status">Pending — available Apr 23</div></div>
+        <div class="tx-amount pos">+$4.99</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon debit">&#8594;</div>
+        <div class="tx-info"><div class="name">Sent to Coach Elite</div><div class="status">Sent &middot; &#127936; Coaching</div></div>
+        <div class="tx-amount neg">-$150.00</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon credit">&#8593;</div>
+        <div class="tx-info"><div class="name">L2 from @coach_mike</div><div class="status">Available</div></div>
+        <div class="tx-amount pos">+$2.00</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon debit">&#8595;</div>
+        <div class="tx-info"><div class="name">Earning reversed</div><div class="status">@old_subscriber cancelled</div></div>
+        <div class="tx-amount neg">-$1.50</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon success">&#10003;</div>
+        <div class="tx-info"><div class="name">Paid to Venmo</div><div class="status">Completed &middot; Mar 28</div></div>
+        <div class="tx-amount neg">-$45.00</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon credit">&#8593;</div>
+        <div class="tx-info"><div class="name">@sarah_runs subscribed</div><div class="status">Available</div></div>
+        <div class="tx-amount pos">+$2.49</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon debit">&#8595;</div>
+        <div class="tx-info"><div class="name">Subscription auto-paid</div><div class="status">From wallet &middot; Apr 1</div></div>
+        <div class="tx-amount neg">-$9.95</div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon credit">&#8593;</div>
+        <div class="tx-info"><div class="name">Received from @fit_daily</div><div class="status">Sent &middot; &#127947; Equipment</div></div>
+        <div class="tx-amount pos">+$35.00</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <p>VAI Wallet v4.2 &middot; Stripe SDK-First Architecture &middot; 11 Screens</p>
+  <p style="margin-top:8px;">Spec: vai-wallet-super-spec-v4.2-FINAL.md &middot; Build Bible: vai-codebase-recon-report.md</p>
+  <p style="margin-top:8px;">No KYC &middot; No clawback &middot; No commission &middot; No PayPal in UI</p>
+  <p style="margin-top:12px;color:#f0a030;">Built by Tommy Shelby for VAI</p>
+</div>
+
+</body>
+</html>
