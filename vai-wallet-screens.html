@@ -51,7 +51,7 @@
   }
   .phone-frame {
     width: 375px;
-    min-height: 700px;
+    height: 812px;
     background: #0C0A09;
     border-radius: 40px;
     border: 3px solid #333;
@@ -1318,6 +1318,26 @@
           <div class="text-tertiary fs-12" style="margin-top:4px;">Wallet balance: $89.00</div>
         </div>
 
+        <!-- Payment Methods — Stripe PaymentSheet surfaces these automatically -->
+        <div style="margin-top:16px;padding:12px;background:#151210;border-radius:12px;border:1px solid #2A2623;">
+          <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1px;margin-bottom:10px;">CARD PORTION PAID WITH</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:#0C0A09;border-radius:8px;border:1px solid #2A2623;">
+              <span style="font-size:14px;">&#128179;</span>
+              <span class="text-primary fs-12 fw-600">Visa &bull;&bull;&bull;&bull; 4242</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:#FFFFFF;border-radius:8px;">
+              <span style="font-size:14px;">&#63743;</span>
+              <span style="color:#000;font-size:12px;font-weight:700;">Pay</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;padding:8px 12px;background:#FFFFFF;border-radius:8px;">
+              <span style="color:#4285F4;font-size:13px;font-weight:700;">G</span>
+              <span style="color:#000;font-size:12px;font-weight:600;">Pay</span>
+            </div>
+          </div>
+          <div class="text-tertiary fs-11" style="line-height:15px;">Stripe PaymentSheet shows saved cards, Apple Pay, and Google Pay based on device. Face ID / Touch ID confirms the payment.</div>
+        </div>
+
         <div style="margin-top:20px;">
           <div class="text-secondary fs-13" style="margin-bottom:8px;">Message (optional)</div>
           <textarea class="message-input" readonly>Thanks for the coaching!</textarea>
@@ -1483,7 +1503,7 @@
 <!-- ────────────────────────────────────────────────────────────── -->
 <div class="screen-wrapper">
   <div class="screen-label">7. Wallet Activation</div>
-  <div class="screen-sublabel">Intro + KYC form + success state</div>
+  <div class="screen-sublabel">Intro + features + CTA</div>
   <div class="phone-frame">
     <div class="status-bar">
       <span class="time">9:41</span>
@@ -1492,69 +1512,76 @@
     <div class="screen-content">
       <div style="padding:0 16px;">
         <!-- Hero -->
-        <div style="text-align:center;padding-top:32px;padding-bottom:24px;">
+        <div style="text-align:center;padding-top:24px;padding-bottom:20px;">
           <div class="hero-badge">You have $8.50 waiting</div>
-          <div class="text-primary" style="font-size:32px;font-weight:700;line-height:38px;margin-bottom:12px;">Activate Your<br>VAI Wallet</div>
-          <div class="text-secondary fs-15" style="line-height:22px;max-width:300px;margin:0 auto;">Your network is paying you. Set up your wallet to cash out earnings, pay mentors, and more.</div>
+          <div class="text-primary" style="font-size:28px;font-weight:700;line-height:34px;margin-bottom:10px;">Activate Your<br>VAI Wallet</div>
+          <div class="text-secondary fs-14" style="line-height:20px;max-width:300px;margin:0 auto;">Your network is paying you. Set up your wallet to cash out earnings and send payments.</div>
         </div>
 
         <!-- Balance Preview -->
-        <div style="background:#151210;border-radius:16px;padding:20px;text-align:center;border:1px solid #2A2623;margin-bottom:24px;">
-          <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1.2px;margin-bottom:6px;">PENDING EARNINGS</div>
-          <div class="text-green fs-36 fw-700" style="margin-bottom:4px;">$8.50</div>
-          <div class="text-tertiary fs-13">This money is waiting for you. Activate to unlock it.</div>
+        <div style="background:#151210;border-radius:16px;padding:16px;text-align:center;border:1px solid #2A2623;margin-bottom:18px;">
+          <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1.2px;margin-bottom:4px;">PENDING EARNINGS</div>
+          <div class="text-green fs-32 fw-700" style="margin-bottom:2px;">$8.50</div>
+          <div class="text-tertiary fs-12">This money is waiting for you. Activate to unlock it.</div>
         </div>
 
         <!-- Features -->
-        <div style="margin-bottom:24px;">
-          <div class="section-title" style="letter-spacing:1.2px;margin-bottom:16px;">WHAT YOU GET</div>
+        <div style="margin-bottom:18px;">
+          <div class="section-title" style="letter-spacing:1.2px;margin-bottom:12px;">WHAT YOU GET</div>
           <div class="feature-row">
             <span class="feature-icon">&#128176;</span>
             <div>
-              <div class="text-primary fs-15 fw-600" style="margin-bottom:2px;">Cash Out Anytime</div>
-              <div class="text-tertiary fs-13" style="line-height:18px;">Withdraw to Venmo, PayPal, or bank account. No fees with Venmo.</div>
+              <div class="text-primary fs-14 fw-600" style="margin-bottom:2px;">Cash Out Anytime</div>
+              <div class="text-tertiary fs-12" style="line-height:16px;">Withdraw to Venmo or bank. No fees with Venmo.</div>
             </div>
           </div>
           <div class="feature-row">
             <span class="feature-icon">&#128202;</span>
             <div>
-              <div class="text-primary fs-15 fw-600" style="margin-bottom:2px;">5-Level Earnings</div>
-              <div class="text-tertiary fs-13" style="line-height:18px;">Earn commissions on 5 levels of referrals. See your full affiliate tree.</div>
-            </div>
-          </div>
-          <div class="feature-row">
-            <span class="feature-icon">&#128179;</span>
-            <div>
-              <div class="text-primary fs-15 fw-600" style="margin-bottom:2px;">Pay Your Subscription</div>
-              <div class="text-tertiary fs-13" style="line-height:18px;">Earn enough and your network pays your VAI subscription for free.</div>
+              <div class="text-primary fs-14 fw-600" style="margin-bottom:2px;">5-Level Earnings</div>
+              <div class="text-tertiary fs-12" style="line-height:16px;">Earn commissions on 5 levels of referrals.</div>
             </div>
           </div>
           <div class="feature-row">
             <span class="feature-icon">&#129309;</span>
             <div>
-              <div class="text-primary fs-15 fw-600" style="margin-bottom:2px;">Make Payments</div>
-              <div class="text-tertiary fs-13" style="line-height:18px;">Send payments directly from your wallet balance.</div>
+              <div class="text-primary fs-14 fw-600" style="margin-bottom:2px;">Send &amp; Receive</div>
+              <div class="text-tertiary fs-12" style="line-height:16px;">Pay anyone via Apple Pay, Google Pay, or saved card.</div>
             </div>
           </div>
         </div>
 
-        <!-- KYC Notice -->
+        <!-- Verify Notice -->
         <div class="kyc-notice">
-          <div class="text-primary fs-14 fw-600" style="margin-bottom:6px;">Quick Verification Required</div>
-          <div class="text-tertiary fs-13" style="line-height:18px;">To comply with financial regulations, we need to verify your identity. This takes about 2 minutes and your data is secured by Stripe.</div>
+          <div class="text-primary fs-13 fw-600" style="margin-bottom:4px;">Quick Verification Required</div>
+          <div class="text-tertiary fs-12" style="line-height:16px;">Verify your identity (2 minutes). Powered by Stripe.</div>
         </div>
 
         <!-- CTA -->
-        <button class="btn-primary" style="margin-bottom:12px;font-size:18px;">Activate Wallet</button>
-        <div class="text-tertiary fs-12" style="text-align:center;margin-bottom:24px;">You have 30 days to activate. After that, weekly reminders will be sent.</div>
+        <button class="btn-primary" style="margin-bottom:10px;font-size:17px;">Activate Wallet</button>
+        <div class="text-tertiary fs-11" style="text-align:center;">30 days to activate, then weekly reminders.</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <div class="divider" style="margin-bottom:16px;"></div>
+<!-- ────────────────────────────────────────────────────────────── -->
+<!-- SCREEN 7b: Verify Identity -->
+<!-- ────────────────────────────────────────────────────────────── -->
+<div class="screen-wrapper">
+  <div class="screen-label">7b. Verify Identity</div>
+  <div class="screen-sublabel">Stripe-hosted verification form</div>
+  <div class="phone-frame">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679; &#9679; &#9679;</span>
+    </div>
+    <div class="screen-content">
+      <div style="padding:20px 16px 0;">
+        <div class="text-orange fs-18 fw-700" style="margin-bottom:4px;">Verify Your Identity</div>
+        <div class="text-secondary fs-13" style="line-height:18px;margin-bottom:18px;">Required by financial regulations. Your data is secured by Stripe. VAI never sees your SSN.</div>
 
-        <!-- KYC Form Preview -->
-        <div class="text-orange fs-16 fw-600" style="margin-bottom:6px;">KYC Form Preview</div>
-        <div class="text-secondary fs-14" style="line-height:20px;margin-bottom:24px;">This information is required by financial regulations and is secured by Stripe.</div>
-
-        <div style="display:flex;gap:12px;">
+        <div style="display:flex;gap:10px;">
           <div style="flex:1;">
             <div class="input-group">
               <div class="input-label">First Name</div>
@@ -1577,13 +1604,13 @@
           <div class="input-field" style="color:#57534E;">****</div>
         </div>
 
-        <div class="text-tertiary fs-12 fw-600" style="letter-spacing:1px;margin-top:8px;margin-bottom:16px;">Address</div>
+        <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1px;margin-top:6px;margin-bottom:10px;">ADDRESS</div>
 
         <div class="input-group">
           <div class="input-label">Street Address</div>
           <div class="input-field" style="color:#57534E;">123 Main St</div>
         </div>
-        <div style="display:flex;gap:12px;">
+        <div style="display:flex;gap:10px;">
           <div style="flex:2;">
             <div class="input-group">
               <div class="input-label">City</div>
@@ -1602,48 +1629,61 @@
           <div class="input-field" style="color:#57534E;">80202</div>
         </div>
 
-        <div class="security-note">
-          <div class="text-tertiary fs-12" style="line-height:16px;">Your information is encrypted and sent directly to Stripe for verification. VAI does not store your SSN or sensitive identity data.</div>
+        <div class="security-note" style="margin-bottom:14px;">
+          <div class="text-tertiary fs-11" style="line-height:15px;">Encrypted and sent directly to Stripe. VAI does not store your SSN.</div>
         </div>
 
-        <button class="btn-primary" style="margin-bottom:24px;">Verify & Activate</button>
+        <button class="btn-primary">Verify &amp; Activate</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <div class="divider" style="margin-bottom:16px;"></div>
-
-        <!-- Success State Preview -->
-        <div style="text-align:center;padding:32px 0 40px;">
+<!-- ────────────────────────────────────────────────────────────── -->
+<!-- SCREEN 7c: Wallet Approved -->
+<!-- ────────────────────────────────────────────────────────────── -->
+<div class="screen-wrapper">
+  <div class="screen-label">7c. Wallet Approved</div>
+  <div class="screen-sublabel">Success state + next steps</div>
+  <div class="phone-frame">
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">&#9679; &#9679; &#9679;</span>
+    </div>
+    <div class="screen-content">
+      <div style="padding:0 16px;">
+        <div style="text-align:center;padding:40px 0 24px;">
           <div class="success-circle" style="margin:0 auto 20px;">
             <span class="success-check">&#10003;</span>
           </div>
-          <div class="text-primary" style="font-size:26px;font-weight:700;margin-bottom:8px;">Wallet Activated!</div>
-          <div class="text-secondary fs-15" style="margin-bottom:24px;line-height:22px;">Your identity has been verified and your VAI Wallet is live.</div>
-
-          <div style="background:#151210;border-radius:14px;padding:20px;border:1px solid #2A2623;text-align:center;margin-bottom:24px;">
-            <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1px;margin-bottom:4px;">PENDING EARNINGS</div>
-            <div class="text-green fs-32 fw-700" style="margin-bottom:6px;">$8.50</div>
-            <div class="text-tertiary fs-13" style="line-height:18px;">Your pending commissions will become available after the 14-day hold period.</div>
-          </div>
-
-          <div style="text-align:left;margin-bottom:32px;">
-            <div class="text-tertiary fs-12 fw-600" style="letter-spacing:1px;margin-bottom:14px;">NEXT STEPS</div>
-            <div class="next-step-row">
-              <div class="next-step-bullet">1</div>
-              <div class="text-primary fs-14" style="flex:1;">Link a payout method (Venmo recommended)</div>
-            </div>
-            <div class="next-step-row">
-              <div class="next-step-bullet">2</div>
-              <div class="text-primary fs-14" style="flex:1;">Keep sharing your link to grow earnings</div>
-            </div>
-            <div class="next-step-row">
-              <div class="next-step-bullet">3</div>
-              <div class="text-primary fs-14" style="flex:1;">Cash out once you reach $25 available</div>
-            </div>
-          </div>
-
-          <button class="btn-primary" style="max-width:240px;margin:0 auto;">Go to Wallet</button>
+          <div class="text-primary" style="font-size:28px;font-weight:700;margin-bottom:8px;">Wallet Activated!</div>
+          <div class="text-secondary fs-15" style="line-height:22px;max-width:300px;margin:0 auto;">Your identity is verified and your VAI Wallet is live.</div>
         </div>
+
+        <div style="background:#151210;border-radius:14px;padding:18px;border:1px solid #2A2623;text-align:center;margin-bottom:20px;">
+          <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1px;margin-bottom:4px;">PENDING EARNINGS</div>
+          <div class="text-green fs-32 fw-700" style="margin-bottom:4px;">$8.50</div>
+          <div class="text-tertiary fs-12" style="line-height:16px;">Available after the 14-day hold period.</div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div class="text-tertiary fs-11 fw-600" style="letter-spacing:1px;margin-bottom:12px;">NEXT STEPS</div>
+          <div class="next-step-row">
+            <div class="next-step-bullet">1</div>
+            <div class="text-primary fs-13" style="flex:1;">Link a payout method (Venmo recommended)</div>
+          </div>
+          <div class="next-step-row">
+            <div class="next-step-bullet">2</div>
+            <div class="text-primary fs-13" style="flex:1;">Keep sharing your link to grow earnings</div>
+          </div>
+          <div class="next-step-row">
+            <div class="next-step-bullet">3</div>
+            <div class="text-primary fs-13" style="flex:1;">Cash out once you reach $25 available</div>
+          </div>
+        </div>
+
+        <button class="btn-primary">Go to Wallet</button>
       </div>
-      <div style="height:40px;"></div>
     </div>
   </div>
 </div>
