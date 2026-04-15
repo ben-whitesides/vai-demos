@@ -1,0 +1,103 @@
+{
+  "_comment": "Example VaiProfile payload. This is the exact shape the template expects from your profile endpoint. Copy into a test fixture and use as a target.",
+  "user": {
+    "id": "a812b6d8-b406-439b-9d6b-fc1d8a3313cd",
+    "handle": "bwhite",
+    "name": "Ben Whitesides",
+    "avatar": "https://prod.media.vai.app/avatars/a812b6d8.jpg",
+    "classYear": 2026,
+    "sports": ["Football"],
+    "position": "QB",
+    "location": "Kaysville, UT",
+    "height": "6'2\"",
+    "weight": "190 LBS",
+    "measurables": {
+      "40-yd": "4.6",
+      "Vertical": "32\""
+    },
+    "bio": "High-performance coach specializing in strength and conditioning for youth athletes. 10+ years experience working with elite programs.",
+    "followers": 46,
+    "following": 138,
+    "roles": ["Trainer", "Coach", "Parent"]
+  },
+  "coach": {
+    "id": "c4f9a1b2-0000-0000-0000-000000000000",
+    "handle": "coachjones"
+  },
+  "stats": [
+    {
+      "key": "squat",
+      "name": "Back Squat",
+      "value": "320",
+      "unit": "lbs",
+      "verified": true,
+      "date": "2023-12-08",
+      "increase": "12%",
+      "startDate": "2023-06-15",
+      "overall": "35",
+      "iconKey": "dumbbell",
+      "videoUrl": "https://prod.media.vai.app/highlights/squat-pr.mp4"
+    },
+    {
+      "key": "pushups",
+      "name": "Push Ups",
+      "value": "72",
+      "unit": "reps",
+      "verified": true,
+      "date": "2023-12-08",
+      "increase": "18%",
+      "startDate": "2023-07-20",
+      "overall": "11",
+      "iconKey": "bicep"
+    },
+    {
+      "key": "situps",
+      "name": "Sit Ups",
+      "value": "45",
+      "unit": "reps",
+      "verified": false,
+      "date": "2023-11-15",
+      "iconKey": "flame"
+    }
+  ],
+  "highlights": [
+    {
+      "id": "h1",
+      "url": "https://prod.media.vai.app/highlights/h1.mp4",
+      "poster": "https://prod.media.vai.app/highlights/h1-thumb.jpg",
+      "caption": "Weekend PR session"
+    },
+    {
+      "id": "h2",
+      "url": "https://prod.media.vai.app/highlights/h2.mp4",
+      "poster": "https://prod.media.vai.app/highlights/h2-thumb.jpg"
+    }
+  ],
+  "topHighlight": {
+    "url": "https://prod.media.vai.app/highlights/top.mp4",
+    "poster": "https://prod.media.vai.app/highlights/top-poster.jpg"
+  },
+  "abilities": {
+    "cycling": { "level": "Athlete", "stars": 4 },
+    "running": { "level": "Athlete", "stars": 4 },
+    "strength": { "level": "Elite", "stars": 5 }
+  },
+  "sportStats": [
+    {
+      "sport": "Tennis",
+      "metrics": [
+        { "name": "Tournament Won", "value": "15", "total": true }
+      ]
+    },
+    {
+      "sport": "Football",
+      "metrics": [
+        { "name": "Completion %", "value": "66.5", "total": true }
+      ]
+    }
+  ],
+  "token": "8951bdc6-271d-4571-9f2e-85552a490b9e",
+  "viewer": {
+    "affiliateHandle": "scoutA"
+  }
+}
