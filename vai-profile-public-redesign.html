@@ -1151,14 +1151,20 @@
       font-size: 12px;
     }
 
-    .vai-logo {
+    .footer-logo {
       display: inline-block;
-      font-size: 14px;
-      font-weight: 700;
-      color: #F7941E;
-      margin-bottom: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      margin-bottom: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-logo img {
+      width: 80px;
+      height: auto;
+    }
+
+    .footer-logo:hover {
+      opacity: 0.85;
+      transform: scale(1.05);
     }
 
     /* RESPONSIVE */
@@ -1585,7 +1591,9 @@
 
     <!-- FOOTER -->
     <div class="footer">
-      <div class="vai-logo">VAI</div>
+      <a href="https://vai.app" target="_blank" class="footer-logo">
+        <img src="https://vai.app/wp-content/uploads/logo.png" alt="VAI">
+      </a>
       <p>Share your athletic profile with coaches, scouts, and recruiters worldwide.</p>
     </div>
   </div>
