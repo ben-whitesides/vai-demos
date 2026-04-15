@@ -982,6 +982,15 @@
       display: block;
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      .profile-hero video { display: none; }
+      .profile-hero.video-hero {
+        background-image: var(--hero-poster, none);
+        background-size: cover;
+        background-position: center;
+      }
+    }
+
     .profile-hero-overlay {
       position: absolute;
       bottom: 16px;
@@ -1833,7 +1842,184 @@
   </div>
 
   <script>
-    const highlights = [
+    /* =================================================================
+       VAI PROFILE HYDRATION LAYER
+       -----------------------------------------------------------------
+       Badinho: inject window.VAI_PROFILE server-side with real data.
+       Everything below self-wires: conditional chips, verified badges,
+       coach credential, highlights grid, share URL with affiliate
+       attribution, UTM tracking, accessibility, connection awareness.
+
+       Template renders Ben Whitesides defaults so design review works
+       without any data injection.
+       ================================================================= */
+
+    // Default shape — Badinho replaces server-side:
+    //   window.VAI_PROFILE = { user:{...}, stats:[...], highlights:[...],
+    //                          abilities:{...}, sports:[...], coach:{...},
+    //                          viewer:{ affiliateHandle:"..." } }
+    const P = window.VAI_PROFILE || null;
+
+    // ----- URL PARAM UTILITIES -----
+    const URL_PARAMS = new URLSearchParams(window.location.search);
+    const REFERRER_HANDLE = URL_PARAMS.get('ref') || URL_PARAMS.get('share');
+
+    // ----- HYDRATION: runs on DOMContentLoaded -----
+    document.addEventListener('DOMContentLoaded', () => {
+      hydrateProfile();
+      hydrateAttributionPill();
+      hydrateCoachedBy();
+      hydrateMetaChips();
+      hydrateVerifiedBadges();
+      hydrateAVANTIUtm();
+      hydrateShareURLWithAffiliate();
+      handleReducedMotion();
+      handleSlowConnection();
+    });
+
+    // ----- USER PROFILE FIELDS -----
+    function hydrateProfile() {
+      if (!P || !P.user) return; // template stays as design-review default
+      const u = P.user;
+      setText('.profile-name', u.name);
+      setText('.profile-handle', u.handle ? '@' + u.handle : '');
+      setAttr('.profile-avatar img', 'src', u.avatar);
+      setAttr('.profile-avatar img', 'alt', u.name);
+      setHref('.cta-button.primary', `https://app.vai.app/chat/${u.id}`);
+      setText('.cta-button.primary', `Chat with @${u.handle}`, { preserveSVG: true });
+      setHref('.ghost-button[href*="profile/"]', `https://app.vai.app/profile/${u.id}?public=${P.token || ''}`);
+      // Share URL canonical:
+      setMeta('og:url', window.location.href);
+      document.title = `${u.name} — VAI Athlete Profile`;
+    }
+
+    // ----- ATTRIBUTION PILL: hide unless ?ref= present -----
+    function hydrateAttributionPill() {
+      const pill = document.getElementById('attributionPill');
+      if (!pill) return;
+      if (!REFERRER_HANDLE) { pill.style.display = 'none'; return; }
+      pill.querySelector('strong').textContent = '@' + REFERRER_HANDLE;
+    }
+
+    // ----- COACHED-BY: hide unless coach linked -----
+    function hydrateCoachedBy() {
+      const chip = document.querySelector('.coached-by');
+      if (!chip) return;
+      if (!P || !P.coach || !P.coach.id) { chip.style.display = 'none'; return; }
+      chip.setAttribute('href', `https://app.vai.app/profile/${P.coach.id}`);
+      chip.querySelector('strong').textContent = '@' + P.coach.handle;
+    }
+
+    // ----- META CHIPS: hide any chip with missing data -----
+    function hydrateMetaChips() {
+      if (!P || !P.user) return;
+      const u = P.user;
+      const chips = document.querySelectorAll('.meta-chip');
+      // Chip order in template: Class / Sport / Position / Location / HT+WT / 40-yd
+      const values = [
+        u.classYear && `Class of '${String(u.classYear).slice(-2)}`,
+        u.sports && u.sports[0],
+        u.position,
+        u.location,
+        (u.height && u.weight) ? `${u.height} / ${u.weight}` : null,
+        u.measurables && u.measurables['40-yd'] ? `${u.measurables['40-yd']} 40-yd` : null
+      ];
+      chips.forEach((chip, i) => {
+        if (!values[i]) chip.style.display = 'none';
+        else {
+          // Replace text node after the SVG
+          const svg = chip.querySelector('svg');
+          chip.innerHTML = svg.outerHTML + values[i];
+        }
+      });
+    }
+
+    // ----- VERIFIED BADGES: only show when stat.verified === true -----
+    function hydrateVerifiedBadges() {
+      if (!P || !P.stats) return;
+      const cards = document.querySelectorAll('.stat-card');
+      cards.forEach((card, i) => {
+        const stat = P.stats[i];
+        const badge = card.querySelector('.measured-badge');
+        if (!badge) return;
+        if (!stat || !stat.verified) badge.style.display = 'none';
+      });
+    }
+
+    // ----- AVANTI CTA: inject UTM tracking -----
+    function hydrateAVANTIUtm() {
+      const link = document.querySelector('.cta-button.avanti');
+      if (!link) return;
+      const userId = (P && P.user && P.user.id) || 'template';
+      const base = 'https://vai.app/share/partner-program?program_type=plus#pricing';
+      const sep = base.includes('?') ? '&' : '?';
+      // UTM goes before the fragment hash
+      const [path, hash] = base.split('#');
+      const utm = `utm_source=profile&utm_medium=share&utm_campaign=avanti_cta&utm_content=${encodeURIComponent(userId)}`;
+      link.href = `${path}${path.includes('?') ? '&' : '?'}${utm}${hash ? '#' + hash : ''}`;
+    }
+
+    // ----- SHARE URL: append viewer's affiliate handle for 5-tier attribution -----
+    function getShareURL() {
+      const url = new URL(window.location.href);
+      const viewerAffiliate = P && P.viewer && P.viewer.affiliateHandle;
+      if (viewerAffiliate) url.searchParams.set('share', viewerAffiliate);
+      return url.toString();
+    }
+
+    function hydrateShareURLWithAffiliate() {
+      // shareProfile() will call getShareURL() at click time — nothing to set now
+      // but we expose the helper globally so it runs in shareProfile()
+      window._getVAIShareURL = getShareURL;
+    }
+
+    // ----- ACCESSIBILITY: honor prefers-reduced-motion on video hero -----
+    function handleReducedMotion() {
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.querySelectorAll('.profile-hero video').forEach(v => {
+        v.removeAttribute('autoplay');
+        v.pause();
+      });
+    }
+
+    // ----- CONNECTION-AWARE: skip video autoplay on slow links -----
+    function handleSlowConnection() {
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if (!conn) return;
+      const slow = ['slow-2g', '2g', '3g'].includes(conn.effectiveType) || conn.saveData;
+      if (slow) {
+        document.querySelectorAll('.profile-hero video').forEach(v => {
+          v.removeAttribute('autoplay');
+          v.removeAttribute('loop');
+          v.preload = 'none';
+        });
+      }
+    }
+
+    // ----- HELPERS -----
+    function setText(sel, val, opts = {}) {
+      const el = document.querySelector(sel);
+      if (!el || !val) return;
+      if (opts.preserveSVG && el.querySelector('svg')) {
+        const svg = el.querySelector('svg').outerHTML;
+        el.innerHTML = svg + ' ' + val;
+      } else el.textContent = val;
+    }
+    function setAttr(sel, attr, val) {
+      const el = document.querySelector(sel);
+      if (el && val) el.setAttribute(attr, val);
+    }
+    function setHref(sel, val) { setAttr(sel, 'href', val); }
+    function setMeta(prop, val) {
+      const m = document.querySelector(`meta[property="${prop}"]`);
+      if (m && val) m.setAttribute('content', val);
+    }
+
+    /* =================================================================
+       EXISTING INTERACTION LOGIC (modals, tabs, share) — unchanged
+       ================================================================= */
+
+    const highlights = (P && P.highlights) ? P.highlights.map(h => h.url || h) : [
       '[PLACEHOLDER: HIGHLIGHT_1]',
       '[PLACEHOLDER: HIGHLIGHT_2]',
       '[PLACEHOLDER: HIGHLIGHT_3]',
@@ -1852,10 +2038,12 @@
     }
 
     async function shareProfile() {
+      const athleteName = (P && P.user && P.user.name) || 'Ben Whitesides';
+      const shareURL = (window._getVAIShareURL && window._getVAIShareURL()) || window.location.href;
       const shareData = {
-        title: 'Ben Whitesides — VAI Athlete Profile',
-        text: "Check out Ben Whitesides's athletic profile on VAI — stats, highlights, and more.",
-        url: window.location.href
+        title: `${athleteName} — VAI Athlete Profile`,
+        text: `Check out ${athleteName}'s athletic profile on VAI — stats, highlights, and more.`,
+        url: shareURL
       };
       if (navigator.share) {
         try {
