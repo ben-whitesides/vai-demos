@@ -20,6 +20,23 @@ This is the **contract-locked** API scaffold for OneSignal Journeys Phase 1. The
 3. Timer Concurrency: Switched from `Timer` (fire-and-forget) to `PeriodicTimer` (waits for completion, prevents overlapping executions)
 4. Journey Timing: Fixed `tier_upgraded` step 4 delay from 2880 → 1440 minutes (delivers Day 3, not Day 4)
 
+---
+
+## 📘 Reference Docs (in this folder)
+
+| Doc | What it covers |
+|---|---|
+| **[IMPLEMENTATION_REFERENCE.md](./IMPLEMENTATION_REFERENCE.md)** | All 6 method specs with SQL hints + testing checklist |
+| **[INTEGRATION_POINTS.md](./INTEGRATION_POINTS.md)** | Where to add event emission in 6 existing services |
+| **[scripts/setup-onesignal-feature.sh](./scripts/setup-onesignal-feature.sh)** | Pre-flight check — verifies scaffold + DI + DB connectivity |
+| **[scripts/generate-method-stubs.sh](./scripts/generate-method-stubs.sh)** | C# stub generator with SQL hints per method |
+| **[scripts/test-journey-integration.sh](./scripts/test-journey-integration.sh)** | End-to-end integration test |
+| **[MIRROR-NOTICE.md](./MIRROR-NOTICE.md)** | Context — this is a read-only docs mirror; code lives in `vai-api` |
+
+> **Source of truth for code:** `vai-app/vai-api` → `Vai.Api/Features/Notifications/` (Services, Models, Jobs) + `Vai.Database/Scripts/055_*.sql` + `056_*.sql`. This folder mirrors the docs only so reviewers don't need vai-app GitHub auth on a phone.
+
+---
+
 ## Architecture Pattern
 - **Services:** `IJourneyOrchestrationService` interface + stub implementation
 - **Models:** Journey state, templates, delivery events
