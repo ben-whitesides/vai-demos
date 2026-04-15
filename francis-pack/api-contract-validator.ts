@@ -30,7 +30,9 @@ const VaiUserSchema = z.object({
   handle: z.string().regex(/^[a-zA-Z0-9_]+$/, 'handle must be alphanumeric/underscore only'),
   name: z.string().min(1),
   avatar: z.string().url().startsWith('https://'),
-  classYear: z.number().int().min(2020).max(2040).nullable(),
+  // Range covers current athletes (Class of '26+), adult coaches/parents who
+  // are former athletes (down to 1990), and future recruiting cycles (up to 2045).
+  classYear: z.number().int().min(1990).max(2045).nullable(),
   sports: z.array(z.string()),
   position: z.string().nullable(),
   location: z.string().nullable(),
