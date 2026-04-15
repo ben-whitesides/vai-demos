@@ -94,12 +94,16 @@ fi
 # --- Step 4: dotnet test (Drip-only filter for speed)
 echo
 echo "[4/5] Running drip tests..."
+set -o pipefail
 if dotnet test --no-build --nologo --verbosity minimal --filter "FullyQualifiedName~Drip" 2>&1 | tee /tmp/drip-test.log | tail -10; then
   echo "  ✓ Drip tests pass"
 else
-  echo "  ⚠ Drip tests reported a failure — review /tmp/drip-test.log"
-  echo "    (NB: The pre-existing EventServiceTests flake is unrelated and excluded by the filter)"
-  echo "    Restore with the .bak.$TS files if needed."
+  echo "  ✗ Drip tests FAILED — review /tmp/drip-test.log"
+  echo "    (Pre-existing EventServiceTests flake is unrelated and excluded by the filter.)"
+  echo "    Restore originals with:"
+  echo "      cp $TARGET_DIR/DripSendLogRepository.cs.bak.$TS $TARGET_DIR/DripSendLogRepository.cs"
+  echo "      cp $TARGET_DIR/DripSendJob.cs.bak.$TS $TARGET_DIR/DripSendJob.cs"
+  exit 1
 fi
 
 # --- Step 5: diff summary

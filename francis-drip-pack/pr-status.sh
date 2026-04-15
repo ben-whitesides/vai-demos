@@ -34,24 +34,49 @@ echo
 echo "🔧 CI checks:"
 gh pr checks $PR --repo $REPO 2>/dev/null | sed 's/^/  /'
 
-# --- Open review threads
+# --- Unresolved review threads (proper GraphQL query — checks isResolved flag)
 echo
-echo "💬 Outstanding review threads:"
-gh api "repos/$REPO/pulls/$PR/comments" --paginate 2>/dev/null \
+echo "💬 Unresolved review threads:"
+gh api graphql -f query='
+query($repo_owner: String!, $repo_name: String!, $pr: Int!) {
+  repository(owner: $repo_owner, name: $repo_name) {
+    pullRequest(number: $pr) {
+      reviewThreads(first: 100) {
+        nodes {
+          isResolved
+          isOutdated
+          path
+          line
+          comments(first: 1) {
+            nodes { author { login } body }
+          }
+        }
+      }
+    }
+  }
+}' -F repo_owner="$(echo $REPO | cut -d/ -f1)" -F repo_name="$(echo $REPO | cut -d/ -f2)" -F pr="$PR" 2>/dev/null \
   | python3 -c '
 import json, sys
-comments = json.load(sys.stdin)
-unresolved = [c for c in comments if not c.get("in_reply_to_id")]
-if not unresolved:
-    print("  (none)")
-else:
-    for c in unresolved[-10:]:
-        path = c.get("path", "?")
-        line = c.get("line") or c.get("original_line", "?")
-        author = c.get("user", {}).get("login", "?")
-        body = (c.get("body", "") or "").splitlines()[0][:100]
-        print(f"  {author} on {path}:{line}")
-        print(f"    > {body}")
+try:
+    data = json.load(sys.stdin)
+    threads = data["data"]["repository"]["pullRequest"]["reviewThreads"]["nodes"]
+    unresolved = [t for t in threads if not t.get("isResolved")]
+    if not unresolved:
+        print("  (all resolved)")
+    else:
+        for t in unresolved[:10]:
+            c = t["comments"]["nodes"][0] if t["comments"]["nodes"] else {}
+            author = c.get("author", {}).get("login", "?") if c else "?"
+            body = (c.get("body", "") or "").splitlines()[0][:100] if c else ""
+            path = t.get("path", "?")
+            line = t.get("line", "?")
+            stale = " [outdated]" if t.get("isOutdated") else ""
+            print(f"  {author} on {path}:{line}{stale}")
+            print(f"    > {body}")
+        if len(unresolved) > 10:
+            print(f"  ... and {len(unresolved) - 10} more")
+except Exception as e:
+    print(f"  (could not parse review threads: {e})")
 ' 2>/dev/null || echo "  (could not fetch — check gh auth)"
 
 # --- Branch / commit info

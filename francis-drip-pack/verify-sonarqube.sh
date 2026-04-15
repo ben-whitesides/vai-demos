@@ -28,6 +28,21 @@ echo
 echo "Current PR #$PR check status:"
 gh pr checks $PR --repo $REPO 2>&1 | head -10
 
+# --- Fuzzy-match the Sonar check name (GitHub display name may drift)
+SONAR_NAME="$(gh pr checks $PR --repo $REPO --json name \
+  --jq '.[] | select(.name | test("(?i)sonar")) | .name' 2>/dev/null | head -1)"
+
+if [ -z "$SONAR_NAME" ]; then
+  echo
+  echo "⚠  Could not find a Sonar* check on PR #$PR. Available check names:"
+  gh pr checks $PR --repo $REPO --json name --jq '.[].name' 2>/dev/null | sed 's/^/    /'
+  echo
+  echo "Either Sonar hasn't started yet, or the check name changed. Re-run in a minute."
+  exit 1
+fi
+echo
+echo "Watching check: \"$SONAR_NAME\""
+
 # --- Poll for SonarCloud to settle (max 5 min)
 echo
 echo "Waiting for SonarCloud to complete (timeout: 5 min)..."
@@ -35,9 +50,9 @@ DEADLINE=$(( $(date +%s) + 300 ))
 LAST_STATE=""
 while [ "$(date +%s)" -lt "$DEADLINE" ]; do
   STATE="$(gh pr checks $PR --repo $REPO --json name,state \
-    --jq '.[] | select(.name=="SonarCloud Code Analysis") | .state' 2>/dev/null || echo unknown)"
+    --jq --arg n "$SONAR_NAME" '.[] | select(.name==$n) | .state' 2>/dev/null || echo unknown)"
   if [ "$STATE" != "$LAST_STATE" ]; then
-    echo "  SonarCloud: $STATE"
+    echo "  $SONAR_NAME: $STATE"
     LAST_STATE="$STATE"
   fi
   case "$STATE" in
@@ -50,7 +65,7 @@ done
 
 # --- Final state
 FINAL_STATE="$(gh pr checks $PR --repo $REPO --json name,state \
-  --jq '.[] | select(.name=="SonarCloud Code Analysis") | .state' 2>/dev/null || echo unknown)"
+  --jq --arg n "$SONAR_NAME" '.[] | select(.name==$n) | .state' 2>/dev/null || echo unknown)"
 
 echo
 case "$FINAL_STATE" in
@@ -60,7 +75,7 @@ case "$FINAL_STATE" in
   FAILURE|ERROR)
     echo "❌ SonarCloud FAILED — open the report at:"
     gh pr checks $PR --repo $REPO --json name,link \
-      --jq '.[] | select(.name=="SonarCloud Code Analysis") | .link' 2>/dev/null
+      --jq --arg n "$SONAR_NAME" '.[] | select(.name==$n) | .link' 2>/dev/null
     echo
     echo "Common remaining flags after this refactor:"
     echo "  • Cognitive complexity in BuildViewModel — split if needed"

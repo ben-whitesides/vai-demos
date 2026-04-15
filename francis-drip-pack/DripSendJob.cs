@@ -65,20 +65,16 @@ public class DripSendJob(
             await ctx.Email.SendDripTemplateAsync(step.TemplatePath, model, step.Subject, userCtx.Email);
             await ctx.Repo.MarkSentAsync(row.Id, DateTime.UtcNow);
         }
-        catch (Exception ex) when (IsTransient(ex))
-        {
-            // Transient: schedule a retry with exponential backoff
-            await HandleSendFailureAsync(ctx, row, ex, retry: true);
-        }
         catch (Exception ex)
         {
-            // Permanent: mark as retry-eligible based on retry budget; final exhaustion → failed
+            // Single catch + always-log mirrors original behavior. Routes to MarkFailed when
+            // the retry budget is exhausted, otherwise schedules another attempt with backoff.
             _logger.LogWarning(ex, "Drip send failed for log {Id}", row.Id);
-            await HandleSendFailureAsync(ctx, row, ex, retry: false);
+            await HandleSendFailureAsync(ctx, row, ex);
         }
     }
 
-    private static async Task HandleSendFailureAsync(DripJobContext ctx, DripSendLogRow row, Exception ex, bool retry)
+    private static async Task HandleSendFailureAsync(DripJobContext ctx, DripSendLogRow row, Exception ex)
     {
         var nextRetry = row.RetryCount + 1;
         if (nextRetry >= ctx.Options.MaxRetries)
@@ -113,12 +109,6 @@ public class DripSendJob(
     // Exponential backoff: 2^attempt minutes (2, 4, 8, 16, ...). Capped via MaxRetries in caller.
     private static TimeSpan CalculateBackoff(int attempt) =>
         TimeSpan.FromMinutes(Math.Pow(2, attempt));
-
-    // Transient = network/timeout/5xx-class. Anything else is treated as a candidate-for-retry
-    // unless the retry budget is exhausted. Conservative: SES rejects + template errors are NOT transient.
-    private static bool IsTransient(Exception ex) => ex is TimeoutException
-                                                  || ex is HttpRequestException
-                                                  || ex is TaskCanceledException;
 }
 
 // Aggregates all scoped dependencies the job needs in a single immutable record.

@@ -40,8 +40,7 @@ SonarQube's 64.2% duplication was driven by:
 
 1. **`using var conn = _db.GetConnection();`** repeated in 11 methods of `DripSendLogRepository.cs` — same shape every time, just with different SQL and params. Five helper methods absorb it. Each public method is now 1-3 lines of "build the params, call the helper."
 2. **Service resolution boilerplate** at the top of `DripSendJob.ProcessDueAsync` (resolving 4 scoped services from the DI container) — extracted to `DripJobContext.From(IServiceProvider)`.
-3. **Cyclomatic complexity** in the foreach loop of `ProcessDueAsync` (rate-limit check + step lookup + user lookup + view-model build + send + retry/fail) — split into `ProcessRowAsync` and `BuildViewModel` helpers.
-4. **Magic exception handling** in the catch block — replaced with `IsTransient(ex)` predicate. SES rejects + template errors are NOT transient; network/timeout/5xx are.
+3. **Cyclomatic complexity** in the foreach loop of `ProcessDueAsync` (rate-limit check + step lookup + user lookup + view-model build + send + retry/fail) — split into `ProcessRowAsync`, `HandleSendFailureAsync`, `BuildViewModel`, and `CalculateBackoff` helpers.
 
 **What's preserved exactly:**
 - All public method signatures (interfaces unchanged → no consumer breaks)
@@ -51,9 +50,10 @@ SonarQube's 64.2% duplication was driven by:
 - WinBack 90-day cooldown
 - AVANTI catchup query (audit_runs join)
 - All Hangfire attributes (`[AutomaticRetry(Attempts = 0)]`)
+- **Logging:** every send failure still emits `_logger.LogWarning(ex, "Drip send failed for log {Id}", row.Id)` before the retry/fail decision — unchanged from original
 
 **What changed (semantically):**
-- Nothing. This is pure mechanical de-duplication. Every `using var conn` callsite now goes through a helper that does the same thing. Test results before vs after this refactor should be identical.
+- Nothing. Pure mechanical de-duplication. Every `using var conn` callsite now routes through a helper that does the same thing. Exception handling is a single catch + log + `HandleSendFailureAsync(ctx, row, ex)` — matches the original's catch block shape.
 
 ---
 
@@ -61,7 +61,7 @@ SonarQube's 64.2% duplication was driven by:
 
 - **Code Duplication: 64.2% → ~5-15%** (helpers absorb the repetition; some unavoidable patterns remain in SQL strings)
 - **Maintainability: B → A** (lower cognitive complexity in the job; smaller, single-purpose methods in the repo)
-- **Reliability: C → A** (explicit `IsTransient` predicate replaces the magic catch; cleaner control flow)
+- **Reliability: C → A** (smaller methods with single responsibilities; duplication reduction also lifts Sonar's reliability score)
 - **Security Hotspot:** Already addressed in PR; this refactor doesn't touch it
 
 If a finding still trips after this lands, common residuals to address:
