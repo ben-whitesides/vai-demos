@@ -489,29 +489,10 @@
       opacity: 0.95;
     }
 
-    /* STAT CARD AS BUTTON — full reset of native button UA styles so it behaves identically to the original div.
-       Position: relative is critical so .measured-badge (absolute positioned) anchors to the card corner. */
-    button.stat-card {
-      position: relative;
-      font-family: inherit;
-      font-size: inherit;
-      font-weight: inherit;
-      color: inherit;
-      width: 100%;
-      margin: 0;
-      text-align: center;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-      line-height: inherit;
-      appearance: none;
-      -webkit-appearance: none;
-    }
+    /* STAT CARD keyboard accessibility — div with role=button still needs a focus ring */
+    .stat-card[role="button"] { cursor: pointer; }
 
-    button.stat-card:focus-visible {
+    .stat-card[role="button"]:focus-visible {
       outline: 2px solid #34D399;
       outline-offset: 4px;
     }
@@ -670,6 +651,8 @@
     }
 
     .chart-video-cta {
+      display: block;
+      width: 100%;
       text-align: center;
       padding: 12px;
       background: rgba(52, 211, 153, 0.15);
@@ -678,14 +661,23 @@
       color: #34D399;
       font-size: 13px;
       font-weight: 700;
+      font-family: inherit;
+      text-transform: uppercase;
       cursor: pointer;
       transition: all 0.2s ease;
       letter-spacing: 1px;
     }
 
-    .chart-video-cta:hover {
+    .chart-video-cta:hover,
+    .chart-video-cta:focus-visible {
       background: #34D399;
       color: #0C0A09;
+      outline: none;
+    }
+
+    .chart-video-cta:disabled,
+    .chart-video-cta.hidden {
+      display: none;
     }
 
     .ability-footer {
@@ -1602,29 +1594,29 @@
     <div class="stats-section">
       <div class="section-title">Top Performance Stats</div>
       <div class="stats-grid">
-        <button type="button" class="stat-card" onclick="openAbility('squat')" aria-label="View Back Squat ability detail">
+        <div class="stat-card" role="button" tabindex="0" onclick="openAbility('squat')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAbility('squat')}" aria-label="View Back Squat ability detail">
           <div class="measured-badge" title="Measured in the VAI app">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verified
-          </button>
+          </div>
           <div class="stat-card-value">320</div>
           <div class="stat-card-unit">lbs</div>
           <div class="stat-card-label">Back Squat</div>
         </div>
-        <button type="button" class="stat-card" onclick="openAbility('pushups')" aria-label="View Push Ups ability detail">
+        <div class="stat-card" role="button" tabindex="0" onclick="openAbility('pushups')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAbility('pushups')}" aria-label="View Push Ups ability detail">
           <div class="measured-badge" title="Measured in the VAI app">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verified
-          </button>
+          </div>
           <div class="stat-card-value">72</div>
           <div class="stat-card-unit">reps</div>
           <div class="stat-card-label">Push Ups</div>
         </div>
-        <button type="button" class="stat-card" onclick="openAbility('situps')" aria-label="View Sit Ups ability detail">
+        <div class="stat-card" role="button" tabindex="0" onclick="openAbility('situps')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAbility('situps')}" aria-label="View Sit Ups ability detail">
           <div class="measured-badge" title="Measured in the VAI app">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verified
-          </button>
+          </div>
           <div class="stat-card-value">45</div>
           <div class="stat-card-unit">reps</div>
           <div class="stat-card-label">Sit Ups</div>
@@ -1668,10 +1660,10 @@
             <div class="chart-line"></div>
             <div class="chart-line"></div>
           </div>
-          <div class="chart-video-cta">
+          <button type="button" class="chart-video-cta" id="abilityVideoCTA" onclick="playAbilityVideo()" aria-label="Watch highlight video for this ability">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;vertical-align:middle"><path d="M8 5v14l11-7z"/></svg>
             Watch Highlight Video
-          </div>
+          </button>
         </div>
 
         <div class="ability-footer">
@@ -1930,7 +1922,7 @@
       hydrateAttributionPill();
       hydrateCoachedBy();
       hydrateMetaChips();
-      hydrateVerifiedBadges();
+      hydrateTopStats();              // unified: cards + verified badge + ability lookup rebuild
       hydrateHeroVideo();
       hydrateHighlightsGrid();
       hydrateBio();
@@ -2020,17 +2012,48 @@
       });
     }
 
-    // ----- VERIFIED BADGES: only activate when stat.verified === true -----
-    // CSS default is display:none; we add .active class only when backend confirms verification.
-    // If VAI_PROFILE is absent entirely, design-review fallback shows all badges (body.design-review).
-    function hydrateVerifiedBadges() {
-      if (!P || !P.stats) return; // no data = badges stay hidden (CSS default)
+    // ----- TOP PERFORMANCE STATS: hydrate value + unit + label + verified badge + onclick routing -----
+    // Single source of truth for both the cards and the ability-detail modal.
+    function hydrateTopStats() {
+      if (!P || !Array.isArray(P.stats)) return; // no data = hardcoded template values stay (design review)
       const cards = document.querySelectorAll('.stat-card');
       cards.forEach((card, i) => {
         const stat = P.stats[i];
+        if (!stat) { card.style.display = 'none'; return; }
+        const valueEl = card.querySelector('.stat-card-value');
+        const unitEl = card.querySelector('.stat-card-unit');
+        const labelEl = card.querySelector('.stat-card-label');
+        if (valueEl) valueEl.textContent = String(stat.value != null ? stat.value : '');
+        if (unitEl) unitEl.textContent = stat.unit || '';
+        if (labelEl) labelEl.textContent = stat.name || '';
+        // Route the card's click to the matching key so the modal reads from P.stats
+        if (stat.key) card.setAttribute('onclick', `openAbility('${String(stat.key).replace(/'/g, '\\\'')}')`);
+        // Aria label update
+        if (stat.name) card.setAttribute('aria-label', `View ${stat.name} ability detail`);
+        // Verified badge
         const badge = card.querySelector('.measured-badge');
-        if (!badge) return;
-        if (stat && stat.verified === true) badge.classList.add('active');
+        if (badge && stat.verified === true) badge.classList.add('active');
+      });
+      // Rebuild the abilities lookup (used by openAbility) from P.stats so the modal shows real data
+      rebuildAbilitiesFromStats();
+    }
+
+    function rebuildAbilitiesFromStats() {
+      if (!P || !Array.isArray(P.stats)) return;
+      const ICON_MAP = { dumbbell: ICON_DUMBBELL, bicep: ICON_BICEP, flame: ICON_FLAME };
+      P.stats.forEach(stat => {
+        if (!stat || !stat.key) return;
+        abilities[stat.key] = {
+          icon: ICON_MAP[stat.iconKey] || abilities[stat.key]?.icon || ICON_DUMBBELL,
+          name: stat.name || '',
+          value: String(stat.value != null ? stat.value : ''),
+          unit: (stat.unit || '').toUpperCase(),
+          date: stat.date || '',
+          increase: stat.increase != null ? String(stat.increase) : '—',
+          start: stat.startDate || stat.date || '',
+          overall: stat.overall != null ? String(stat.overall) : '0',
+          videoUrl: stat.videoUrl || null
+        };
       });
     }
 
@@ -2288,6 +2311,25 @@
     ];
 
     let currentHighlight = 0;
+    let lastFocusBeforeModal = null;
+
+    // Focus trap: constrain Tab navigation within the active modal
+    function trapFocus(modalEl, e) {
+      if (e.key !== 'Tab') return;
+      const focusables = modalEl.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
 
     function showToast(message) {
       const toast = document.getElementById('toast');
@@ -2330,8 +2372,18 @@
       situps:  { icon: ICON_FLAME,    name: 'Sit Ups',   value: '45',  unit: 'REPS', date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' }
     };
 
+    let currentAbilityKey = null;
+
     function openAbility(key) {
       const a = abilities[key];
+      if (!a) return;
+      currentAbilityKey = key;
+      // Toggle Watch Video CTA based on whether this ability has a video
+      const videoCTA = document.getElementById('abilityVideoCTA');
+      if (videoCTA) {
+        if (a.videoUrl && isSafeURL(a.videoUrl)) videoCTA.classList.remove('hidden');
+        else videoCTA.classList.add('hidden');
+      }
       // a.icon is a trusted hardcoded SVG constant (ICON_DUMBBELL/BICEP/FLAME), not user input — innerHTML is safe here
       document.getElementById('abilityIcon').innerHTML = a.icon;
       document.getElementById('abilityName').textContent = a.name;
@@ -2343,14 +2395,48 @@
       document.getElementById('abilityStartUnit').textContent = a.unit;
       document.getElementById('abilityOverall').textContent = a.overall;
       document.getElementById('abilityOverallUnit').textContent = a.unit;
-      document.getElementById('abilityModal').classList.add('active');
+      const abModal = document.getElementById('abilityModal');
+      lastFocusBeforeModal = document.activeElement;
+      abModal.classList.add('active');
       document.body.style.overflow = 'hidden';
+      setTimeout(() => { const btn = abModal.querySelector('.ability-back'); if (btn) btn.focus(); }, 50);
     }
 
     function closeAbility(event) {
       if (event && event.target.id !== 'abilityModal') return;
       document.getElementById('abilityModal').classList.remove('active');
       document.body.style.overflow = 'auto';
+      // Restore focus to the element that opened the modal
+      if (lastFocusBeforeModal) { lastFocusBeforeModal.focus(); lastFocusBeforeModal = null; }
+    }
+
+    // Watch Highlight Video CTA inside the ability modal: close ability, open highlight modal at that video
+    function playAbilityVideo() {
+      if (!currentAbilityKey) return;
+      const a = abilities[currentAbilityKey];
+      if (!a || !a.videoUrl || !isSafeURL(a.videoUrl)) return;
+      // Close ability modal first
+      document.getElementById('abilityModal').classList.remove('active');
+      // Inject the ability video as a single-item highlight modal entry
+      const img = document.getElementById('modalImage');
+      const vid = document.getElementById('modalVideo');
+      const isVideo = /\.(mp4|webm|mov)(\?|$)/i.test(a.videoUrl);
+      if (isVideo) {
+        img.style.display = 'none';
+        vid.src = a.videoUrl;
+        vid.style.display = 'block';
+        vid.muted = true;
+        vid.load();
+        vid.play().catch(() => {});
+      } else {
+        vid.pause();
+        vid.src = '';
+        vid.style.display = 'none';
+        img.src = a.videoUrl;
+        img.style.display = 'block';
+      }
+      document.getElementById('highlightModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
     }
 
     function switchTab(tabName) {
@@ -2413,8 +2499,12 @@
       if (index < 0 || index >= max) return;
       currentHighlight = index;
       renderModalMedia(currentHighlight);
-      document.getElementById('highlightModal').classList.add('active');
+      const modal = document.getElementById('highlightModal');
+      lastFocusBeforeModal = document.activeElement;
+      modal.classList.add('active');
       document.body.style.overflow = 'hidden';
+      // Move focus into the modal for screen-reader / keyboard users
+      setTimeout(() => { const btn = modal.querySelector('.modal-close'); if (btn) btn.focus(); }, 50);
     }
 
     function closeModal(event) {
@@ -2425,6 +2515,8 @@
       const vid = document.getElementById('modalVideo');
       if (vid) { vid.pause(); vid.src = ''; }
       document.body.style.overflow = 'auto';
+      // Restore focus to the element that opened the modal
+      if (lastFocusBeforeModal) { lastFocusBeforeModal.focus(); lastFocusBeforeModal = null; }
     }
 
     function nextHighlight() {
@@ -2439,16 +2531,20 @@
       renderModalMedia(currentHighlight);
     }
 
-    // Keyboard navigation — single unified handler for both modals
+    // Keyboard navigation — single unified handler for both modals (with focus trap)
     document.addEventListener('keydown', (e) => {
-      const highlightActive = document.getElementById('highlightModal').classList.contains('active');
-      const abilityActive = document.getElementById('abilityModal').classList.contains('active');
+      const highlightModal = document.getElementById('highlightModal');
+      const abilityModal = document.getElementById('abilityModal');
+      const highlightActive = highlightModal.classList.contains('active');
+      const abilityActive = abilityModal.classList.contains('active');
       if (highlightActive) {
         if (e.key === 'ArrowRight') nextHighlight();
         else if (e.key === 'ArrowLeft') prevHighlight();
         else if (e.key === 'Escape') closeModal();
+        else if (e.key === 'Tab') trapFocus(highlightModal, e);
       } else if (abilityActive) {
         if (e.key === 'Escape') closeAbility();
+        else if (e.key === 'Tab') trapFocus(abilityModal, e);
       }
     });
   </script>
