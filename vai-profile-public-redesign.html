@@ -469,6 +469,208 @@
       opacity: 0.95;
     }
 
+    /* STAT CARD ICON */
+    .stat-card-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    /* ABILITY DETAIL MODAL */
+    .ability-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+      overflow-y: auto;
+      padding: 40px 20px;
+    }
+
+    .ability-modal.active { display: flex; }
+
+    .ability-modal-content {
+      background: linear-gradient(135deg, #7A1F1F 0%, #3A0808 100%);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 520px;
+      padding: 32px;
+      color: #FAFAF9;
+      animation: slideUp 0.4s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .ability-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .ability-back, .ability-addpr {
+      background: transparent;
+      color: #FAFAF9;
+      border: 1px solid rgba(250, 250, 249, 0.3);
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 1px;
+    }
+
+    .ability-back:hover, .ability-addpr:hover {
+      background: rgba(52, 211, 153, 0.15);
+      border-color: #34D399;
+      color: #34D399;
+    }
+
+    .ability-hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 20px;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(250, 250, 249, 0.15);
+      margin-bottom: 20px;
+    }
+
+    .ability-hero-icon {
+      font-size: 48px;
+      grid-row: span 2;
+    }
+
+    .ability-hero-label {
+      font-size: 14px;
+      color: #FAFAF9;
+      opacity: 0.8;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      align-self: end;
+    }
+
+    .ability-hero-value {
+      font-size: 52px;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: -2px;
+      text-align: right;
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+
+    .ability-updated {
+      text-align: center;
+      font-size: 13px;
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    .ability-timerange {
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 999px;
+      padding: 4px;
+      margin: 0 auto 24px;
+      width: fit-content;
+    }
+
+    .time-pill {
+      padding: 8px 20px;
+      background: transparent;
+      border: none;
+      color: #FAFAF9;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+
+    .time-pill.active { background: #FAFAF9; color: #0C0A09; }
+    .time-pill:hover:not(.active) { color: #34D399; }
+
+    .ability-increase {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .ability-chart {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .chart-placeholder {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .chart-line {
+      height: 1px;
+      border-top: 1px dashed rgba(250, 250, 249, 0.3);
+    }
+
+    .chart-video-cta {
+      text-align: center;
+      padding: 12px;
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid #34D399;
+      border-radius: 8px;
+      color: #34D399;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 1px;
+    }
+
+    .chart-video-cta:hover {
+      background: #34D399;
+      color: #0C0A09;
+    }
+
+    .ability-footer {
+      border-top: 1px solid rgba(250, 250, 249, 0.15);
+      padding-top: 20px;
+    }
+
+    .ability-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 8px 0;
+    }
+
+    .ability-footer-label {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .ability-footer-value {
+      font-size: 18px;
+      font-weight: 900;
+      font-style: italic;
+    }
+
+    .ability-footer-value em {
+      font-size: 13px;
+      opacity: 0.8;
+      font-style: normal;
+      margin-left: 4px;
+    }
+
     /* SPORT STATS (Stats tab) */
     .stats-year-filter {
       display: flex;
@@ -1021,20 +1223,74 @@
     <div class="stats-section">
       <div class="section-title">Top Performance Stats</div>
       <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card" onclick="openAbility('squat')">
+          <div class="stat-card-icon">🏋️</div>
           <div class="stat-card-value">320</div>
           <div class="stat-card-unit">lbs</div>
           <div class="stat-card-label">Back Squat</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" onclick="openAbility('pushups')">
+          <div class="stat-card-icon">💪</div>
           <div class="stat-card-value">72</div>
           <div class="stat-card-unit">reps</div>
           <div class="stat-card-label">Push Ups</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" onclick="openAbility('situps')">
+          <div class="stat-card-icon">🔥</div>
           <div class="stat-card-value">45</div>
           <div class="stat-card-unit">reps</div>
           <div class="stat-card-label">Sit Ups</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABILITY DETAIL MODAL -->
+    <div id="abilityModal" class="ability-modal" onclick="closeAbility(event)">
+      <div class="ability-modal-content" onclick="event.stopPropagation()">
+        <div class="ability-modal-header">
+          <button class="ability-back" onclick="closeAbility()">← BACK</button>
+          <button class="ability-addpr">+ Add PR</button>
+        </div>
+
+        <div class="ability-hero">
+          <div class="ability-hero-icon" id="abilityIcon">🏋️</div>
+          <div class="ability-hero-label" id="abilityName">Squat</div>
+          <div class="ability-hero-value"><span id="abilityValue">320</span> <span id="abilityUnit">LBS</span></div>
+        </div>
+
+        <div class="ability-updated">Updated <span id="abilityDate">12/08/2023</span></div>
+
+        <div class="ability-timerange">
+          <button class="time-pill active">12 MOS</button>
+          <button class="time-pill">3 YEAR</button>
+        </div>
+
+        <div class="ability-increase">
+          📈 <span id="abilityIncrease">0%</span> Increase
+        </div>
+
+        <div class="ability-chart">
+          <div class="chart-placeholder">
+            <div class="chart-line"></div>
+            <div class="chart-line"></div>
+            <div class="chart-line"></div>
+            <div class="chart-line"></div>
+            <div class="chart-line"></div>
+          </div>
+          <div class="chart-video-cta">
+            ▶ Watch Highlight Video
+          </div>
+        </div>
+
+        <div class="ability-footer">
+          <div class="ability-footer-row">
+            <span class="ability-footer-label">Starting Point:</span>
+            <span class="ability-footer-value"><span id="abilityStart">04/14/2026</span> <em id="abilityStartUnit">LBS</em></span>
+          </div>
+          <div class="ability-footer-row">
+            <span class="ability-footer-label">Overall Increase:</span>
+            <span class="ability-footer-value"><span id="abilityOverall">0</span> <em id="abilityOverallUnit">LBS</em></span>
+          </div>
         </div>
       </div>
     </div>
@@ -1204,6 +1460,34 @@
 
     let currentHighlight = 0;
 
+    const abilities = {
+      squat:   { icon: '🏋️', name: 'Squat',    value: '320', unit: 'LBS',  date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' },
+      pushups: { icon: '💪', name: 'Push Ups',  value: '72',  unit: 'REPS', date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' },
+      situps:  { icon: '🔥', name: 'Sit Ups',   value: '45',  unit: 'REPS', date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' }
+    };
+
+    function openAbility(key) {
+      const a = abilities[key];
+      document.getElementById('abilityIcon').textContent = a.icon;
+      document.getElementById('abilityName').textContent = a.name;
+      document.getElementById('abilityValue').textContent = a.value;
+      document.getElementById('abilityUnit').textContent = a.unit;
+      document.getElementById('abilityDate').textContent = a.date;
+      document.getElementById('abilityIncrease').textContent = a.increase;
+      document.getElementById('abilityStart').textContent = a.start;
+      document.getElementById('abilityStartUnit').textContent = a.unit;
+      document.getElementById('abilityOverall').textContent = a.overall;
+      document.getElementById('abilityOverallUnit').textContent = a.unit;
+      document.getElementById('abilityModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAbility(event) {
+      if (event && event.target.id !== 'abilityModal') return;
+      document.getElementById('abilityModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
     function switchTab(tabName) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -1245,6 +1529,12 @@
       if (e.key === 'ArrowRight') nextHighlight();
       if (e.key === 'ArrowLeft') prevHighlight();
       if (e.key === 'Escape') closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.getElementById('abilityModal').classList.contains('active')) {
+        closeAbility();
+      }
     });
   </script>
 </body>
