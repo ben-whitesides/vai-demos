@@ -944,7 +944,7 @@
       position: fixed;
       bottom: 32px;
       left: 50%;
-      transform: translateX(-50%) translateY(120%);
+      transform: translateX(-50%) translateY(calc(100% + 64px));
       background: #34D399;
       color: #0C0A09;
       padding: 14px 24px;
@@ -957,10 +957,16 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease;
     }
 
-    .toast.active { transform: translateX(-50%) translateY(0); }
+    .toast.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     /* VIDEO HERO (replaces static placeholder) */
     .profile-hero.video-hero {
