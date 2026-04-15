@@ -27,7 +27,7 @@ git push origin feature/drip-email-backend
 | File | Purpose |
 |---|---|
 | `DripSendLogRepository.cs` | Refactored repository. Five helpers (`QuerySingleAsync<T>`, `ExecuteScalarAsync<T>`, `QueryListAsync<T>`, `ExecuteAsync`, `ExecuteInTransactionAsync<T>`) consolidate the `using var conn` boilerplate that was repeated across all 11 public methods. Public API signatures unchanged. Transaction handling on `InsertSchedulesAsync` preserved exactly. |
-| `DripSendJob.cs` | Refactored job. `DripJobContext` factory record extracts service-locator boilerplate. `ProcessRowAsync` splits the hot loop's per-row pipeline (lower cyclomatic complexity). `CalculateBackoff` extracted. `IsTransient` predicate makes catch semantics explicit. Behavior unchanged. |
+| `DripSendJob.cs` | Refactored job. `DripJobContext` factory record extracts service-locator boilerplate. `ProcessRowAsync` splits the hot loop's per-row pipeline (lower cyclomatic complexity). `HandleSendFailureAsync` + `CalculateBackoff` extracted. Single catch + always-log preserved from original. Behavior unchanged. |
 | `apply-refactor.sh` | Idempotent installer. Backs up originals to `.bak.<timestamp>`, drops in refactored files, runs `dotnet build`, runs `dotnet test --filter Drip`, prints diff summary. Refuses to run outside vai-api repo or off the `feature/drip-email-backend` branch (override: `VAI_DRIP_BRANCH_OVERRIDE=1`). |
 | `verify-sonarqube.sh` | Polls `gh pr checks 490` until SonarCloud completes (5 min timeout). Reports pass/fail + link to the report if it fails. |
 | `pr-status.sh` | One-shot snapshot of PR #490: title, state, review decision, mergeability, CI checks, outstanding review threads, latest commit. Run it any time to see where the PR stands. |
