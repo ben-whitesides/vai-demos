@@ -1594,7 +1594,7 @@
     <div class="stats-section">
       <div class="section-title">Top Performance Stats</div>
       <div class="stats-grid">
-        <div class="stat-card" role="button" tabindex="0" onclick="openAbility('squat')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAbility('squat')}" aria-label="View Back Squat ability detail">
+        <div class="stat-card" role="button" tabindex="0" data-ability-key="squat" aria-label="View Back Squat ability detail">
           <div class="measured-badge" title="Measured in the VAI app">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verified
@@ -1603,7 +1603,7 @@
           <div class="stat-card-unit">lbs</div>
           <div class="stat-card-label">Back Squat</div>
         </div>
-        <div class="stat-card" role="button" tabindex="0" onclick="openAbility('pushups')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAbility('pushups')}" aria-label="View Push Ups ability detail">
+        <div class="stat-card" role="button" tabindex="0" data-ability-key="pushups" aria-label="View Push Ups ability detail">
           <div class="measured-badge" title="Measured in the VAI app">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verified
@@ -1612,7 +1612,7 @@
           <div class="stat-card-unit">reps</div>
           <div class="stat-card-label">Push Ups</div>
         </div>
-        <div class="stat-card" role="button" tabindex="0" onclick="openAbility('situps')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openAbility('situps')}" aria-label="View Sit Ups ability detail">
+        <div class="stat-card" role="button" tabindex="0" data-ability-key="situps" aria-label="View Sit Ups ability detail">
           <div class="measured-badge" title="Measured in the VAI app">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verified
@@ -1939,11 +1939,12 @@
     // ----- URL SAFETY -----
     function isSafeURL(url) {
       if (!url || typeof url !== 'string') return false;
-      // Allow only https / relative / app-specific schemes; block javascript:, data:, etc.
+      // Allowlist: https only for profile media/assets + vaiapp: for universal links.
+      // Blocks http: (mixed-content / downgrade risk), javascript:, data:, file:, ftp:, etc.
       try {
         if (url.startsWith('/') || url.startsWith('#')) return true;
         const u = new URL(url, window.location.href);
-        return ['https:', 'http:', 'vaiapp:'].includes(u.protocol);
+        return ['https:', 'vaiapp:'].includes(u.protocol);
       } catch { return false; }
     }
 
@@ -2012,11 +2013,24 @@
       });
     }
 
-    // ----- TOP PERFORMANCE STATS: hydrate value + unit + label + verified badge + onclick routing -----
+    // ----- TOP PERFORMANCE STATS: hydrate value + unit + label + verified badge; bind click+keydown safely -----
     // Single source of truth for both the cards and the ability-detail modal.
+    // addEventListener (not setAttribute) eliminates attribute-injection vectors via stat.key.
+    // Listener reads data-ability-key at click time (not capture time), so it stays correct if the key is rehydrated.
     function hydrateTopStats() {
-      if (!P || !Array.isArray(P.stats)) return; // no data = hardcoded template values stay (design review)
       const cards = document.querySelectorAll('.stat-card');
+      cards.forEach(card => {
+        const fire = () => {
+          const k = card.getAttribute('data-ability-key');
+          if (k) openAbility(k);
+        };
+        card.addEventListener('click', fire);
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fire(); }
+        });
+      });
+
+      if (!P || !Array.isArray(P.stats)) return; // no data = hardcoded template values + default keys stay
       cards.forEach((card, i) => {
         const stat = P.stats[i];
         if (!stat) { card.style.display = 'none'; return; }
@@ -2026,11 +2040,12 @@
         if (valueEl) valueEl.textContent = String(stat.value != null ? stat.value : '');
         if (unitEl) unitEl.textContent = stat.unit || '';
         if (labelEl) labelEl.textContent = stat.name || '';
-        // Route the card's click to the matching key so the modal reads from P.stats
-        if (stat.key) card.setAttribute('onclick', `openAbility('${String(stat.key).replace(/'/g, '\\\'')}')`);
-        // Aria label update
+        // Dynamic key routing: allowlist-validate before writing to data attribute.
+        // Listener re-reads at click time, so this change is safe and immediate.
+        if (stat.key && typeof stat.key === 'string' && /^[a-zA-Z0-9_-]+$/.test(stat.key)) {
+          card.setAttribute('data-ability-key', stat.key);
+        }
         if (stat.name) card.setAttribute('aria-label', `View ${stat.name} ability detail`);
-        // Verified badge
         const badge = card.querySelector('.measured-badge');
         if (badge && stat.verified === true) badge.classList.add('active');
       });
@@ -2150,10 +2165,6 @@
         if (img) img.alt = h.caption || 'Highlight';
         item.style.display = '';
       });
-      // If data has <6 items, also hide any leftovers (redundant safety)
-      for (let i = items.length; i < 6; i++) {
-        if (items[i]) items[i].style.display = 'none';
-      }
       // Rebuild modal navigation array to only include populated highlights
       window._activeHighlights = source.slice(0, 6).map(h => ({
         url: isSafeURL(h.url) ? h.url : '',
