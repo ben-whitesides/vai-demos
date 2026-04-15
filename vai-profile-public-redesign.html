@@ -327,6 +327,285 @@
       border-bottom-color: #34D399;
     }
 
+    /* TAB CONTENT PANELS */
+    .tab-content {
+      display: none;
+      animation: fadeInUp 0.4s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* INFO CARDS (Biometrics, Education, Ability) */
+    .info-card {
+      background: #151210;
+      border: 1px solid #2A2623;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      border-color: #34D399;
+      box-shadow: 0 8px 24px rgba(52, 211, 153, 0.2);
+    }
+
+    .info-card-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: #A8A29E;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #2A2623;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #2A2623;
+      transition: all 0.2s ease;
+    }
+
+    .info-row:last-child { border-bottom: none; }
+
+    .info-row:hover {
+      background: rgba(52, 211, 153, 0.04);
+      padding-left: 12px;
+      padding-right: 12px;
+      border-radius: 8px;
+    }
+
+    .info-row-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #A8A29E;
+      font-size: 14px;
+    }
+
+    .info-row-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #F7941E;
+      font-size: 18px;
+    }
+
+    .info-row-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #FAFAF9;
+    }
+
+    .info-row-value .unit {
+      font-size: 13px;
+      color: #A8A29E;
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    /* ATHLETE BIO CARD */
+    .athlete-card {
+      background: linear-gradient(135deg, #7A1F1F 0%, #4A1010 100%);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .athlete-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(52, 211, 153, 0.25);
+    }
+
+    .athlete-card-label {
+      font-size: 12px;
+      color: #FAFAF9;
+      opacity: 0.7;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .athlete-card-name {
+      font-size: 42px;
+      font-weight: 900;
+      color: #FAFAF9;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .athlete-card-class {
+      font-size: 16px;
+      color: #FAFAF9;
+      opacity: 0.85;
+      margin-bottom: 20px;
+    }
+
+    .athlete-card-bio {
+      color: #FAFAF9;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .athlete-card-bio-item {
+      padding: 4px 0;
+      opacity: 0.95;
+    }
+
+    /* SPORT STATS (Stats tab) */
+    .stats-year-filter {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      align-items: center;
+    }
+
+    .year-pill {
+      padding: 8px 20px;
+      background: #151210;
+      border: 1px solid #2A2623;
+      border-radius: 999px;
+      color: #FAFAF9;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .year-pill:hover {
+      border-color: #34D399;
+      color: #34D399;
+    }
+
+    .year-pill.active {
+      background: #FAFAF9;
+      color: #0C0A09;
+      border-color: #FAFAF9;
+    }
+
+    .sport-stats-section {
+      margin-bottom: 40px;
+    }
+
+    .sport-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: #FAFAF9;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #2A2623;
+      margin-bottom: 8px;
+    }
+
+    .sport-stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(42, 38, 35, 0.5);
+      transition: all 0.2s ease;
+    }
+
+    .sport-stat-row:last-child { border-bottom: none; }
+
+    .sport-stat-row:hover {
+      background: rgba(52, 211, 153, 0.04);
+      padding-left: 16px;
+      padding-right: 16px;
+      border-radius: 8px;
+    }
+
+    .sport-stat-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #FAFAF9;
+      margin-bottom: 2px;
+    }
+
+    .sport-stat-meta {
+      font-size: 12px;
+      color: #A8A29E;
+    }
+
+    .sport-stat-value {
+      font-size: 48px;
+      font-weight: 900;
+      font-style: italic;
+      color: #FAFAF9;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    /* ABILITY CATEGORY CARD */
+    .ability-card {
+      background: linear-gradient(135deg, #2A1810 0%, #151210 100%);
+      border: 1px solid #2A2623;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .ability-card:hover {
+      border-color: #34D399;
+      box-shadow: 0 8px 24px rgba(52, 211, 153, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .ability-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .ability-card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(247, 148, 30, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #F7941E;
+      font-size: 18px;
+    }
+
+    .ability-card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #A8A29E;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .ability-card-name {
+      font-size: 32px;
+      font-weight: 900;
+      color: #FAFAF9;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
     /* HIGHLIGHTS GRID */
     .highlights-grid {
       display: grid;
@@ -760,35 +1039,130 @@
       </div>
     </div>
 
-    <!-- HIGHLIGHTS TABS -->
+    <!-- PROFILE TABS -->
     <div class="tabs-section">
-      <div class="section-title">Highlights</div>
+      <div class="section-title">Profile</div>
 
       <div class="tabs">
-        <button class="tab active">Highlights</button>
-        <button class="tab">Ability</button>
-        <button class="tab">Stats</button>
-        <button class="tab">Bio</button>
+        <button class="tab active" data-tab="highlights" onclick="switchTab('highlights')">Highlights</button>
+        <button class="tab" data-tab="ability" onclick="switchTab('ability')">Ability</button>
+        <button class="tab" data-tab="stats" onclick="switchTab('stats')">Stats</button>
+        <button class="tab" data-tab="bio" onclick="switchTab('bio')">Bio</button>
       </div>
 
-      <div class="highlights-grid">
-        <div class="highlight-item" onclick="openModal(0)">
-          <img src="[PLACEHOLDER: HIGHLIGHT_1]" alt="Highlight">
+      <!-- HIGHLIGHTS TAB -->
+      <div id="tab-highlights" class="tab-content active">
+        <div class="highlights-grid">
+          <div class="highlight-item" onclick="openModal(0)">
+            <img src="[PLACEHOLDER: HIGHLIGHT_1]" alt="Highlight">
+          </div>
+          <div class="highlight-item" onclick="openModal(1)">
+            <img src="[PLACEHOLDER: HIGHLIGHT_2]" alt="Highlight">
+          </div>
+          <div class="highlight-item" onclick="openModal(2)">
+            <img src="[PLACEHOLDER: HIGHLIGHT_3]" alt="Highlight">
+          </div>
+          <div class="highlight-item" onclick="openModal(3)">
+            <img src="[PLACEHOLDER: HIGHLIGHT_4]" alt="Highlight">
+          </div>
+          <div class="highlight-item" onclick="openModal(4)">
+            <img src="[PLACEHOLDER: HIGHLIGHT_5]" alt="Highlight">
+          </div>
+          <div class="highlight-item" onclick="openModal(5)">
+            <img src="[PLACEHOLDER: HIGHLIGHT_6]" alt="Highlight">
+          </div>
         </div>
-        <div class="highlight-item" onclick="openModal(1)">
-          <img src="[PLACEHOLDER: HIGHLIGHT_2]" alt="Highlight">
+      </div>
+
+      <!-- ABILITY TAB -->
+      <div id="tab-ability" class="tab-content">
+        <div class="ability-card">
+          <div class="ability-card-header">
+            <div class="ability-card-icon">🚴</div>
+            <div class="ability-card-title">Cycling</div>
+          </div>
+          <div class="ability-card-name">ATHLETE</div>
         </div>
-        <div class="highlight-item" onclick="openModal(2)">
-          <img src="[PLACEHOLDER: HIGHLIGHT_3]" alt="Highlight">
+        <div class="ability-card">
+          <div class="ability-card-header">
+            <div class="ability-card-icon">🏃</div>
+            <div class="ability-card-title">Running</div>
+          </div>
+          <div class="ability-card-name">ATHLETE</div>
         </div>
-        <div class="highlight-item" onclick="openModal(3)">
-          <img src="[PLACEHOLDER: HIGHLIGHT_4]" alt="Highlight">
+        <div class="ability-card">
+          <div class="ability-card-header">
+            <div class="ability-card-icon">🏋️</div>
+            <div class="ability-card-title">Strength</div>
+          </div>
+          <div class="ability-card-name">ATHLETE</div>
         </div>
-        <div class="highlight-item" onclick="openModal(4)">
-          <img src="[PLACEHOLDER: HIGHLIGHT_5]" alt="Highlight">
+      </div>
+
+      <!-- STATS TAB -->
+      <div id="tab-stats" class="tab-content">
+        <div class="stats-year-filter">
+          <button class="year-pill active">Year: 2024</button>
+          <button class="year-pill">All</button>
         </div>
-        <div class="highlight-item" onclick="openModal(5)">
-          <img src="[PLACEHOLDER: HIGHLIGHT_6]" alt="Highlight">
+
+        <div class="sport-stats-section">
+          <div class="sport-header">Tennis</div>
+          <div class="sport-stat-row">
+            <div class="sport-stat-label">
+              <div class="sport-stat-name">Tournament Won</div>
+              <div class="sport-stat-meta">Total</div>
+            </div>
+            <div class="sport-stat-value">15</div>
+          </div>
+        </div>
+
+        <div class="sport-stats-section">
+          <div class="sport-header">Golf</div>
+          <div class="sport-stat-row">
+            <div class="sport-stat-label">
+              <div class="sport-stat-name">Handicap</div>
+              <div class="sport-stat-meta">Total</div>
+            </div>
+            <div class="sport-stat-value">8.5</div>
+          </div>
+          <div class="sport-stat-row">
+            <div class="sport-stat-label">
+              <div class="sport-stat-name">Driving Distance</div>
+              <div class="sport-stat-meta">Total</div>
+            </div>
+            <div class="sport-stat-value">310</div>
+          </div>
+        </div>
+
+        <div class="sport-stats-section">
+          <div class="sport-header">Football</div>
+          <div class="sport-stat-row">
+            <div class="sport-stat-label">
+              <div class="sport-stat-name">Completion %</div>
+              <div class="sport-stat-meta">Total</div>
+            </div>
+            <div class="sport-stat-value">66.5</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIO TAB -->
+      <div id="tab-bio" class="tab-content">
+        <div class="athlete-card">
+          <div class="athlete-card-label">BEN</div>
+          <div class="athlete-card-name">Whitesides</div>
+          <div class="athlete-card-class">Class of '26</div>
+          <div class="athlete-card-bio">
+            <div class="athlete-card-bio-item">Founder of VAI</div>
+            <div class="athlete-card-bio-item">Father of 5</div>
+            <div class="athlete-card-bio-item">Husband to the Queen</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-header">About</div>
+          <p style="line-height: 1.8; color: #FAFAF9;">High-performance coach specializing in strength and conditioning for youth athletes. 10+ years experience working with elite programs. Focused on sustainable training methodologies and mental resilience development.</p>
         </div>
       </div>
     </div>
@@ -803,11 +1177,6 @@
           <button onclick="nextHighlight()">Next →</button>
         </div>
       </div>
-    </div>
-
-    <!-- BIO SECTION -->
-    <div class="bio-section">
-      <p>High-performance coach specializing in strength and conditioning for youth athletes. 10+ years experience working with elite programs. Focused on sustainable training methodologies and mental resilience development.</p>
     </div>
 
     <!-- CTA BUTTONS -->
@@ -834,6 +1203,13 @@
     ];
 
     let currentHighlight = 0;
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
 
     function openModal(index) {
       currentHighlight = index;
