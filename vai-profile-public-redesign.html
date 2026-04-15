@@ -3,7 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VAI Profile — Public Share</title>
+  <title>Ben Whitesides — VAI Athlete Profile</title>
+  <meta name="description" content="View Ben Whitesides's athletic profile on VAI — stats, highlights, bio, and ability metrics. Share with coaches, scouts, and recruiters.">
+
+  <!-- Open Graph / Facebook / Text message previews -->
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="VAI">
+  <meta property="og:title" content="Ben Whitesides — VAI Athlete Profile">
+  <meta property="og:description" content="Class of '26. Check out my performance stats, highlight reel, and ability metrics on VAI.">
+  <meta property="og:image" content="[PLACEHOLDER: OG_IMAGE_URL_1200x630]">
+  <meta property="og:url" content="[PLACEHOLDER: CANONICAL_URL]">
+
+  <!-- Twitter/X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ben Whitesides — VAI Athlete Profile">
+  <meta name="twitter:description" content="Class of '26. Stats, highlights, ability metrics on VAI.">
+  <meta name="twitter:image" content="[PLACEHOLDER: OG_IMAGE_URL_1200x630]">
+
+  <!-- Apple Smart App Banner (shows Open in App on iOS Safari) -->
+  <meta name="apple-itunes-app" content="app-id=6447384009">
+
+  <link rel="icon" href="https://vai.app/wp-content/uploads/logo.png">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -900,6 +920,89 @@
       line-height: 1.6;
     }
 
+    /* PROFILE NAME ROW + SHARE ICON */
+    .profile-name-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .share-icon-btn {
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: #34D399;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .share-icon-btn:hover {
+      background: #34D399;
+      color: #0C0A09;
+      transform: scale(1.08);
+    }
+
+    /* ATHLETE META CHIPS (Class / Sport / Position / Location) */
+    .profile-athlete-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0 4px;
+    }
+
+    .meta-chip {
+      background: rgba(247, 148, 30, 0.08);
+      border: 1px solid rgba(247, 148, 30, 0.3);
+      color: #F7941E;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* SECONDARY ACTIONS (Share + Open in VAI App) */
+    .secondary-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .ghost-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      background: transparent;
+      border: 1px solid #2A2623;
+      border-radius: 12px;
+      color: #A8A29E;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .ghost-button:hover {
+      border-color: #34D399;
+      color: #34D399;
+      background: rgba(52, 211, 153, 0.05);
+    }
+
+    @media (max-width: 640px) {
+      .secondary-actions { grid-template-columns: 1fr; }
+    }
+
     .cta-button.primary {
       background: linear-gradient(135deg, #F7941E 0%, #ff6b1e 100%);
       color: #0C0A09;
@@ -1206,8 +1309,19 @@
             <img src="[PLACEHOLDER: PROFILE_IMAGE]" alt="Ben Whitesides">
           </div>
           <div class="profile-meta">
-            <div class="profile-name">Ben Whitesides</div>
+            <div class="profile-name-row">
+              <div class="profile-name">Ben Whitesides ✓</div>
+              <button class="share-icon-btn" onclick="shareProfile()" title="Share this profile">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              </button>
+            </div>
             <div class="profile-handle">@bwhite</div>
+            <div class="profile-athlete-meta">
+              <span class="meta-chip">🎓 Class of '26</span>
+              <span class="meta-chip">🏈 Football</span>
+              <span class="meta-chip">📍 QB</span>
+              <span class="meta-chip">📍 Kaysville, UT</span>
+            </div>
             <div class="profile-badges">
               <span class="badge trainer">Trainer</span>
               <span class="badge coach">Coach</span>
@@ -1457,6 +1571,18 @@
       In-app chat is free with VAI Basic. AVANTI AI Coaching is part of VAI+ at $19.95/mo.
     </div>
 
+    <!-- SECONDARY ACTIONS -->
+    <div class="secondary-actions">
+      <button class="ghost-button" onclick="shareProfile()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share Profile
+      </button>
+      <a href="https://app.vai.app/profile/[USER_ID]?public=[PUBLIC_TOKEN]" class="ghost-button" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        Open in VAI App
+      </a>
+    </div>
+
     <!-- FOOTER -->
     <div class="footer">
       <div class="vai-logo">VAI</div>
@@ -1475,6 +1601,31 @@
     ];
 
     let currentHighlight = 0;
+
+    async function shareProfile() {
+      const shareData = {
+        title: 'Ben Whitesides — VAI Athlete Profile',
+        text: "Check out Ben Whitesides's athletic profile on VAI — stats, highlights, and more.",
+        url: window.location.href
+      };
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          if (err.name !== 'AbortError') console.warn('Share failed:', err);
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(shareData.url);
+          const mailto = `mailto:?subject=${encodeURIComponent(shareData.title)}&body=${encodeURIComponent(shareData.text + '\n\n' + shareData.url)}`;
+          if (confirm('Link copied to clipboard. Open email to share?')) {
+            window.location.href = mailto;
+          }
+        } catch (err) {
+          window.prompt('Copy this link to share:', shareData.url);
+        }
+      }
+    }
 
     const abilities = {
       squat:   { icon: '🏋️', name: 'Squat',    value: '320', unit: 'LBS',  date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' },
