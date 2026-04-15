@@ -1,39 +1,62 @@
-# Francis Pack — VAI Public Profile API Contract
+# Francis Pack — VAI Profile API Contract
 
-Ben built these probes so you don't have to hunt through schemas to answer the two open questions in the spec, plus a validator so you can confirm your endpoint matches the template's contract.
+**Status:** APPROVED for handoff. Commit `0d82abb` on `ben-whitesides/vai-demos` main.
 
-## What's here
+---
 
-| File | Purpose |
-|---|---|
-| `probe-stat-verified.sql` | Scans schemas for the source of `stat.verified`. Run once, report back. |
-| `probe-coach-linkage.sql` | Finds how coach↔athlete linkage is stored (direct FK, junction table, or missing). |
-| `api-contract-validator.ts` | Zod-based contract test. Runs against your profile endpoint and prints a diff of any schema violations. |
-| `example-response.json` | Complete reference payload in the exact shape the template expects. Use as a fixture. |
+## TL;DR
 
-## Quick start
+Ben built a full public athlete profile template (the one recruiters/coaches land on when an athlete shares their profile) + an API shaping pack for you. Your remaining work: ~20 min to run two SQL probes and report back, then shape the response.
+
+**Live preview:** https://ben-whitesides.github.io/vai-demos/vai-profile-public-redesign.html
+**Spec (data contract + open questions):** [BADINHO-PROFILE-SPEC.md](../BADINHO-PROFILE-SPEC.md)
+
+---
+
+## What's in this pack
+
+| File | Purpose | Effort |
+|---|---|---|
+| `probe-stat-verified.sql` | 4-query psql probe that finds where `stat.verified` lives in your schema — column, enum, event log, or missing | 5 min |
+| `probe-coach-linkage.sql` | Same pattern for coach ↔ athlete linkage — direct FK, junction table, or missing | 5 min |
+| `api-contract-validator.ts` | Zod validator runs against your live profile endpoint and prints a field-by-field diff of any schema violations. Enforces `https://` on all media URLs, 15s fetch timeout, JSON-family content-type regex (accepts `application/vnd.api+json`, `application/ld+json`) | 5 min setup + run on demand |
+| `example-response.json` | Complete reference `VaiProfile` payload — drop-in test fixture. Passes the Zod schema cleanly. | Fixture |
+| `example-response.README.md` | Docs for the fixture | Read once |
+| `../badinho-pack/types.ts` | TypeScript contract Badinho's route.ts uses — import to type-check your response shaper | Reference |
+
+---
+
+## Quick Start — ~20 min end-to-end
 
 ### 1. Run the schema probes (5 min)
 
 ```bash
-psql $VAI_API_DATABASE_URL -f probe-stat-verified.sql > /tmp/stat-verified-probe.txt
-psql $VAI_API_DATABASE_URL -f probe-coach-linkage.sql > /tmp/coach-linkage-probe.txt
+psql $VAI_API_DATABASE_URL -f probe-stat-verified.sql > /tmp/stat-verified.txt
+psql $VAI_API_DATABASE_URL -f probe-coach-linkage.sql > /tmp/coach-linkage.txt
 ```
 
-Then reply to Ben's DM with:
-- Does the stat/PR table have a `verified BOOLEAN` column? (pattern A)
-- Is there a `source` enum on the stat? (pattern B)
-- Does the user table have `coach_user_id`? (pattern A)
-- Or is there a `user_relationships` junction table? (pattern B)
+Reply back with these four answers — they drive how we shape the response:
 
-Those four answers tell us how to wire the response shaper.
+- Does the stat/PR table have a `verified BOOLEAN` column? *(Pattern A — direct flag)*
+- Or a `source` enum with values like `"app" / "self" / "coach"`? *(Pattern B — derive verified)*
+- Does the users table have a `coach_user_id` FK? *(Pattern A)*
+- Or is there a `user_relationships` junction table? *(Pattern B)*
 
-### 2. Validate your endpoint matches the contract (5 min)
+If no linkage exists yet → we hide the Coached-by chip for v1 and plan a migration for v2.
 
-Once the endpoint is shaped, run the validator against staging:
+### 2. Shape the profile endpoint (10 min)
+
+Match the `VaiProfile` structure in [`example-response.json`](./example-response.json) + [`../badinho-pack/types.ts`](../badinho-pack/types.ts):
+
+**Nullable discipline matters.** Every optional field should be `null` (not empty string, not zero) when missing — the template uses `null` checks to hide chips conditionally. If a user has no coach, `coach: null`. No pinned highlight, `topHighlight: null`. No position, `user.position: null`.
+
+**Token validation.** Endpoint must return 404 when `public` token is expired, revoked, or doesn't match the user's current share_token. Template already handles 404 via `notFound()`.
+
+**HTTPS enforcement at write time.** All `avatar` / `highlight.url` / `highlight.poster` / `videoUrl` must be `https://`. Template's `isSafeURL()` blocks `http://` for mixed-content safety. Enforce in your DB layer validation.
+
+### 3. Validate before merge (5 min)
 
 ```bash
-# Pin Zod v3 — validator uses v3 APIs; Zod v4 made breaking changes to z.record()
 npm install zod@^3.23 tsx
 tsx api-contract-validator.ts \
   a812b6d8-b406-439b-9d6b-fc1d8a3313cd \
@@ -41,37 +64,44 @@ tsx api-contract-validator.ts \
   https://api-staging.vai.app/v1
 ```
 
-- Exit 0 = contract matches, template will render correctly
-- Exit 1 = shape mismatch; script prints exact fields to fix
+- Exit 0 = contract matches → template renders correctly
+- Exit 1 = shape mismatch → script prints exact fields to fix
 - Exit 2 = network/auth failure
 
-### 3. Use `example-response.json` as a fixture
+---
 
-Drop `example-response.json` into your test suite to lock the response shape. If your endpoint returns this exact structure (nullables respected), the template self-configures.
+## Security Notes (reinforce server-side)
 
-## Your remaining work
+The template + pack went through 3 audit rounds on different model families. Reinforcements that belong on your side:
 
-1. **Shape the response.** Once the probes tell us where `verified` and `coach` live, wire the response shaper in your profile endpoint to match `VaiProfile` (types in `../badinho-pack/types.ts`).
+- **Allowlist `stat.key` at write time:** must match `/^[a-zA-Z0-9_-]+$/`. Template defense-in-depths this; enforce at the DB write layer too.
+- **Sanitize handles at signup:** `/^[a-zA-Z0-9_]+$/`. Template uses `textContent` so XSS is blocked client-side, but UX breaks with weird characters.
+- **Rate-limit token lookups.** `?public=[token]` is a guessable target for brute-force. Standard auth rate limits apply.
+- **CDN-only avatars.** Only accept `prod.media.vai.app` URLs for `user.avatar` on profile edit — prevents arbitrary image hosting injection.
 
-2. **Nullable discipline.** Every optional field should be `null` (not empty string, not zero) when missing. The template uses `null` checks to hide chips.
+---
 
-3. **Token validation.** Endpoint must 404 when `public` token is expired, revoked, or doesn't match the user's current share_token. Template already handles 404 via `notFound()`.
+## Audit Trail
 
-4. **HTTPS everywhere.** All `avatar` / `videoUrl` / highlight URLs must be `https://`. The template's `isSafeURL()` blocks `http://` for mixed-content safety. Enforce at write time in your DB layer.
+| Round | Judge | Result |
+|---|---|---|
+| 1 | Claude Haiku 4.5 (advisory) | CONDITIONAL → 5 findings fixed |
+| 2 | Cursor GPT-5.4 (binding) | CONDITIONAL → 10 findings fixed |
+| 3 | Gemini 3.1 via Antigravity (binding) | CONDITIONAL → 1 new finding fixed |
+| 4 | Cursor GPT-5.4 re-audit | ✅ APPROVED (9.3 / 9.1 / 9.0) |
+| 5 | Gemini 3.1 re-audit | ✅ APPROVED (9.8 / 9.5 / 9.5) |
 
-5. **Run the validator before merging.** It's your contract test — if it passes, Badinho's Next.js port just works.
+Final HEAD: `0d82abb` on `ben-whitesides/vai-demos` main.
 
-## Security notes (Code Masters remediation context)
+---
 
-The template passed 2 independent audits. Areas where your backend reinforces the security posture:
+## Open Questions for You
 
-- **Allowlist `stat.key`** at write time: must match `/^[a-zA-Z0-9_-]+$/`. Template defense-in-depths this, but enforce server-side.
-- **Sanitize handles** at signup: must match `/^[a-zA-Z0-9_]+$/`. Template uses `textContent` so XSS is blocked client-side, but UX breaks with weird chars.
-- **Rate-limit token lookups**: `?public=[token]` is a share token; someone could try token brute-forcing. Standard auth rate limits apply.
-- **CDN-only avatars**: Only accept `prod.media.vai.app` URLs for `user.avatar`. Prevents arbitrary image hosting from being injected via profile edit.
+Flagged in the spec. Your answers unblock the final wire-up:
 
-## Spec
+1. **Authoritative source for `stat.verified`** — measured-in-app event log? Flag on stat record? Enum field?
+2. **Coach linkage field** — which column/table surfaces `coach.id` and `coach.handle` on the user record?
+3. **Role taxonomy normalization** — memory shows bwhite's role is "Jumpers" in-app. Is that legacy, or is it a different taxonomy than Athlete/Coach/Trainer/Parent/Builder?
+4. **`/chat/[USER_ID]` route** — Badinho will probe it, but if the route doesn't exist we need to add it (universal link fires regardless).
 
-Full data contract with every field documented: `../BADINHO-PROFILE-SPEC.md` §2.
-
-Ping Ben with anything that feels off. The goal is to save you reverse-engineering time — if any probe surfaces something unexpected, let's realign before you build.
+Ping Ben with blockers. The goal of this pack is to save you reverse-engineering time — if any probe surfaces something unexpected, realign before building.
