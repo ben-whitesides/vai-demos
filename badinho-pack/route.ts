@@ -30,19 +30,26 @@ async function getVaiProfile(id: string, token: string): Promise<VaiProfile | nu
   return null;
 }
 
-// ----- TEMPLATE LOADER (cached at module scope; reads once per worker) -----
-let templateCache: string | null = null;
-async function loadTemplate(): Promise<string> {
-  if (templateCache) return templateCache;
-  // Template sits next to this file: app/public-profile/[id]/template.html
+// ----- TEMPLATE LOADER (promise-cached; concurrent-safe on cold start) -----
+// Storing the in-flight Promise (not the resolved string) means concurrent
+// first-requests share one readFile() call instead of racing.
+let templatePromise: Promise<string> | null = null;
+function loadTemplate(): Promise<string> {
+  if (templatePromise) return templatePromise;
   const path = join(process.cwd(), 'app', 'public-profile', '[id]', 'template.html');
-  templateCache = await readFile(path, 'utf8');
-  return templateCache;
+  templatePromise = readFile(path, 'utf8').catch((err) => {
+    // Clear on failure so a retry can attempt again (don't cache the rejection)
+    templatePromise = null;
+    throw err;
+  });
+  return templatePromise;
 }
 
 // ----- XSS-SAFE JSON INJECTION -----
 // Escapes characters that could break out of the <script> tag or HTML context.
 // Safe even with hostile strings anywhere in profile data.
+// Throws if the object graph has circular references or unserializable values
+// (BigInt, functions, symbols) — caller must wrap in try/catch.
 function safeJSONStringify(value: unknown): string {
   return JSON.stringify(value)
     .replace(/</g, '\\u003c')
@@ -53,14 +60,16 @@ function safeJSONStringify(value: unknown): string {
 }
 
 // ----- HTML RESPONSE HELPER -----
+// No caching on share-token responses: the token can be revoked at any time
+// and we must not serve stale HTML after revocation. Browsers may still keep
+// their own bfcache for same-tab back/forward — that's out of our control,
+// but CDN / intermediary caching is blocked.
 function htmlResponse(body: string, status = 200): Response {
   return new Response(body, {
     status,
     headers: {
       'content-type': 'text/html; charset=utf-8',
-      // Cache at the edge for 60s — recent profile edits surface fast without DB hammering
-      'cache-control': status === 200 ? 'public, max-age=60, stale-while-revalidate=300' : 'no-store',
-      // Security headers
+      'cache-control': 'no-store, no-cache, must-revalidate, private',
       'x-content-type-options': 'nosniff',
       'referrer-policy': 'strict-origin-when-cross-origin',
     },
@@ -96,22 +105,32 @@ export async function GET(
     return htmlResponse(NOT_FOUND_HTML, 404);
   }
 
-  const profile = await getVaiProfile(id, token);
-  if (!profile) return htmlResponse(NOT_FOUND_HTML, 404);
-
-  const template = await loadTemplate();
-  const profileJSON = safeJSONStringify(profile);
+  let profile: VaiProfile | null;
+  let profileJSON: string;
+  let template: string;
+  try {
+    profile = await getVaiProfile(id, token);
+    if (!profile) return htmlResponse(NOT_FOUND_HTML, 404);
+    template = await loadTemplate();
+    profileJSON = safeJSONStringify(profile);
+  } catch (err) {
+    // Circular reference in profile, BigInt in stats, template file missing, etc.
+    console.error('[public-profile] serialization error for id=%s:', id, err);
+    return htmlResponse(NOT_FOUND_HTML, 500);
+  }
 
   // Inject right before the template's closing </head> so it's available before DOMContentLoaded.
   // Using a <script> with a fixed id makes it idempotent if someone rehydrates client-side later.
   const injectionScript =
     `<script id="vai-profile-data">window.VAI_PROFILE = ${profileJSON};</script>\n</head>`;
 
-  // Swap the closing </head> for injection + </head>. If </head> missing, fail loudly.
-  if (!template.includes('</head>')) {
-    throw new Error('Template malformed: </head> not found');
+  // Swap ONLY the first closing </head> for injection + </head>. If </head> missing, 500.
+  const headCloseIndex = template.indexOf('</head>');
+  if (headCloseIndex === -1) {
+    console.error('[public-profile] template malformed: </head> not found');
+    return htmlResponse(NOT_FOUND_HTML, 500);
   }
-  const html = template.replace('</head>', injectionScript);
+  const html = template.slice(0, headCloseIndex) + injectionScript + template.slice(headCloseIndex + '</head>'.length);
 
   // Dynamically rewrite the <title> + OG URL with this athlete's identity.
   // (The template ships with generic defaults; we personalize per-request.)

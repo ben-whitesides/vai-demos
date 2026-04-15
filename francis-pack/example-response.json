@@ -1,5 +1,4 @@
 {
-  "_comment": "Example VaiProfile payload. This is the exact shape the template expects from your profile endpoint. Copy into a test fixture and use as a target.",
   "user": {
     "id": "a812b6d8-b406-439b-9d6b-fc1d8a3313cd",
     "handle": "bwhite",

@@ -125,9 +125,19 @@ async function main() {
       console.error(await res.text());
       process.exit(2);
     }
+    // Defensive: endpoint might return a 200 with an HTML error page (stray proxy,
+    // misconfigured middleware, CDN intercept). Verify content-type before parsing.
+    const ct = res.headers.get('content-type') ?? '';
+    if (!ct.toLowerCase().includes('application/json')) {
+      const preview = (await res.text()).slice(0, 300);
+      console.error(`\n❌ Non-JSON response from endpoint (content-type: "${ct}")`);
+      console.error(`First 300 chars: ${preview}`);
+      console.error(`\nExpected: application/json. Check your endpoint is returning JSON, not an HTML error page or redirect.`);
+      process.exit(2);
+    }
     raw = await res.json();
   } catch (e) {
-    console.error('\n❌ Network error:', e instanceof Error ? e.message : e);
+    console.error('\n❌ Network / parse error:', e instanceof Error ? e.message : e);
     process.exit(2);
   }
 

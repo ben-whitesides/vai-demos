@@ -57,8 +57,8 @@ Nothing on the client needs you to wire it. Just inject the data.
 
 The template passed two independent Code Masters audits:
 
-- **Cursor (GPT-5.4)** — Security 8.6, Logic 7.7 → Quality 8.6 on third pass (CONDITIONAL → clean)
-- **Gemini 3.1 (Antigravity)** — Security 9.5, Logic 9.2, Quality 9.0 → APPROVED
+- **Cursor (GPT-5.4)** — two passes surfaced 14 findings → all remediated in commit 89d1fbe (attribute-injection, onkeydown desync, http:// allow, dead code)
+- **Gemini 3.1 (Antigravity)** — independent re-audit on remediated code: Security 9.5 / Logic 9.2 / Quality 9.0 → APPROVED FOR HANDOFF
 
 All attribute-injection vectors closed. All target="_blank" links carry `rel="noopener noreferrer"`. `isSafeURL()` allowlists `https:` and `vaiapp:` only. Focus trap on both modals with focus restoration. Data-attribute-based listeners (not inline event handlers).
 
