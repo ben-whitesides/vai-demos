@@ -920,6 +920,160 @@
       line-height: 1.6;
     }
 
+    /* ATTRIBUTION PILL */
+    .attribution-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(247, 148, 30, 0.08);
+      border: 1px solid rgba(247, 148, 30, 0.3);
+      color: #F7941E;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .attribution-pill svg {
+      flex-shrink: 0;
+    }
+
+    /* TOAST (copy-link confirmation) */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: #34D399;
+      color: #0C0A09;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 12px 40px rgba(52, 211, 153, 0.4);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .toast.active { transform: translateX(-50%) translateY(0); }
+
+    /* VIDEO HERO (replaces static placeholder) */
+    .profile-hero.video-hero {
+      position: relative;
+      overflow: hidden;
+      background: #0C0A09;
+    }
+
+    .profile-hero video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-hero-overlay {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: rgba(12, 10, 9, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #F7941E;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .profile-hero-overlay svg { flex-shrink: 0; }
+
+    /* MEASURED-IN-VAI VERIFICATION BADGE on stat cards */
+    .stat-card {
+      position: relative;
+    }
+
+    .measured-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: #34D399;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* COACHED-BY CREDENTIAL CHIP */
+    .coached-by {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(52, 211, 153, 0.08);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      color: #34D399;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      margin: 8px 0 4px;
+    }
+
+    .coached-by:hover {
+      background: rgba(52, 211, 153, 0.15);
+      border-color: #34D399;
+    }
+
+    /* PROMINENT ABILITY RATING (Ability tab — like a 247Composite/5-star equivalent) */
+    .ability-card {
+      position: relative;
+    }
+
+    .ability-level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #F7941E 0%, #ff6b1e 100%);
+      color: #0C0A09;
+      padding: 12px 20px;
+      border-radius: 12px;
+      margin-top: 8px;
+    }
+
+    .ability-level-name {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-style: italic;
+    }
+
+    .ability-level-stars {
+      display: inline-flex;
+      gap: 2px;
+    }
+
+    .ability-level-stars svg {
+      color: #0C0A09;
+    }
+
     /* PROFILE NAME ROW + SHARE ICON */
     .profile-name-row {
       display: flex;
@@ -1307,6 +1461,12 @@
   </div>
 
   <div class="container">
+    <!-- SHARED-BY ATTRIBUTION PILL -->
+    <div class="attribution-pill" id="attributionPill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      <span>Shared by <strong>@bwhite</strong></span>
+    </div>
+
     <!-- PROFILE HEADER -->
     <div class="profile-header">
       <div class="profile-info">
@@ -1323,11 +1483,17 @@
             </div>
             <div class="profile-handle">@bwhite</div>
             <div class="profile-athlete-meta">
-              <span class="meta-chip">🎓 Class of '26</span>
-              <span class="meta-chip">🏈 Football</span>
-              <span class="meta-chip">📍 QB</span>
-              <span class="meta-chip">📍 Kaysville, UT</span>
+              <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Class of '26</span>
+              <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12a10 10 0 1 0 20 0 10 10 0 1 0-20 0"/><path d="M5 5l14 14M9 3l12 12M3 9l12 12"/></svg>Football</span>
+              <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 12h5v10h6V12h5z"/></svg>QB</span>
+              <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Kaysville, UT</span>
+              <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>6'2" / 190 LBS</span>
+              <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>4.6 40-yd</span>
             </div>
+            <a href="https://app.vai.app/profile/[COACH_ID]" class="coached-by" target="_blank">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Coached by <strong>@coachjones</strong>
+            </a>
             <div class="profile-badges">
               <span class="badge trainer">Trainer</span>
               <span class="badge coach">Coach</span>
@@ -1347,8 +1513,14 @@
         </div>
       </div>
 
-      <div class="profile-hero placeholder">
-        <img src="[PLACEHOLDER: HERO_IMAGE]" alt="Hero">
+      <div class="profile-hero video-hero">
+        <video autoplay muted loop playsinline poster="[PLACEHOLDER: HERO_POSTER]">
+          <source src="[PLACEHOLDER: TOP_HIGHLIGHT_VIDEO_URL]" type="video/mp4">
+        </video>
+        <div class="profile-hero-overlay">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Top Highlight
+        </div>
       </div>
     </div>
 
@@ -1357,16 +1529,28 @@
       <div class="section-title">Top Performance Stats</div>
       <div class="stats-grid">
         <div class="stat-card" onclick="openAbility('squat')">
+          <div class="measured-badge" title="Measured in the VAI app">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Verified
+          </div>
           <div class="stat-card-value">320</div>
           <div class="stat-card-unit">lbs</div>
           <div class="stat-card-label">Back Squat</div>
         </div>
         <div class="stat-card" onclick="openAbility('pushups')">
+          <div class="measured-badge" title="Measured in the VAI app">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Verified
+          </div>
           <div class="stat-card-value">72</div>
           <div class="stat-card-unit">reps</div>
           <div class="stat-card-label">Push Ups</div>
         </div>
         <div class="stat-card" onclick="openAbility('situps')">
+          <div class="measured-badge" title="Measured in the VAI app">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Verified
+          </div>
           <div class="stat-card-value">45</div>
           <div class="stat-card-unit">reps</div>
           <div class="stat-card-label">Sit Ups</div>
@@ -1383,7 +1567,9 @@
         </div>
 
         <div class="ability-hero">
-          <div class="ability-hero-icon" id="abilityIcon">🏋️</div>
+          <div class="ability-hero-icon" id="abilityIcon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/></svg>
+          </div>
           <div class="ability-hero-label" id="abilityName">Squat</div>
           <div class="ability-hero-value"><span id="abilityValue">320</span> <span id="abilityUnit">LBS</span></div>
         </div>
@@ -1396,7 +1582,8 @@
         </div>
 
         <div class="ability-increase">
-          📈 <span id="abilityIncrease">0%</span> Increase
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          <span id="abilityIncrease">0%</span> Increase
         </div>
 
         <div class="ability-chart">
@@ -1408,7 +1595,8 @@
             <div class="chart-line"></div>
           </div>
           <div class="chart-video-cta">
-            ▶ Watch Highlight Video
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;vertical-align:middle"><path d="M8 5v14l11-7z"/></svg>
+            Watch Highlight Video
           </div>
         </div>
 
@@ -1464,24 +1652,55 @@
       <div id="tab-ability" class="tab-content">
         <div class="ability-card">
           <div class="ability-card-header">
-            <div class="ability-card-icon">🚴</div>
+            <div class="ability-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM6 17l3-7 4 3 4-4"/></svg>
+            </div>
             <div class="ability-card-title">Cycling</div>
           </div>
-          <div class="ability-card-name">ATHLETE</div>
+          <div class="ability-level-badge">
+            <span class="ability-level-name">Athlete</span>
+            <span class="ability-level-stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+            </span>
+          </div>
         </div>
         <div class="ability-card">
           <div class="ability-card-header">
-            <div class="ability-card-icon">🏃</div>
+            <div class="ability-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M4 22l5-11 6 2-2 5 5 4"/><path d="M14 13l-3 2"/></svg>
+            </div>
             <div class="ability-card-title">Running</div>
           </div>
-          <div class="ability-card-name">ATHLETE</div>
+          <div class="ability-level-badge">
+            <span class="ability-level-name">Athlete</span>
+            <span class="ability-level-stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+            </span>
+          </div>
         </div>
         <div class="ability-card">
           <div class="ability-card-header">
-            <div class="ability-card-icon">🏋️</div>
+            <div class="ability-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/></svg>
+            </div>
             <div class="ability-card-title">Strength</div>
           </div>
-          <div class="ability-card-name">ATHLETE</div>
+          <div class="ability-level-badge">
+            <span class="ability-level-name">Athlete</span>
+            <span class="ability-level-stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -1567,8 +1786,14 @@
 
     <!-- CTA BUTTONS -->
     <div class="cta-section">
-      <a href="https://app.vai.app/chat/[USER_ID]" class="cta-button primary" target="_blank">💬 Chat with @bwhite</a>
-      <a href="https://vai.app/share/partner-program?program_type=plus#pricing" class="cta-button avanti" target="_blank">✨ Try AVANTI AI Coaching</a>
+      <a href="https://app.vai.app/chat/[USER_ID]" class="cta-button primary" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:10px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat with @bwhite
+      </a>
+      <a href="https://vai.app/share/partner-program?program_type=plus#pricing" class="cta-button avanti" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:10px"><path d="M12 3l1.9 5.7L20 10l-5.1 3.7L17 20l-5-3.5L7 20l2.1-6.3L4 10l6.1-1.3z"/></svg>
+        Try AVANTI AI Coaching
+      </a>
     </div>
     <div class="cta-subtitle">
       In-app chat is free with VAI Basic. AVANTI AI Coaching is part of VAI+ at $19.95/mo.
@@ -1595,6 +1820,12 @@
     </div>
   </div>
 
+  <!-- TOAST (copy-link confirmation) -->
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <span class="toast-message">Link copied</span>
+  </div>
+
   <script>
     const highlights = [
       '[PLACEHOLDER: HIGHLIGHT_1]',
@@ -1606,6 +1837,13 @@
     ];
 
     let currentHighlight = 0;
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.querySelector('.toast-message').textContent = message;
+      toast.classList.add('active');
+      setTimeout(() => toast.classList.remove('active'), 2800);
+    }
 
     async function shareProfile() {
       const shareData = {
@@ -1622,25 +1860,26 @@
       } else {
         try {
           await navigator.clipboard.writeText(shareData.url);
-          const mailto = `mailto:?subject=${encodeURIComponent(shareData.title)}&body=${encodeURIComponent(shareData.text + '\n\n' + shareData.url)}`;
-          if (confirm('Link copied to clipboard. Open email to share?')) {
-            window.location.href = mailto;
-          }
+          showToast('Link copied — paste anywhere');
         } catch (err) {
           window.prompt('Copy this link to share:', shareData.url);
         }
       }
     }
 
+    const ICON_DUMBBELL = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"/></svg>';
+    const ICON_BICEP = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3c0 3-2 5-5 5s-3 2-3 5"/><circle cx="12" cy="12" r="2"/></svg>';
+    const ICON_FLAME = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>';
+
     const abilities = {
-      squat:   { icon: '🏋️', name: 'Squat',    value: '320', unit: 'LBS',  date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' },
-      pushups: { icon: '💪', name: 'Push Ups',  value: '72',  unit: 'REPS', date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' },
-      situps:  { icon: '🔥', name: 'Sit Ups',   value: '45',  unit: 'REPS', date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' }
+      squat:   { icon: ICON_DUMBBELL, name: 'Squat',    value: '320', unit: 'LBS',  date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' },
+      pushups: { icon: ICON_BICEP,    name: 'Push Ups',  value: '72',  unit: 'REPS', date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' },
+      situps:  { icon: ICON_FLAME,    name: 'Sit Ups',   value: '45',  unit: 'REPS', date: '12/08/2023', increase: 'NaN%', start: '04/14/2026', overall: '0' }
     };
 
     function openAbility(key) {
       const a = abilities[key];
-      document.getElementById('abilityIcon').textContent = a.icon;
+      document.getElementById('abilityIcon').innerHTML = a.icon;
       document.getElementById('abilityName').textContent = a.name;
       document.getElementById('abilityValue').textContent = a.value;
       document.getElementById('abilityUnit').textContent = a.unit;
