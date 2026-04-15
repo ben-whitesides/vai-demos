@@ -33,7 +33,8 @@ Those four answers tell us how to wire the response shaper.
 Once the endpoint is shaped, run the validator against staging:
 
 ```bash
-npm install zod tsx          # if not installed
+# Pin Zod v3 — validator uses v3 APIs; Zod v4 made breaking changes to z.record()
+npm install zod@^3.23 tsx
 tsx api-contract-validator.ts \
   a812b6d8-b406-439b-9d6b-fc1d8a3313cd \
   8951bdc6-271d-4571-9f2e-85552a490b9e \

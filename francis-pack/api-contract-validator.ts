@@ -62,10 +62,11 @@ const VaiStatSchema = z.object({
   videoUrl: z.string().url().startsWith('https://').optional(),
 });
 
+// Media URLs must be https:// — template's isSafeURL() blocks http:// for mixed-content safety.
 const VaiHighlightSchema = z.object({
   id: z.string(),
-  url: z.string().url(),
-  poster: z.string().url(),
+  url: z.string().url().startsWith('https://', 'highlight url must be https:// (template blocks mixed content)'),
+  poster: z.string().url().startsWith('https://', 'highlight poster must be https://'),
   caption: z.string().optional(),
 });
 
@@ -89,8 +90,8 @@ const VaiProfileSchema = z.object({
   stats: z.array(VaiStatSchema),
   highlights: z.array(VaiHighlightSchema),
   topHighlight: z.object({
-    url: z.string().url(),
-    poster: z.string().url(),
+    url: z.string().url().startsWith('https://', 'topHighlight.url must be https://'),
+    poster: z.string().url().startsWith('https://', 'topHighlight.poster must be https://'),
   }).nullable(),
   abilities: z.record(VaiAbilitySchema),
   sportStats: z.array(VaiSportStatsSchema),
@@ -119,7 +120,11 @@ async function main() {
 
   let raw: unknown;
   try {
-    const res = await fetch(url, { headers: { Accept: 'application/json' } });
+    // 15s timeout — prevents hang on slow/malicious endpoints in CI or local runs
+    const res = await fetch(url, {
+      headers: { Accept: 'application/json' },
+      signal: AbortSignal.timeout(15_000),
+    });
     if (!res.ok) {
       console.error(`\n❌ HTTP ${res.status} ${res.statusText}`);
       console.error(await res.text());
@@ -127,12 +132,15 @@ async function main() {
     }
     // Defensive: endpoint might return a 200 with an HTML error page (stray proxy,
     // misconfigured middleware, CDN intercept). Verify content-type before parsing.
-    const ct = res.headers.get('content-type') ?? '';
-    if (!ct.toLowerCase().includes('application/json')) {
+    // Accepts: application/json, application/json; charset=utf-8, application/vnd.api+json,
+    //          application/ld+json, etc. — any JSON-family content type.
+    const ct = (res.headers.get('content-type') ?? '').toLowerCase();
+    const isJSONLike = /application\/(?:[a-z+.-]*\+)?json/.test(ct);
+    if (!isJSONLike) {
       const preview = (await res.text()).slice(0, 300);
       console.error(`\n❌ Non-JSON response from endpoint (content-type: "${ct}")`);
       console.error(`First 300 chars: ${preview}`);
-      console.error(`\nExpected: application/json. Check your endpoint is returning JSON, not an HTML error page or redirect.`);
+      console.error(`\nExpected: application/json (or JSON variant). Check your endpoint is returning JSON, not an HTML error page or redirect.`);
       process.exit(2);
     }
     raw = await res.json();

@@ -31,10 +31,21 @@ echo "Pack source: $PACK_DIR"
 echo "Repo target: $REPO_ROOT"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# --- Guard: must be a git repo
+# --- Guard: must be a git repo AND look like vai-game-day (prevents dropping files in the wrong project)
 if [ ! -d ".git" ]; then
   echo "ERROR: not inside a git repo. cd into vai-game-day first."
   exit 1
+fi
+
+REMOTE_URL="$(git remote get-url origin 2>/dev/null || echo '')"
+PKG_NAME="$(node -p "require('./package.json').name" 2>/dev/null || echo '')"
+if [[ "$REMOTE_URL" != *"vai-game-day"* ]] && [[ "$PKG_NAME" != *"vai"* ]] && [[ "$PKG_NAME" != *"game-day"* ]]; then
+  echo "ERROR: this does not look like the vai-game-day repo."
+  echo "  git remote origin: $REMOTE_URL"
+  echo "  package.json name: $PKG_NAME"
+  echo "  Refusing to install — you probably cd'd into the wrong project."
+  echo "  Override with: VAI_INSTALL_FORCE=1 $0"
+  [ "${VAI_INSTALL_FORCE:-}" != "1" ] && exit 1
 fi
 
 # --- Guard: uncommitted changes?
@@ -105,7 +116,7 @@ echo "✅ INSTALL COMPLETE"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo
 echo "Files installed:"
-echo "  app/public-profile/[id]/route.ts       ← Next.js Server Component (WIRE TODO #1)"
+echo "  app/public-profile/[id]/route.ts       ← Next.js Route Handler (WIRE TODO #1)"
 echo "  app/public-profile/[id]/types.ts       ← VaiProfile TypeScript contract"
 echo "  app/public-profile/[id]/template.html  ← Self-hydrating template (no changes needed)"
 echo "  app/api/og/[id]/route.tsx              ← OG image generator (WIRE TODO #1)"

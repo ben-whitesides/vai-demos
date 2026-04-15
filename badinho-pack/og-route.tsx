@@ -84,13 +84,24 @@ export async function GET(
       }}>
         {/* Top row: avatar + name block */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 32, marginBottom: 40 }}>
-          <img
-            src={profile.avatar}
-            width={180}
-            height={180}
-            style={{ borderRadius: 24, objectFit: 'cover', border: `3px solid ${ORANGE}` }}
-            alt={profile.name}
-          />
+          {/* Defense in depth: only render avatar if it's https://. Fetcher should already enforce this. */}
+          {profile.avatar && profile.avatar.startsWith('https://') ? (
+            <img
+              src={profile.avatar}
+              width={180}
+              height={180}
+              style={{ borderRadius: 24, objectFit: 'cover', border: `3px solid ${ORANGE}` }}
+              alt={profile.name}
+            />
+          ) : (
+            <div style={{
+              width: 180, height: 180, borderRadius: 24, border: `3px solid ${ORANGE}`,
+              background: CARD_BG, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: ORANGE, fontSize: 80, fontWeight: 900,
+            }}>
+              {(profile.name || '?').charAt(0).toUpperCase()}
+            </div>
+          )}
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
             <div style={{ fontSize: 64, fontWeight: 900, lineHeight: 1.05, marginBottom: 12 }}>
               {profile.name}
@@ -154,9 +165,11 @@ export async function GET(
     {
       width: 1200,
       height: 630,
-      // Cache for 5 min at CDN, stale-while-revalidate 1 hour
+      // Share tokens are revocable — no edge/CDN cache on successful OG renders.
+      // Short private cache allows the link-preview renderer to re-use once per session only.
+      // Matches the HTML route's no-store policy for revocation safety.
       headers: {
-        'cache-control': 'public, max-age=300, stale-while-revalidate=3600',
+        'cache-control': 'private, max-age=60, must-revalidate',
       },
     }
   );

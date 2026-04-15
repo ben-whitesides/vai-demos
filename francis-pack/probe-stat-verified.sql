@@ -53,33 +53,27 @@ WHERE (table_name ILIKE '%event%'
 ORDER BY table_name;
 
 \echo
-\echo '[4/4] Sample 5 rows from the most likely stat table (adjust table name if needed):'
--- Adjust this SELECT once query [2/4] shows the actual table name.
--- Common candidates: user_stats, performance_records, athlete_metrics, prs, measurements
-DO $$
-DECLARE
-  tbl text;
-BEGIN
-  SELECT table_name INTO tbl
-  FROM information_schema.tables
-  WHERE (table_name ILIKE '%stat%' OR table_name ILIKE '%measurement%' OR table_name ILIKE '%pr_%' OR table_name ILIKE '%personal_record%')
-    AND table_schema = 'public'
-  ORDER BY
-    CASE
-      WHEN table_name = 'user_stats' THEN 1
-      WHEN table_name = 'prs' THEN 2
-      WHEN table_name = 'performance_records' THEN 3
-      ELSE 99
-    END
-  LIMIT 1;
+\echo '[4/4] Candidate stat table name (used by the next query):'
+-- Produce a single-row result surfacing the best candidate table name.
+-- psql prints this to stdout so operators can use it for the sample below.
+SELECT table_name AS candidate_stat_table
+FROM information_schema.tables
+WHERE (table_name ILIKE '%stat%' OR table_name ILIKE '%measurement%' OR table_name ILIKE '%pr_%' OR table_name ILIKE '%personal_record%')
+  AND table_schema = 'public'
+ORDER BY
+  CASE
+    WHEN table_name = 'user_stats' THEN 1
+    WHEN table_name = 'prs' THEN 2
+    WHEN table_name = 'performance_records' THEN 3
+    ELSE 99
+  END
+LIMIT 1;
 
-  IF tbl IS NOT NULL THEN
-    RAISE NOTICE 'Sampling from table: %', tbl;
-    EXECUTE format('SELECT * FROM %I LIMIT 5', tbl);
-  ELSE
-    RAISE NOTICE 'No obvious stat table found in public schema. Check query [2/4] above.';
-  END IF;
-END $$;
+\echo
+\echo '[4/4b] After reading the candidate above, run the sample manually:'
+\echo '       SELECT * FROM <candidate_stat_table> LIMIT 5;'
+\echo '       (Kept outside a DO block so rows are returned to the client.'
+\echo '        EXECUTE inside DO cannot surface rowsets via psql.)'
 
 \echo
 \echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'

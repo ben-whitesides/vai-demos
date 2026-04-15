@@ -144,16 +144,24 @@ export async function GET(
   // Helper: escape for HTML attribute values
   const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+  // Function replacers (not string replacers) — avoids String.prototype.replace's $&, $1, $', $$ special tokens.
+  // If we used `$1${esc(name)}$2` and name contained "$&", the previous match would be injected — metadata corruption risk.
+  const titleText = esc(`${name} — VAI Athlete Profile`);
+  const descText = esc(desc);
+  const urlText = esc(canonicalURL);
+  const imgText = esc(ogImage);
+  const wrap = (val: string) => (_m: string, pre: string, post: string) => pre + val + post;
+
   const personalizedHTML = html
-    .replace(/<title>[^<]*<\/title>/i, `<title>${esc(`${name} — VAI Athlete Profile`)}</title>`)
-    .replace(/(<meta name="description" content=")[^"]*(")/i, `$1${esc(desc)}$2`)
-    .replace(/(<meta property="og:title" content=")[^"]*(")/i, `$1${esc(`${name} — VAI Athlete Profile`)}$2`)
-    .replace(/(<meta property="og:description" content=")[^"]*(")/i, `$1${esc(desc)}$2`)
-    .replace(/(<meta property="og:url" content=")[^"]*(")/i, `$1${esc(canonicalURL)}$2`)
-    .replace(/(<meta property="og:image" content=")[^"]*(")/gi, `$1${esc(ogImage)}$2`)
-    .replace(/(<meta name="twitter:title" content=")[^"]*(")/i, `$1${esc(`${name} — VAI Athlete Profile`)}$2`)
-    .replace(/(<meta name="twitter:description" content=")[^"]*(")/i, `$1${esc(desc)}$2`)
-    .replace(/(<meta name="twitter:image" content=")[^"]*(")/i, `$1${esc(ogImage)}$2`);
+    .replace(/<title>[^<]*<\/title>/i, () => `<title>${titleText}</title>`)
+    .replace(/(<meta name="description" content=")[^"]*(")/i, wrap(descText))
+    .replace(/(<meta property="og:title" content=")[^"]*(")/i, wrap(titleText))
+    .replace(/(<meta property="og:description" content=")[^"]*(")/i, wrap(descText))
+    .replace(/(<meta property="og:url" content=")[^"]*(")/i, wrap(urlText))
+    .replace(/(<meta property="og:image" content=")[^"]*(")/gi, wrap(imgText))
+    .replace(/(<meta name="twitter:title" content=")[^"]*(")/i, wrap(titleText))
+    .replace(/(<meta name="twitter:description" content=")[^"]*(")/i, wrap(descText))
+    .replace(/(<meta name="twitter:image" content=")[^"]*(")/i, wrap(imgText));
 
   return htmlResponse(personalizedHTML);
 }
