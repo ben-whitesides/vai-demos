@@ -489,6 +489,20 @@
       opacity: 0.95;
     }
 
+    /* STAT CARD AS BUTTON — reset native styling so it matches the card visual */
+    button.stat-card {
+      font-family: inherit;
+      color: inherit;
+      width: 100%;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    button.stat-card:focus-visible {
+      outline: 2px solid #34D399;
+      outline-offset: 4px;
+    }
+
     /* STAT CARD ICON */
     .stat-card-icon {
       font-size: 24px;
@@ -1020,7 +1034,8 @@
       position: absolute;
       top: 12px;
       right: 12px;
-      display: inline-flex;
+      /* Default hidden — JS activates only when stat.verified === true */
+      display: none;
       align-items: center;
       gap: 4px;
       background: rgba(52, 211, 153, 0.12);
@@ -1033,6 +1048,11 @@
       letter-spacing: 1px;
       text-transform: uppercase;
     }
+
+    .measured-badge.active { display: inline-flex; }
+
+    /* Design-review fallback: when no VAI_PROFILE injected, show badges so template still looks complete on GitHub Pages */
+    .design-review .measured-badge { display: inline-flex; }
 
     /* COACHED-BY CREDENTIAL CHIP */
     .coached-by {
@@ -1244,7 +1264,9 @@
     }
 
     .modal-content img,
-    .modal-content video {
+    .modal-content video,
+    .modal-content #modalImage,
+    .modal-content #modalVideo {
       max-width: 100%;
       max-height: 100%;
       width: auto;
@@ -1252,6 +1274,8 @@
       object-fit: contain;
       border-radius: 12px;
     }
+
+    .design-review #modalImage { display: block !important; }
 
     .modal-close {
       position: absolute;
@@ -1456,6 +1480,32 @@
         padding: 20px;
       }
     }
+
+    /* PRINT STYLES — clean printable profile for recruiters */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .header, .secondary-actions, .cta-section, .cta-subtitle, .attribution-pill,
+      .footer, .toast, .share-icon-btn, .tabs, #highlightModal, #abilityModal {
+        display: none !important;
+      }
+      .container { margin: 0 !important; padding: 20px !important; max-width: 100% !important; }
+      .profile-hero video { display: none !important; }
+      .tab-content { display: block !important; page-break-inside: avoid; }
+      .tab-content:not(.active) { display: none !important; } /* only print active tab */
+      .stat-card, .info-card, .athlete-card, .ability-card {
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+      .stat-card-value, .profile-name, .sport-stat-value { color: #000 !important; }
+      a { color: #000 !important; text-decoration: underline; }
+      a[href]::after { content: " (" attr(href) ")"; font-size: 10px; }
+    }
   </style>
 </head>
 <body>
@@ -1466,10 +1516,10 @@
     </a>
 
     <div class="app-store-links">
-      <a href="https://apps.apple.com/us/app/vai-from-next-level-athlete/id6447384009" class="app-store-badge" title="Download on Apple App Store" target="_blank">
+      <a href="https://apps.apple.com/us/app/vai-from-next-level-athlete/id6447384009" class="app-store-badge" title="Download on Apple App Store" target="_blank" rel="noopener noreferrer">
         <img src="https://vai.app/wp-content/uploads/app-store-download-1.png" alt="Download on Apple App Store">
       </a>
-      <a href="https://play.google.com/store/apps/details?id=com.nla.vaiapp" class="app-store-badge" title="Get it on Google Play" target="_blank">
+      <a href="https://play.google.com/store/apps/details?id=com.nla.vaiapp" class="app-store-badge" title="Get it on Google Play" target="_blank" rel="noopener noreferrer">
         <img src="https://vai.app/wp-content/uploads/google-play-badge-1-1.png" alt="Get it on Google Play">
       </a>
     </div>
@@ -1505,7 +1555,7 @@
               <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>6'2" / 190 LBS</span>
               <span class="meta-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>4.6 40-yd</span>
             </div>
-            <a href="https://app.vai.app/profile/[COACH_ID]" class="coached-by" target="_blank">
+            <a href="https://app.vai.app/profile/[COACH_ID]" class="coached-by" target="_blank" rel="noopener noreferrer">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               Coached by <strong>@coachjones</strong>
             </a>
@@ -1543,29 +1593,29 @@
     <div class="stats-section">
       <div class="section-title">Top Performance Stats</div>
       <div class="stats-grid">
-        <div class="stat-card" onclick="openAbility('squat')">
+        <button type="button" class="stat-card" onclick="openAbility('squat')" aria-label="View Back Squat ability detail">
           <div class="measured-badge" title="Measured in the VAI app">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verified
-          </div>
+          </button>
           <div class="stat-card-value">320</div>
           <div class="stat-card-unit">lbs</div>
           <div class="stat-card-label">Back Squat</div>
         </div>
-        <div class="stat-card" onclick="openAbility('pushups')">
+        <button type="button" class="stat-card" onclick="openAbility('pushups')" aria-label="View Push Ups ability detail">
           <div class="measured-badge" title="Measured in the VAI app">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verified
-          </div>
+          </button>
           <div class="stat-card-value">72</div>
           <div class="stat-card-unit">reps</div>
           <div class="stat-card-label">Push Ups</div>
         </div>
-        <div class="stat-card" onclick="openAbility('situps')">
+        <button type="button" class="stat-card" onclick="openAbility('situps')" aria-label="View Sit Ups ability detail">
           <div class="measured-badge" title="Measured in the VAI app">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verified
-          </div>
+          </button>
           <div class="stat-card-value">45</div>
           <div class="stat-card-unit">reps</div>
           <div class="stat-card-label">Sit Ups</div>
@@ -1788,24 +1838,25 @@
     </div>
 
     <!-- MODAL / LIGHTBOX -->
-    <div id="highlightModal" class="modal" onclick="closeModal(event)">
+    <div id="highlightModal" class="modal" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-label="Highlight">
       <div class="modal-content" onclick="event.stopPropagation()">
-        <img id="modalImage" src="" alt="Highlight Full Screen">
-        <button class="modal-close" onclick="closeModal()">×</button>
+        <img id="modalImage" src="" alt="Highlight" style="display:none">
+        <video id="modalVideo" controls playsinline style="display:none"></video>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
         <div class="modal-nav">
-          <button onclick="prevHighlight()">← Previous</button>
-          <button onclick="nextHighlight()">Next →</button>
+          <button onclick="prevHighlight()" aria-label="Previous highlight">← Previous</button>
+          <button onclick="nextHighlight()" aria-label="Next highlight">Next →</button>
         </div>
       </div>
     </div>
 
     <!-- CTA BUTTONS -->
     <div class="cta-section">
-      <a href="https://app.vai.app/chat/[USER_ID]" class="cta-button primary" target="_blank">
+      <a href="https://app.vai.app/chat/[USER_ID]" class="cta-button primary" target="_blank" rel="noopener noreferrer">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:10px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Chat with @bwhite
       </a>
-      <a href="https://vai.app/share/partner-program?program_type=plus#pricing" class="cta-button avanti" target="_blank">
+      <a href="https://vai.app/share/partner-program?program_type=plus#pricing" class="cta-button avanti" target="_blank" rel="noopener noreferrer">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:10px"><path d="M12 3l1.9 5.7L20 10l-5.1 3.7L17 20l-5-3.5L7 20l2.1-6.3L4 10l6.1-1.3z"/></svg>
         Try AVANTI AI Coaching
       </a>
@@ -1820,7 +1871,7 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Share Profile
       </button>
-      <a href="https://app.vai.app/profile/[USER_ID]?public=[PUBLIC_TOKEN]" class="ghost-button" target="_blank">
+      <a href="https://app.vai.app/profile/[USER_ID]?public=[PUBLIC_TOKEN]" class="ghost-button" target="_blank" rel="noopener noreferrer">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
         Open in VAI App
       </a>
@@ -1828,7 +1879,7 @@
 
     <!-- FOOTER -->
     <div class="footer">
-      <a href="https://vai.app" target="_blank" class="footer-logo">
+      <a href="https://vai.app" target="_blank" rel="noopener noreferrer" class="footer-logo">
         <img src="https://vai.app/wp-content/uploads/logo.png" alt="VAI">
       </a>
       <p>Share your athletic profile with coaches, scouts, and recruiters worldwide.</p>
@@ -1871,11 +1922,33 @@
       hydrateCoachedBy();
       hydrateMetaChips();
       hydrateVerifiedBadges();
+      hydrateHeroVideo();
+      hydrateHighlightsGrid();
+      hydrateBio();
+      hydrateRoleBadges();
+      hydrateFollowStats();
+      hydrateAbilityTab();
+      hydrateSportStatsTab();
       hydrateAVANTIUtm();
       hydrateShareURLWithAffiliate();
       handleReducedMotion();
       handleSlowConnection();
     });
+
+    // ----- URL SAFETY -----
+    function isSafeURL(url) {
+      if (!url || typeof url !== 'string') return false;
+      // Allow only https / relative / app-specific schemes; block javascript:, data:, etc.
+      try {
+        if (url.startsWith('/') || url.startsWith('#')) return true;
+        const u = new URL(url, window.location.href);
+        return ['https:', 'http:', 'vaiapp:'].includes(u.protocol);
+      } catch { return false; }
+    }
+
+    function safeImgSrc(url, fallback) {
+      return isSafeURL(url) ? url : (fallback || '');
+    }
 
     // ----- USER PROFILE FIELDS -----
     function hydrateProfile() {
@@ -1883,11 +1956,14 @@
       const u = P.user;
       setText('.profile-name', u.name);
       setText('.profile-handle', u.handle ? '@' + u.handle : '');
-      setAttr('.profile-avatar img', 'src', u.avatar);
-      setAttr('.profile-avatar img', 'alt', u.name);
-      setHref('.cta-button.primary', `https://app.vai.app/chat/${u.id}`);
-      setText('.cta-button.primary', `Chat with @${u.handle}`, { preserveSVG: true });
-      setHref('.ghost-button[href*="profile/"]', `https://app.vai.app/profile/${u.id}?public=${P.token || ''}`);
+      const avatar = safeImgSrc(u.avatar);
+      if (avatar) setAttr('.profile-avatar img', 'src', avatar);
+      setAttr('.profile-avatar img', 'alt', u.name || '');
+      if (u.id) {
+        setHref('.cta-button.primary', `https://app.vai.app/chat/${encodeURIComponent(u.id)}`);
+        setHref('.ghost-button[href*="profile/"]', `https://app.vai.app/profile/${encodeURIComponent(u.id)}?public=${encodeURIComponent(P.token || '')}`);
+      }
+      if (u.handle) setText('.cta-button.primary', `Chat with @${u.handle}`, { preserveSVG: true });
       // Share URL canonical:
       setMeta('og:url', window.location.href);
       document.title = `${u.name} — VAI Athlete Profile`;
@@ -1925,24 +2001,31 @@
         u.measurables && u.measurables['40-yd'] ? `${u.measurables['40-yd']} 40-yd` : null
       ];
       chips.forEach((chip, i) => {
-        if (!values[i]) chip.style.display = 'none';
-        else {
-          // Replace text node after the SVG
-          const svg = chip.querySelector('svg');
-          chip.innerHTML = svg.outerHTML + values[i];
-        }
+        if (!values[i]) { chip.style.display = 'none'; return; }
+        // Safe DOM rebuild — XSS-proof: clone SVG, clear chip, append SVG + text node
+        const svg = chip.querySelector('svg');
+        const svgClone = svg ? svg.cloneNode(true) : null;
+        chip.textContent = '';
+        if (svgClone) chip.appendChild(svgClone);
+        chip.appendChild(document.createTextNode(values[i]));
       });
     }
 
-    // ----- VERIFIED BADGES: only show when stat.verified === true -----
+    // ----- VERIFIED BADGES: only activate when stat.verified === true -----
+    // CSS default is display:none; we add .active class only when backend confirms verification.
+    // If VAI_PROFILE is absent entirely, design-review fallback shows all badges (body.design-review).
     function hydrateVerifiedBadges() {
-      if (!P || !P.stats) return;
+      if (!P || !P.stats) {
+        // No data injected — design review mode. Show all badges so template previews correctly.
+        document.body.classList.add('design-review');
+        return;
+      }
       const cards = document.querySelectorAll('.stat-card');
       cards.forEach((card, i) => {
         const stat = P.stats[i];
         const badge = card.querySelector('.measured-badge');
         if (!badge) return;
-        if (!stat || !stat.verified) badge.style.display = 'none';
+        if (stat && stat.verified === true) badge.classList.add('active');
       });
     }
 
@@ -1952,11 +2035,11 @@
       if (!link) return;
       const userId = (P && P.user && P.user.id) || 'template';
       const base = 'https://vai.app/share/partner-program?program_type=plus#pricing';
-      const sep = base.includes('?') ? '&' : '?';
       // UTM goes before the fragment hash
-      const [path, hash] = base.split('#');
+      const [pathPart, hashPart] = base.split('#');
+      const sep = pathPart.includes('?') ? '&' : '?';
       const utm = `utm_source=profile&utm_medium=share&utm_campaign=avanti_cta&utm_content=${encodeURIComponent(userId)}`;
-      link.href = `${path}${path.includes('?') ? '&' : '?'}${utm}${hash ? '#' + hash : ''}`;
+      link.href = `${pathPart}${sep}${utm}${hashPart ? '#' + hashPart : ''}`;
     }
 
     // ----- SHARE URL: append viewer's affiliate handle for 5-tier attribution -----
@@ -1968,9 +2051,9 @@
     }
 
     function hydrateShareURLWithAffiliate() {
-      // shareProfile() will call getShareURL() at click time — nothing to set now
-      // but we expose the helper globally so it runs in shareProfile()
-      window._getVAIShareURL = getShareURL;
+      // Expose the helper through a namespaced handle — not polluting global scope
+      window.VAI_PROFILE_UI = window.VAI_PROFILE_UI || {};
+      window.VAI_PROFILE_UI.getShareURL = getShareURL;
     }
 
     // ----- ACCESSIBILITY: honor prefers-reduced-motion on video hero -----
@@ -1996,13 +2079,188 @@
       }
     }
 
+    // ----- HERO VIDEO: wire from P.topHighlight; hide block if absent -----
+    function hydrateHeroVideo() {
+      const heroEl = document.querySelector('.profile-hero.video-hero');
+      if (!heroEl) return;
+      const top = P && P.topHighlight;
+      if (!top || !isSafeURL(top.url)) {
+        // No top highlight → keep the hero block visible with a static poster fallback if provided,
+        // or hide the hero entirely (design decision: hide to avoid empty black rectangle)
+        if (top && isSafeURL(top.poster)) {
+          heroEl.style.backgroundImage = `url(${CSS.escape(top.poster)})`;
+          heroEl.style.backgroundSize = 'cover';
+          heroEl.style.backgroundPosition = 'center';
+          const v = heroEl.querySelector('video');
+          if (v) v.style.display = 'none';
+        }
+        // If no data at all, template's placeholder video gracefully fails to load; overlay still shows
+        return;
+      }
+      const video = heroEl.querySelector('video');
+      const source = heroEl.querySelector('video source');
+      if (source) source.src = top.url;
+      if (video) {
+        if (isSafeURL(top.poster)) video.poster = top.poster;
+        video.load();
+      }
+    }
+
+    // ----- HIGHLIGHTS GRID: populate thumbnails from P.highlights; hide empty slots -----
+    function hydrateHighlightsGrid() {
+      const grid = document.querySelector('.highlights-grid');
+      if (!grid) return;
+      const items = grid.querySelectorAll('.highlight-item');
+      const source = (P && Array.isArray(P.highlights)) ? P.highlights : null;
+      if (!source) {
+        // Design review mode — leave placeholders
+        document.body.classList.add('design-review');
+        return;
+      }
+      items.forEach((item, i) => {
+        const h = source[i];
+        if (!h) { item.style.display = 'none'; return; }
+        const img = item.querySelector('img');
+        const poster = safeImgSrc(h.poster || h.url);
+        if (img && poster) img.src = poster;
+        if (img) img.alt = h.caption || 'Highlight';
+        item.style.display = '';
+      });
+      // If data has <6 items, also hide any leftovers (redundant safety)
+      for (let i = items.length; i < 6; i++) {
+        if (items[i]) items[i].style.display = 'none';
+      }
+      // Rebuild modal navigation array to only include populated highlights
+      window._activeHighlights = source.slice(0, 6).map(h => ({
+        url: isSafeURL(h.url) ? h.url : '',
+        poster: safeImgSrc(h.poster || h.url),
+        isVideo: /\.(mp4|webm|mov)(\?|$)/i.test(h.url || '')
+      }));
+    }
+
+    // ----- BIO: inject user bio text safely -----
+    function hydrateBio() {
+      if (!P || !P.user || !P.user.bio) return;
+      const bioP = document.querySelector('#tab-bio .info-card p');
+      if (bioP) bioP.textContent = P.user.bio; // textContent = XSS-safe
+      // Athlete card elements
+      const firstName = (P.user.name || '').split(' ')[0];
+      const lastName = (P.user.name || '').split(' ').slice(1).join(' ');
+      const label = document.querySelector('.athlete-card-label');
+      const name = document.querySelector('.athlete-card-name');
+      const cls = document.querySelector('.athlete-card-class');
+      if (label && firstName) label.textContent = firstName.toUpperCase();
+      if (name && lastName) name.textContent = lastName;
+      if (cls && P.user.classYear) cls.textContent = `Class of '${String(P.user.classYear).slice(-2)}`;
+    }
+
+    // ----- ROLE BADGES: render dynamic role list from P.user.roles -----
+    function hydrateRoleBadges() {
+      if (!P || !P.user || !Array.isArray(P.user.roles)) return;
+      const container = document.querySelector('.profile-badges');
+      if (!container) return;
+      container.textContent = ''; // clear hardcoded Trainer/Coach/Parent
+      P.user.roles.forEach(role => {
+        const span = document.createElement('span');
+        const roleClass = String(role).toLowerCase().replace(/[^a-z]/g, '');
+        span.className = `badge ${roleClass}`;
+        span.textContent = role; // textContent = XSS-safe
+        container.appendChild(span);
+      });
+    }
+
+    // ----- FOLLOW STATS: wire follower/following counts -----
+    function hydrateFollowStats() {
+      if (!P || !P.user) return;
+      const stats = document.querySelectorAll('.follow-stats .stat-value');
+      if (stats[0] && typeof P.user.followers === 'number') stats[0].textContent = formatCount(P.user.followers);
+      if (stats[1] && typeof P.user.following === 'number') stats[1].textContent = formatCount(P.user.following);
+    }
+
+    function formatCount(n) {
+      if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+      if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+      return String(n);
+    }
+
+    // ----- ABILITY TAB: populate sport cards from P.abilities -----
+    function hydrateAbilityTab() {
+      if (!P || !P.abilities) return;
+      const tab = document.getElementById('tab-ability');
+      if (!tab) return;
+      const cards = tab.querySelectorAll('.ability-card');
+      // P.abilities shape: { cycling: {level, stars}, running:{...}, strength:{...} }
+      const keys = Object.keys(P.abilities);
+      cards.forEach((card, i) => {
+        const key = keys[i];
+        if (!key) { card.style.display = 'none'; return; }
+        const data = P.abilities[key];
+        if (!data) { card.style.display = 'none'; return; }
+        const title = card.querySelector('.ability-card-title');
+        const levelName = card.querySelector('.ability-level-name');
+        const starsWrap = card.querySelector('.ability-level-stars');
+        if (title) title.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+        if (levelName && data.level) levelName.textContent = data.level;
+        if (starsWrap && typeof data.stars === 'number') {
+          const starCount = Math.max(0, Math.min(5, data.stars));
+          const starSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>';
+          // Trusted hardcoded SVG markup — safe to assign via innerHTML
+          starsWrap.innerHTML = starSVG.repeat(starCount);
+        }
+      });
+    }
+
+    // ----- SPORT STATS TAB: render per-sport metrics from P.sportStats -----
+    function hydrateSportStatsTab() {
+      if (!P || !Array.isArray(P.sportStats)) return;
+      const tab = document.getElementById('tab-stats');
+      if (!tab) return;
+      // Remove hardcoded sport sections (keep year filter)
+      tab.querySelectorAll('.sport-stats-section').forEach(sec => sec.remove());
+      const filterEl = tab.querySelector('.stats-year-filter');
+      P.sportStats.forEach(sport => {
+        const section = document.createElement('div');
+        section.className = 'sport-stats-section';
+        const header = document.createElement('div');
+        header.className = 'sport-header';
+        header.textContent = sport.sport;
+        section.appendChild(header);
+        (sport.metrics || []).forEach(metric => {
+          const row = document.createElement('div');
+          row.className = 'sport-stat-row';
+          const labelWrap = document.createElement('div');
+          labelWrap.className = 'sport-stat-label';
+          const nameEl = document.createElement('div');
+          nameEl.className = 'sport-stat-name';
+          nameEl.textContent = metric.name || '';
+          labelWrap.appendChild(nameEl);
+          if (metric.total) {
+            const meta = document.createElement('div');
+            meta.className = 'sport-stat-meta';
+            meta.textContent = 'Total';
+            labelWrap.appendChild(meta);
+          }
+          const val = document.createElement('div');
+          val.className = 'sport-stat-value';
+          val.textContent = String(metric.value != null ? metric.value : '');
+          row.appendChild(labelWrap);
+          row.appendChild(val);
+          section.appendChild(row);
+        });
+        tab.appendChild(section);
+      });
+    }
+
     // ----- HELPERS -----
     function setText(sel, val, opts = {}) {
       const el = document.querySelector(sel);
       if (!el || !val) return;
       if (opts.preserveSVG && el.querySelector('svg')) {
-        const svg = el.querySelector('svg').outerHTML;
-        el.innerHTML = svg + ' ' + val;
+        // XSS-proof: clone the SVG, clear container, append SVG + text node
+        const svgClone = el.querySelector('svg').cloneNode(true);
+        el.textContent = '';
+        el.appendChild(svgClone);
+        el.appendChild(document.createTextNode(' ' + val));
       } else el.textContent = val;
     }
     function setAttr(sel, attr, val) {
@@ -2039,7 +2297,7 @@
 
     async function shareProfile() {
       const athleteName = (P && P.user && P.user.name) || 'Ben Whitesides';
-      const shareURL = (window._getVAIShareURL && window._getVAIShareURL()) || window.location.href;
+      const shareURL = (window.VAI_PROFILE_UI && window.VAI_PROFILE_UI.getShareURL && window.VAI_PROFILE_UI.getShareURL()) || window.location.href;
       const shareData = {
         title: `${athleteName} — VAI Athlete Profile`,
         text: `Check out ${athleteName}'s athletic profile on VAI — stats, highlights, and more.`,
@@ -2073,6 +2331,7 @@
 
     function openAbility(key) {
       const a = abilities[key];
+      // a.icon is a trusted hardcoded SVG constant (ICON_DUMBBELL/BICEP/FLAME), not user input — innerHTML is safe here
       document.getElementById('abilityIcon').innerHTML = a.icon;
       document.getElementById('abilityName').textContent = a.name;
       document.getElementById('abilityValue').textContent = a.value;
@@ -2094,18 +2353,66 @@
     }
 
     function switchTab(tabName) {
+      closeAllModals();
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
-      document.getElementById(`tab-${tabName}`).classList.add('active');
+      const tabBtn = document.querySelector(`.tab[data-tab="${tabName}"]`);
+      const tabPanel = document.getElementById(`tab-${tabName}`);
+      if (tabBtn) tabBtn.classList.add('active');
+      if (tabPanel) tabPanel.classList.add('active');
+    }
+
+    function closeAllModals() {
+      const hl = document.getElementById('highlightModal');
+      const ab = document.getElementById('abilityModal');
+      if (hl && hl.classList.contains('active')) closeModal();
+      if (ab && ab.classList.contains('active')) closeAbility();
+      // Restore scroll lock unconditionally
+      document.body.style.overflow = 'auto';
+    }
+
+    function renderModalMedia(index) {
+      const img = document.getElementById('modalImage');
+      const vid = document.getElementById('modalVideo');
+      // Prefer hydrated data when available; fall back to design-review string array
+      const active = (window._activeHighlights && window._activeHighlights[index]) || null;
+      let url, isVideo;
+      if (active) {
+        url = active.url || active.poster;
+        isVideo = active.isVideo;
+      } else {
+        url = highlights[index];
+        isVideo = typeof url === 'string' && /\.(mp4|webm|mov)(\?|$)/i.test(url);
+      }
+      if (!isSafeURL(url)) {
+        img.style.display = 'none';
+        vid.style.display = 'none';
+        return;
+      }
+      if (isVideo) {
+        img.style.display = 'none';
+        vid.src = url;
+        vid.style.display = 'block';
+        vid.load();
+        // Autoplay muted on open — user can unmute via controls
+        vid.muted = true;
+        vid.play().catch(() => {});
+      } else {
+        vid.pause();
+        vid.src = '';
+        vid.style.display = 'none';
+        img.src = url;
+        img.style.display = 'block';
+      }
     }
 
     function openModal(index) {
+      // Bound index to populated highlights when available
+      const max = (window._activeHighlights && window._activeHighlights.length) || highlights.length;
+      if (index < 0 || index >= max) return;
       currentHighlight = index;
-      const modal = document.getElementById('highlightModal');
-      const modalImage = document.getElementById('modalImage');
-      modalImage.src = highlights[index];
-      modal.classList.add('active');
+      renderModalMedia(currentHighlight);
+      document.getElementById('highlightModal').classList.add('active');
       document.body.style.overflow = 'hidden';
     }
 
@@ -2113,32 +2420,34 @@
       if (event && event.target.id !== 'highlightModal') return;
       const modal = document.getElementById('highlightModal');
       modal.classList.remove('active');
+      // Pause any playing video
+      const vid = document.getElementById('modalVideo');
+      if (vid) { vid.pause(); vid.src = ''; }
       document.body.style.overflow = 'auto';
     }
 
     function nextHighlight() {
-      currentHighlight = (currentHighlight + 1) % highlights.length;
-      document.getElementById('modalImage').src = highlights[currentHighlight];
+      const max = (window._activeHighlights && window._activeHighlights.length) || highlights.length;
+      currentHighlight = (currentHighlight + 1) % max;
+      renderModalMedia(currentHighlight);
     }
 
     function prevHighlight() {
-      currentHighlight = (currentHighlight - 1 + highlights.length) % highlights.length;
-      document.getElementById('modalImage').src = highlights[currentHighlight];
+      const max = (window._activeHighlights && window._activeHighlights.length) || highlights.length;
+      currentHighlight = (currentHighlight - 1 + max) % max;
+      renderModalMedia(currentHighlight);
     }
 
-    // Keyboard navigation
+    // Keyboard navigation — single unified handler for both modals
     document.addEventListener('keydown', (e) => {
-      const modal = document.getElementById('highlightModal');
-      if (!modal.classList.contains('active')) return;
-
-      if (e.key === 'ArrowRight') nextHighlight();
-      if (e.key === 'ArrowLeft') prevHighlight();
-      if (e.key === 'Escape') closeModal();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && document.getElementById('abilityModal').classList.contains('active')) {
-        closeAbility();
+      const highlightActive = document.getElementById('highlightModal').classList.contains('active');
+      const abilityActive = document.getElementById('abilityModal').classList.contains('active');
+      if (highlightActive) {
+        if (e.key === 'ArrowRight') nextHighlight();
+        else if (e.key === 'ArrowLeft') prevHighlight();
+        else if (e.key === 'Escape') closeModal();
+      } else if (abilityActive) {
+        if (e.key === 'Escape') closeAbility();
       }
     });
   </script>

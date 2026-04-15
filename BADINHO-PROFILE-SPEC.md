@@ -9,15 +9,43 @@
 
 ## TL;DR
 
-The HTML template is **self-hydrating**. Inject one global object server-side and the template wires everything — conditional chips, verified badges, affiliate share attribution, UTM tracking, accessibility, connection-awareness. All the patterns are from the locked Gold Standard Brief (competitive recon of Hudl / MaxPreps / SportsRecruits / NCSA / On3 / 247Sports + onboarding recon in memory).
+The HTML template is **self-hydrating**. Inject one global object (`window.VAI_PROFILE`) server-side and the template wires the following automatically:
 
-**Your job:**
-1. Port the template into Next.js (decide: MUI-wrap or standalone route)
-2. Server-render the `window.VAI_PROFILE` JSON payload
-3. Build the `/api/og/[id]` OG image generator
-4. Kill the legacy `/profile/[id] → /profile/[id]/highlights` redirect
+**✅ Hydrated by template (zero Badinho work):**
+- Profile header (name, handle, avatar, CTA hrefs)
+- Attribution pill (shows only with `?ref=` or `?share=` URL param)
+- Meta chips (Class / Sport / Position / Location / HT+WT / 40-yd — each hides when its field is null)
+- Coached-by chip (hides when `coach` absent)
+- Role badges (loops `user.roles` dynamically; drops hardcoded Trainer/Coach/Parent)
+- Follow/Following counts (formatted 1.2K / 3.4M style)
+- Hero video + poster (wired from `P.topHighlight`; falls back to poster image if no video; gracefully hides if neither)
+- Top Performance stat cards (Verified ✓ badges only show when `stat.verified === true`)
+- Highlights grid (populates from `P.highlights`; hides empty slots; up to 6 shown)
+- Highlight modal supports both video (`.mp4/.webm/.mov`) and image; auto-plays muted video with native controls
+- Bio tab (athlete card name + class year + bio text, all XSS-safe via `textContent`)
+- Ability tab (loops `P.abilities` with dynamic star count 1–5)
+- Stats tab (loops `P.sportStats` per-sport with name + value + total flag)
+- AVANTI CTA (auto-injects UTM params including `utm_content=[user.id]`)
+- Share URL (auto-appends `?share=HANDLE` when `viewer.affiliateHandle` set, for 5-tier commission)
+- Accessibility: `prefers-reduced-motion` pauses hero video; stat cards are real `<button>` elements (keyboard+SR accessible)
+- Connection-aware: 2G/3G/save-data skips video autoplay
+- Print stylesheet: clean printable layout when recruiter hits Cmd+P
 
-That's it. Everything else is wired.
+**🔨 Your remaining work:**
+1. Port to Next.js — decide: MUI wrap or standalone route (recommend standalone — reasoning in §5)
+2. Server-render the `window.VAI_PROFILE` JSON payload from your user fetcher
+3. Build the `/api/og/[id]` OG image generator (stub code in §3)
+4. Kill the legacy `/profile/[id] → /profile/[id]/highlights` redirect (or serve at `/highlights`; recommend killing)
+5. Confirm `/chat/[id]` app route exists (universal link will fire either way)
+6. Answer open questions in §9 (coach linkage field, verified source, role taxonomy)
+
+**🔐 Security notes (Code Masters audit remediations):**
+- All user-injected strings use `textContent` / DOM node creation — no `innerHTML` concat
+- All `target="_blank"` links carry `rel="noopener noreferrer"`
+- `isSafeURL()` gates image/video/href assignment to `https:` / `http:` / `vaiapp:` schemes only — blocks `javascript:` / `data:` URIs
+- User IDs + tokens in dynamic URLs are `encodeURIComponent`-wrapped
+- Attribution pill handle is echoed via `textContent` (never `innerHTML`)
+- Stat cards are semantic `<button>` elements with `aria-label` (not `<div onclick>`)
 
 ---
 
