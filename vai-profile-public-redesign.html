@@ -489,13 +489,26 @@
       opacity: 0.95;
     }
 
-    /* STAT CARD AS BUTTON — reset native styling so it matches the card visual */
+    /* STAT CARD AS BUTTON — full reset of native button UA styles so it behaves identically to the original div.
+       Position: relative is critical so .measured-badge (absolute positioned) anchors to the card corner. */
     button.stat-card {
+      position: relative;
       font-family: inherit;
+      font-size: inherit;
+      font-weight: inherit;
       color: inherit;
       width: 100%;
+      margin: 0;
       text-align: center;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      line-height: inherit;
+      appearance: none;
+      -webkit-appearance: none;
     }
 
     button.stat-card:focus-visible {
@@ -1051,9 +1064,6 @@
 
     .measured-badge.active { display: inline-flex; }
 
-    /* Design-review fallback: when no VAI_PROFILE injected, show badges so template still looks complete on GitHub Pages */
-    .design-review .measured-badge { display: inline-flex; }
-
     /* COACHED-BY CREDENTIAL CHIP */
     .coached-by {
       display: inline-flex;
@@ -1275,7 +1285,6 @@
       border-radius: 12px;
     }
 
-    .design-review #modalImage { display: block !important; }
 
     .modal-close {
       position: absolute;
@@ -2015,11 +2024,7 @@
     // CSS default is display:none; we add .active class only when backend confirms verification.
     // If VAI_PROFILE is absent entirely, design-review fallback shows all badges (body.design-review).
     function hydrateVerifiedBadges() {
-      if (!P || !P.stats) {
-        // No data injected — design review mode. Show all badges so template previews correctly.
-        document.body.classList.add('design-review');
-        return;
-      }
+      if (!P || !P.stats) return; // no data = badges stay hidden (CSS default)
       const cards = document.querySelectorAll('.stat-card');
       cards.forEach((card, i) => {
         const stat = P.stats[i];
@@ -2112,11 +2117,7 @@
       if (!grid) return;
       const items = grid.querySelectorAll('.highlight-item');
       const source = (P && Array.isArray(P.highlights)) ? P.highlights : null;
-      if (!source) {
-        // Design review mode — leave placeholders
-        document.body.classList.add('design-review');
-        return;
-      }
+      if (!source) return; // design review mode — leave placeholders as-is
       items.forEach((item, i) => {
         const h = source[i];
         if (!h) { item.style.display = 'none'; return; }
