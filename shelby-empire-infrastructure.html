@@ -207,8 +207,8 @@
 graph TB
     subgraph Hardware["HARDWARE TIER"]
         Mac["Mac M4 Pro<br/>24GB RAM | ARM64<br/>LIVE"]
-        Garrison["Garrison VPS<br/>GCP | 40mo Runway<br/>4-Node Tailscale Mesh<br/>LIVE"]
-        Garrison2["Garrison 2<br/>Oracle Cloud | Failover<br/>Distributed Mesh<br/>LIVE"]
+        Garrison["Garrison 1 (G1)<br/>Oracle Cloud<br/>4-Node Tailscale Mesh<br/>LIVE"]
+        Garrison2["Garrison 2 (G2)<br/>Google Cloud | 40mo Runway<br/>Distributed Mesh<br/>LIVE"]
         Remote["Remote Containers<br/>NanoClaw Isolation<br/>LIVE"]
     end
 
@@ -248,20 +248,20 @@ graph TB
                 </div>
 
                 <div class="card">
-                    <h3>⚡ Garrison VPS (Primary)</h3>
-                    <p><strong>Provider:</strong> Google Cloud Platform<br/>
-                    <strong>Runway:</strong> 40 months<br/>
+                    <h3>⚡ Garrison 1 (G1) — Oracle Cloud</h3>
+                    <p><strong>Provider:</strong> Oracle Cloud Infrastructure<br/>
                     <strong>Network:</strong> 4-node Tailscale mesh<br/>
                     <strong>Status:</strong> <span class="status-live">● LIVE</span><br/>
-                    <strong>Role:</strong> Cron jobs, distributed compute, LiteLLM routing</p>
+                    <strong>Role:</strong> Cron jobs, distributed compute, infrastructure backbone</p>
                 </div>
 
                 <div class="card">
-                    <h3>⚡ Garrison 2 (Failover)</h3>
-                    <p><strong>Provider:</strong> Oracle Cloud Infrastructure<br/>
-                    <strong>Network:</strong> Tailscale mesh + ephemeral failover<br/>
+                    <h3>⚡ Garrison 2 (G2) — Google Cloud</h3>
+                    <p><strong>Provider:</strong> Google Cloud Platform<br/>
+                    <strong>Runway:</strong> 40 months<br/>
+                    <strong>Network:</strong> Tailscale mesh + failover routing<br/>
                     <strong>Status:</strong> <span class="status-live">● LIVE</span><br/>
-                    <strong>Role:</strong> Redundancy, failover routing, distributed resilience</p>
+                    <strong>Role:</strong> LiteLLM routing, secondary compute, resilience</p>
                 </div>
 
                 <div class="card">
@@ -547,7 +547,8 @@ graph TB
 
 ✓ HARDWARE TIER
   ✓ Mac M4 Pro (Primary)         LIVE   | Always-on, no sleep
-  ✓ Garrison VPS (Worker)        LIVE   | 40mo runway, ARM64
+  ✓ Garrison 1 (Oracle)          LIVE   | Infrastructure backbone, Tailscale mesh
+  ✓ Garrison 2 (GCP)             LIVE   | 40mo runway, secondary compute
   ✓ Ollama Inference             LIVE   | Gemma4, DeepSeek, Qwen
 
 ✓ AI BRAIN LAYER
