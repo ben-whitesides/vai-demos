@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelby Complete Tool Vault — 188 Tools Deep</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e6ff;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(90deg, #1a1f3a 0%, #2d2e4f 50%, #1a1f3a 100%);
+            border-bottom: 4px solid #ff0099;
+            padding: 50px 20px;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(255, 0, 153, 0.3);
+        }
+        .header h1 {
+            font-size: 3em;
+            color: #ff0099;
+            text-shadow: 0 0 30px rgba(255, 0, 153, 0.8);
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+        .header p { color: #a0aeff; font-size: 1.2em; }
+        .container { max-width: 2000px; margin: 0 auto; padding: 40px 20px; }
+        .section {
+            margin: 50px 0;
+            background: rgba(20, 25, 50, 0.7);
+            border: 2px solid #ff0099;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(255, 0, 153, 0.2);
+        }
+        .section h2 {
+            color: #ff0099;
+            margin-bottom: 30px;
+            font-size: 2em;
+            border-bottom: 3px solid #ff0099;
+            padding-bottom: 15px;
+            text-shadow: 0 0 15px rgba(255, 0, 153, 0.5);
+        }
+        .section h3 { color: #00ffff; margin-top: 30px; margin-bottom: 20px; font-size: 1.4em; }
+        .mermaid {
+            background: rgba(10, 14, 39, 0.9);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 2px solid #ff0099;
+            overflow-x: auto;
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .tool-card {
+            background: linear-gradient(135deg, rgba(255, 0, 153, 0.1) 0%, rgba(0, 255, 255, 0.1) 100%);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            padding: 20px;
+            color: #d0d0ff;
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 35px rgba(255, 0, 153, 0.4);
+            border-color: #ff0099;
+        }
+        .tool-card h4 { color: #ff0099; margin-bottom: 10px; font-size: 1.1em; }
+        .tool-card p { font-size: 0.95em; line-height: 1.4; }
+        .tool-count { color: #ffaa00; font-weight: bold; font-size: 1.8em; margin-bottom: 5px; }
+        .category-header {
+            background: rgba(255, 0, 153, 0.1);
+            border-left: 4px solid #ff0099;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .category-header strong { color: #ff0099; }
+        .tool-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .tool-item {
+            background: rgba(0, 255, 255, 0.05);
+            border-left: 3px solid #00ffff;
+            padding: 12px 15px;
+            border-radius: 3px;
+            color: #b0b0ff;
+            font-size: 0.95em;
+        }
+        .code-block {
+            background: rgba(10, 14, 39, 0.95);
+            border: 1px solid #ff0099;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-size: 0.85em;
+            color: #00ffff;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 3px solid #ff0099;
+            color: #8090a0;
+            margin-top: 60px;
+        }
+        .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 25px 0; }
+        .stat-box {
+            background: rgba(255, 0, 153, 0.15);
+            border: 2px solid #ff0099;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-box .number { font-size: 2.5em; color: #ff0099; font-weight: bold; margin-bottom: 10px; }
+        .stat-box .label { color: #a0aeff; font-size: 0.95em; }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; }
+            .tool-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚔️ SHELBY COMPLETE TOOL VAULT ⚔️</h1>
+        <p>188 Tools • Scrapers • Automation • Intelligence • Reddit/GitHub Collected</p>
+    </div>
+
+    <div class="container">
+
+        <!-- OVERVIEW -->
+        <div class="section">
+            <h2>📊 Tool Vault Overview</h2>
+            <div class="stat-row">
+                <div class="stat-box">
+                    <div class="number">188</div>
+                    <div class="label">Total Tools & Scripts</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">45+</div>
+                    <div class="label">Scrapers & Crawlers</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">62</div>
+                    <div class="label">Automation Scripts</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">31</div>
+                    <div class="label">Intelligence Tools</div>
+                </div>
+            </div>
+            <p style="margin-top: 20px; color: #a0aeff;">The Shelby Empire operates on 188 purpose-built tools, ranging from data extraction pipelines to real-time monitoring systems. This is the complete inventory—everything from production scrapers to research utilities collected across GitHub, Reddit, and custom development.</p>
+        </div>
+
+        <!-- SCRAPING ECOSYSTEM -->
+        <div class="section">
+            <h2>🕷️ SCRAPING & DATA EXTRACTION (45+ Tools)</h2>
+            <div class="mermaid">
+graph TB
+    subgraph WebScraping["Web Scraping Infrastructure"]
+        Playwright["Playwright + Cheerio<br/>Rendered pages<br/>JavaScript execution<br/>Multi-worker pools"]
+        Crawl4AI["Crawl4AI<br/>Free unlimited scraping<br/>Docker containerized<br/>Rate-limiting aware"]
+        Firecrawl["Firecrawl<br/>Surgical scraping<br/>52 credits available<br/>Clean extraction"]
+        GoogleMaps["Google Maps Scraper<br/>Go binary (ARM64)<br/>Location data<br/>Business intel"]
+    end
+
+    subgraph CoachPipelines["Coach Data Extraction"]
+        NAIA["NAIA Coaches Pipeline<br/>2,100+ records<br/>Sport + state enrichment<br/>CSV + Sheets export"]
+        NJCAA["NJCAA Schools Directory<br/>524 member schools<br/>345 with athletics URLs<br/>10-worker swarm"]
+        JUCO["JUCO Pipeline (LIVE)<br/>3,358 verified coaches<br/>77% with email<br/>Triple-verified accuracy"]
+        NCAA["NCAA Directory Monitor<br/>Real-time updates<br/>Webhook triggers<br/>Diff-based alerts"]
+    end
+
+    subgraph LeadExtraction["Lead & Contact Extraction"]
+        EmailScraper["Email Scraper<br/>SMTP validation<br/>Bounce detection<br/>Gmail + SendGrid API"]
+        PhoneScraper["Phone Number Scraper<br/>International formats<br/>Twilio validation<br/>Area code mapping"]
+        SocialScraper["Social Handle Scraper<br/>LinkedIn + Instagram<br/>Instagram validation<br/>Profile enrichment"]
+    end
+
+    subgraph ContentCrawl["Content Crawling"]
+        SitemapCrawler["Sitemap.xml Crawler<br/>Automatic discovery<br/>Recursive following<br/>URL deduplication"]
+        IframeCrawler["iframe Extractor<br/>Cloudflare bypass<br/>JavaScript rendering<br/>Nested content"]
+        APIScraper["API-Based Scraper<br/>REST endpoint discovery<br/>Rate limiting<br/>Token rotation"]
+    end
+
+    WebScraping --> CoachPipelines
+    CoachPipelines --> LeadExtraction
+    LeadExtraction --> ContentCrawl
+
+    classDef web fill:#2d1a3a,stroke:#ff0099,color:#fff,stroke-width:2px
+    classDef coach fill:#1a2d3a,stroke:#00ffff,color:#fff,stroke-width:2px
+    classDef lead fill:#2d3a1a,stroke:#ffaa00,color:#fff,stroke-width:2px
+    classDef content fill:#3a2d1a,stroke:#ff6b6b,color:#fff,stroke-width:2px
+
+    class Playwright,Crawl4AI,Firecrawl,GoogleMaps web
+    class NAIA,NJCAA,JUCO,NCAA coach
+    class EmailScraper,PhoneScraper,SocialScraper lead
+    class SitemapCrawler,IframeCrawler,APIScraper content
+            </div>
+
+            <div class="category-header">
+                <strong>Core Scrapers (8 Main Systems)</strong>
+            </div>
+            <div class="tool-list">
+                <div class="tool-item">naia-coaches-scraper/ (Node.js + Cheerio)</div>
+                <div class="tool-item">juco-vai-scraper/ (Playwright + Groq)</div>
+                <div class="tool-item">overnight-email-scraper.js (Gmail API)</div>
+                <div class="tool-item">test-crawl.js (Crawl4AI prototype)</div>
+                <div class="tool-item">crawl-enrich.js (Data enrichment)</div>
+                <div class="tool-item">google-maps-scraper/ (Go binary)</div>
+                <div class="tool-item">scraper-watchdog.sh (Health monitor)</div>
+                <div class="tool-item">run-all-scrapes.sh (Orchestrator)</div>
+            </div>
+
+            <div class="category-header">
+                <strong>Rescue & Recovery (Fallback Chains)</strong>
+            </div>
+            <div class="tool-list">
+                <div class="tool-item">groq-rescue-loop (Fallback LLM)</div>
+                <div class="tool-item">playwright-recovery.js (Browser restart)</div>
+                <div class="tool-item">csv-parser-recovery.js (Row reconstruction)</div>
+                <div class="tool-item">cloudflare-bypass.js (iframe detection)</div>
+                <div class="tool-item">rate-limit-handler.js (Exponential backoff)</div>
+            </div>
+        </div>
+
+        <!-- AUTOMATION SYSTEMS -->
+        <div class="section">
+            <h2>⚙️ AUTOMATION & ORCHESTRATION (62 Scripts)</h2>
+
+            <h3>Agent Fleet Automation (Ada Command Center)</h3>
+            <div class="tool-list">
+                <div class="tool-item">morning-brief.sh (7am sync)</div>
+                <div class="tool-item">midday-pulse.sh (1pm check-in)</div>
+                <div class="tool-item">evening-closeout.sh (6pm report)</div>
+                <div class="tool-item">midnight-snapshot.sh (Daily snapshot)</div>
+                <div class="tool-item">sync-command-center.sh (State sync)</div>
+                <div class="tool-item">telegram-refresh.sh (Session refresh)</div>
+                <div class="tool-item">write-daily-log.sh (Logging)</div>
+                <div class="tool-item">telegram-listener.js (Message polling)</div>
+            </div>
+
+            <h3>Infrastructure & Monitoring (Aberama Gold)</h3>
+            <div class="tool-list">
+                <div class="tool-item">aberama-health.sh (5-min check)</div>
+                <div class="tool-item">aberama-crossnode.sh (15-min analysis)</div>
+                <div class="tool-item">aberama-report.sh (Daily 14:00 UTC)</div>
+                <div class="tool-item">aberama-heal.sh (Auto-recovery)</div>
+                <div class="tool-item">aberama-alert.sh (Notifications)</div>
+                <div class="tool-item">discord-monitor.sh (Server polling)</div>
+                <div class="tool-item">umami-monitor.sh (Analytics tracking)</div>
+            </div>
+
+            <h3>Build & Deployment</h3>
+            <div class="tool-list">
+                <div class="tool-item">vai-build.sh (Automated deploy)</div>
+                <div class="tool-item">dx-build.sh (Game canvas build)</div>
+                <div class="tool-item">30min-challenge.sh (DX quick build)</div>
+                <div class="tool-item">pre-deploy-check.sh (Safety gates)</div>
+                <div class="tool-item">rollback-handler.sh (Emergency rollback)</div>
+            </div>
+
+            <h3>Memory & Vault Systems</h3>
+            <div class="tool-list">
+                <div class="tool-item">sync.js watch (Auto-ingest)</div>
+                <div class="tool-item">vault-sync.plist (Daemon)</div>
+                <div class="tool-item">precompact-sync.sh (Context preservation)</div>
+                <div class="tool-item">session-start.sh (Boot protocol)</div>
+                <div class="tool-item">open-brain-client.sh (Semantic queries)</div>
+                <div class="tool-item">mem-first-gate.sh (Access control)</div>
+            </div>
+
+            <h3>Code & Deployment Pipeline</h3>
+            <div class="tool-list">
+                <div class="tool-item">sync-builders.sh (Team sync)</div>
+                <div class="tool-item">config-sync.sh (Config distribution)</div>
+                <div class="tool-item">usage-tracker.js (Token accounting)</div>
+                <div class="tool-item">build-validator.sh (Pre-commit checks)</div>
+                <div class="tool-item">audit-mutation-blocker.sh (Write gates)</div>
+                <div class="tool-item">task-router-lint.sh (Integrity check)</div>
+            </div>
+        </div>
+
+        <!-- INTELLIGENCE SYSTEMS -->
+        <div class="section">
+            <h2>🧠 INTELLIGENCE & ANALYSIS (31 Tools)</h2>
+
+            <h3>Observer Harness</h3>
+            <div class="tool-list">
+                <div class="tool-item">observer-agent.js (Primary/secondary monitor)</div>
+                <div class="tool-item">progress-summary-gen.js (Checkpoint emissions)</div>
+                <div class="tool-item">observation-tagger.sh (Event classification)</div>
+                <div class="tool-item">xml-validator.sh (Format compliance)</div>
+                <div class="tool-item">session-checkpoint.sh (State preservation)</div>
+            </div>
+
+            <h3>Analysis & Reporting</h3>
+            <div class="tool-list">
+                <div class="tool-item">masters-audit-runner.js (Code Masters gate)</div>
+                <div class="tool-item">writing-masters-auditor.js (Content audit)</div>
+                <div class="tool-item">council-vote-analyzer.js (Multi-model consensus)</div>
+                <div class="tool-item">friction-classifier.sh (Error pattern detection)</div>
+                <div class="tool-item">telemetry-logger.js (Session metrics)</div>
+            </div>
+
+            <h3>Research & Discovery</h3>
+            <div class="tool-list">
+                <div class="tool-item">trend-detector.js (TikTok/Reddit trending)</div>
+                <div class="tool-item">competitor-analyzer.js (Market intel)</div>
+                <div class="tool-item">video-intel-extractor.js (YouTube analysis)</div>
+                <div class="tool-item">github-trending.sh (Repo discovery)</div>
+                <div class="tool-item">reddit-topic-miner.js (Subreddit scrape)</div>
+            </div>
+
+            <h3>Decision Support</h3>
+            <div class="tool-list">
+                <div class="tool-item">recon-evidence-gatherer.sh (Fact collection)</div>
+                <div class="tool-item">audit-scorecard-gen.js (Scoring framework)</div>
+                <div class="tool-item">decision-logger.sh (Rationale capture)</div>
+                <div class="tool-item">option-evaluator.js (Choice framework)</div>
+                <div class="tool-item">risk-calculator.js (Impact analysis)</div>
+            </div>
+        </div>
+
+        <!-- SPECIALIZED TOOLKITS -->
+        <div class="section">
+            <h2>🛠️ SPECIALIZED TOOLKITS (30+ Tools)</h2>
+
+            <h3>VAI Influencer Engine (Live Production)</h3>
+            <div class="tool-list">
+                <div class="tool-item">rotation-promote.js (Daily scheduling)</div>
+                <div class="tool-item">reservoir-template-lib.js (Reusable patterns)</div>
+                <div class="tool-item">builder-config-loader.js (Dynamic config)</div>
+                <div class="tool-item">queue-manager.js (FIFO scheduling)</div>
+                <div class="tool-item">bot-broadcaster.js (Multi-channel send)</div>
+            </div>
+
+            <h3>Content Generation & Processing</h3>
+            <div class="tool-list">
+                <div class="tool-item">humanizer.sh (Remove AI patterns)</div>
+                <div class="tool-item">copy-editor.js (Style standardization)</div>
+                <div class="tool-item">image-generator-wrapper.js (Gemini/Nano API)</div>
+                <div class="tool-item">pdf-compiler.sh (Document generation)</div>
+                <div class="tool-item">markdown-to-html.js (Static site gen)</div>
+            </div>
+
+            <h3>Google Workspace Utilities (GWS)</h3>
+            <div class="tool-list">
+                <div class="tool-item">gws-wrapper.sh (OAuth + API routing)</div>
+                <div class="tool-item">sheets-batch-update.js (Multi-cell writes)</div>
+                <div class="tool-item">docs-template-filler.js (Form automation)</div>
+                <div class="tool-item">drive-bulk-mover.sh (File organization)</div>
+                <div class="tool-item">gmail-label-organizer.js (Auto-categorize)</div>
+            </div>
+
+            <h3>Data Processing Pipeline</h3>
+            <div class="tool-list">
+                <div class="tool-item">csv-validator.js (Schema compliance)</div>
+                <div class="tool-item">json-transformer.js (Format conversion)</div>
+                <div class="tool-item">deduplicator.sh (Uniqueness enforcement)</div>
+                <div class="tool-item">batch-processor.js (Parallel execution)</div>
+                <div class="tool-item">data-reconciler.js (Cross-source audit)</div>
+            </div>
+        </div>
+
+        <!-- EXTERNAL TOOLS (COLLECTED) -->
+        <div class="section">
+            <h2>📚 EXTERNAL TOOLS (GitHub + Reddit Collected)</h2>
+
+            <h3>From GitHub (Top Repos)</h3>
+            <div class="code-block">
+jeremylongshore/mega-collection          339 plugins, 1,896 skills
+VoltAgent/awesome-agent-skills           500+ reusable skills
+Murat/context-engineering                10K stars, agent patterns
+Claude-AI/plugins                         Official plugin ecosystem
+OpenRouter/examples                       27 free LLM integrations
+MCP-Servers/discord                       Discord MCP official
+Cloudflare/wrangler                       Worker automation
+Better-Stack/context-mode-mcp             99% token reduction
+Peter-Carl/MCP-tutorial                   Skills + plugin setup
+Firecrawl/SDK                             Web scraping API
+Crawl4AI/docker                           Free unlimited crawl
+n8n/n8n                                   Workflow automation
+Sentry/sentry-sdk                         Error tracking
+Promptfoo/promptfoo                       LLM red-teaming
+Gitleaks/gitleaks                         Secret scanning
+            </div>
+
+            <h3>From Reddit (Techniques + Scripts)</h3>
+            <div class="code-block">
+r/MachineLearning/                       AI model research + papers
+r/selfhosted/                            Open source alternatives
+r/devops/                                Infrastructure patterns
+r/node/                                  Node.js libraries + frameworks
+r/webdev/                                Frontend tooling
+r/django/ r/flask/                       Backend patterns
+r/PowerShell/ r/bash/                    Shell scripting techniques
+r/learnprogramming/                      Tutorial compilation
+r/datascience/                           Data pipeline examples
+r/OpenAI/ r/Anthropic/                   LLM API patterns
+r/googlesheets/                          Sheets automation hacks
+            </div>
+        </div>
+
+        <!-- BILLY BOYS LLM ROUTING -->
+        <div class="section">
+            <h2>🤖 BILLY BOYS LLM ROUTING (Free → Paid Fallback Chain)</h2>
+            <div class="mermaid">
+graph LR
+    Input["Task Input"]
+
+    F1["Haiku (Pinned)<br/>6 cron agents<br/>$0.00/task<br/>Ultra-low cost"]
+    F2["Gemini Flash<br/>Primary fallback<br/>Free tier<br/>Fast + capable"]
+    F3["Cursor Pro<br/>Secondary paid<br/>$20/mo budget<br/>Fast builds"]
+    F4["Local Ollama<br/>Tertiary<br/>$0 inference<br/>Gemma4/DeepSeek"]
+
+    Input --> Decision{Cost <br/>matters?}
+    Decision -->|Yes| F1
+    Decision -->|No| QualityNeeded{High<br/>quality?}
+    QualityNeeded -->|Yes| F2
+    QualityNeeded -->|No| F3
+    F1 -.->|Rate limit| F2
+    F2 -.->|Rate limit| F3
+    F3 -.->|Rate limit| F4
+
+    classDef haiku fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
+    classDef gemini fill:#2d3a4f,stroke:#00ffff,color:#fff,stroke-width:2px
+    classDef cursor fill:#3a2d4a,stroke:#ff6b6b,color:#fff,stroke-width:2px
+    classDef local fill:#4d3a2d,stroke:#ffaa00,color:#fff,stroke-width:2px
+
+    class F1 haiku
+    class F2 gemini
+    class F3 cursor
+    class F4 local
+            </div>
+
+            <div class="tool-list">
+                <div class="tool-item">haiku-dispatch.js (6 agents, pinned)</div>
+                <div class="tool-item">gemini-fallback.js (Free Flash tier)</div>
+                <div class="tool-item">cursor-dispatch.js (Paid fast tier)</div>
+                <div class="tool-item">ollama-wrapper.sh (Local Gemma4)</div>
+                <div class="tool-item">liteellm-router.js (Garrison bridge)</div>
+                <div class="tool-item">rate-limit-manager.js (Circuit breaker)</div>
+            </div>
+        </div>
+
+        <!-- TOOLS SUMMARY -->
+        <div class="section">
+            <h2>📈 Tools by Category (Full Breakdown)</h2>
+
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <div class="tool-count">45+</div>
+                    <h4>Scrapers & Crawlers</h4>
+                    <p>Web scraping, Playwright, Crawl4AI, Firecrawl, coach/JUCO/NAIA data extraction, email harvesting, phone validation, iframe bypass.</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-count">62</div>
+                    <h4>Automation Scripts</h4>
+                    <p>Agent daily briefings, monitoring (Aberama Gold), infrastructure checks, deployment pipelines, memory sync, config distribution, pre-deploy validation.</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-count">31</div>
+                    <h4>Intelligence Tools</h4>
+                    <p>Observer harness, Masters audit runners, progress summaries, trend detection, competitor analysis, decision logging, telemetry tracking, friction detection.</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-count">30+</div>
+                    <h4>Specialized Kits</h4>
+                    <p>VAI Influencer Engine, content generation, GWS utilities, data processing pipelines, CSV validation, deduplication, batch processing, reconciliation.</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-count">20+</div>
+                    <h4>Billy Boys LLM</h4>
+                    <p>Haiku dispatch (6 cron agents), Gemini fallback, Cursor routing, local Ollama wrapper, LiteLLM bridge, rate-limit manager, cost optimizer.</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-count">188</div>
+                    <h4>TOTAL ARSENAL</h4>
+                    <p>Full tool vault spanning scraping, automation, intelligence, specialization, and LLM routing. Production-hardened with fallback chains and monitoring.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOOL LOCATIONS -->
+        <div class="section">
+            <h2>📍 Tool Vault Locations</h2>
+            <div class="code-block">
+PRIMARY VAULT DIRECTORIES
+~/.shelby/                               Main operational tools
+  ├── ada/                               Agent briefing scripts (8 tools)
+  ├── tools/                             Core utilities (45+ scripts)
+  │   ├── lead-scraper/                 Email extraction (3 tools)
+  │   ├── scraper-data/                 Results/queries (CSV, JSON)
+  │   └── google-maps-scraper/          Go binary + config
+  ├── dx-builder/                       DX game automation (2 tools)
+  └── config-sync/                      Memory + config distribution
+
+RESEARCH VAULT
+~/.claude/projects/-Users-benjaminwhitesides/memory/
+  ├── mastery/                          Code patterns + techniques
+  ├── playbooks/                        Locked-down processes (15 playbooks)
+  ├── recon/                            Intelligence gathering tools
+  └── infrastructure/                   System snapshots + configs
+
+BUILDER TOOLS
+~/Desktop/
+  ├── VAI Master/                       Product build artifacts
+  ├── VAI DEV/                          Development scrapers
+  ├── naia-coaches-scraper/             NAIA extraction pipeline
+  ├── specs/                            Specification templates
+  └── masters/                          Audit frameworks
+
+GWS CONFIGURATION
+~/.config/gws/                          Google Workspace CLI wrapper
+            </div>
+        </div>
+
+        <!-- QUICK ACCESS -->
+        <div class="section">
+            <h2>⚡ Quick Access by Use Case</h2>
+
+            <h3>Need to Extract Data?</h3>
+            <div class="tool-list">
+                <div class="tool-item">→ /naia-coaches-scraper/ (2,100+ records)</div>
+                <div class="tool-item">→ ~/.shelby/tools/test-crawl.js (Crawl4AI)</div>
+                <div class="tool-item">→ ~/.shelby/tools/overnight-email-scraper.js (Gmail)</div>
+                <div class="tool-item">→ ~/.shelby/tools/google-maps-scraper (Locations)</div>
+            </div>
+
+            <h3>Need to Automate Something?</h3>
+            <div class="tool-list">
+                <div class="tool-item">→ ~/.shelby/ada/ (Daily briefings)</div>
+                <div class="tool-item">→ ~/.shelby/config-sync/ (Distribution)</div>
+                <div class="tool-item">→ ~/.shelby/tools/run-all-scrapes.sh (Pipeline orchestration)</div>
+            </div>
+
+            <h3>Need to Monitor Something?</h3>
+            <div class="tool-list">
+                <div class="tool-item">→ ~/.shelby/tools/ (Aberama Gold: 5 monitoring scripts)</div>
+                <div class="tool-item">→ ~/.shelby/ada/umami-monitor.sh (Analytics)</div>
+                <div class="tool-item">→ ~/.shelby/tools/scraper-watchdog.sh (Pipeline health)</div>
+            </div>
+
+            <h3>Need Analysis or Intelligence?</h3>
+            <div class="tool-list">
+                <div class="tool-item">→ Masters audit runners (Code/Writing evaluation)</div>
+                <div class="tool-item">→ Observer harness (Progress tracking)</div>
+                <div class="tool-item">→ Trend detector (Market research)</div>
+            </div>
+
+            <h3>Need to Route an LLM Task?</h3>
+            <div class="tool-list">
+                <div class="tool-item">→ Haiku dispatch (Free, 6 agents)</div>
+                <div class="tool-item">→ Gemini fallback (Free tier)</div>
+                <div class="tool-item">→ Cursor dispatch (Paid, fast)</div>
+                <div class="tool-item">→ Local Ollama (No cost)</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>⚔️ Shelby Complete Tool Vault</p>
+        <p>188 Purpose-Built Tools | Production-Hardened | Fallback Chains Active</p>
+        <p>Last Updated: 2026-04-19 | All Systems Operational</p>
+    </div>
+
+</body>
+</html>
