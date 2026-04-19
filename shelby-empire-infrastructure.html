@@ -208,6 +208,7 @@ graph TB
     subgraph Hardware["HARDWARE TIER"]
         Mac["Mac M4 Pro<br/>24GB RAM | ARM64<br/>LIVE"]
         Garrison["Garrison VPS<br/>GCP | 40mo Runway<br/>4-Node Tailscale Mesh<br/>LIVE"]
+        Garrison2["Garrison 2<br/>Oracle Cloud | Failover<br/>Distributed Mesh<br/>LIVE"]
         Remote["Remote Containers<br/>NanoClaw Isolation<br/>LIVE"]
     end
 
@@ -225,12 +226,14 @@ graph TB
     Mac --> Docker
     Garrison --> Tailscale
     Garrison --> VPN
+    Garrison2 --> Tailscale
+    Garrison2 --> VPN
     Remote --> Tailscale
 
     classDef live fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
     classDef infra fill:#1a3a3a,stroke:#2d5f4f,color:#c0d0ff,stroke-width:1px
 
-    class Mac,Garrison,Remote live
+    class Mac,Garrison,Garrison2,Remote live
     class Ollama,Docker,Tailscale,VPN infra
             </div>
 
@@ -245,12 +248,20 @@ graph TB
                 </div>
 
                 <div class="card">
-                    <h3>⚡ Garrison VPS (Worker Node)</h3>
+                    <h3>⚡ Garrison VPS (Primary)</h3>
                     <p><strong>Provider:</strong> Google Cloud Platform<br/>
                     <strong>Runway:</strong> 40 months<br/>
                     <strong>Network:</strong> 4-node Tailscale mesh<br/>
                     <strong>Status:</strong> <span class="status-live">● LIVE</span><br/>
                     <strong>Role:</strong> Cron jobs, distributed compute, LiteLLM routing</p>
+                </div>
+
+                <div class="card">
+                    <h3>⚡ Garrison 2 (Failover)</h3>
+                    <p><strong>Provider:</strong> Oracle Cloud Infrastructure<br/>
+                    <strong>Network:</strong> Tailscale mesh + ephemeral failover<br/>
+                    <strong>Status:</strong> <span class="status-live">● LIVE</span><br/>
+                    <strong>Role:</strong> Redundancy, failover routing, distributed resilience</p>
                 </div>
 
                 <div class="card">
