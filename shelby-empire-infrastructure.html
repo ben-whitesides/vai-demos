@@ -293,8 +293,8 @@ graph TB
 
     subgraph FallbackChain["FALLBACK CHAINS (LiteLLM)"]
         Router["LiteLLM Router<br/>Cost-Aware Dispatch<br/>Distributed Routing"]
-        F1["Primary: DeepSeek V4<br/>$0.03/1M Input"]
-        F2["Secondary: Gemini Flash<br/>Free"]
+        F1["Primary: Gemini Flash<br/>Free"]
+        F2["Secondary: DeepSeek V4<br/>$0.03/1M Input"]
         F3["Tertiary: Groq Llama<br/>$0.10/1M Input"]
     end
 
@@ -349,12 +349,12 @@ graph TB
 
             <div class="code-block">LiteLLM Cost Optimization Pattern:
 → Audit/Research = GPT-5.4 only ($0.05)
-→ Bulk content = Gemma 4 26B ($0.003)
-→ Simple transforms = DeepSeek V4 (free on Billy Boys)
+→ Bulk content = Gemini Flash (free tier primary)
+→ Content gen = Gemma 4 26B ($0.003)
 → Logic puzzles = DeepSeek R1 (free local)
 → Grunt work = Qwen 3 (free local)
 
-Result: 60% reduction in "redo it" cycles. $0 daily LLM spend for X bot.</div>
+Result: 60% reduction in "redo it" cycles. $0 daily LLM spend for most workloads.</div>
         </div>
 
         <!-- AGENT FLEET -->
