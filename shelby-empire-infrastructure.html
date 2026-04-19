@@ -217,8 +217,8 @@ graph TB
     end
 
     subgraph Network["NETWORK MESH"]
-        Tailscale["Tailscale<br/>100.86.238.83<br/>Decentralized Control"]
-        VPN["Public IP Rotation<br/>129.146.135.60<br/>Ephemeral Gate"]
+        Tailscale["Tailscale<br/>Decentralized Control<br/>Private Mesh"]
+        VPN["Public IP Rotation<br/>Ephemeral Gateway<br/>Failover Ready"]
     end
 
     Mac --> Ollama
@@ -281,7 +281,7 @@ graph TB
     end
 
     subgraph FallbackChain["FALLBACK CHAINS (LiteLLM)"]
-        Router["LiteLLM Router<br/>Cost-Aware Dispatch<br/>Garrison:7861"]
+        Router["LiteLLM Router<br/>Cost-Aware Dispatch<br/>Distributed Routing"]
         F1["Primary: DeepSeek V4<br/>$0.03/1M Input"]
         F2["Secondary: Gemini Flash<br/>Free"]
         F3["Tertiary: Groq Llama<br/>$0.10/1M Input"]
