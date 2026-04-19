@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tommy 4.1 Enforcement Architecture</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e6ff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #1a1f3a 0%, #2d2e4f 50%, #1a1f3a 100%);
+            border-bottom: 3px solid #ff6b6b;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(255, 107, 107, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 107, 107, 0.1), transparent);
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: #a0aeff;
+            font-size: 1.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            margin: 40px 0;
+            background: rgba(20, 25, 50, 0.6);
+            border: 2px solid #4d2f2f;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(255, 107, 107, 0.15);
+        }
+
+        .section h2 {
+            color: #ff6b6b;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #ff6b6b;
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+        }
+
+        .mermaid {
+            background: rgba(10, 14, 39, 0.8);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid #4d2f2f;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: rgba(77, 47, 47, 0.2);
+            border: 1px solid #ff6b6b;
+            border-radius: 6px;
+            padding: 20px;
+            color: #c0d0ff;
+        }
+
+        .card h3 {
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .card p {
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .code-block {
+            background: rgba(10, 14, 39, 0.9);
+            border: 1px solid #4d2f2f;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-size: 0.9em;
+            color: #ff9999;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 2px solid #4d2f2f;
+            color: #8090a0;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚔️ TOMMY 4.1 ENFORCEMENT ARCHITECTURE ⚔️</h1>
+        <p>Non-Bypass Gatekeeper | Three-Phase Audit Orchestration | Mutation Blocker | Masters Code Gate</p>
+    </div>
+
+    <div class="container">
+
+        <!-- 7-STATE WORKFLOW -->
+        <div class="section">
+            <h2>🔄 TOMMY 4.1 — 7-STATE WORKFLOW</h2>
+            <div class="mermaid">
+graph LR
+    Start["🚀 START<br/>Spec Submitted"]
+    Approved["✅ SPEC_APPROVED<br/>Masters Audit Pass<br/>All Axes ≥8.0"]
+    InProg["⏳ IN_PROGRESS<br/>Build Phase Active<br/>Hooks Enforcing"]
+    AuditPass["🎯 AUDIT_PASSED<br/>Independent Verdict<br/>Evidence Chain Complete"]
+    Complete["✨ BUILD_COMPLETE<br/>Ready for Deployment<br/>Attestation Sealed"]
+    Blocked["🛑 BLOCKED<br/>Audit Failed<br/>Findings Documented"]
+    Remediate["🔧 REMEDIATE<br/>Fixes Applied<br/>Re-audit Triggered"]
+
+    Start -->|Spec Quality Check| Approved
+    Approved -->|Build Begins| InProg
+    InProg -->|Audit Evidence| AuditPass
+    AuditPass -->|All Tests Pass| Complete
+    InProg -->|Blocker Found| Blocked
+    Blocked -->|Findings Addressed| Remediate
+    Remediate -->|Re-audit Pass| AuditPass
+
+    classDef initial fill:#1a3a2e,stroke:#ff6b6b,color:#fff,stroke-width:2px
+    classDef approved fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
+    classDef active fill:#2d3a4f,stroke:#4d7f8f,color:#c0d0ff,stroke-width:2px
+    classDef passed fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
+    classDef complete fill:#1a3a2e,stroke:#ff6b6b,color:#fff,stroke-width:2px
+    classDef blocked fill:#4d0a0a,stroke:#ff3333,color:#fff,stroke-width:2px
+
+    class Start initial
+    class Approved approved
+    class InProg active
+    class AuditPass passed
+    class Complete complete
+    class Blocked blocked
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>📋 SPEC_APPROVED</h3>
+                    <p>Specification passes independent Masters audit on all three axes (Security, Logic, Quality). Threshold: ≥8.0 on each axis, no averaging.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🔨 IN_PROGRESS</h3>
+                    <p>Build phase is active. PreToolUse hooks are live. Mutation blocker enforces verified-PASS gate. Evidence files accumulating.</p>
+                </div>
+
+                <div class="card">
+                    <h3>✅ AUDIT_PASSED</h3>
+                    <p>Independent audit phase complete. Attestation chain intact. JSON evidence contracts signed. Ready for deployment gate.</p>
+                </div>
+
+                <div class="card">
+                    <h3>✨ BUILD_COMPLETE</h3>
+                    <p>All three phases (Recon/Verify/Executor) passed. No blockers. Marker file sealed. Build locked and deployable.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🛑 BLOCKED</h3>
+                    <p>Audit returned findings. Build halted. No writes permitted. Findings documented with line citations.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🔧 REMEDIATE</h3>
+                    <p>Fixes applied to address audit findings. Evidence re-collected. Re-audit triggered. Loop until AUDIT_PASSED.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- THREE-PHASE AUDIT ORCHESTRATOR -->
+        <div class="section">
+            <h2>🎭 THREE-PHASE AUDIT ORCHESTRATOR</h2>
+            <div class="mermaid">
+graph TB
+    Input["Issue Report<br/>or Task"]
+
+    subgraph ReconPhase["PHASE 1: RECON (Read-Only)"]
+        R1["Read/Glob/Grep<br/>Git Queries<br/>Bash Snapshots"]
+    end
+
+    subgraph VerifyPhase["PHASE 2: VERIFY (Cross-Check)"]
+        V1["Load Evidence JSON<br/>Cross-Check Claims<br/>Flag CHANGED vs VERIFIED"]
+    end
+
+    subgraph ExecutorPhase["PHASE 3: EXECUTOR (Write)"]
+        E1["Check verified-PASS<br/>Execute Fixes<br/>Seal Attestation"]
+    end
+
+    Input --> ReconPhase
+    ReconPhase -->|JSON Contract| VerifyPhase
+    VerifyPhase -->|overall_status| Decision{"PASS?"}
+    Decision -->|YES| ExecutorPhase
+    Decision -->|NO| Blocked["🛑 BLOCKED<br/>Return Findings"]
+    ExecutorPhase --> Complete["✅ COMPLETE<br/>Evidence Sealed"]
+
+    classDef recon fill:#2d4a3a,stroke:#ffaa00,color:#c0d0ff,stroke-width:2px
+    classDef verify fill:#3a2d4a,stroke:#ff6b6b,color:#c0d0ff,stroke-width:2px
+    classDef executor fill:#2d3a4a,stroke:#00ff88,color:#c0d0ff,stroke-width:2px
+
+    class ReconPhase,R1 recon
+    class VerifyPhase,V1 verify
+    class ExecutorPhase,E1 executor
+            </div>
+
+            <div class="code-block">PHASE CONTRACT EXCHANGE:
+
+Phase 1 Output: recon-{timestamp}.json
+{
+  "phase": "recon",
+  "evidence": [
+    {"type": "file_read", "path": "/path/file", "hash": "sha256:..."},
+    {"type": "grep_result", "pattern": "X", "matches": [...]}
+  ],
+  "claims": ["Root cause: X", "State: Y"]
+}
+
+Phase 2 Verdict: verified-{timestamp}.json
+{
+  "overall_status": "PASS" | "FAIL",
+  "verified": ["Root cause VERIFIED"],
+  "changed": ["State CHANGED: expected Y, found Z"],
+  "findings": [{"blocker": "X", "line": 123, "fix": "..."}]
+}
+
+Phase 3 Only Runs If Phase 2 = PASS
+            </div>
+        </div>
+
+        <!-- MUTATION BLOCKER HOOK -->
+        <div class="section">
+            <h2>🔐 MUTATION BLOCKER HOOK (PreToolUse)</h2>
+            <div class="mermaid">
+graph TB
+    Tool["Tool Call<br/>Edit/Write/Bash"]
+    Hook["PreToolUse Hook<br/>Intercept"]
+    Check1{"verified-*.json<br/>exists?"}
+    Check2{"overall_status<br/>= PASS?"}
+    Allow["✅ ALLOW<br/>Tool Executes"]
+    Block["🛑 BLOCK<br/>Log Attempt"]
+
+    Tool --> Hook
+    Hook --> Check1
+    Check1 -->|NO| Block
+    Check1 -->|YES| Check2
+    Check2 -->|NO| Block
+    Check2 -->|YES| Allow
+    Block --> Log["mutation-audit.jsonl"]
+    Allow --> Exec["Mutation Approved"]
+
+    classDef hook fill:#4d0a0a,stroke:#ff3333,color:#fff,stroke-width:2px
+    classDef allow fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
+
+    class Hook,Block hook
+    class Allow,Exec allow
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>🚫 Block Condition</h3>
+                    <p>Edit/Write/Bash blocked unless verified-PASS marker exists. Zero backdoors. Atomic enforcement.</p>
+                </div>
+
+                <div class="card">
+                    <h3>📋 Mutation Log</h3>
+                    <p>All blocked attempts logged to mutation-audit.jsonl. Forensic trail. Timestamp, tool, args, reason.</p>
+                </div>
+
+                <div class="card">
+                    <h3>✅ Allow Condition</h3>
+                    <p>Tool executes only after Verify returns PASS. Evidence file is authoritative.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MASTERS CODE GATE -->
+        <div class="section">
+            <h2>🎯 MASTERS CODE GATE INTEGRATION</h2>
+            <div class="mermaid">
+graph LR
+    Spec["Masters Audit<br/>Security/Logic/Quality"]
+    Pass{"All ≥8.0?"}
+    Create["Create Marker<br/>state: SPEC_APPROVED"]
+    Build["Build Phase<br/>IN_PROGRESS"]
+    Audit["Audit Collection<br/>3-Phase Process"]
+    Check["Verdict<br/>PASS/FAIL"]
+    Update["Update Marker<br/>AUDIT_PASSED"]
+    Deploy["🚀 Deploy Unlocked"]
+    Fail["BLOCKED<br/>Remediate"]
+
+    Spec --> Pass
+    Pass -->|YES| Create
+    Pass -->|NO| Fail
+    Create --> Build
+    Build --> Audit
+    Audit --> Check
+    Check -->|PASS| Update
+    Check -->|FAIL| Fail
+    Fail -->|Fixed| Audit
+    Update --> Deploy
+
+    classDef gate fill:#2d4a3a,stroke:#ff6b6b,color:#c0d0ff,stroke-width:2px
+    classDef deploy fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
+
+    class Spec,Create,Build,Update gate
+    class Deploy deploy
+            </div>
+
+            <div class="code-block">MARKER FILE STATES:
+
+/tmp/.masters-code-gate-20260419.marker
+
+State 1: SPEC_APPROVED
+→ Masters PASS (all axes ≥8.0)
+→ Build begins
+→ Hooks ARMED
+
+State 2: IN_PROGRESS
+→ Build phase active
+→ Evidence collecting
+→ Mutations locked
+
+State 3: AUDIT_PASSED
+→ Independent audit done
+→ All findings resolved
+→ Deploy gate UNLOCKED
+            </div>
+        </div>
+
+        <!-- ENFORCEMENT SUMMARY -->
+        <div class="section">
+            <h2>📊 ENFORCEMENT SUMMARY</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>🔄 7-State Machine</h3>
+                    <p>SPEC_APPROVED → IN_PROGRESS → AUDIT_PASSED → BUILD_COMPLETE. Loop back to REMEDIATE if BLOCKED.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🎭 Three-Phase Audit</h3>
+                    <p>Recon (read-only) → Verify (cross-check) → Executor (write-enabled). JSON evidence contracts between phases.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🔐 Mutation Lock</h3>
+                    <p>Edit/Write/Bash blocked at PreToolUse hook until Verify returns PASS. Mutation attempts logged.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 Masters Gate</h3>
+                    <p>Marker file controls state machine. SPEC_APPROVED unlocks build, AUDIT_PASSED unlocks deployment.</p>
+                </div>
+
+                <div class="card">
+                    <h3>⛓️ Evidence Chain</h3>
+                    <p>JSON contracts flow between phases. Recon → Verify → Executor. Attestation signed at each boundary.</p>
+                </div>
+
+                <div class="card">
+                    <h3>📑 Attestation</h3>
+                    <p>Each phase produces signed JSON. Full chain preserved. No unauthorized mutations possible.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🎯 Tommy 4.1 Enforcement Architecture — Non-Bypass Gatekeeper</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Complete enforcement flow showing 7-state workflow, three-phase audit orchestration, mutation blocker, Masters code gate</p>
+            <p style="font-size: 0.85em; margin-top: 10px; color: #5080a0;">Last updated: April 19, 2026</p>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+        mermaid.contentLoaded();
+    </script>
+</body>
+</html>
