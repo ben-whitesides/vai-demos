@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelby Vault — Complete Tool Inventory</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e6ff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #1a1f3a 0%, #2d2e4f 50%, #1a1f3a 100%);
+            border-bottom: 3px solid #00ff88;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(0, 255, 136, 0.1), transparent);
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: #a0aeff;
+            font-size: 1.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            margin: 40px 0;
+            background: rgba(20, 25, 50, 0.6);
+            border: 2px solid #004d4d;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0, 255, 136, 0.15);
+        }
+
+        .section h2 {
+            color: #00ff88;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #00ff88;
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .section h3 {
+            color: #ffaa00;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .mermaid {
+            background: rgba(10, 14, 39, 0.8);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid #004d4d;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: rgba(0, 77, 77, 0.2);
+            border: 1px solid #00ff88;
+            border-radius: 6px;
+            padding: 20px;
+            color: #c0d0ff;
+        }
+
+        .card h3 {
+            color: #00ff88;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .card p {
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .card-count {
+            color: #ffaa00;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .code-block {
+            background: rgba(10, 14, 39, 0.9);
+            border: 1px solid #004d4d;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-size: 0.9em;
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .list-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .list-item {
+            background: rgba(0, 77, 77, 0.15);
+            border-left: 3px solid #00ff88;
+            padding: 10px 15px;
+            border-radius: 3px;
+            color: #c0d0ff;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 2px solid #004d4d;
+            color: #8090a0;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .list-two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔐 SHELBY VAULT — COMPLETE INVENTORY 🔐</h1>
+        <p>All Tools | Plugins | Skills | Playbooks | Domains | Mastery | Recon | Feedback Rules</p>
+    </div>
+
+    <div class="container">
+
+        <!-- TOOLS ECOSYSTEM -->
+        <div class="section">
+            <h2>🛠️ TOOLS ECOSYSTEM — CORE + EXTENDED</h2>
+            <div class="mermaid">
+graph TB
+    subgraph CoreTools["CORE TOOLS (Read/Write/Execution)"]
+        Read["📖 Read<br/>File content retrieval<br/>Images, PDFs, notebooks"]
+        Edit["✏️ Edit<br/>Surgical file modifications<br/>Replace + merge"]
+        Write["✍️ Write<br/>New files + complete rewrites<br/>Overwrite protection"]
+        Bash["⚙️ Bash<br/>Shell commands<br/>Git, npm, python, etc"]
+        Glob["🔍 Glob<br/>File pattern matching<br/>*.js, src/**/*.ts"]
+        Grep["🔎 Grep<br/>Content search<br/>Regex + ripgrep patterns"]
+    end
+
+    subgraph TaskTools["TASK ORCHESTRATION"]
+        TaskCreate["📝 TaskCreate<br/>Create work items<br/>Track progress"]
+        TaskList["📋 TaskList<br/>View all tasks<br/>Pending/in-progress/done"]
+        TaskGet["🎯 TaskGet<br/>Fetch task details<br/>Dependencies, metadata"]
+        TaskUpdate["🔄 TaskUpdate<br/>Mark complete<br/>Set dependencies"]
+    end
+
+    subgraph AgentTools["AGENT DISPATCH"]
+        Agent["🤖 Agent<br/>Explore, Plan<br/>Code-reviewer<br/>General-purpose"]
+        EnterPlan["📐 EnterPlanMode<br/>Architecture planning<br/>Multi-file design"]
+        ExitPlan["✅ ExitPlanMode<br/>Approve plan<br/>Request permissions"]
+    end
+
+    subgraph MemoryTools["MEMORY + KNOWLEDGE"]
+        Search["🧠 claude-mem search<br/>3-layer workflow<br/>Index + timeline + fetch"]
+        Brain["🌐 Open Brain<br/>Semantic search<br/>pgvector + constraints"]
+        Index["📚 Context Index<br/>Markdown chunking<br/>BM25 fulltext"]
+    end
+
+    subgraph WebTools["WEB + DATA"]
+        WebSearch["🌍 WebSearch<br/>Current events<br/>Rate-aware"]
+        WebFetch["📄 WebFetch<br/>URL content + HTML2MD<br/>15-min cache"]
+        Stripe["💳 Stripe<br/>Customers, payments<br/>Invoices, disputes"]
+        Reddit["📱 Reddit<br/>Posts, comments<br/>Create, edit, delete"]
+    end
+
+    subgraph WorkspaceTools["WORKSPACE"]
+        Slack["💬 Slack<br/>Search, channels<br/>DMs, Canvas"]
+        Gmail["📧 Gmail<br/>Read, draft, search<br/>Threads, labels"]
+        Calendar["📅 Calendar<br/>CRUD events<br/>Suggest time"]
+        Drive["☁️ Drive<br/>Upload, download<br/>Search, read content"]
+    end
+
+    CoreTools --> TaskTools
+    CoreTools --> AgentTools
+    TaskTools --> MemoryTools
+    AgentTools --> WebTools
+    WebTools --> WorkspaceTools
+
+    classDef core fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
+    classDef task fill:#2d3a4f,stroke:#4d7f8f,color:#fff,stroke-width:2px
+    classDef agent fill:#3a2d4a,stroke:#ff6b6b,color:#fff,stroke-width:2px
+    classDef memory fill:#1a3a2e,stroke:#ffaa00,color:#fff,stroke-width:2px
+    classDef web fill:#4d0a0a,stroke:#ff3333,color:#fff,stroke-width:2px
+    classDef ws fill:#2d4a3a,stroke:#00ffff,color:#fff,stroke-width:2px
+
+    class Read,Edit,Write,Bash,Glob,Grep core
+    class TaskCreate,TaskList,TaskGet,TaskUpdate task
+    class Agent,EnterPlan,ExitPlan agent
+    class Search,Brain,Index memory
+    class WebSearch,WebFetch,Stripe,Reddit web
+    class Slack,Gmail,Calendar,Drive ws
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>📖 Read/Write/Edit</h3>
+                    <p>File operations with content verification. Edit uses surgical replacement; Write forces pre-read verification.</p>
+                </div>
+                <div class="card">
+                    <h3>⚙️ Bash + Git</h3>
+                    <p>Shell execution with error scrubbing. Handles npm, python, docker, deployment.</p>
+                </div>
+                <div class="card">
+                    <h3>🔍 Glob + Grep</h3>
+                    <p>Fast file discovery and content search. Ripgrep patterns, context, head_limit.</p>
+                </div>
+                <div class="card">
+                    <h3>🤖 Agents</h3>
+                    <p>Explore (codebase), Plan (architecture), code-reviewer, general-purpose. Worktree isolation.</p>
+                </div>
+                <div class="card">
+                    <h3>🧠 Memory Trio</h3>
+                    <p>claude-mem 3-layer, Open Brain semantic, Context7 docs. Mem-first gate enforced.</p>
+                </div>
+                <div class="card">
+                    <h3>💬 Workspace APIs</h3>
+                    <p>Slack Canvas, Gmail threaded, Calendar CRUD, Drive search. OAuth-injected.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MCPS & PLUGINS -->
+        <div class="section">
+            <h2>🔌 MCPS & PLUGINS — 11 ACTIVE INTEGRATIONS</h2>
+            <div class="mermaid">
+graph TB
+    subgraph CloudMCPs["CLOUD MCPs (OAuth-Backed)"]
+        SlackCloud["Slack Cloud<br/>Search, Canvas, DMs<br/>Draft + Message"]
+        GmailCloud["Gmail Cloud<br/>Thread, Draft, Label<br/>Search + Fetch"]
+        CalCloud["Calendar Cloud<br/>List/Create/Update<br/>Suggest time"]
+        DriveCloud["Drive Cloud<br/>Upload, Download<br/>Search, Read content"]
+    end
+
+    subgraph LocalMCPs["LOCAL MCPS (Direct API)"]
+        Github["GitHub<br/>15 vai-app repos<br/>PR, Issues, Commits"]
+        Discord["Discord<br/>Read, Send, React<br/>Threads, Forum posts"]
+        Postiz["Postiz<br/>Social scheduling<br/>7 platforms"]
+        GWS["GWS Wrapper<br/>Google Workspace CLI<br/>All APIs"]
+    end
+
+    subgraph DataMCPs["DATA MCPS"]
+        Stripe["Stripe<br/>Customers, Payments<br/>Invoices, Disputes"]
+        Reddit["Reddit<br/>Posts, Comments<br/>Create, Edit, Delete"]
+        OpenBrain["Open Brain<br/>Semantic search<br/>pgvector + constraints"]
+    end
+
+    CloudMCPs --> LocalMCPs
+    LocalMCPs --> DataMCPs
+
+    classDef cloud fill:#0a4d2e,stroke:#00ffff,color:#fff,stroke-width:2px
+    classDef local fill:#2d3a4f,stroke:#ffaa00,color:#fff,stroke-width:2px
+    classDef data fill:#3a2d4a,stroke:#ff6b6b,color:#fff,stroke-width:2px
+
+    class SlackCloud,GmailCloud,CalCloud,DriveCloud cloud
+    class Github,Discord,Postiz,GWS local
+    class Stripe,Reddit,OpenBrain data
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>🌐 Cloud MCPs (4)</h3>
+                    <p><span class="card-count">4</span> OAuth-backed: Slack, Gmail, Calendar, Drive. Auto-token injection via wrapper.</p>
+                </div>
+                <div class="card">
+                    <h3>🔗 Local MCPs (4)</h3>
+                    <p><span class="card-count">4</span> Direct API: GitHub, Discord, Postiz, GWS. Rate-aware + retry logic.</p>
+                </div>
+                <div class="card">
+                    <h3>💾 Data MCPs (3)</h3>
+                    <p><span class="card-count">3</span> Stripe, Reddit, Open Brain. Query + semantic layers.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SKILLS VAULT -->
+        <div class="section">
+            <h2>🎯 SKILLS VAULT — 220+ REUSABLE COMMANDS</h2>
+
+            <h3>Architecture & Planning</h3>
+            <div class="list-two-col">
+                <div class="list-item">/brainstorming</div>
+                <div class="list-item">/claude-md-improver</div>
+                <div class="list-item">/mcp-developer</div>
+                <div class="list-item">/orchestrating-swarms</div>
+                <div class="list-item">/obra-executing-plans</div>
+                <div class="list-item">/obra-test-driven-development</div>
+                <div class="list-item">/planning-with-files</div>
+                <div class="list-item">/spec-miner</div>
+                <div class="list-item">/verification-loop</div>
+                <div class="list-item">/using-superpowers</div>
+            </div>
+
+            <h3>Code Quality & Testing</h3>
+            <div class="list-two-col">
+                <div class="list-item">/code-documenter</div>
+                <div class="list-item">/code-reviewer</div>
+                <div class="list-item">/differential-review</div>
+                <div class="list-item">/property-based-testing</div>
+                <div class="list-item">/security-review</div>
+                <div class="list-item">/security-scan</div>
+                <div class="list-item">/systematic-debugging</div>
+                <div class="list-item">/test-master</div>
+                <div class="list-item">/typescript-pro</div>
+                <div class="list-item">/dspy</div>
+            </div>
+
+            <h3>Deployment & DevOps</h3>
+            <div class="list-two-col">
+                <div class="list-item">/ci-cd-pipeline-builder</div>
+                <div class="list-item">/cloud-architect</div>
+                <div class="list-item">/database-migrations</div>
+                <div class="list-item">/deployment-patterns</div>
+                <div class="list-item">/devops-engineer</div>
+                <div class="list-item">/docker-patterns</div>
+                <div class="list-item">/github-actions-templates</div>
+                <div class="list-item">/monitoring-expert</div>
+                <div class="list-item">/sre-engineer</div>
+                <div class="list-item">/cloud-migration</div>
+            </div>
+
+            <h3>Mobile & React Native</h3>
+            <div class="list-two-col">
+                <div class="list-item">/expo-expo-api-routes</div>
+                <div class="list-item">/expo-expo-cicd-workflows</div>
+                <div class="list-item">/expo-expo-deployment</div>
+                <div class="list-item">/expo-dev-client</div>
+                <div class="list-item">/react-native-architecture</div>
+                <div class="list-item">/react-native-design</div>
+                <div class="list-item">/rn-building-ui</div>
+                <div class="list-item">/rn-composition-patterns</div>
+                <div class="list-item">/rn-data-fetching</div>
+                <div class="list-item">/upgrading-react-native</div>
+            </div>
+
+            <h3>Frontend & Web</h3>
+            <div class="list-two-col">
+                <div class="list-item">/ascii-sketch-first</div>
+                <div class="list-item">/frontend-design-compound</div>
+                <div class="list-item">/frontend-dev</div>
+                <div class="list-item">/frontend-patterns</div>
+                <div class="list-item">/html-css-deep-research</div>
+                <div class="list-item">/landing-page-generator</div>
+                <div class="list-item">/mobile-design</div>
+                <div class="list-item">/responsive-design</div>
+                <div class="list-item">/site-architecture</div>
+                <div class="list-item">/ui-design-system</div>
+            </div>
+
+            <h3>Backend & Database</h3>
+            <div class="list-two-col">
+                <div class="list-item">/api-designer</div>
+                <div class="list-item">/backend-patterns</div>
+                <div class="list-item">/database-optimizer</div>
+                <div class="list-item">/postgres-patterns</div>
+                <div class="list-item">/websocket-engineer</div>
+                <div class="list-item">/schema-markup</div>
+                <div class="list-item">/cache-strategies</div>
+                <div class="list-item">/transaction-safety</div>
+            </div>
+
+            <h3>AI & ML</h3>
+            <div class="list-two-col">
+                <div class="list-item">/ai-seo</div>
+                <div class="list-item">/fine-tuning-expert</div>
+                <div class="list-item">/instructor</div>
+                <div class="list-item">/knowledge-distillation</div>
+                <div class="list-item">/ml-pipeline</div>
+                <div class="list-item">/nemo-guardrails</div>
+                <div class="list-item">/rag-architect</div>
+                <div class="list-item">/semantic-search</div>
+            </div>
+
+            <h3>Content & Marketing</h3>
+            <div class="list-two-col">
+                <div class="list-item">/article-writing</div>
+                <div class="list-item">/campaign-analytics</div>
+                <div class="list-item">/cold-email</div>
+                <div class="list-item">/content-creator</div>
+                <div class="list-item">/content-engine</div>
+                <div class="list-item">/content-strategy</div>
+                <div class="list-item">/copy-editing</div>
+                <div class="list-item">/copywriting</div>
+                <div class="list-item">/email-sequence</div>
+                <div class="list-item">/email-template-builder</div>
+                <div class="list-item">/form-cro</div>
+                <div class="list-item">/investor-outreach</div>
+                <div class="list-item">/market-research</div>
+                <div class="list-item">/market-sizing-analysis</div>
+                <div class="list-item">/paid-ads</div>
+                <div class="list-item">/paywall-upgrade-cro</div>
+                <div class="list-item">/programmatic-seo</div>
+                <div class="list-item">/seo-audit</div>
+                <div class="list-item">/seo-optimizer</div>
+            </div>
+
+            <h3>VAI-Specific</h3>
+            <div class="list-two-col">
+                <div class="list-item">/vai-gold-standard-feature-recon</div>
+                <div class="list-item">/vai-intel-scraper</div>
+                <div class="list-item">/vai-pr-build</div>
+                <div class="list-item">/vai-spec-audit</div>
+                <div class="list-item">/vai-code-masters</div>
+                <div class="list-item">/vai-masters-audit</div>
+            </div>
+
+            <h3>Business & Operations</h3>
+            <div class="list-two-col">
+                <div class="list-item">/churn-prevention</div>
+                <div class="list-item">/financial-modeling</div>
+                <div class="list-item">/investor-materials</div>
+                <div class="list-item">/kpi-dashboard-design</div>
+                <div class="list-item">/pricing-strategy</div>
+                <div class="list-item">/product-marketing-context</div>
+                <div class="list-item">/referral-program</div>
+                <div class="list-item">/sales-enablement</div>
+                <div class="list-item">/startup-metrics-framework</div>
+                <div class="list-item">/startup-financial-modeling</div>
+            </div>
+
+            <div class="card" style="margin-top: 25px;">
+                <h3>📊 Total Skills Inventory</h3>
+                <p><span class="card-count">220+</span> reusable skills organized across 12 domains. Location: <code>~/.claude/skills/</code></p>
+                <p style="margin-top: 10px; font-size: 0.9em;">Invoke via: <code>/skill-name</code> or <code>Skill("skill-name")</code></p>
+            </div>
+        </div>
+
+        <!-- PLAYBOOKS -->
+        <div class="section">
+            <h2>📋 PLAYBOOKS — LOCKED-DOWN PROCESSES</h2>
+            <div class="mermaid">
+graph TB
+    subgraph DataPlaybooks["Data & Intelligence"]
+        JUCO["JUCO Coach Extraction<br/>Live-only + triple-verified<br/>95%+ accuracy gate"]
+        Recon["Recon Before Walkthrough<br/>Verify prerequisites<br/>Signal all blockers"]
+        TaskRouter["Task Router Lint<br/>Automated validation<br/>Healing + telemetry"]
+    end
+
+    subgraph CommissionPlaybooks["Commission & Revenue"]
+        Commission["Commission Pay Period<br/>10-step biweekly<br/>BLDV cross-check audit"]
+        Revenue["Revenue Dashboard<br/>Service + product totals<br/>Commission workbook feed"]
+    end
+
+    subgraph InfraPlaybooks["Infrastructure & Ops"]
+        Garrison["Garrison VPS Connectivity<br/>Tailscale troubleshooting<br/>IP change detection"]
+        AuditOrch["Three-Phase Audit System<br/>Recon → Verify → Executor<br/>JSON evidence contracts"]
+        MemoryProtocol["Memory Protocol Vault<br/>Write paths + tagging<br/>Session checklist"]
+    end
+
+    subgraph DispatchPlaybooks["Agent Dispatch"]
+        GarrisonDispatch["Garrison Audit Dispatch<br/>Complex infra audits<br/>Multi-phase verification"]
+        CursorDispatch["Cursor Audit Dispatch<br/>Code + architecture<br/>Masters audit routing"]
+        AGDispatch["AG Content Dispatch<br/>Antigravity fine-tuning<br/>Batch optimization"]
+        SubagentDispatch["Subagent Research Dispatch<br/>Parallel exploration<br/>Evidence aggregation"]
+    end
+
+    subgraph SpecPlaybooks["Specification & Build"]
+        SpecAudit["Spec Audit Iteration<br/>Cursor + Gemini loop<br/>TCC workaround pattern"]
+        ReservoirRotation["Reservoir Rotation<br/>Template library pattern<br/>Position state management"]
+        RiskRecon["Risk Recon Parity<br/>Risk register + mitigations<br/>Masters audit gates"]
+    end
+
+    DataPlaybooks --> CommissionPlaybooks
+    CommissionPlaybooks --> InfraPlaybooks
+    InfraPlaybooks --> DispatchPlaybooks
+    DispatchPlaybooks --> SpecPlaybooks
+
+    classDef data fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
+    classDef comm fill:#2d3a4f,stroke:#4d7f8f,color:#fff,stroke-width:2px
+    classDef infra fill:#3a2d4a,stroke:#ff6b6b,color:#fff,stroke-width:2px
+    classDef dispatch fill:#1a3a2e,stroke:#ffaa00,color:#fff,stroke-width:2px
+    classDef spec fill:#4d0a0a,stroke:#ff3333,color:#fff,stroke-width:2px
+
+    class JUCO,Recon,TaskRouter data
+    class Commission,Revenue comm
+    class Garrison,AuditOrch,MemoryProtocol infra
+    class GarrisonDispatch,CursorDispatch,AGDispatch,SubagentDispatch dispatch
+    class SpecAudit,ReservoirRotation,RiskRecon spec
+            </div>
+
+            <div class="grid" style="margin-top: 25px;">
+                <div class="card">
+                    <h3>📊 Data Playbooks (3)</h3>
+                    <p>JUCO coach extraction, recon validation, task router automation. Location: <code>memory/playbooks/</code></p>
+                </div>
+                <div class="card">
+                    <h3>💰 Commission Playbooks (2)</h3>
+                    <p>Biweekly pay cycle, revenue dashboard unification. BLDV cross-check audit gates.</p>
+                </div>
+                <div class="card">
+                    <h3>🛠️ Infrastructure Playbooks (3)</h3>
+                    <p>Garrison connectivity, three-phase audit orchestration, memory protocol enforcement.</p>
+                </div>
+                <div class="card">
+                    <h3>🚀 Dispatch Playbooks (4)</h3>
+                    <p>Garrison/Cursor/AG/Subagent routing. Multi-phase verification + evidence aggregation.</p>
+                </div>
+                <div class="card">
+                    <h3>📐 Specification Playbooks (3)</h3>
+                    <p>Spec audit loops, reservoir rotation, risk register + Masters gates.</p>
+                </div>
+                <div class="card">
+                    <h3>📝 Total Playbooks</h3>
+                    <p><span class="card-count">15</span> locked-down processes with reusable templates and validation gates.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOMAINS -->
+        <div class="section">
+            <h2>🌍 DOMAINS — STRATEGIC SILOS</h2>
+            <div class="mermaid">
+graph TB
+    subgraph CoreDomains["CORE BUSINESS DOMAINS"]
+        VAI["VAI Ecosystem<br/>Phase 2 Scheduling<br/>AVANTI Connect<br/>Profile Sharing"]
+        Arcdeft["Arcdeft<br/>Books + Creator<br/>Website + Content<br/>Morpheus Partnership"]
+        DivX["DivX<br/>Accelerated Yield<br/>Trading Models<br/>Market Intel"]
+    end
+
+    subgraph SupportDomains["SUPPORT DOMAINS"]
+        Empire["Empire Infrastructure<br/>Garrison + Mac<br/>GWS Bridge<br/>NanoClaw"]
+        People["Team Roster<br/>Voice Profiles<br/>Contact Info<br/>Builder Updates"]
+        Market["Lead Generation<br/>Coach Contact Lists<br/>Outreach Patterns<br/>Tools"]
+    end
+
+    subgraph PortfolioDomains["PORTFOLIO DOMAINS"]
+        Giova["Giova Medspa<br/>Grace Agent<br/>PureFlow Integration<br/>Commission Tracking"]
+        Empire -.-> Market
+        Empire -.-> People
+    end
+
+    subgraph MetaDomains["META DOMAINS"]
+        DX["DX Game Bible<br/>Combat System<br/>Dungeon Bugs<br/>Card System"]
+        Mastery["Mastery Vault<br/>Code Patterns<br/>Anti-Patterns<br/>Audit Lessons"]
+        Feedback["Feedback Rules<br/>218 Corrections<br/>Operational Intel"]
+    end
+
+    CoreDomains --> SupportDomains
+    SupportDomains --> PortfolioDomains
+    PortfolioDomains --> MetaDomains
+
+    classDef core fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
+    classDef support fill:#2d3a4f,stroke:#4d7f8f,color:#fff,stroke-width:2px
+    classDef portfolio fill:#3a2d4a,stroke:#ff6b6b,color:#fff,stroke-width:2px
+    classDef meta fill:#1a3a2e,stroke:#ffaa00,color:#fff,stroke-width:2px
+
+    class VAI,Arcdeft,DivX core
+    class Empire,People,Market support
+    class Giova portfolio
+    class DX,Mastery,Feedback meta
+            </div>
+
+            <div class="grid" style="margin-top: 25px;">
+                <div class="card">
+                    <h3>🎯 VAI</h3>
+                    <p>Core product. Phase 2 Scheduling locked. Calendar gold standard. Mentor marketplace. AVANTI coaching live.</p>
+                </div>
+                <div class="card">
+                    <h3>📖 Arcdeft</h3>
+                    <p>Creator books + website. Morpheus partnership. Content engine. Exclusive creator IP.</p>
+                </div>
+                <div class="card">
+                    <h3>📈 DivX</h3>
+                    <p>Accelerated yield trading. DXY/VIX models. Market intelligence. Automated signals.</p>
+                </div>
+                <div class="card">
+                    <h3>⚙️ Empire</h3>
+                    <p>Infrastructure. Garrison I + II. Mac primary. GWS bridge. Agent fleet command center.</p>
+                </div>
+                <div class="card">
+                    <h3>👥 People</h3>
+                    <p>Team roster. Voice profiles. Builder updates. Contact info. Org structure.</p>
+                </div>
+                <div class="card">
+                    <h3>🎯 Market</h3>
+                    <p>Lead gen playbooks. Coach contact lists. JUCO/NAIA data. Outreach automation.</p>
+                </div>
+                <div class="card">
+                    <h3>💆 Giova</h3>
+                    <p>Medspa operations. Grace agent. PureFlow billing. Commission tracking. Revenue reporting.</p>
+                </div>
+                <div class="card">
+                    <h3>🎮 DX</h3>
+                    <p>Game Bible. Canvas mastery. Combat system. Tile-based rendering. PRNG patterns.</p>
+                </div>
+                <div class="card">
+                    <h3>🧠 Mastery</h3>
+                    <p>Code patterns vault. Anti-patterns library. Audit lessons. Architecture decisions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MASTERY FILES -->
+        <div class="section">
+            <h2>📚 MASTERY VAULT — SKILL LIBRARY</h2>
+            <div class="mermaid">
+graph TB
+    subgraph CoreMastery["CORE MASTERY"]
+        GameDev["Game Dev Canvas Mastery<br/>Tile rendering<br/>PRNG + BSP<br/>Canvas patterns"]
+        NodeMastery["Node.js Mastery<br/>GWS bridge<br/>Garrison agents<br/>Event loops"]
+        PythonMastery["Python Mastery<br/>vai-ai scripts<br/>AVANTI gateway<br/>Data pipelines"]
+    end
+
+    subgraph SpecMastery["SPECIALIZED MASTERY"]
+        ReactNative["React Native Mastery<br/>Expo workflows<br/>Navigation stacks<br/>Performance"]
+        BackendStack["Backend Stack Mastery<br/>PostgreSQL<br/>Redis patterns<br/>AWS infrastructure"]
+        BashScript["Bash Scripting Mastery<br/>Deployment automation<br/>Cron jobs<br/>CI/CD patterns"]
+    end
+
+    subgraph QualityMastery["QUALITY & STANDARDS"]
+        CodeQuality["Code Quality Foundations<br/>Anti-patterns<br/>Pre-ship checklist<br/>Audit findings"]
+        CodingStandards["Coding Standards<br/>Naming conventions<br/>Structure patterns<br/>Cross-language consistency"]
+        HTMLCSS["HTML/CSS Frontend Mastery<br/>Responsive design<br/>Accessibility<br/>Performance"]
+    end
+
+    subgraph AuditMastery["AUDIT TEMPLATES"]
+        DXTemplate["DX Audit Template<br/>Bible location<br/>Tile system<br/>Known bugs"]
+        VAITemplate["VAI Audit Template<br/>4 repos<br/>Style guide<br/>Deployment patterns"]
+        InfraTemplate["Infrastructure Audit Template<br/>Garrison + Mac<br/>Service patterns<br/>Deploy rules"]
+    end
+
+    CoreMastery --> SpecMastery
+    SpecMastery --> QualityMastery
+    QualityMastery --> AuditMastery
+
+    classDef core fill:#0a4d2e,stroke:#00ff88,color:#fff,stroke-width:2px
+    classDef spec fill:#2d3a4f,stroke:#4d7f8f,color:#fff,stroke-width:2px
+    classDef quality fill:#3a2d4a,stroke:#ff6b6b,color:#fff,stroke-width:2px
+    classDef audit fill:#1a3a2e,stroke:#ffaa00,color:#fff,stroke-width:2px
+
+    class GameDev,NodeMastery,PythonMastery core
+    class ReactNative,BackendStack,BashScript spec
+    class CodeQuality,CodingStandards,HTMLCSS quality
+    class DXTemplate,VAITemplate,InfraTemplate audit
+            </div>
+
+            <div class="grid" style="margin-top: 25px;">
+                <div class="card">
+                    <h3>🎮 Game Dev Mastery</h3>
+                    <p>Canvas rendering patterns, tile systems, PRNG, BSP algorithms. DX-specific.</p>
+                </div>
+                <div class="card">
+                    <h3>⚙️ Backend Mastery</h3>
+                    <p>PostgreSQL patterns, Redis caching, AWS infrastructure, transaction safety, idempotency.</p>
+                </div>
+                <div class="card">
+                    <h3>🚀 Deployment Mastery</h3>
+                    <p>Bash automation, Docker patterns, CI/CD, GitHub Actions, monitoring, SRE practices.</p>
+                </div>
+                <div class="card">
+                    <h3>📱 Frontend Mastery</h3>
+                    <p>React Native, Expo, HTML/CSS, responsive design, accessibility, performance optimization.</p>
+                </div>
+                <div class="card">
+                    <h3>✅ Quality Mastery</h3>
+                    <p>Code quality standards, anti-patterns, pre-ship checklist, audit findings, naming conventions.</p>
+                </div>
+                <div class="card">
+                    <h3>📋 Audit Templates</h3>
+                    <p>DX, VAI, Infrastructure audit templates for lean Masters audits. Reusable context per domain.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECON & INTEL -->
+        <div class="section">
+            <h2>🔍 RECON & INTELLIGENCE FILES</h2>
+
+            <h3>Active Recon Artifacts</h3>
+            <div class="code-block">
+API & Service Recon
+├── rettiwt-api-recon.md          (X/Twitter API auth + rate limits)
+├── stripe-webhook-patterns.md    (Payment event routing)
+├── google-workspace-scopes.md    (OAuth permissions mapping)
+└── discord-council-ref.md        (Empires 101 server intelligence)
+
+Infrastructure Recon
+├── infrastructure/               (Redacted snapshots)
+│   ├── garrison-snapshot.md      (VPS configuration state)
+│   ├── mac-pro-snapshot.md       (Primary hardware config)
+│   ├── networking-snapshot.md    (Tailscale mesh topology)
+│   └── README.md                 (Index + cron scheduling)
+├── garrison-connectivity-logs.md (Troubleshooting history)
+└── ip-address-vault.md           (RESTRICTED — never share)
+
+Database & Schema Recon
+├── postgresql-schema-audit.md    (Table structure + indexes)
+├── redis-key-patterns.md         (Cache namespace mapping)
+├── pgvector-config.md            (Semantic search setup)
+└── tipalti-vendor-config.md      (Payment service integration)
+
+Team & Operational Recon
+├── people/team-roster-ref.md     (Builder assignments)
+├── people/voice-profiles.md      (Agent communication styles)
+├── agent-schedule-ref.md         (Daily polling cycles)
+└── gws-permissions-ref.md        (OAuth scope audit)
+
+Market Intelligence
+├── juco-coaches-accurate.csv     (3,358 verified contacts)
+├── naia-coaches-final.csv        (2,100+ enriched records)
+├── athletic-director-crm.md      (24 transferred records)
+└── coach-enrichment-status.md    (Sport/state/email coverage)
+            </div>
+
+            <div class="grid" style="margin-top: 25px;">
+                <div class="card">
+                    <h3>🔐 Recon Files</h3>
+                    <p><span class="card-count">218</span> feedback rules + 15+ recon artifacts tracking live system state, API behaviors, infrastructure topology, team assignments.</p>
+                </div>
+                <div class="card">
+                    <h3>📊 Intelligence Dashboard</h3>
+                    <p>Snapshots updated via cron: <code>~/.shelby/audit/infra-snapshot-to-vault.sh</code></p>
+                </div>
+                <div class="card">
+                    <h3>⚠️ Sensitive Recon</h3>
+                    <p>IP addresses, API keys, OAuth tokens, database passwords stored in RESTRICTED vault. Never shared externally.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPERATIONAL STATUS -->
+        <div class="section">
+            <h2>🟢 OPERATIONAL STATUS</h2>
+
+            <h3>System Health</h3>
+            <div class="code-block">
+VAULT STATUS
+├── Memory Files:           ✅ 503 files (200-line cap on MEMORY.md)
+├── Open Brain (pgvector):  ✅ Connected (localhost:3853)
+├── claude-mem Layer 1:     ✅ Observation search active
+├── vault-sync watch:       ✅ Running (auto-ingest on changes)
+└── Session Handoff:        ✅ Last saved Apr 19 12:05 MDT
+
+INFRASTRUCTURE
+├── Mac M4 Pro:             ✅ Primary (24GB ARM64)
+├── Garrison I (Oracle):    ✅ Production live (100.86.238.83 private)
+├── Garrison 2 (GCP):       ✅ Active (40-month runway remaining)
+├── Tailscale Mesh:         ✅ Connected (4 nodes)
+└── G2 Heartbeat:           ✅ 5-min poll cycle active
+
+AI BRAIN
+├── Haiku (6 cron agents):  ✅ Pinned for cost efficiency
+├── Gemini Flash (F1):      ✅ Primary fallback
+├── Cursor (F2):            ✅ Secondary paid tier
+├── Local Ollama:           ✅ Tertiary (Gemma4/DeepSeek/Qwen3)
+└── Billy Boys Routing:     ✅ Multi-fallback active
+
+MEMORY & KNOWLEDGE
+├── MEMORY.md Index:        ✅ 8 domain routers + session handoff
+├── Domain INDEXes:         ✅ VAI/Arcdeft/DX/Mastery/People/Market/Giova
+├── Feedback Rules:         ✅ 218 corrections + 11 hard protocols
+├── Mastery Vault:          ✅ 8 mastery files + 3 audit templates
+└── Playbooks:              ✅ 15 locked-down processes
+
+AUTOMATION
+├── Pre-Compact Auto-Sync:  ✅ LIVE (backs up + signals /sync-learnings)
+├── Task Router Lint:       ✅ LIVE (validates + heals broken refs)
+├── Aberama Gold Sentinel:  ✅ 5 scripts (5/15/daily/cleanup/alert)
+├── Discord Poll (read-only):⏸️  Killed (awaiting Ben restart)
+└── Cron Jobs:              ✅ 22 scripts across agents
+
+MASTERS AUDIT GATES
+├── Code Masters:           ✅ Required for load-bearing code
+├── Writing Masters:        ✅ Required for outbound content
+├── Mutation Blocker Hook:  ✅ Prevents writes until audit PASS
+└── Three-Phase Orchestration: ✅ Recon → Verify → Executor
+
+API INTEGRATIONS
+├── Stripe:                 ✅ Customers + payments (live)
+├── Google Workspace:       ✅ All 12 seats (grandfathered)
+├── GitHub:                 ✅ 15 vai-app repos (PR gating)
+├── Discord MCP:            ✅ Empires 101 + Morpheus Council
+├── Slack Cloud MCP:        ✅ OAuth-backed (token injection)
+├── Gmail Cloud MCP:        ✅ Draft + search + label
+└── Tipalti (W-9/1099):     ✅ Tax compliance service (phase 1)
+
+COMMUNICATION
+├── Telegram (Ben):         ✅ Primary (encrypted)
+├── Discord (Morpheus):     ✅ Council briefings
+├── Slack (Empire):         ✅ Agent reports (#empire-intel, etc)
+└── Email (GWS):            ✅ Draft + send via gws-wrapper.sh
+
+DATA PIPELINES
+├── JUCO Coach Extraction:  ✅ 3,358 verified (95%+ accuracy)
+├── NAIA Enrichment:        ✅ 2,100+ records (sport + state)
+├── Commission Payroll:     ✅ Biweekly (BLDV cross-check)
+├── Revenue Dashboard:      ✅ Service + product feeds
+└── Lead Gen Outreach:      ✅ Multi-channel automation
+            </div>
+
+            <div class="grid" style="margin-top: 25px;">
+                <div class="card">
+                    <h3>✅ All Systems LIVE</h3>
+                    <p>Vault synced. Memory gates enforced. Masters audits active. Three-phase orchestration running.</p>
+                </div>
+                <div class="card">
+                    <h3>🚀 Automation Active</h3>
+                    <p>Pre-compact auto-sync, task router lint, Aberama Gold sentinel, cron fleet. 22 scripts managing ops.</p>
+                </div>
+                <div class="card">
+                    <h3>💾 Data Pipelines</h3>
+                    <p>JUCO/NAIA extraction, commission payroll, revenue dashboards, lead gen. All verified + audited.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK REFERENCE -->
+        <div class="section">
+            <h2>⚡ QUICK REFERENCE</h2>
+
+            <h3>Key Paths</h3>
+            <div class="code-block">
+Memory Vault:              ~/.claude/projects/-Users-benjaminwhitesides/memory/
+Skills:                    ~/.claude/skills/
+Playbooks:                 ~/.claude/projects/-Users-benjaminwhitesides/memory/playbooks/
+Mastery Files:             ~/.claude/projects/-Users-benjaminwhitesides/memory/mastery/
+Feedback Rules:            ~/.claude/projects/-Users-benjaminwhitesides/memory/feedback/
+Domain INDEXes:            ~/.claude/projects/-Users-benjaminwhitesides/memory/{vai,arcdeft,dx,giova,empire,people,market}/
+Infrastructure Snapshots:  ~/.claude/projects/-Users-benjaminwhitesides/memory/infrastructure/
+Recon Files:               ~/.claude/projects/-Users-benjaminwhitesides/memory/recon/
+GWS Wrapper:               ~/.config/gws/gws-wrapper.sh
+Tommy 4.1 Scaffold:        ~/Desktop/tommy41/
+Shelby Config Sync:        ~/.shelby/config-sync/sync.sh
+            </div>
+
+            <h3>Command Quick Links</h3>
+            <div class="code-block">
+Invoke a Skill:            /skill-name or Skill("skill-name")
+Search Memory:             /mem-search (3-layer: search → timeline → fetch)
+Run Masters Audit:         Cursor + Gemini dual audit (Security/Logic/Quality ≥8.0)
+Check System Status:       ps aux | grep vault-sync | grep -v grep
+View Open Brain:           curl http://localhost:3853/health
+Sync Learnings:            /sync-learnings (8-phase memory sync — MANDATORY before compact)
+Deploy to GitHub Pages:    git push origin main (vai-demos repo)
+            </div>
+
+            <h3>Memory Protocol Summary</h3>
+            <div class="code-block">
+NEW INTEL:
+  → Saved to domain INDEX + Open Brain observation
+  → Example: VAI shipping news → vai/INDEX.md + /brain_remember
+
+CORRECTIONS:
+  → Saved to feedback/{topic}.md + Open Brain constraint
+  → Tagged: "feedback" + domain
+  → Example: Stripe integration gotcha → feedback/feedback_stripe_*.md
+
+INFRASTRUCTURE CHANGES:
+  → Saved to infrastructure/ folder with cron-driven snapshots
+  → Sensitive data (IPs, keys) in RESTRICTED vault
+  → Example: Garrison IP change → infrastructure/garrison-snapshot.md
+
+RESEARCH FINDINGS:
+  → Saved to recon/{topic}.md
+  → Example: X/Twitter API auth → recon/rettiwt-api-recon.md
+
+NO MEMORY QUESTIONS:
+  → Always search memory FIRST (claude-mem, MEMORY.md, grep vault)
+  → Only ask Ben if confirmed absent
+  → PreToolUse hook blocks memory-question patterns
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <p>🔐 Shelby Vault — Complete Tool Inventory</p>
+        <p>Last Updated: 2026-04-19 | All Systems LIVE | Memory Synced | Masters Gates Active</p>
+        <p>Vault Location: ~/.claude/projects/-Users-benjaminwhitesides/memory/ (503 files)</p>
+    </div>
+
+</body>
+</html>
