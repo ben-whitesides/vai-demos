@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelby Tool Vault Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            border-bottom: 3px solid #c72c48;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .metadata {
+            display: flex;
+            gap: 30px;
+            font-size: 0.9em;
+            color: #b0b0b0;
+            margin-top: 15px;
+        }
+
+        .metadata span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            background: #16213e;
+            padding: 5px 12px;
+            border-radius: 4px;
+            border-left: 3px solid #533483;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #00d4ff;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #533483;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        h3 {
+            font-size: 1.3em;
+            color: #ff6b9d;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .diagram-container {
+            background: #16213e;
+            border: 1px solid #533483;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            box-shadow: 0 0 20px rgba(83, 52, 131, 0.2);
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #16213e;
+            border: 1px solid #533483;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #0f3460;
+            color: #00d4ff;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #533483;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #2a2a3e;
+        }
+
+        tr:hover {
+            background: #1a2a4e;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        code {
+            background: #0f1419;
+            color: #00ff00;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .status-live {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: #ffaa00;
+            font-weight: bold;
+        }
+
+        .status-fail {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .access-card {
+            background: #16213e;
+            border: 1px solid #533483;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(83, 52, 131, 0.2);
+        }
+
+        .access-card h4 {
+            color: #ff6b9d;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .access-card ol {
+            margin-left: 20px;
+            color: #d0d0d0;
+        }
+
+        .access-card li {
+            margin-bottom: 8px;
+        }
+
+        .directory-map {
+            background: #0f1419;
+            border-left: 3px solid #c72c48;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.8;
+            color: #00ff00;
+            overflow-x: auto;
+            border-radius: 4px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .status-item {
+            background: #16213e;
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .status-item strong {
+            color: #00d4ff;
+        }
+
+        .status-item .status {
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        footer {
+            border-top: 2px solid #533483;
+            padding-top: 20px;
+            margin-top: 40px;
+            text-align: center;
+            color: #b0b0b0;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #00d4ff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #533483;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #533483;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛠️ SHELBY TOOL VAULT — VISUAL DASHBOARD</h1>
+            <div class="metadata">
+                <span class="badge"><strong>Last Updated:</strong> 2026-04-19</span>
+                <span class="badge"><strong>Total Tools:</strong> 188</span>
+                <span class="badge"><strong>Categories:</strong> 5</span>
+                <span class="badge"><strong>Status:</strong> <span class="status-live">ALL SYSTEMS GO</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="https://ben-whitesides.github.io/vai-demos/shelby-empire-infrastructure.html">Infrastructure</a>
+                <a href="https://ben-whitesides.github.io/vai-demos/tommy-shelby-agent-architecture.html">Tommy Architecture</a>
+                <a href="https://ben-whitesides.github.io/vai-demos/shelby-complete-tool-vault.html">Tool Inventory</a>
+                <a href="https://ben-whitesides.github.io/vai-demos/shelby-tool-vault-dashboard.html">Dashboard</a>
+            </div>
+        </header>
+
+        <section>
+            <h2>🎯 QUICK OVERVIEW</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    A["🛠️ TOOL VAULT<br/>188 Tools"] -->|"45+ Scrapers"| B["Data Extraction"]
+    A -->|"62 Automation"| C["Orchestration"]
+    A -->|"31 Intelligence"| D["Analysis & Audit"]
+    A -->|"30+ Specialization"| E["Domain Expertise"]
+    A -->|"20+ LLM Routing"| F["Billy Boys Brain"]
+
+    B -->|"Pipeline"| B1["JUCO: 3,358 coaches<br/>NJCAA: 524 schools<br/>NAIA: 2,100+ records"]
+    C -->|"Daily Ops"| C1["Ada: 3 briefs<br/>Aberama: 5 monitors<br/>Deployment: 5 scripts"]
+    D -->|"Masters Audits"| D1["Code Masters<br/>Writing Masters<br/>Council Vote"]
+    E -->|"Live Systems"| E1["VAI Influencer Engine<br/>GWS Wrapper<br/>Content Generators"]
+    F -->|"Fallback Chain"| F1["Haiku → Gemini<br/>→ Cursor → Ollama"]
+
+    style A fill:#1a1a2e
+    style B fill:#16213e
+    style C fill:#0f3460
+    style D fill:#533483
+    style E fill:#8b3d62
+    style F fill:#c72c48
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🔧 SCRAPERS & CRAWLERS (45+ Tools)</h2>
+            <h3>Production Pipelines</h3>
+            <table>
+                <tr>
+                    <th>Pipeline</th>
+                    <th>Records</th>
+                    <th>Tools</th>
+                    <th>Status</th>
+                    <th>Email Rate</th>
+                </tr>
+                <tr>
+                    <td><strong>JUCO</strong></td>
+                    <td>3,358 coaches</td>
+                    <td>Playwright + Groq</td>
+                    <td><span class="status-live">✅ LIVE</span></td>
+                    <td>77%</td>
+                </tr>
+                <tr>
+                    <td><strong>NJCAA</strong></td>
+                    <td>524 schools</td>
+                    <td>10-worker Playwright swarm</td>
+                    <td><span class="status-live">✅ LIVE</span></td>
+                    <td>65%</td>
+                </tr>
+                <tr>
+                    <td><strong>NAIA</strong></td>
+                    <td>2,100+ records</td>
+                    <td>Cheerio + Groq fallback</td>
+                    <td><span class="status-live">✅ SHIPPED</span></td>
+                    <td>58%</td>
+                </tr>
+                <tr>
+                    <td><strong>NCAA</strong></td>
+                    <td>Monitor</td>
+                    <td>Real-time webhook</td>
+                    <td><span class="status-pending">⏳ Webhook-driven</span></td>
+                    <td>TBD</td>
+                </tr>
+            </table>
+
+            <h3>Extraction Architecture</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph LR
+    A["Target Site"] -->|"Render Check"| B{{"Is JavaScript?"}}
+    B -->|"YES"| C["Playwright<br/>Browser Pool"]
+    B -->|"NO"| D["Cheerio<br/>Static Parse"]
+    C -->|"Success"| E["CSV Validated"]
+    D -->|"Success"| E
+    C -->|"Fail"| F["Groq Rescue<br/>LLM Extraction"]
+    D -->|"Fail"| F
+    F -->|"Fail"| G["WebSearch<br/>Last Resort"]
+    G -->|"Fail"| H["Manual Review<br/>Queue"]
+    E -->|"QA"| I["Google Sheets<br/>Export"]
+
+    style A fill:#1a1a2e
+    style C fill:#0f3460
+    style D fill:#0f3460
+    style F fill:#8b3d62
+    style G fill:#c72c48
+    style H fill:#c72c48
+    style I fill:#16213e
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>⚙️ AUTOMATION & ORCHESTRATION (62 Scripts)</h2>
+            <h3>Daily Command Center (Ada)</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    A["Ada Command Center"] -->|"07:00 MDT"| B["Morning Brief"]
+    A -->|"13:00 MDT"| C["Midday Pulse"]
+    A -->|"18:00 MDT"| D["Evening Closeout"]
+    A -->|"00:00 UTC"| E["Midnight Snapshot"]
+    A -->|"Hourly"| F["State Sync"]
+
+    B -->|"Send"| G["Telegram to Ben"]
+    C -->|"Send"| G
+    D -->|"Send"| G
+    E -->|"Send"| G
+    F -->|"Update"| H["Memory Vault"]
+
+    style A fill:#1a1a2e
+    style B fill:#0f3460
+    style C fill:#0f3460
+    style D fill:#0f3460
+    style E fill:#0f3460
+    style G fill:#533483
+    style H fill:#16213e
+                </div>
+            </div>
+
+            <h3>Infrastructure Sentinel (Aberama Gold)</h3>
+            <table>
+                <tr>
+                    <th>Script</th>
+                    <th>Frequency</th>
+                    <th>Monitors</th>
+                    <th>Alert Level</th>
+                </tr>
+                <tr>
+                    <td><code>aberama-health.sh</code></td>
+                    <td>Every 5 min</td>
+                    <td>Garrison I/II, Mac Pro, Redis, PostgreSQL</td>
+                    <td><span class="status-fail">Critical on FAIL</span></td>
+                </tr>
+                <tr>
+                    <td><code>aberama-crossnode.sh</code></td>
+                    <td>Every 15 min</td>
+                    <td>Network mesh, agent responsiveness</td>
+                    <td><span class="status-pending">Warning on SLOW</span></td>
+                </tr>
+                <tr>
+                    <td><code>aberama-report.sh</code></td>
+                    <td>Daily 14:00 UTC</td>
+                    <td>Comprehensive health summary</td>
+                    <td>Info</td>
+                </tr>
+                <tr>
+                    <td><code>aberama-heal.sh</code></td>
+                    <td>Auto-trigger</td>
+                    <td>Auto-recovery on detection</td>
+                    <td>Auto-action</td>
+                </tr>
+                <tr>
+                    <td><code>aberama-alert.sh</code></td>
+                    <td>3am critical</td>
+                    <td>Telegram escalation</td>
+                    <td><span class="status-fail">Critical</span></td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>🧠 INTELLIGENCE & ANALYSIS (31 Tools)</h2>
+            <h3>Observer Harness (Memory Logging)</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    A["Primary Session<br/>Active Work"] -->|"Tool Outcome"| B["Observer Agent<br/>Monitors & Logs"]
+    B -->|"Emit XML"| C["Structured Observations"]
+    C -->|"Every 2-3h"| D["progress-summary-gen.js<br/>Checkpoint Summary"]
+    C -->|"Continuous"| E["MEMORY.md Update"]
+    C -->|"Sync"| F["Open Brain<br/>pgvector Layer"]
+
+    D -->|"When Requested"| G["Ben Reviews<br/>Current Status"]
+
+    style A fill:#1a1a2e
+    style B fill:#533483
+    style C fill:#0f3460
+    style D fill:#8b3d62
+    style E fill:#16213e
+    style F fill:#533483
+    style G fill:#1a1a2e
+                </div>
+            </div>
+
+            <h3>Masters Audit Runners</h3>
+            <table>
+                <tr>
+                    <th>Auditor</th>
+                    <th>Axes</th>
+                    <th>Score Threshold</th>
+                    <th>Use Case</th>
+                </tr>
+                <tr>
+                    <td><strong>Code Masters</strong></td>
+                    <td>Security, Logic, Quality</td>
+                    <td>≥ 8.0 all axes</td>
+                    <td>Production code, load-bearing systems</td>
+                </tr>
+                <tr>
+                    <td><strong>Writing Masters</strong></td>
+                    <td>Clarity, Tone, Accuracy, Persuasion</td>
+                    <td>Weighted ≥ 9.0</td>
+                    <td>Email, content, marketing copy</td>
+                </tr>
+                <tr>
+                    <td><strong>Council Vote</strong></td>
+                    <td>Multi-model consensus</td>
+                    <td>Majority ✅</td>
+                    <td>Architectural decisions, policy</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>🎯 SPECIALIZED TOOLKITS (30+ Tools)</h2>
+            <h3>VAI Influencer Engine (LIVE)</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    A["Daily 07:00 MDT"] -->|"Trigger"| B["rotation-promote.js"]
+    B -->|"Select Brief"| C["50-Brief Reservoir"]
+    C -->|"Check State"| D["reservoir-template-lib.js"]
+    D -->|"Format"| E["Promotional Brief"]
+    E -->|"Broadcast"| F["bot-broadcaster.js"]
+    F -->|"Send to"| G["Discord"]
+    F -->|"Send to"| H["Telegram"]
+    F -->|"Send to"| I["Slack"]
+
+    style A fill:#1a1a2e
+    style B fill:#0f3460
+    style C fill:#16213e
+    style E fill:#533483
+    style F fill:#8b3d62
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🤖 BILLY BOYS LLM ROUTING (20+ Tools)</h2>
+            <h3>Routing Hierarchy</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    A["Task Arrives"] -->|"Check Cost"| B{{"Route?"}}
+    B -->|"Free Tier OK"| C["Haiku Dispatch<br/>6 Pinned Agents"]
+    B -->|"Free Tier Full"| D["Gemini Flash<br/>Primary Fallback"]
+    B -->|"Speed Critical"| E["Cursor Dispatch<br/>$20/mo Paid"]
+    B -->|"All APIs Down"| F["Ollama Wrapper<br/>Local Inference"]
+
+    C -->|"5 min"| G["Result"]
+    D -->|"8 min"| G
+    E -->|"2 min"| G
+    F -->|"12 min"| G
+
+    style A fill:#1a1a2e
+    style C fill:#16213e
+    style D fill:#0f3460
+    style E fill:#533483
+    style F fill:#8b3d62
+    style G fill:#1a1a2e
+                </div>
+            </div>
+
+            <h3>Model Tiers & Cost</h3>
+            <table>
+                <tr>
+                    <th>Tier</th>
+                    <th>Model</th>
+                    <th>Cost/Task</th>
+                    <th>Use Case</th>
+                    <th>Fallback</th>
+                </tr>
+                <tr>
+                    <td><strong>F0</strong></td>
+                    <td>Haiku</td>
+                    <td>$0.00</td>
+                    <td>Cron agents (pinned 6)</td>
+                    <td>→ F1</td>
+                </tr>
+                <tr>
+                    <td><strong>F1</strong></td>
+                    <td>Gemini Flash</td>
+                    <td>Free</td>
+                    <td>Primary fallback</td>
+                    <td>→ F2</td>
+                </tr>
+                <tr>
+                    <td><strong>F2</strong></td>
+                    <td>Cursor Pro</td>
+                    <td>$0.04/task</td>
+                    <td>Builds, audits</td>
+                    <td>→ F3</td>
+                </tr>
+                <tr>
+                    <td><strong>F3</strong></td>
+                    <td>Ollama local</td>
+                    <td>$0.00</td>
+                    <td>Last resort</td>
+                    <td>FAIL</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>📊 QUICK ACCESS BY USE CASE</h2>
+            <div class="quick-access">
+                <div class="access-card">
+                    <h4>Need to Extract Data?</h4>
+                    <ol>
+                        <li><strong>JUCO coaches</strong> → ~/Desktop/naia-coaches-scraper/ (2,100+ records)</li>
+                        <li><strong>Quick prototype</strong> → ~/.shelby/tools/test-crawl.js (Crawl4AI)</li>
+                        <li><strong>Email harvesting</strong> → ~/.shelby/tools/overnight-email-scraper.js (Gmail API)</li>
+                        <li><strong>Location data</strong> → ~/.shelby/tools/google-maps-scraper (Go binary)</li>
+                    </ol>
+                </div>
+                <div class="access-card">
+                    <h4>Need to Automate?</h4>
+                    <ol>
+                        <li><strong>Daily briefings</strong> → ~/.shelby/ada/ (ready-to-customize)</li>
+                        <li><strong>Config distribution</strong> → ~/.shelby/config-sync/</li>
+                        <li><strong>Full orchestration</strong> → ~/.shelby/tools/run-all-scrapes.sh</li>
+                    </ol>
+                </div>
+                <div class="access-card">
+                    <h4>Need to Monitor?</h4>
+                    <ol>
+                        <li><strong>Infrastructure health</strong> → ~/.shelby/tools/aberama-*.sh (5 scripts)</li>
+                        <li><strong>Analytics</strong> → ~/.shelby/ada/umami-monitor.sh</li>
+                        <li><strong>Pipeline health</strong> → ~/.shelby/tools/scraper-watchdog.sh</li>
+                    </ol>
+                </div>
+                <div class="access-card">
+                    <h4>Need LLM Routing?</h4>
+                    <ol>
+                        <li><strong>Free</strong> → Haiku dispatch (6 agents)</li>
+                        <li><strong>Free fallback</strong> → Gemini Flash</li>
+                        <li><strong>Paid fast</strong> → Cursor dispatch</li>
+                        <li><strong>Local only</strong> → Ollama wrapper</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🔄 MEMORY & SYNC SYSTEM</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    A["Session Active"] -->|"Every 60s"| B["vault-sync.js watch"]
+    B -->|"Detect Changes"| C["~/.shelby/memory/ Changes"]
+    C -->|"Push"| D["Open Brain<br/>pgvector Layer"]
+
+    E["Pre-Compact Trigger"] -->|"On Compact"| F["precompact-sync.sh"]
+    F -->|"Backup"| G["MEMORY.md → Checkpoint"]
+    F -->|"Create"| H["Session Handoff File"]
+    F -->|"Set Marker"| I["~/.shelby/.pre-compact/trigger"]
+
+    J["Next Session Boot"] -->|"Detect"| I
+    I -->|"Signal"| K["Run /sync-learnings<br/>Full 8-Phase Sync"]
+    K -->|"Update"| D
+
+    style B fill:#0f3460
+    style D fill:#533483
+    style F fill:#8b3d62
+    style K fill:#16213e
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>📍 MASTER DIRECTORY MAP</h2>
+            <div class="directory-map">~/.shelby/                          PRIMARY OPERATIONAL HUB
+  ├── ada/                          Daily briefing scripts (8)
+  ├── tools/                        Core utilities (45+)
+  │   ├── lead-scraper/            Email extraction
+  │   ├── scraper-data/            Results + logs
+  │   ├── google-maps-scraper/     Go binary + config
+  │   └── vai-influencer-engine/   Rotation system (5)
+  ├── dx-builder/                  DX game automation
+  ├── config-sync/                 Memory + config
+  └── audit/                       Audit orchestration
+
+~/.claude/projects/.../memory/      RESEARCH VAULT
+  ├── mastery/                      Code patterns (8 files)
+  ├── playbooks/                    Locked processes (15+)
+  ├── recon/                        Intelligence files
+  └── infrastructure/               Snapshots + configs
+
+~/Desktop/                          BUILDER TOOLS
+  ├── VAI Master/                   Product artifacts
+  ├── VAI DEV/                      Dev scrapers
+  ├── naia-coaches-scraper/         NAIA pipeline
+  └── masters/                      Audit frameworks
+
+~/.config/gws/                      GOOGLE WORKSPACE CLI</div>
+        </section>
+
+        <section>
+            <h2>✅ SYSTEM STATUS (Apr 19)</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <strong>vault-sync.js</strong>
+                    <div class="status"><span class="status-live">✅ RUNNING</span></div>
+                    <div style="font-size: 0.85em; color: #b0b0b0; margin-top: 5px;">Auto-sync every 60s</div>
+                </div>
+                <div class="status-item">
+                    <strong>Open Brain</strong>
+                    <div class="status"><span class="status-live">✅ CONNECTED</span></div>
+                    <div style="font-size: 0.85em; color: #b0b0b0; margin-top: 5px;">Semantic layer active</div>
+                </div>
+                <div class="status-item">
+                    <strong>Pre-compact sync</strong>
+                    <div class="status"><span class="status-live">✅ ENABLED</span></div>
+                    <div style="font-size: 0.85em; color: #b0b0b0; margin-top: 5px;">Auto-triggers on compact</div>
+                </div>
+                <div class="status-item">
+                    <strong>Garrison I (Oracle)</strong>
+                    <div class="status"><span class="status-live">✅ LIVE</span></div>
+                    <div style="font-size: 0.85em; color: #b0b0b0; margin-top: 5px;">Billy Boys routing active</div>
+                </div>
+                <div class="status-item">
+                    <strong>Garrison II (GCP)</strong>
+                    <div class="status"><span class="status-live">✅ LIVE</span></div>
+                    <div style="font-size: 0.85em; color: #b0b0b0; margin-top: 5px;">Fallback chain verified</div>
+                </div>
+                <div class="status-item">
+                    <strong>JUCO Pipeline</strong>
+                    <div class="status"><span class="status-live">✅ ACCURATE</span></div>
+                    <div style="font-size: 0.85em; color: #b0b0b0; margin-top: 5px;">3,358 coaches verified</div>
+                </div>
+                <div class="status-item">
+                    <strong>Ada Briefings</strong>
+                    <div class="status"><span class="status-live">✅ SCHEDULED</span></div>
+                    <div style="font-size: 0.85em; color: #b0b0b0; margin-top: 5px;">Daily 07:00 MDT</div>
+                </div>
+                <div class="status-item">
+                    <strong>Aberama Monitors</strong>
+                    <div class="status"><span class="status-live">✅ 5/5 ACTIVE</span></div>
+                    <div style="font-size: 0.85em; color: #b0b0b0; margin-top: 5px;">All green</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🎯 NEXT STEPS</h2>
+            <div style="background: #16213e; border-left: 3px solid #533483; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                <ul style="margin-left: 20px; color: #d0d0d0;">
+                    <li>Expand VAI Influencer Engine with local LLM failover</li>
+                    <li>Add Discord channel monitoring to Aberama</li>
+                    <li>Create unified JUCO/NAIA extraction (consolidated pipeline)</li>
+                    <li>Build tool usage telemetry dashboard</li>
+                    <li>Document all 188 tools in searchable index ✅ COMPLETE</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>Reference:</strong> <a href="https://ben-whitesides.github.io/vai-demos/shelby-tool-vault-dashboard.html">Full Tool Vault Dashboard</a></p>
+            <p style="margin-top: 15px;">Tommy Shelby Command Center | Shelby Empire Agent Orchestration</p>
+            <p style="margin-top: 15px; font-size: 0.8em;">All systems operational. Fallback chains verified. Data extraction verified. Infrastructure healthy.</p>
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+        mermaid.contentLoaderFunction();
+    </script>
+</body>
+</html>
