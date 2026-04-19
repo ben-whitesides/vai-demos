@@ -300,11 +300,17 @@ graph TB
    ✓ Memory vault sync active?
    ✓ Agent fleet responsive?
 
-2. Infrastructure Health
+2. Infrastructure Health (via Aberama Gold Sentinel)
    ✓ Mac M4 (primary): CPU, RAM, network
    ✓ Garrison 1 (Oracle): uptime, failover state
    ✓ Garrison 2 (GCP): monitoring self + hosts
    ✓ Redis/PostgreSQL: connection pools, queries
+
+   ** ABERAMA GOLD INFRASTRUCTURE SENTINEL **
+   ✓ Health checks (every 5 min) → /opt/aberama/logs/health.log
+   ✓ Cross-node analysis (every 15 min) → /opt/aberama/logs/crossnode.log
+   ✓ Daily reports (14:00 UTC) → /opt/aberama/logs/report.log
+   ✓ Monitors: garrison_i, garrison_ii, mac_pro, old_mac
 
 3. Decision Logic
    All green → Monitor continues
@@ -316,6 +322,7 @@ graph TB
    Log to /tmp/heartbeat.jsonl
    Update Alfred status board
    Escalate to John (Ops) if needed
+   Aberama Gold alerts → immediate triage
             </div>
         </div>
 
@@ -595,6 +602,11 @@ graph TB
                 <div class="card">
                     <h3>🔐 Mutation Blocker Hook</h3>
                     <p>Edit/Write/Bash blocked until verified-PASS marker exists. Logs all mutation attempts to mutation-audit.jsonl. Zero backdoors. Atomic enforcement.</p>
+                </div>
+
+                <div class="card">
+                    <h3>🛡️ Aberama Gold Sentinel</h3>
+                    <p>Infrastructure monitoring system on Garrison I. 5-min health checks, 15-min cross-node analysis, daily reports. Monitors all 4 nodes (G1, G2, Mac, Old Mac). Production live.</p>
                 </div>
             </div>
         </div>
