@@ -361,44 +361,38 @@ body {
 
     <div class="flow-arrow"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
 
-    <!-- SCREEN 2: Batch List (broken) -->
+    <!-- SCREEN 2: Results — batch already created, prior-batch coaches excluded -->
     <div class="flow-node">
       <div class="phone highlight-bad">
         <div class="phone-notch"><div class="notch-pill"></div></div>
-        <div class="phone-status"><span>9:41</span><span>◼◼◼</span></div>
+        <div class="phone-status"><span>1:32</span><span>◼◼ 73%</span></div>
         <div class="phone-screen dark">
           <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
-          <div class="stat-row">
-            <div class="stat-box"><div class="n">0</div><div class="l">Sent</div></div>
-            <div class="stat-box"><div class="n orange">0</div><div class="l">Views</div></div>
-            <div class="stat-box"><div class="n">3</div><div class="l">Batches</div></div>
+          <div style="background:#1a1200;border:1px solid #4a3000;border-radius:7px;padding:6px 8px;margin-bottom:8px;font-size:7.5px;color:#f0a500;line-height:1.4;">ⓘ Not what you're looking for? Go back and adjust your filters.</div>
+          <div style="font-size:9px;font-weight:800;color:#f0a500;margin-bottom:7px;letter-spacing:0.04em;">2 COACHES FOUND</div>
+          <div class="coach-row" style="flex-direction:column;align-items:flex-start;gap:2px;padding:7px;">
+            <div style="font-size:9px;font-weight:800;color:#fff;">Chris Pfatenhauer</div>
+            <div style="font-size:8px;color:#4CAF7D;font-weight:700;">Utah Tech University</div>
+            <div style="font-size:7.5px;color:#555;">NCAA · Coach</div>
+            <div style="font-size:7.5px;color:#555;">Baseball · I · UT</div>
           </div>
-          <div class="ps-section-label">YOUR BATCHES</div>
-          <div class="batch-card">
-            <div class="bt">12 Coaches</div>
-            <div class="bd">Apr 22, 2026</div>
-            <div class="bs">0 sent · 0 views · 📍 OR</div>
+          <div class="coach-row" style="flex-direction:column;align-items:flex-start;gap:2px;padding:7px;margin-top:3px;">
+            <div style="font-size:9px;font-weight:800;color:#fff;">Nate Rasmussen</div>
+            <div style="font-size:8px;color:#4CAF7D;font-weight:700;">Utah Valley University</div>
+            <div style="font-size:7.5px;color:#555;">NCAA · Coach</div>
+            <div style="font-size:7.5px;color:#555;">Baseball · I · UT</div>
           </div>
-          <div class="batch-card">
-            <div class="bt">5 Coaches</div>
-            <div class="bd">Apr 22, 2026</div>
-            <div class="bs">0 sent · 0 views · 📍 UT</div>
-          </div>
-          <div class="batch-card">
-            <div class="bt">20 Coaches</div>
-            <div class="bd">Apr 22, 2026</div>
-            <div class="bs">0 sent · 0 views · 📍 UT</div>
-          </div>
-          <div class="dead-end-badge">No sport shown. Can't tell batches apart. No delete.</div>
+          <div style="background:#f0a500;border-radius:7px;text-align:center;padding:7px;font-size:9px;font-weight:800;color:#000;margin-top:8px;">Generate Emails (2)</div>
+          <div class="dead-end-badge">🚨 Batch created at search-time. Other UT baseball coaches already batched — silently excluded. User never sees them again.</div>
         </div>
       </div>
       <div class="screen-caption">
-        <div class="sc-title">Batch List</div>
-        <div class="sc-bug">No context, no delete</div>
+        <div class="sc-title">Results</div>
+        <div class="sc-bug">Batch auto-created. Prior coaches gone.</div>
       </div>
     </div>
 
-    <div class="flow-arrow"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+    <div class="flow-arrow bad"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#ff4444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
 
     <!-- SCREEN 3: Preview (OK) -->
     <div class="flow-node">
@@ -780,11 +774,12 @@ body {
   <p>Green = already exists and is good · Orange = in progress · Red = bug to fix · Blue = new feature</p>
   <div class="issues-grid">
 
-    <div class="issue-card fix">
-      <div class="issue-top"><span class="issue-num">01</span><span class="issue-pill" style="background:#0f2a18;color:#4CAF7D;">✓ Good</span></div>
-      <div class="issue-title">Filter & Search screen</div>
-      <div class="issue-fix">Gender toggle, Sport, Division, Location — all explicit. "Search Coaches" CTA. Quota visible. This screen is correctly built.</div>
-      <div class="issue-owner">No change needed</div>
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">01</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">"Search Coaches" silently creates a batch</div>
+      <div class="issue-now">Tapping Search fires two things: returns results AND creates a batch. Coaches already in any prior batch for that sport+state are permanently excluded from results.</div>
+      <div class="issue-fix">Search = browse only. Show ALL coaches. Explicit "Add to Outreach List" action creates the batch — user decides, not the search.</div>
+      <div class="issue-owner">Francis (query logic) + Badinho (decouple search from batch create)</div>
     </div>
 
     <div class="issue-card bug">
