@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVANTI Connect — Flow Redesign</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #080808;
+  color: #e8e8e8;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  padding: 48px 32px 80px;
+}
+
+/* ── HEADER ── */
+.doc-header { text-align: center; margin-bottom: 64px; }
+.doc-header .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #4CAF7D; margin-bottom: 12px; }
+.doc-header h1 { font-size: 42px; font-weight: 800; color: #fff; line-height: 1.1; margin-bottom: 16px; }
+.doc-header h1 span { color: #4CAF7D; }
+.doc-header p { color: #555; font-size: 14px; }
+
+/* ── SECTION TITLES ── */
+.section-title { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+.section-title h2 { font-size: 22px; font-weight: 700; }
+.section-title .badge { font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
+.badge-red { background: #3a0f0f; color: #ff6b6b; border: 1px solid #6a1a1a; }
+.badge-green { background: #0f2a18; color: #4CAF7D; border: 1px solid #1a5a2a; }
+
+/* ── FLOW SECTION ── */
+.flow-section { margin-bottom: 80px; }
+.flow-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #444; margin-bottom: 20px; }
+
+/* ── PHONE FRAMES ── */
+.flow-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
+.flow-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  margin-top: 80px;
+  flex-shrink: 0;
+}
+.flow-arrow svg { opacity: 0.4; }
+.flow-arrow.bad svg { opacity: 0.7; }
+.flow-arrow.good svg { opacity: 0.9; }
+
+.phone {
+  width: 160px;
+  background: #111;
+  border-radius: 22px;
+  border: 1.5px solid #2a2a2a;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+.phone.highlight-bad  { border-color: #ff4444; box-shadow: 0 0 0 2px rgba(255,68,68,0.2), 0 8px 32px rgba(0,0,0,0.6); }
+.phone.highlight-good { border-color: #4CAF7D; box-shadow: 0 0 0 2px rgba(76,175,125,0.2), 0 8px 32px rgba(0,0,0,0.6); }
+.phone.highlight-ok   { border-color: #555; }
+
+.phone-notch {
+  height: 6px;
+  background: #1a1a1a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 0 2px;
+}
+.notch-pill {
+  width: 36px; height: 4px;
+  background: #2a2a2a;
+  border-radius: 2px;
+}
+.phone-status {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 10px 4px;
+  font-size: 8px;
+  color: #444;
+  background: #111;
+}
+.phone-screen { padding: 8px 9px 12px; min-height: 220px; }
+.phone-screen.dark { background: #111; }
+
+/* Screen components */
+.ps-header {
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #4CAF7D;
+  padding: 4px 0 8px;
+  letter-spacing: 0.04em;
+}
+.ps-header span { color: #fff; }
+.ps-title { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+.ps-sub { font-size: 8px; color: #555; margin-bottom: 10px; }
+.ps-section-label { font-size: 8px; font-weight: 700; color: #f0a500; text-transform: uppercase; letter-spacing: 0.06em; margin: 8px 0 5px; }
+
+.stat-row { display: flex; gap: 5px; margin-bottom: 10px; }
+.stat-box { flex: 1; background: #1a1a1a; border-radius: 6px; padding: 6px 4px; text-align: center; border: 1px solid #222; }
+.stat-box .n { font-size: 14px; font-weight: 800; color: #4CAF7D; }
+.stat-box .n.orange { color: #f0a500; }
+.stat-box .n.red { color: #ff6b6b; }
+.stat-box .l { font-size: 7px; color: #555; margin-top: 1px; }
+
+.coach-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 7px;
+  background: #1a1a1a;
+  border-radius: 7px;
+  margin-bottom: 4px;
+  border: 1px solid #242424;
+}
+.coach-row.sent { border-color: #1a3a22; background: #121a14; }
+.coach-avatar {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: #252525;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+.coach-info { flex: 1; min-width: 0; }
+.coach-name { font-size: 9px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.coach-meta { font-size: 7.5px; color: #555; }
+.coach-status { font-size: 7px; font-weight: 700; padding: 1px 5px; border-radius: 6px; flex-shrink: 0; }
+.cs-queued  { background: #0f1f30; color: #6ab0f0; }
+.cs-sent    { background: #0f2018; color: #4CAF7D; }
+.cs-skipped { background: #201f0f; color: #f0a500; }
+
+.batch-card {
+  background: #1a1a1a;
+  border-radius: 7px;
+  padding: 8px;
+  margin-bottom: 5px;
+  border: 1px solid #242424;
+}
+.batch-card .bt { font-size: 9px; font-weight: 700; color: #fff; }
+.batch-card .bd { font-size: 7.5px; color: #555; margin-top: 2px; }
+.batch-card .bs { font-size: 7.5px; color: #f0a500; margin-top: 3px; }
+.batch-card.named .bt { color: #4CAF7D; }
+
+.btn-full {
+  display: block;
+  background: #4CAF7D;
+  color: #000;
+  font-size: 9px;
+  font-weight: 800;
+  text-align: center;
+  padding: 8px;
+  border-radius: 7px;
+  margin-top: 8px;
+}
+.btn-ghost {
+  display: block;
+  background: transparent;
+  color: #888;
+  font-size: 9px;
+  font-weight: 600;
+  text-align: center;
+  padding: 6px;
+  border-radius: 7px;
+  border: 1px solid #2a2a2a;
+  margin-top: 4px;
+}
+
+.email-card {
+  background: #161616;
+  border-radius: 7px;
+  padding: 8px;
+  margin-bottom: 6px;
+  border: 1px solid #242424;
+}
+.email-label { font-size: 7px; font-weight: 700; color: #f0a500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+.email-subject { font-size: 9px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.email-body { font-size: 7.5px; color: #666; line-height: 1.4; }
+
+.modal-overlay {
+  background: rgba(0,0,0,0.75);
+  border-radius: 0 0 22px 22px;
+  padding: 12px 10px 8px;
+  position: relative;
+}
+.modal-box {
+  background: #1a1a1a;
+  border-radius: 10px;
+  padding: 12px 10px;
+  text-align: center;
+  border: 1px solid #333;
+}
+.modal-icon { font-size: 18px; margin-bottom: 6px; }
+.modal-title { font-size: 10px; font-weight: 800; color: #fff; margin-bottom: 3px; }
+.modal-sub { font-size: 8px; color: #666; margin-bottom: 10px; }
+
+.quota-bar-wrap { background: #1a1a1a; border-radius: 6px; padding: 6px 8px; margin-bottom: 8px; border: 1px solid #242424; }
+.quota-label { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.quota-label span { font-size: 7.5px; color: #666; }
+.quota-label strong { font-size: 7.5px; color: #f0a500; font-weight: 700; }
+.bar-track { background: #252525; border-radius: 3px; height: 4px; }
+.bar-fill { background: #4CAF7D; border-radius: 3px; height: 4px; }
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 6px;
+  background: #1a1a1a;
+  border-radius: 6px;
+  margin-bottom: 3px;
+  border: 1px solid #242424;
+}
+.checkbox { width: 12px; height: 12px; border-radius: 3px; border: 1.5px solid #333; flex-shrink: 0; }
+.checkbox.checked { background: #4CAF7D; border-color: #4CAF7D; display: flex; align-items: center; justify-content: center; font-size: 8px; color: #000; }
+.filter-row { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+.filter-chip { background: #1e2e20; color: #4CAF7D; font-size: 7px; font-weight: 700; padding: 3px 7px; border-radius: 10px; border: 1px solid #2a5a30; }
+
+.dead-end-badge {
+  background: #3a0f0f;
+  border: 1px solid #6a1a1a;
+  border-radius: 6px;
+  padding: 5px 7px;
+  margin-top: 6px;
+  font-size: 7.5px;
+  color: #ff8888;
+  text-align: center;
+}
+.good-badge {
+  background: #0f2a18;
+  border: 1px solid #1a5a2a;
+  border-radius: 6px;
+  padding: 5px 7px;
+  margin-top: 6px;
+  font-size: 7.5px;
+  color: #4CAF7D;
+  text-align: center;
+}
+
+/* screen label under phone */
+.screen-caption {
+  margin-top: 10px;
+  text-align: center;
+  width: 160px;
+}
+.screen-caption .sc-title { font-size: 11px; font-weight: 700; color: #fff; }
+.screen-caption .sc-sub { font-size: 10px; color: #555; margin-top: 2px; }
+.screen-caption .sc-bug { font-size: 10px; color: #ff6b6b; margin-top: 3px; font-weight: 600; }
+.screen-caption .sc-good { font-size: 10px; color: #4CAF7D; margin-top: 3px; font-weight: 600; }
+
+/* ── ISSUES ── */
+.issues-section { margin-bottom: 64px; }
+.issues-section h2 { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.issues-section p { font-size: 13px; color: #555; margin-bottom: 28px; }
+.issues-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.issue-card {
+  background: #0e0e0e;
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  padding: 18px;
+}
+.issue-card.bug    { border-left: 3px solid #ff4444; }
+.issue-card.fix    { border-left: 3px solid #4CAF7D; }
+.issue-card.partial{ border-left: 3px solid #f0a500; }
+.issue-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.issue-num { font-size: 10px; font-weight: 800; color: #444; }
+.issue-pill { font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+.pill-bug { background: #2a0f0f; color: #ff6b6b; }
+.pill-inprogress { background: #2a2a0f; color: #f0c040; }
+.pill-new { background: #0f1f30; color: #6ab0f0; }
+.issue-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.issue-now { font-size: 12px; color: #ff8888; margin-bottom: 6px; padding-left: 12px; position: relative; }
+.issue-now::before { content: '✕'; position: absolute; left: 0; font-size: 10px; }
+.issue-fix { font-size: 12px; color: #4CAF7D; margin-bottom: 8px; padding-left: 12px; position: relative; }
+.issue-fix::before { content: '✓'; position: absolute; left: 0; font-size: 10px; }
+.issue-owner { font-size: 11px; color: #444; font-weight: 600; margin-top: 8px; padding-top: 8px; border-top: 1px solid #1a1a1a; }
+
+/* ── SEPARATOR ── */
+.flow-separator {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 48px;
+}
+.flow-separator-line { flex: 1; height: 1px; background: #1a1a1a; }
+.flow-separator-text { font-size: 12px; color: #333; font-weight: 600; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="eyebrow">UX Redesign · Apr 22, 2026</div>
+  <h1><span>AVANTI</span> Connect<br>Flow Redesign</h1>
+  <p>Current state → Gold Standard &nbsp;·&nbsp; Prepared for Francis + Badinho</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- CURRENT FLOW -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="flow-section">
+  <div class="section-title">
+    <h2>Current Flow</h2>
+    <div class="badge badge-red">⚠ What's Broken Today</div>
+  </div>
+
+  <div class="flow-row">
+
+    <!-- SCREEN 1: Home -->
+    <div class="flow-node">
+      <div class="phone highlight-bad">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>9:41</span><span>◼◼◼</span></div>
+        <div class="phone-screen dark">
+          <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+          <div class="stat-row">
+            <div class="stat-box"><div class="n">0</div><div class="l">Sent</div></div>
+            <div class="stat-box"><div class="n orange">0</div><div class="l">Views</div></div>
+            <div class="stat-box"><div class="n red">0</div><div class="l">Batches</div></div>
+          </div>
+          <div style="background:#1a1a1a;border-radius:8px;padding:20px;text-align:center;margin-top:8px;">
+            <div style="font-size:8px;color:#555;">Select Sport</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:8px;">
+              <div class="filter-chip">Football</div>
+              <div class="filter-chip">Baseball</div>
+              <div class="filter-chip">Soccer</div>
+            </div>
+            <div style="font-size:8px;color:#555;margin-top:10px;">Select State</div>
+            <div style="display:flex;gap:4px;justify-content:center;margin-top:6px;">
+              <div style="background:#252525;border-radius:5px;padding:4px 8px;font-size:8px;color:#fff;border:1px solid #4CAF7D;">UT</div>
+              <div style="background:#1a1a1a;border-radius:5px;padding:4px 8px;font-size:8px;color:#555;">OR</div>
+              <div style="background:#1a1a1a;border-radius:5px;padding:4px 8px;font-size:8px;color:#555;">TX</div>
+            </div>
+          </div>
+          <div class="dead-end-badge">⚠ Tapping UT silently creates a batch — user doesn't know</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Home</div>
+        <div class="sc-bug">Auto-batch on tap</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow bad"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#ff4444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- SCREEN 2: Batch List (broken) -->
+    <div class="flow-node">
+      <div class="phone highlight-bad">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>9:41</span><span>◼◼◼</span></div>
+        <div class="phone-screen dark">
+          <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+          <div class="stat-row">
+            <div class="stat-box"><div class="n">0</div><div class="l">Sent</div></div>
+            <div class="stat-box"><div class="n orange">0</div><div class="l">Views</div></div>
+            <div class="stat-box"><div class="n">3</div><div class="l">Batches</div></div>
+          </div>
+          <div class="ps-section-label">YOUR BATCHES</div>
+          <div class="batch-card">
+            <div class="bt">12 Coaches</div>
+            <div class="bd">Apr 22, 2026</div>
+            <div class="bs">0 sent · 0 views · 📍 OR</div>
+          </div>
+          <div class="batch-card">
+            <div class="bt">5 Coaches</div>
+            <div class="bd">Apr 22, 2026</div>
+            <div class="bs">0 sent · 0 views · 📍 UT</div>
+          </div>
+          <div class="batch-card">
+            <div class="bt">20 Coaches</div>
+            <div class="bd">Apr 22, 2026</div>
+            <div class="bs">0 sent · 0 views · 📍 UT</div>
+          </div>
+          <div class="dead-end-badge">No sport shown. Can't tell batches apart. No delete.</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Batch List</div>
+        <div class="sc-bug">No context, no delete</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- SCREEN 3: Preview (OK) -->
+    <div class="flow-node">
+      <div class="phone highlight-ok">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>1:07</span><span style="color:#4CAF7D;">1 of 20</span></div>
+        <div class="phone-screen dark">
+          <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+          <div class="coach-row">
+            <div class="coach-avatar">🎓</div>
+            <div class="coach-info">
+              <div class="coach-name">Mario Acitelli</div>
+              <div class="coach-meta">Utah State · OL Coord · Football</div>
+            </div>
+          </div>
+          <div class="email-card" style="margin-top:6px;">
+            <div class="email-label">Subject</div>
+            <div class="email-subject">Class of 2026 Football Prospect - Ben</div>
+            <div class="email-label" style="margin-top:5px;">Your Message</div>
+            <div class="email-body">Coach Acitelli,<br><br>I'm writing to express my strong interest in Utah State's football program...</div>
+          </div>
+          <div style="font-size:7px;color:#555;text-align:center;padding:4px 0;">Your email app will open with everything filled in.</div>
+          <div class="btn-full">✓ Looks Good — Send This</div>
+          <div class="btn-ghost">Cancel This Coach</div>
+          <div style="text-align:center;font-size:7.5px;color:#555;margin-top:4px;">Skip This Coach</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Preview</div>
+        <div class="sc-good">✓ This is good</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- SCREEN 4: Gmail -->
+    <div class="flow-node">
+      <div class="phone highlight-ok">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>1:08</span><span>◼◼ VAI</span></div>
+        <div class="phone-screen dark">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0 8px;">
+            <div style="width:16px;height:16px;background:#3a3a3a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;">✕</div>
+            <div style="font-size:8px;color:#888;">Gmail</div>
+            <div style="font-size:10px;color:#4CAF7D;">►</div>
+          </div>
+          <div style="font-size:7.5px;color:#888;padding:4px 0;border-bottom:1px solid #222;">To: mario.acitelli@usu.edu</div>
+          <div style="font-size:7.5px;color:#888;padding:4px 0;border-bottom:1px solid #222;">From: ben@vai.app</div>
+          <div style="font-size:7.5px;color:#888;padding:4px 0;border-bottom:1px solid #222;">Class of 2026 Football Prospect - Ben...</div>
+          <div style="font-size:7.5px;color:#666;padding:8px 0;line-height:1.5;">Coach Acitelli,<br><br>I'm writing to express my strong interest in Utah State's football program and the opportunity to compete for your offensive line...</div>
+          <div class="good-badge">✓ Pre-filled. User taps send (►). Works well.</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Gmail</div>
+        <div class="sc-good">✓ Works great</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- SCREEN 5: Did you send? -->
+    <div class="flow-node">
+      <div class="phone highlight-ok">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>1:09</span><span>◼◼◼</span></div>
+        <div class="phone-screen dark" style="padding:0;position:relative;">
+          <div style="padding:8px 9px;opacity:0.35;">
+            <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+            <div class="email-card">
+              <div class="email-label">Subject</div>
+              <div class="email-subject">Class of 2026 Football...</div>
+              <div class="email-body">Coach Acitelli, I'm writing...</div>
+            </div>
+          </div>
+          <div class="modal-overlay">
+            <div class="modal-box">
+              <div class="modal-icon">✉️</div>
+              <div class="modal-title">Did you send it?</div>
+              <div class="modal-sub">Email to Coach Mario Acitelli at Utah State</div>
+              <div class="btn-full" style="font-size:8px;padding:6px;">✓ Yes, I sent it!</div>
+              <div class="btn-ghost" style="font-size:8px;padding:5px;margin-top:3px;">Not yet — I saved it as a draft</div>
+              <div style="font-size:7.5px;color:#555;margin-top:5px;">Skip this coach</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Confirmation</div>
+        <div class="sc-good">✓ Already built</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow bad"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#ff4444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- SCREEN 6: Dead end -->
+    <div class="flow-node">
+      <div class="phone highlight-bad">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>1:10</span><span>◼◼◼</span></div>
+        <div class="phone-screen dark">
+          <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+          <div class="ps-title" style="font-size:11px;">20 Coaches</div>
+          <div class="ps-sub">Wed, Apr 22, 2026</div>
+          <div class="stat-row">
+            <div class="stat-box"><div class="n" style="font-size:16px;">1</div><div class="l">Sent</div></div>
+            <div class="stat-box"><div class="n orange" style="font-size:16px;">0</div><div class="l">Views</div></div>
+            <div class="stat-box"><div class="n red" style="font-size:16px;">0</div><div class="l">Pending</div></div>
+          </div>
+          <div class="ps-section-label">SENT (1)</div>
+          <div class="coach-row sent">
+            <div class="coach-avatar" style="background:#1a3a22;font-size:10px;">✓</div>
+            <div class="coach-info">
+              <div class="coach-name">Mario Acitelli</div>
+              <div class="coach-meta">Utah State · UT</div>
+            </div>
+          </div>
+          <div style="padding:20px 0;text-align:center;font-size:7.5px;color:#333;">— nothing else here —</div>
+          <div class="dead-end-badge">🚨 19 coaches missing. Pending = 0 (bug). No "Continue" button. Dead end.</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Batch Detail</div>
+        <div class="sc-bug">Dead end — 19 gone</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- GOLD STANDARD FLOW -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div class="flow-separator">
+  <div class="flow-separator-line"></div>
+  <div class="flow-separator-text">▼ GOLD STANDARD</div>
+  <div class="flow-separator-line"></div>
+</div>
+
+<div class="flow-section">
+  <div class="section-title">
+    <h2>Gold Standard Flow</h2>
+    <div class="badge badge-green">✓ How It Should Work</div>
+  </div>
+
+  <div class="flow-row">
+
+    <!-- GS SCREEN 1: Search with filters -->
+    <div class="flow-node">
+      <div class="phone highlight-good">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>9:41</span><span>◼◼◼</span></div>
+        <div class="phone-screen dark">
+          <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+          <div style="font-size:8px;color:#888;margin-bottom:6px;">Find Coaches</div>
+          <div class="filter-row">
+            <div class="filter-chip">Football ✓</div>
+            <div class="filter-chip">D-I ✓</div>
+          </div>
+          <div class="filter-row">
+            <div class="filter-chip">Utah ✓</div>
+            <div class="filter-chip">Men ✓</div>
+          </div>
+          <div class="quota-bar-wrap" style="margin-top:8px;">
+            <div class="quota-label"><span>Weekly Quota</span><strong>3 / 20 used</strong></div>
+            <div class="bar-track"><div class="bar-fill" style="width:15%;"></div></div>
+          </div>
+          <div class="btn-full" style="margin-top:4px;">Find Coaches →</div>
+          <div class="good-badge">No batch yet. User intentionally searches.</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Search</div>
+        <div class="sc-good">Explicit intent</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow good"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#4CAF7D" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- GS SCREEN 2: Results with checkboxes -->
+    <div class="flow-node">
+      <div class="phone highlight-good">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>9:41</span><span>◼◼◼</span></div>
+        <div class="phone-screen dark">
+          <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+          <div style="font-size:9px;font-weight:700;color:#fff;margin-bottom:2px;">Football · D-I · Utah</div>
+          <div style="font-size:7.5px;color:#555;margin-bottom:8px;">20 coaches found</div>
+          <div class="quota-bar-wrap">
+            <div class="quota-label"><span>This week</span><strong>17 emails left</strong></div>
+            <div class="bar-track"><div class="bar-fill" style="width:15%;"></div></div>
+          </div>
+          <div class="checkbox-row">
+            <div class="checkbox checked">✓</div>
+            <div class="coach-info"><div class="coach-name">Mario Acitelli</div><div class="coach-meta">Utah State · OL Coord</div></div>
+          </div>
+          <div class="checkbox-row">
+            <div class="checkbox checked">✓</div>
+            <div class="coach-info"><div class="coach-name">Brandon Doman</div><div class="coach-meta">BYU · OC</div></div>
+          </div>
+          <div class="checkbox-row">
+            <div class="checkbox"></div>
+            <div class="coach-info"><div class="coach-name">Kyle Whittingham</div><div class="coach-meta">Utah · Head Coach</div></div>
+          </div>
+          <div class="btn-full">Add to Outreach List (2)</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Results</div>
+        <div class="sc-good">User selects coaches</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow good"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#4CAF7D" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- GS SCREEN 3: Outreach List (named, all visible) -->
+    <div class="flow-node">
+      <div class="phone highlight-good">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>1:10</span><span>◼◼◼</span></div>
+        <div class="phone-screen dark">
+          <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+          <div class="ps-title" style="font-size:10px;">Football · D-I · Utah</div>
+          <div class="ps-sub">20 coaches · 1 Sent · 19 Queued</div>
+          <div class="stat-row">
+            <div class="stat-box"><div class="n" style="font-size:14px;">1</div><div class="l">Sent</div></div>
+            <div class="stat-box"><div class="n orange" style="font-size:14px;">0</div><div class="l">Views</div></div>
+            <div class="stat-box"><div class="n" style="font-size:14px;color:#6ab0f0;">19</div><div class="l">Queued</div></div>
+          </div>
+          <div class="coach-row sent">
+            <div class="coach-avatar" style="background:#1a3a22;font-size:9px;">✅</div>
+            <div class="coach-info"><div class="coach-name">Mario Acitelli</div><div class="coach-meta">Utah State · Apr 22</div></div>
+            <div class="coach-status cs-sent">Sent</div>
+          </div>
+          <div class="coach-row">
+            <div class="coach-avatar" style="font-size:9px;">🔵</div>
+            <div class="coach-info"><div class="coach-name">Brandon Doman</div><div class="coach-meta">BYU · OC</div></div>
+            <div class="coach-status cs-queued">Next</div>
+          </div>
+          <div class="coach-row">
+            <div class="coach-avatar" style="font-size:9px;">🔵</div>
+            <div class="coach-info"><div class="coach-name">Kyle Whittingham</div><div class="coach-meta">Utah · HC</div></div>
+            <div class="coach-status cs-queued">Queued</div>
+          </div>
+          <div class="btn-full">Continue Sending (19 left)</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Outreach List</div>
+        <div class="sc-good">All 20 always visible</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow good"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#4CAF7D" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- GS SCREEN 4: Preview (same) -->
+    <div class="flow-node">
+      <div class="phone highlight-ok">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>1:07</span><span style="color:#4CAF7D;">2 of 20</span></div>
+        <div class="phone-screen dark">
+          <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+          <div class="coach-row">
+            <div class="coach-avatar">🎓</div>
+            <div class="coach-info">
+              <div class="coach-name">Brandon Doman</div>
+              <div class="coach-meta">BYU · Offensive Coord</div>
+            </div>
+          </div>
+          <div class="email-card" style="margin-top:6px;">
+            <div class="email-label">Subject</div>
+            <div class="email-subject">Class of 2026 Football Prospect - Ben</div>
+            <div class="email-label" style="margin-top:5px;">Your Message</div>
+            <div class="email-body">Coach Doman,<br><br>I'm writing about BYU's program and the Big 12 opportunity...</div>
+          </div>
+          <div class="btn-full">✓ Looks Good — Send This</div>
+          <div class="btn-ghost">Skip For Now</div>
+          <div style="text-align:center;font-size:7.5px;color:#555;margin-top:4px;">Remove from list</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Preview</div>
+        <div class="sc-good">Same — keep as-is</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow good"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#4CAF7D" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- GS SCREEN 5: Did you send? -->
+    <div class="flow-node">
+      <div class="phone highlight-ok">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>1:09</span><span>◼◼◼</span></div>
+        <div class="phone-screen dark" style="padding:0;">
+          <div style="padding:8px 9px;opacity:0.35;">
+            <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+            <div class="email-card">
+              <div class="email-body">Coach Doman,<br>I'm writing about BYU's program...</div>
+            </div>
+          </div>
+          <div class="modal-overlay">
+            <div class="modal-box">
+              <div class="modal-icon">✉️</div>
+              <div class="modal-title">Did you send it?</div>
+              <div class="modal-sub">Email to Coach Brandon Doman at BYU</div>
+              <div class="btn-full" style="font-size:8px;padding:6px;">✓ Yes, I sent it!</div>
+              <div class="btn-ghost" style="font-size:8px;padding:5px;margin-top:3px;">Not yet — saved as draft</div>
+              <div style="font-size:7.5px;color:#555;margin-top:5px;">Skip this coach</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Confirmation</div>
+        <div class="sc-good">✓ Already built</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow good"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#4CAF7D" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+
+    <!-- GS SCREEN 6: Auto-advance to next coach -->
+    <div class="flow-node">
+      <div class="phone highlight-good">
+        <div class="phone-notch"><div class="notch-pill"></div></div>
+        <div class="phone-status"><span>1:09</span><span style="color:#4CAF7D;">3 of 20</span></div>
+        <div class="phone-screen dark">
+          <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
+          <div class="coach-row">
+            <div class="coach-avatar">🎓</div>
+            <div class="coach-info">
+              <div class="coach-name">Kyle Whittingham</div>
+              <div class="coach-meta">Utah · Head Coach</div>
+            </div>
+          </div>
+          <div class="email-card" style="margin-top:6px;">
+            <div class="email-label">Subject</div>
+            <div class="email-subject">Class of 2026 Football Prospect - Ben</div>
+            <div class="email-label" style="margin-top:5px;">Your Message</div>
+            <div class="email-body">Coach Whittingham,<br><br>I'm writing about Utah's Pac-12 program and your tradition of excellence...</div>
+          </div>
+          <div class="btn-full">✓ Looks Good — Send This</div>
+          <div class="btn-ghost">Skip For Now</div>
+          <div class="good-badge">✓ Auto-advanced. No manual navigation needed.</div>
+        </div>
+      </div>
+      <div class="screen-caption">
+        <div class="sc-title">Auto-Advance</div>
+        <div class="sc-good">Next coach instantly</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- CONTACT HISTORY NOTE -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div style="background:#0a100d;border:1px solid #1a3a22;border-radius:12px;padding:24px 28px;margin-bottom:64px;display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">
+  <div style="flex:1;min-width:240px;">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#4CAF7D;margin-bottom:10px;">Contact History</div>
+    <div style="font-size:13px;color:#ccc;line-height:1.7;">The outreach list <em>is</em> the history. Sent coaches stay on the list permanently with their status. No separate history screen needed — just scroll the list to see who you contacted, when, and what sport.</div>
+  </div>
+  <div style="flex:1;min-width:240px;">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#f0a500;margin-bottom:10px;">Weekly Quota · 20 Emails / Week</div>
+    <div style="font-size:13px;color:#ccc;line-height:1.7;">Show the quota counter on the search screen, the results screen, and the home screen. User always knows how many emails they have left before searching — never hits the wall mid-send.</div>
+  </div>
+  <div style="flex:1;min-width:240px;">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#6ab0f0;margin-bottom:10px;">List Naming</div>
+    <div style="font-size:13px;color:#ccc;line-height:1.7;">Auto-name every list from the search filters: <strong style="color:#fff;">Football · D-I · Utah</strong>. User can tell all their lists apart at a glance. No more "20 Coaches · UT."</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- ISSUES -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="issues-section">
+  <h2>What Needs to Change — 9 Issues</h2>
+  <p>Green = already exists and is good · Orange = in progress · Red = bug to fix · Blue = new feature</p>
+  <div class="issues-grid">
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">01</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">Auto-batch on state select</div>
+      <div class="issue-now">Tapping a state silently creates a batch</div>
+      <div class="issue-fix">Search = browse only. Explicit "Add to List" button.</div>
+      <div class="issue-owner">Badinho (UI) + Francis (backend)</div>
+    </div>
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">02</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">19 coaches disappear after 1 sent</div>
+      <div class="issue-now">Batch detail only shows Sent. Pending = 0 (wrong). No Continue button.</div>
+      <div class="issue-fix">Full list always shown. Status per coach. "Continue Sending (19)" CTA.</div>
+      <div class="issue-owner">Francis (query fix) + Badinho (UI)</div>
+    </div>
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">03</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">Batch names have zero context</div>
+      <div class="issue-now">"12 Coaches · UT" — can't tell what sport or why it exists</div>
+      <div class="issue-fix">Auto-name from search filters: "Football · D-I · Utah"</div>
+      <div class="issue-owner">Francis (store sport/div) + Badinho (display)</div>
+    </div>
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">04</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">Pending counter shows 0 (wrong)</div>
+      <div class="issue-now">Shows 0 Pending even with 19 unsent coaches in the batch</div>
+      <div class="issue-fix">Pending = all coaches not yet marked Sent. Must be accurate.</div>
+      <div class="issue-owner">Francis</div>
+    </div>
+
+    <div class="issue-card partial">
+      <div class="issue-top"><span class="issue-num">05</span><span class="issue-pill pill-inprogress">In Progress</span></div>
+      <div class="issue-title">No batch count badge on home screen</div>
+      <div class="issue-now">No indicator on home that new lists exist</div>
+      <div class="issue-fix">Badge count on Lists tile — already being built</div>
+      <div class="issue-owner">Badinho (in progress)</div>
+    </div>
+
+    <div class="issue-card fix">
+      <div class="issue-top"><span class="issue-num">06</span><span class="issue-pill pill-new">New Feature</span></div>
+      <div class="issue-title">No auto-advance after send</div>
+      <div class="issue-now">After "Yes, I sent it!" → goes to batch detail. Stranded.</div>
+      <div class="issue-fix">After confirmation → auto-show Preview for next coach in list.</div>
+      <div class="issue-owner">Badinho</div>
+    </div>
+
+    <div class="issue-card fix">
+      <div class="issue-top"><span class="issue-num">07</span><span class="issue-pill pill-new">New Feature</span></div>
+      <div class="issue-title">No way to delete a list</div>
+      <div class="issue-now">Lists pile up forever with no cleanup</div>
+      <div class="issue-fix">Swipe left on list card = delete with confirm dialog.</div>
+      <div class="issue-owner">Francis (endpoint) + Badinho (swipe UI)</div>
+    </div>
+
+    <div class="issue-card fix">
+      <div class="issue-top"><span class="issue-num">08</span><span class="issue-pill pill-new">New Feature</span></div>
+      <div class="issue-title">Weekly quota invisible</div>
+      <div class="issue-now">User doesn't see 20/week limit until they hit it</div>
+      <div class="issue-fix">"X of 20 used" bar on search + results + home screen.</div>
+      <div class="issue-owner">Francis (data) + Badinho (UI)</div>
+    </div>
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">09</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">"Mixed" gender is ambiguous</div>
+      <div class="issue-now">Mixed = "no gender" AND "coach covers both" — two different things</div>
+      <div class="issue-fix">Force gender select. Mixed = dual-gender coach flag. WHERE sport_gender IN (:gender, 'mixed')</div>
+      <div class="issue-owner">Francis (query) + Badinho (force select UI)</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- KEEP -->
+<div style="background:#080808;border:1px solid #1a2e1a;border-radius:12px;padding:22px 26px;">
+  <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#4CAF7D;margin-bottom:12px;">✓ What's Already Built & Working — Don't Touch These</div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;">
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">AI-personalized email per coach</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">"Did you send it?" modal</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">Sent/Views tracking per batch</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">Gmail pre-fill handoff</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">"Not yet — saved as draft" option</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">Preview screen design + layout</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">1 of N coach counter</div>
+  </div>
+</div>
+
+</body>
+</html>
