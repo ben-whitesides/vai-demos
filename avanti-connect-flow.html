@@ -321,10 +321,18 @@ body {
     <div class="flow-node">
       <div class="phone highlight-ok">
         <div class="phone-notch"><div class="notch-pill"></div></div>
-        <div class="phone-status"><span>1:31</span><span>◼◼ 73%</span></div>
+        <div class="phone-status"><span>1:42</span><span>◼◼ 72%</span></div>
         <div class="phone-screen dark">
           <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
-          <div style="font-size:7.5px;color:#555;margin-bottom:6px;border-bottom:1px solid #1e1e1e;padding-bottom:5px;">✉ 1 sent this week</div>
+          <div style="font-size:7.5px;color:#555;margin-bottom:5px;border-bottom:1px solid #1e1e1e;padding-bottom:4px;">✉ 1 sent this week</div>
+          <!-- My Batches card (current) -->
+          <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:7px;padding:7px 9px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:5px;">
+              <div style="font-size:11px;">🗂</div>
+              <div style="font-size:9px;font-weight:700;color:#fff;">My Batches</div>
+            </div>
+            <div style="font-size:9px;color:#555;">›</div>
+          </div>
           <div style="font-size:7.5px;color:#888;margin-bottom:5px;">Find college coaches recruiting your sport.</div>
           <div style="display:flex;gap:4px;margin-bottom:7px;">
             <div style="flex:1;background:#0f2a18;border:1.5px solid #4CAF7D;border-radius:6px;text-align:center;padding:4px;font-size:8px;font-weight:700;color:#4CAF7D;">Men's</div>
@@ -541,33 +549,53 @@ body {
 
   <div class="flow-row">
 
-    <!-- GS SCREEN 1: Search with filters -->
+    <!-- GS SCREEN 1: Search with Outreach card + gamified bar -->
     <div class="flow-node">
       <div class="phone highlight-good">
         <div class="phone-notch"><div class="notch-pill"></div></div>
-        <div class="phone-status"><span>9:41</span><span>◼◼◼</span></div>
+        <div class="phone-status"><span>1:42</span><span>◼◼ 72%</span></div>
         <div class="phone-screen dark">
           <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
-          <div style="font-size:8px;color:#888;margin-bottom:6px;">Find Coaches</div>
-          <div class="filter-row">
-            <div class="filter-chip">Football ✓</div>
-            <div class="filter-chip">D-I ✓</div>
+          <div style="font-size:7.5px;color:#555;margin-bottom:5px;border-bottom:1px solid #1e1e1e;padding-bottom:4px;">✉ 5 sent this week</div>
+          <!-- My Outreaches card with gamified gradient bar -->
+          <div style="background:#1a1a1a;border:1px solid #2a3a2a;border-radius:8px;padding:8px 9px;margin-bottom:7px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+              <div style="display:flex;align-items:center;gap:5px;">
+                <div style="font-size:10px;">🎯</div>
+                <div style="font-size:9px;font-weight:800;color:#fff;">My Outreaches</div>
+              </div>
+              <div style="font-size:8px;font-weight:700;color:#e8c040;">2 active ›</div>
+            </div>
+            <!-- Gamified gradient progress bar -->
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+              <div style="font-size:7px;color:#666;">Weekly progress</div>
+              <div style="font-size:7px;font-weight:700;color:#e8c040;">5 / 20 sent</div>
+            </div>
+            <div style="background:#252525;border-radius:4px;height:6px;overflow:hidden;">
+              <div style="width:25%;height:100%;border-radius:4px;background:linear-gradient(to right,#f0a500,#e8c040);box-shadow:0 0 6px rgba(240,165,0,0.5);"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;">
+              <div style="font-size:6.5px;color:#555;">🔥 Start</div>
+              <div style="font-size:6.5px;color:#7ec850;">✓ Full send</div>
+            </div>
           </div>
-          <div class="filter-row">
-            <div class="filter-chip">Utah ✓</div>
-            <div class="filter-chip">Men ✓</div>
+          <div style="font-size:7.5px;color:#888;margin-bottom:5px;">Find college coaches recruiting your sport.</div>
+          <div style="display:flex;gap:4px;margin-bottom:5px;">
+            <div style="flex:1;background:#0f2a18;border:1.5px solid #4CAF7D;border-radius:6px;text-align:center;padding:4px;font-size:8px;font-weight:700;color:#4CAF7D;">Men's</div>
+            <div style="flex:1;background:#1a1a1a;border:1px solid #333;border-radius:6px;text-align:center;padding:4px;font-size:8px;color:#888;">Women's</div>
           </div>
-          <div class="quota-bar-wrap" style="margin-top:8px;">
-            <div class="quota-label"><span>Weekly Quota</span><strong>3 / 20 used</strong></div>
-            <div class="bar-track"><div class="bar-fill" style="width:15%;"></div></div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:5px;">
+            <div style="background:#0f2a18;border:1.5px solid #4CAF7D;border-radius:10px;padding:2px 7px;font-size:7px;color:#4CAF7D;font-weight:700;">Baseball ✓</div>
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:2px 7px;font-size:7px;color:#888;">D-I ✓</div>
+            <div style="background:#0f2a18;border:1.5px solid #4CAF7D;border-radius:10px;padding:2px 7px;font-size:7px;color:#4CAF7D;font-weight:700;">UT ✓</div>
           </div>
-          <div class="btn-full" style="margin-top:4px;">Find Coaches →</div>
-          <div class="good-badge">No batch yet. User intentionally searches.</div>
+          <div style="background:#f0a500;border-radius:7px;text-align:center;padding:7px;font-size:9px;font-weight:800;color:#000;margin-top:4px;">Search Coaches</div>
+          <div class="good-badge">✓ Weekly progress visible. Outreaches accessible. Gamified bar drives completion.</div>
         </div>
       </div>
       <div class="screen-caption">
-        <div class="sc-title">Search</div>
-        <div class="sc-good">Explicit intent</div>
+        <div class="sc-title">Filter & Search</div>
+        <div class="sc-good">Outreach card + progress bar</div>
       </div>
     </div>
 
@@ -582,9 +610,15 @@ body {
           <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
           <div style="font-size:9px;font-weight:700;color:#fff;margin-bottom:2px;">Baseball · D-I · Utah</div>
           <div style="font-size:7.5px;color:#555;margin-bottom:6px;">6 coaches found</div>
-          <div class="quota-bar-wrap">
-            <div class="quota-label"><span>Weekly quota</span><strong>19 left</strong></div>
-            <div class="bar-track"><div class="bar-fill" style="width:5%;"></div></div>
+          <!-- Gamified gradient quota bar on results screen -->
+          <div style="background:#1a1a1a;border-radius:6px;padding:5px 7px;margin-bottom:6px;border:1px solid #242424;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+              <div style="font-size:7px;color:#666;">Weekly progress</div>
+              <div style="font-size:7px;font-weight:700;color:#e8c040;">5 / 20 sent</div>
+            </div>
+            <div style="background:#252525;border-radius:4px;height:5px;overflow:hidden;">
+              <div style="width:25%;height:100%;border-radius:4px;background:linear-gradient(to right,#f0a500,#e8c040);box-shadow:0 0 5px rgba(240,165,0,0.4);"></div>
+            </div>
           </div>
           <div class="checkbox-row">
             <div class="checkbox checked">✓</div>
@@ -628,6 +662,10 @@ body {
           <div style="font-size:7px;font-weight:700;color:#4CAF7D;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">My Outreach</div>
           <div class="ps-title" style="font-size:10px;">Baseball · D-I · Utah</div>
           <div class="ps-sub">2 coaches · 1 Sent · 1 Queued</div>
+          <!-- Bar further along = green zone -->
+          <div style="background:#252525;border-radius:4px;height:5px;overflow:hidden;margin-bottom:6px;">
+            <div style="width:75%;height:100%;border-radius:4px;background:linear-gradient(to right,#f0a500,#e8c040,#7ec850,#4CAF7D);box-shadow:0 0 6px rgba(76,175,125,0.4);"></div>
+          </div>
           <div class="stat-row">
             <div class="stat-box"><div class="n" style="font-size:14px;">1</div><div class="l">Sent</div></div>
             <div class="stat-box"><div class="n orange" style="font-size:14px;">0</div><div class="l">Views</div></div>
