@@ -561,22 +561,16 @@ body {
           <div style="background:#1a1a1a;border:1px solid #2a3a2a;border-radius:8px;padding:8px 9px;margin-bottom:7px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
               <div style="display:flex;align-items:center;gap:5px;">
-                <div style="font-size:10px;">🎯</div>
                 <div style="font-size:9px;font-weight:800;color:#fff;">My Outreaches</div>
               </div>
               <div style="font-size:8px;font-weight:700;color:#e8c040;">2 active ›</div>
             </div>
-            <!-- Gamified gradient progress bar -->
             <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
               <div style="font-size:7px;color:#666;">Weekly progress</div>
               <div style="font-size:7px;font-weight:700;color:#e8c040;">5 / 20 sent</div>
             </div>
-            <div style="background:#252525;border-radius:4px;height:6px;overflow:hidden;">
-              <div style="width:25%;height:100%;border-radius:4px;background:linear-gradient(to right,#f0a500,#e8c040);box-shadow:0 0 6px rgba(240,165,0,0.5);"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-top:3px;">
-              <div style="font-size:6.5px;color:#555;">🔥 Start</div>
-              <div style="font-size:6.5px;color:#7ec850;">✓ Full send</div>
+            <div style="background:#252525;border-radius:4px;height:6px;overflow:hidden;margin-bottom:3px;">
+              <div style="width:25%;height:100%;border-radius:4px;background:linear-gradient(to right,#f0a500,#fbbf24,#7ec850,#4CAF7D);box-shadow:0 0 6px rgba(240,165,0,0.4);"></div>
             </div>
           </div>
           <div style="font-size:7.5px;color:#888;margin-bottom:5px;">Find college coaches recruiting your sport.</div>
@@ -714,7 +708,7 @@ body {
             <div class="email-body">Coach Doman,<br><br>I'm writing about BYU's program and the Big 12 opportunity...</div>
           </div>
           <div class="btn-full">✓ Looks Good — Send This</div>
-          <div class="btn-ghost">Skip For Now</div>
+          <div class="btn-ghost" style="color:#f0a500;border-color:#3a2a00;">Skip For Now</div>
           <div style="text-align:center;font-size:7.5px;color:#555;margin-top:4px;">Remove from list</div>
         </div>
       </div>
@@ -779,7 +773,7 @@ body {
             <div class="email-body">Coach Whittingham,<br><br>I'm writing about Utah's Pac-12 program and your tradition of excellence...</div>
           </div>
           <div class="btn-full">✓ Looks Good — Send This</div>
-          <div class="btn-ghost">Skip For Now</div>
+          <div class="btn-ghost" style="color:#f0a500;border-color:#3a2a00;">Skip For Now</div>
           <div class="good-badge">✓ Auto-advanced. No manual navigation needed.</div>
         </div>
       </div>
@@ -791,122 +785,6 @@ body {
 
   </div>
 </div>
-
-<!-- ═══════════════════════════════════════════════════ -->
-<!-- CONTACT HISTORY NOTE -->
-<!-- ═══════════════════════════════════════════════════ -->
-<div style="background:#0a100d;border:1px solid #1a3a22;border-radius:12px;padding:24px 28px;margin-bottom:64px;display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">
-  <div style="flex:1;min-width:240px;">
-    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#4CAF7D;margin-bottom:10px;">Contact History</div>
-    <div style="font-size:13px;color:#ccc;line-height:1.7;">Your Outreach <em>is</em> the history. Sent coaches stay in it permanently with their status chip. No separate history screen needed — scroll your Outreach to see who you contacted, when, and what sport.</div>
-  </div>
-  <div style="flex:1;min-width:240px;">
-    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#f0a500;margin-bottom:10px;">Weekly Quota · 20 Emails / Week</div>
-    <div style="font-size:13px;color:#ccc;line-height:1.7;">Show the quota counter on the search screen, the results screen, and the home screen. User always knows how many emails they have left before searching — never hits the wall mid-send.</div>
-  </div>
-  <div style="flex:1;min-width:240px;">
-    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#6ab0f0;margin-bottom:10px;">Outreach Naming</div>
-    <div style="font-size:13px;color:#ccc;line-height:1.7;">Auto-name every Outreach from the search filters: <strong style="color:#fff;">Baseball · D-I · Utah Outreach</strong>. User can tell all their Outreaches apart at a glance. No more "20 Coaches · UT."</div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════ -->
-<!-- ISSUES -->
-<!-- ═══════════════════════════════════════════════════ -->
-<div class="issues-section">
-  <h2>What Needs to Change — 9 Issues</h2>
-  <p>Green = already exists and is good · Orange = in progress · Red = bug to fix · Blue = new feature</p>
-  <div class="issues-grid">
-
-    <div class="issue-card bug">
-      <div class="issue-top"><span class="issue-num">01</span><span class="issue-pill pill-bug">Bug</span></div>
-      <div class="issue-title">"Search Coaches" silently creates an Outreach</div>
-      <div class="issue-now">Tapping Search fires two things: returns results AND creates an Outreach. Coaches already in any prior Outreach for that sport+state are permanently excluded from results.</div>
-      <div class="issue-fix">Search = browse only. Show ALL coaches with prior-contact status chips. Explicit "Start Outreach" creates it — user decides, not the search.</div>
-      <div class="issue-owner">Francis (query logic) + Badinho (decouple search from Outreach create)</div>
-    </div>
-
-    <div class="issue-card bug">
-      <div class="issue-top"><span class="issue-num">02</span><span class="issue-pill pill-bug">Bug</span></div>
-      <div class="issue-title">19 coaches disappear after 1 sent</div>
-      <div class="issue-now">Outreach detail only shows Sent section. Queued = 0 (wrong). No Continue button.</div>
-      <div class="issue-fix">Full Outreach always shown. Status chip per coach. "Continue Outreach (19 left)" CTA.</div>
-      <div class="issue-owner">Francis (query fix) + Badinho (UI)</div>
-    </div>
-
-    <div class="issue-card bug">
-      <div class="issue-top"><span class="issue-num">03</span><span class="issue-pill pill-bug">Bug</span></div>
-      <div class="issue-title">Outreach names have zero context</div>
-      <div class="issue-now">"12 Coaches · UT" — can't tell what sport or why it exists</div>
-      <div class="issue-fix">Auto-name Outreach from filters: "Baseball · D-I · Utah Outreach"</div>
-      <div class="issue-owner">Francis (store sport/div) + Badinho (display)</div>
-    </div>
-
-    <div class="issue-card bug">
-      <div class="issue-top"><span class="issue-num">04</span><span class="issue-pill pill-bug">Bug</span></div>
-      <div class="issue-title">Pending counter shows 0 (wrong)</div>
-      <div class="issue-now">Shows 0 Queued even with 19 unsent coaches in the Outreach</div>
-      <div class="issue-fix">Pending = all coaches not yet marked Sent. Must be accurate.</div>
-      <div class="issue-owner">Francis</div>
-    </div>
-
-    <div class="issue-card partial">
-      <div class="issue-top"><span class="issue-num">05</span><span class="issue-pill pill-inprogress">In Progress</span></div>
-      <div class="issue-title">No Outreach count badge on home screen</div>
-      <div class="issue-now">No indicator on home that active Outreaches exist</div>
-      <div class="issue-fix">Badge count on Outreach tile showing active + queued — already being built</div>
-      <div class="issue-owner">Badinho (in progress)</div>
-    </div>
-
-    <div class="issue-card fix">
-      <div class="issue-top"><span class="issue-num">06</span><span class="issue-pill pill-new">New Feature</span></div>
-      <div class="issue-title">No auto-advance after send</div>
-      <div class="issue-now">After "Yes, I sent it!" → goes back to Outreach detail. Stranded.</div>
-      <div class="issue-fix">After confirmation → auto-show Preview for next coach in the Outreach.</div>
-      <div class="issue-owner">Badinho</div>
-    </div>
-
-    <div class="issue-card fix">
-      <div class="issue-top"><span class="issue-num">07</span><span class="issue-pill pill-new">New Feature</span></div>
-      <div class="issue-title">No way to delete an Outreach</div>
-      <div class="issue-now">Outreaches pile up forever with no cleanup</div>
-      <div class="issue-fix">Swipe left on Outreach card = delete with confirm dialog.</div>
-      <div class="issue-owner">Francis (endpoint) + Badinho (swipe UI)</div>
-    </div>
-
-    <div class="issue-card fix">
-      <div class="issue-top"><span class="issue-num">08</span><span class="issue-pill pill-new">New Feature</span></div>
-      <div class="issue-title">Weekly quota invisible</div>
-      <div class="issue-now">User doesn't see 20/week limit until they hit it</div>
-      <div class="issue-fix">"X of 20 used" bar on search + results + home screen.</div>
-      <div class="issue-owner">Francis (data) + Badinho (UI)</div>
-    </div>
-
-    <div class="issue-card bug">
-      <div class="issue-top"><span class="issue-num">09</span><span class="issue-pill pill-bug">Bug</span></div>
-      <div class="issue-title">"Mixed" gender is ambiguous</div>
-      <div class="issue-now">Mixed = "no gender" AND "coach covers both" — two different things</div>
-      <div class="issue-fix">Force gender select. Mixed = dual-gender coach flag. WHERE sport_gender IN (:gender, 'mixed')</div>
-      <div class="issue-owner">Francis (query) + Badinho (force select UI)</div>
-    </div>
-
-  </div>
-</div>
-
-<!-- KEEP -->
-<div style="background:#080808;border:1px solid #1a2e1a;border-radius:12px;padding:22px 26px;">
-  <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#4CAF7D;margin-bottom:12px;">✓ What's Already Built & Working — Don't Touch These</div>
-  <div style="display:flex;flex-wrap:wrap;gap:8px;">
-    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">AI-personalized email per coach</div>
-    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">"Did you send it?" modal</div>
-    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">Sent/Views tracking per Outreach</div>
-    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">Gmail pre-fill handoff</div>
-    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">"Not yet — saved as draft" option</div>
-    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">Preview screen design + layout</div>
-    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">1 of N coach counter</div>
-  </div>
-</div>
-
 
 <!-- ═══════════════════════════════════════════════════ -->
 <!-- V2 DESIGN CONCEPT -->
@@ -1198,6 +1076,122 @@ body {
     </div>
   </div>
 </div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- CONTACT HISTORY NOTE -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div style="background:#0a100d;border:1px solid #1a3a22;border-radius:12px;padding:24px 28px;margin-bottom:64px;display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">
+  <div style="flex:1;min-width:240px;">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#4CAF7D;margin-bottom:10px;">Contact History</div>
+    <div style="font-size:13px;color:#ccc;line-height:1.7;">Your Outreach <em>is</em> the history. Sent coaches stay in it permanently with their status chip. No separate history screen needed — scroll your Outreach to see who you contacted, when, and what sport.</div>
+  </div>
+  <div style="flex:1;min-width:240px;">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#f0a500;margin-bottom:10px;">Weekly Quota · 20 Emails / Week</div>
+    <div style="font-size:13px;color:#ccc;line-height:1.7;">Show the quota counter on the search screen, the results screen, and the home screen. User always knows how many emails they have left before searching — never hits the wall mid-send.</div>
+  </div>
+  <div style="flex:1;min-width:240px;">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:#6ab0f0;margin-bottom:10px;">Outreach Naming</div>
+    <div style="font-size:13px;color:#ccc;line-height:1.7;">Auto-name every Outreach from the search filters: <strong style="color:#fff;">Baseball · D-I · Utah Outreach</strong>. User can tell all their Outreaches apart at a glance. No more "20 Coaches · UT."</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- ISSUES -->
+<!-- ═══════════════════════════════════════════════════ -->
+<div class="issues-section">
+  <h2>What Needs to Change — 9 Issues</h2>
+  <p>Green = already exists and is good · Orange = in progress · Red = bug to fix · Blue = new feature</p>
+  <div class="issues-grid">
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">01</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">"Search Coaches" silently creates an Outreach</div>
+      <div class="issue-now">Tapping Search fires two things: returns results AND creates an Outreach. Coaches already in any prior Outreach for that sport+state are permanently excluded from results.</div>
+      <div class="issue-fix">Search = browse only. Show ALL coaches with prior-contact status chips. Explicit "Start Outreach" creates it — user decides, not the search.</div>
+      <div class="issue-owner">Francis (query logic) + Badinho (decouple search from Outreach create)</div>
+    </div>
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">02</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">19 coaches disappear after 1 sent</div>
+      <div class="issue-now">Outreach detail only shows Sent section. Queued = 0 (wrong). No Continue button.</div>
+      <div class="issue-fix">Full Outreach always shown. Status chip per coach. "Continue Outreach (19 left)" CTA.</div>
+      <div class="issue-owner">Francis (query fix) + Badinho (UI)</div>
+    </div>
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">03</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">Outreach names have zero context</div>
+      <div class="issue-now">"12 Coaches · UT" — can't tell what sport or why it exists</div>
+      <div class="issue-fix">Auto-name Outreach from filters: "Baseball · D-I · Utah Outreach"</div>
+      <div class="issue-owner">Francis (store sport/div) + Badinho (display)</div>
+    </div>
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">04</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">Pending counter shows 0 (wrong)</div>
+      <div class="issue-now">Shows 0 Queued even with 19 unsent coaches in the Outreach</div>
+      <div class="issue-fix">Pending = all coaches not yet marked Sent. Must be accurate.</div>
+      <div class="issue-owner">Francis</div>
+    </div>
+
+    <div class="issue-card partial">
+      <div class="issue-top"><span class="issue-num">05</span><span class="issue-pill pill-inprogress">In Progress</span></div>
+      <div class="issue-title">No Outreach count badge on home screen</div>
+      <div class="issue-now">No indicator on home that active Outreaches exist</div>
+      <div class="issue-fix">Badge count on Outreach tile showing active + queued — already being built</div>
+      <div class="issue-owner">Badinho (in progress)</div>
+    </div>
+
+    <div class="issue-card fix">
+      <div class="issue-top"><span class="issue-num">06</span><span class="issue-pill pill-new">New Feature</span></div>
+      <div class="issue-title">No auto-advance after send</div>
+      <div class="issue-now">After "Yes, I sent it!" → goes back to Outreach detail. Stranded.</div>
+      <div class="issue-fix">After confirmation → auto-show Preview for next coach in the Outreach.</div>
+      <div class="issue-owner">Badinho</div>
+    </div>
+
+    <div class="issue-card fix">
+      <div class="issue-top"><span class="issue-num">07</span><span class="issue-pill pill-new">New Feature</span></div>
+      <div class="issue-title">No way to delete an Outreach</div>
+      <div class="issue-now">Outreaches pile up forever with no cleanup</div>
+      <div class="issue-fix">Swipe left on Outreach card = delete with confirm dialog.</div>
+      <div class="issue-owner">Francis (endpoint) + Badinho (swipe UI)</div>
+    </div>
+
+    <div class="issue-card fix">
+      <div class="issue-top"><span class="issue-num">08</span><span class="issue-pill pill-new">New Feature</span></div>
+      <div class="issue-title">Weekly quota invisible</div>
+      <div class="issue-now">User doesn't see 20/week limit until they hit it</div>
+      <div class="issue-fix">"X of 20 used" bar on search + results + home screen.</div>
+      <div class="issue-owner">Francis (data) + Badinho (UI)</div>
+    </div>
+
+    <div class="issue-card bug">
+      <div class="issue-top"><span class="issue-num">09</span><span class="issue-pill pill-bug">Bug</span></div>
+      <div class="issue-title">"Mixed" gender is ambiguous</div>
+      <div class="issue-now">Mixed = "no gender" AND "coach covers both" — two different things</div>
+      <div class="issue-fix">Force gender select. Mixed = dual-gender coach flag. WHERE sport_gender IN (:gender, 'mixed')</div>
+      <div class="issue-owner">Francis (query) + Badinho (force select UI)</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- KEEP -->
+<div style="background:#080808;border:1px solid #1a2e1a;border-radius:12px;padding:22px 26px;">
+  <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#4CAF7D;margin-bottom:12px;">✓ What's Already Built & Working — Don't Touch These</div>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;">
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">AI-personalized email per coach</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">"Did you send it?" modal</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">Sent/Views tracking per Outreach</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">Gmail pre-fill handoff</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">"Not yet — saved as draft" option</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">Preview screen design + layout</div>
+    <div style="background:#111;border:1px solid #1a3a22;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;">1 of N coach counter</div>
+  </div>
+</div>
+
 
 </body>
 </html>
