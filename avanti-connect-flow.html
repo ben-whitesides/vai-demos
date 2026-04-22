@@ -317,42 +317,49 @@ body {
 
   <div class="flow-row">
 
-    <!-- SCREEN 1: Home -->
+    <!-- SCREEN 1: Filter / Search (already correct) -->
     <div class="flow-node">
-      <div class="phone highlight-bad">
+      <div class="phone highlight-ok">
         <div class="phone-notch"><div class="notch-pill"></div></div>
-        <div class="phone-status"><span>9:41</span><span>◼◼◼</span></div>
+        <div class="phone-status"><span>1:31</span><span>◼◼ 73%</span></div>
         <div class="phone-screen dark">
           <div class="ps-header"><span>AVANTI</span> Connect ⚡</div>
-          <div class="stat-row">
-            <div class="stat-box"><div class="n">0</div><div class="l">Sent</div></div>
-            <div class="stat-box"><div class="n orange">0</div><div class="l">Views</div></div>
-            <div class="stat-box"><div class="n red">0</div><div class="l">Batches</div></div>
+          <div style="font-size:7.5px;color:#555;margin-bottom:6px;border-bottom:1px solid #1e1e1e;padding-bottom:5px;">✉ 1 sent this week</div>
+          <div style="font-size:7.5px;color:#888;margin-bottom:5px;">Find college coaches recruiting your sport.</div>
+          <div style="display:flex;gap:4px;margin-bottom:7px;">
+            <div style="flex:1;background:#0f2a18;border:1.5px solid #4CAF7D;border-radius:6px;text-align:center;padding:4px;font-size:8px;font-weight:700;color:#4CAF7D;">Men's</div>
+            <div style="flex:1;background:#1a1a1a;border:1px solid #333;border-radius:6px;text-align:center;padding:4px;font-size:8px;color:#888;">Women's</div>
           </div>
-          <div style="background:#1a1a1a;border-radius:8px;padding:20px;text-align:center;margin-top:8px;">
-            <div style="font-size:8px;color:#555;">Select Sport</div>
-            <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:8px;">
-              <div class="filter-chip">Football</div>
-              <div class="filter-chip">Baseball</div>
-              <div class="filter-chip">Soccer</div>
-            </div>
-            <div style="font-size:8px;color:#555;margin-top:10px;">Select State</div>
-            <div style="display:flex;gap:4px;justify-content:center;margin-top:6px;">
-              <div style="background:#252525;border-radius:5px;padding:4px 8px;font-size:8px;color:#fff;border:1px solid #4CAF7D;">UT</div>
-              <div style="background:#1a1a1a;border-radius:5px;padding:4px 8px;font-size:8px;color:#555;">OR</div>
-              <div style="background:#1a1a1a;border-radius:5px;padding:4px 8px;font-size:8px;color:#555;">TX</div>
-            </div>
+          <div class="ps-section-label">SPORT</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:7px;">
+            <div style="background:#0f2a18;border:1.5px solid #4CAF7D;border-radius:10px;padding:2px 7px;font-size:7px;color:#4CAF7D;font-weight:700;">Baseball ✓</div>
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:2px 7px;font-size:7px;color:#888;">Football</div>
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:2px 7px;font-size:7px;color:#888;">Soccer</div>
           </div>
-          <div class="dead-end-badge">⚠ Tapping UT silently creates a batch — user doesn't know</div>
+          <div class="ps-section-label">DIVISION</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:7px;">
+            <div style="background:#0f2a18;border:1.5px solid #4CAF7D;border-radius:10px;padding:2px 7px;font-size:7px;color:#4CAF7D;font-weight:700;">D-I ✓</div>
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:2px 7px;font-size:7px;color:#888;">D-II</div>
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:2px 7px;font-size:7px;color:#888;">NAIA</div>
+          </div>
+          <div class="ps-section-label">LOCATIONS <span style="font-weight:400;color:#4CAF7D;float:right;">WEST 1/7</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px;">
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:2px 6px;font-size:7px;color:#888;">CA</div>
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:2px 6px;font-size:7px;color:#888;">CO</div>
+            <div style="background:#0f2a18;border:1.5px solid #4CAF7D;border-radius:10px;padding:2px 6px;font-size:7px;color:#4CAF7D;font-weight:700;">UT ✓</div>
+            <div style="background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:2px 6px;font-size:7px;color:#888;">WA</div>
+          </div>
+          <div style="background:#f0a500;border-radius:7px;text-align:center;padding:7px;font-size:9px;font-weight:800;color:#000;margin-top:4px;">Search Coaches</div>
+          <div class="good-badge">✓ Explicit intent. User controls every filter.</div>
         </div>
       </div>
       <div class="screen-caption">
-        <div class="sc-title">Home</div>
-        <div class="sc-bug">Auto-batch on tap</div>
+        <div class="sc-title">Filter & Search</div>
+        <div class="sc-good">✓ Already correct</div>
       </div>
     </div>
 
-    <div class="flow-arrow bad"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#ff4444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+    <div class="flow-arrow"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#444" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
 
     <!-- SCREEN 2: Batch List (broken) -->
     <div class="flow-node">
@@ -773,12 +780,11 @@ body {
   <p>Green = already exists and is good · Orange = in progress · Red = bug to fix · Blue = new feature</p>
   <div class="issues-grid">
 
-    <div class="issue-card bug">
-      <div class="issue-top"><span class="issue-num">01</span><span class="issue-pill pill-bug">Bug</span></div>
-      <div class="issue-title">Auto-batch on state select</div>
-      <div class="issue-now">Tapping a state silently creates a batch</div>
-      <div class="issue-fix">Search = browse only. Explicit "Add to List" button.</div>
-      <div class="issue-owner">Badinho (UI) + Francis (backend)</div>
+    <div class="issue-card fix">
+      <div class="issue-top"><span class="issue-num">01</span><span class="issue-pill" style="background:#0f2a18;color:#4CAF7D;">✓ Good</span></div>
+      <div class="issue-title">Filter & Search screen</div>
+      <div class="issue-fix">Gender toggle, Sport, Division, Location — all explicit. "Search Coaches" CTA. Quota visible. This screen is correctly built.</div>
+      <div class="issue-owner">No change needed</div>
     </div>
 
     <div class="issue-card bug">
