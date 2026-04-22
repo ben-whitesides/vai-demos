@@ -38,12 +38,17 @@ body {
   gap: 0;
   overflow-x: auto;
   padding-bottom: 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.flow-row::-webkit-scrollbar { display: none; }
 .flow-node {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
+  scroll-snap-align: start;
 }
 .flow-arrow {
   display: flex;
@@ -295,6 +300,65 @@ body {
 }
 .flow-separator-line { flex: 1; height: 1px; background: #1a1a1a; }
 .flow-separator-text { font-size: 12px; color: #333; font-weight: 600; white-space: nowrap; }
+
+/* ── MOBILE RESPONSIVE ── */
+.swipe-hint {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: #444;
+  letter-spacing: 0.07em;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.swipe-hint::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, #1e1e1e, transparent);
+}
+
+@media (max-width: 767px) {
+  body { padding: 20px 12px 56px; }
+
+  .doc-header { margin-bottom: 36px; }
+  .doc-header h1 { font-size: 26px; line-height: 1.15; }
+  .doc-header .eyebrow { font-size: 10px; }
+  .doc-header p { font-size: 11px; }
+
+  .section-title { margin-bottom: 20px; }
+  .section-title h2 { font-size: 17px; }
+  .badge { font-size: 9px; padding: 3px 9px; }
+
+  .flow-section { margin-bottom: 48px; }
+  .flow-label { font-size: 10px; }
+
+  /* Each phone snaps neatly — add a right-padding gap so last phone
+     doesn't feel cut off at scroll end */
+  .flow-node:last-child { padding-right: 24px; }
+
+  .screen-caption { width: 160px; }
+  .screen-caption .sc-title { font-size: 10px; }
+  .screen-caption .sc-sub,
+  .screen-caption .sc-bug,
+  .screen-caption .sc-good { font-size: 9px; }
+
+  .flow-separator { margin-bottom: 28px; }
+  .flow-separator-text { font-size: 11px; }
+
+  .issues-section { margin-bottom: 40px; }
+  .issues-section h2 { font-size: 18px; }
+  .issues-section p { font-size: 12px; margin-bottom: 20px; }
+  .issues-grid { grid-template-columns: 1fr !important; }
+  .issue-card { padding: 14px; }
+  .issue-title { font-size: 13px; }
+  .issue-now, .issue-fix { font-size: 11px; }
+  .issue-owner { font-size: 10px; }
+
+  .swipe-hint { display: flex; }
+}
 </style>
 </head>
 <body>
@@ -315,6 +379,7 @@ body {
     <div class="badge badge-red">⚠ What's Broken Today</div>
   </div>
 
+  <div class="swipe-hint">Swipe to see all screens &rarr;</div>
   <div class="flow-row">
 
     <!-- SCREEN 1: Filter / Search (already correct) -->
@@ -547,6 +612,7 @@ body {
     <div class="badge badge-green">✓ How It Should Work</div>
   </div>
 
+  <div class="swipe-hint">Swipe to see all screens &rarr;</div>
   <div class="flow-row">
 
     <!-- GS SCREEN 1: Search with Outreach card + gamified bar -->
@@ -803,6 +869,7 @@ body {
   </div>
   <p style="font-size:13px;color:#333;margin-bottom:36px;">Hero numbers · Circular progress rings · Bold typography as design elements · Color-blocked cards</p>
 
+  <div class="swipe-hint">Swipe to see all screens &rarr;</div>
   <div class="flow-row">
 
     <!-- V2 S1: Search — ring hero + compact filters -->
