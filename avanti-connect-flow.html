@@ -818,34 +818,69 @@ body {
 
     <div class="flow-arrow good"><svg width="28" height="16" viewBox="0 0 28 16"><path d="M0 8 L22 8 M16 2 L22 8 L16 14" stroke="#4CAF7D" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
 
-    <!-- GS SCREEN 6: Auto-advance to next coach -->
+    <!-- GS SCREEN 6: Sent History — email-folder audit trail -->
     <div class="flow-node">
       <div class="phone highlight-good">
         <div class="phone-notch"><div class="notch-pill"></div></div>
-        <div class="phone-status"><span>1:09</span><span style="color:#4CAF7D;">3 of 20</span></div>
-        <div class="phone-screen dark">
-          <div class="ps-header"><span>AVANTI</span> Connect</div>
-          <div class="coach-row">
-            <div class="coach-avatar">KW</div>
-            <div class="coach-info">
-              <div class="coach-name">Kyle Whittingham</div>
-              <div class="coach-meta">Utah · Head Coach</div>
+        <div class="phone-status"><span>1:10</span><span style="color:#4CAF7D;">3 sent</span></div>
+        <div class="phone-screen dark" style="padding:7px 9px 10px;">
+
+          <!-- Header row: Back + title + clock icon -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
+            <div style="font-size:7.5px;color:#555;">‹ Back</div>
+            <div style="font-size:8.5px;font-weight:800;color:#fff;">Sent <span style="color:#4CAF7D;">History</span></div>
+            <!-- Clock / history icon -->
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <circle cx="6.5" cy="6.5" r="5.5" stroke="#4CAF7D" stroke-width="1.2"/>
+              <path d="M6.5 3.5V6.5L8.5 8" stroke="#4CAF7D" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <!-- Summary line -->
+          <div style="font-size:7px;color:#555;margin-bottom:7px;">3 sent this week &nbsp;·&nbsp; 7 total all-time</div>
+
+          <!-- Tab bar -->
+          <div style="display:flex;gap:3px;margin-bottom:7px;">
+            <div style="flex:1;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;text-align:center;padding:3px 0;font-size:7px;color:#555;">Active</div>
+            <div style="flex:1;background:#0f2a18;border:1.5px solid #4CAF7D;border-radius:6px;text-align:center;padding:3px 0;font-size:7px;font-weight:800;color:#4CAF7D;">Sent ✓</div>
+          </div>
+
+          <!-- Sent entries — email folder style -->
+          <div style="display:flex;align-items:center;gap:6px;padding:5px 7px;background:#121a14;border-radius:7px;margin-bottom:3px;border-left:3px solid #4CAF7D;">
+            <div class="coach-avatar" style="background:#0a1f0a;border:1.5px solid #4CAF7D;color:#4CAF7D;font-size:8px;">KW</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:8.5px;font-weight:700;color:#e8fce8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Kyle Whittingham</div>
+              <div style="font-size:6.5px;color:#555;">Utah · Head Coach · Apr 22</div>
             </div>
+            <div class="coach-status cs-sent">Sent</div>
           </div>
-          <div class="email-card" style="margin-top:6px;">
-            <div class="email-label">Subject</div>
-            <div class="email-subject">Class of 2026 Football Prospect - Ben</div>
-            <div class="email-label" style="margin-top:5px;">Your Message</div>
-            <div class="email-body">Coach Whittingham,<br><br>I'm writing about Utah's Pac-12 program and your tradition of excellence...</div>
+
+          <div style="display:flex;align-items:center;gap:6px;padding:5px 7px;background:#121a14;border-radius:7px;margin-bottom:3px;border-left:3px solid #4CAF7D;">
+            <div class="coach-avatar" style="background:#0a1f0a;border:1.5px solid #4CAF7D;color:#4CAF7D;font-size:8px;">BD</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:8.5px;font-weight:700;color:#e8fce8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Brandon Doman</div>
+              <div style="font-size:6.5px;color:#555;">BYU · Offensive Coord · Apr 22</div>
+            </div>
+            <div class="coach-status cs-sent">Sent</div>
           </div>
-          <div class="btn-full">✓ Looks Good — Send This</div>
-          <div class="btn-ghost" style="color:#f0a500;border-color:#3a2a00;">Skip For Now</div>
-          <div class="good-badge">✓ Auto-advanced. No manual navigation needed.</div>
+
+          <div style="display:flex;align-items:center;gap:6px;padding:5px 7px;background:#111;border-radius:7px;margin-bottom:8px;border-left:3px solid #2a4a2a;opacity:0.65;">
+            <div class="coach-avatar" style="font-size:8px;color:#555;">CP</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:8.5px;font-weight:700;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Chris Pfatenhauer</div>
+              <div style="font-size:6.5px;color:#444;">Utah Tech · Coach · Apr 10</div>
+            </div>
+            <div class="coach-status cs-sent">Sent</div>
+          </div>
+
+          <!-- New outreach CTA -->
+          <div style="display:block;background:transparent;border:1.5px solid #4CAF7D;color:#4CAF7D;font-size:8.5px;font-weight:800;text-align:center;padding:7px;border-radius:7px;">+ Start New Outreach</div>
+
         </div>
       </div>
       <div class="screen-caption">
-        <div class="sc-title">Auto-Advance</div>
-        <div class="sc-good">Next coach instantly</div>
+        <div class="sc-title">Sent History</div>
+        <div class="sc-good">Email-style audit trail</div>
       </div>
     </div>
 
