@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI Admin Portal v2 — Design Extract</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0C0A09;
+  --bg2:#151210;
+  --bg3:#1A1714;
+  --surface:#1C1917;
+  --border:#2A2623;
+  --orange:#F7941E;
+  --orange-hi:#FFB347;
+  --green:#34D399;
+  --teal:#5EEAD4;
+  --text:#FAFAF9;
+  --text2:#A8A29E;
+  --text3:#57534E;
+  --red:#F87171;
+  --yellow:#FBBF24;
+  --radius:8px;
+  --sidebar-w:224px;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+
+/* ── LAYOUT ── */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--bg);overflow-y:auto}
+.main{flex:1;overflow-y:auto;background:var(--bg)}
+
+/* ── SIDEBAR ── */
+.sidebar-header{height:56px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.sidebar-logo{height:22px;width:auto}
+.sidebar-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.sidebar-nav{display:flex;flex-direction:column;gap:2px;padding:8px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:6px;cursor:pointer;transition:background .15s,color .15s;color:var(--text2);border-left:2px solid transparent;text-decoration:none;font-size:13px}
+.nav-item:hover{background:var(--bg2);color:var(--text)}
+.nav-item.active{background:var(--bg3);color:var(--orange);border-left-color:var(--orange)}
+.nav-icon{width:16px;height:16px;flex-shrink:0;opacity:.8}
+.nav-item.active .nav-icon{opacity:1}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:600;letter-spacing:.06em;color:var(--text3);text-transform:uppercase}
+.sidebar-section{padding:16px 16px 4px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
+
+/* ── TOP BAR ── */
+.topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:var(--bg);position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:600;color:var(--text)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.user-pill{display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border:1px solid var(--border);border-radius:20px;cursor:pointer}
+.user-pill-name{font-size:12px;font-weight:500;color:var(--text2)}
+.role-chip{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:#2A1F0A;color:var(--orange);padding:2px 8px;border-radius:20px;border:1px solid #3D2D0E}
+
+/* ── PAGE CONTENT ── */
+.page{padding:24px}
+.page-header{margin-bottom:24px}
+.page-title{font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--text3);margin-top:4px}
+
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 20px 16px;position:relative;overflow:hidden}
+.kpi-stripe{position:absolute;top:0;left:0;right:0;height:2px}
+.kpi-label{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:10px}
+.kpi-value{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1}
+.kpi-hint{font-size:11px;color:var(--text3);margin-top:6px}
+
+/* ── CHARTS ROW ── */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px}
+
+/* ── SVG CHARTS ── */
+svg text{font-family:'Inter',sans-serif}
+
+/* ── BOTTOM ROW ── */
+.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ── TABLE ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:13px;font-weight:600;color:var(--text)}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)}
+td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--border);color:var(--text2)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;line-height:1.4}
+.badge-mentor{background:#1A2E1F;color:var(--green);border:1px solid #1F3D25}
+.badge-plus{background:#1A1F2E;color:#93C5FD;border:1px solid #1F2940}
+.badge-free{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.badge-suspended{background:#2E1A1A;color:var(--red);border:1px solid #3D1F1F}
+.badge-pending{background:#2E2A1A;color:var(--yellow);border:1px solid #3D3014}
+.badge-admin{background:#2E1F0A;color:var(--orange);border:1px solid #3D2D0E}
+.badge-coach{background:#1A2A2E;color:var(--teal);border:1px solid #1F3540}
+.badge-user{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.badge-active{background:#1A2E1F;color:var(--green);border:1px solid #1F3D25}
+.badge-past-due{background:#2E2A1A;color:var(--yellow);border:1px solid #3D3014}
+.badge-open{background:#2E1A1A;color:var(--red);border:1px solid #3D1F1F}
+.badge-inprogress{background:#1A1F2E;color:#93C5FD;border:1px solid #1F2940}
+.badge-resolved{background:#1A2E1F;color:var(--green);border:1px solid #1F3D25}
+.badge-high{background:#2E1A1A;color:var(--red);border:1px solid #3D1F1F}
+.badge-medium{background:#2E2A1A;color:var(--yellow);border:1px solid #3D3014}
+.badge-low{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+
+/* ── TICKETS ── */
+.ticket-item{padding:12px 16px;border-bottom:1px solid var(--border)}
+.ticket-item:last-child{border-bottom:none}
+.ticket-subject{font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+.ticket-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ticket-updated{font-size:11px;color:var(--text3)}
+
+/* ── FILTERS ── */
+.filters-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end}
+.filter-group{display:flex;flex-direction:column;gap:4px}
+.filter-label{font-size:11px;font-weight:500;color:var(--text3)}
+.filter-input{height:34px;padding:0 10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;font-family:inherit;outline:none;min-width:180px}
+.filter-input::placeholder{color:var(--text3)}
+.filter-select{height:34px;padding:0 10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;font-family:inherit;outline:none;cursor:pointer;min-width:120px}
+.filter-input:focus,.filter-select:focus{border-color:var(--orange)}
+
+/* ── PAGINATION ── */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--border)}
+.page-info{font-size:12px;color:var(--text3)}
+.btn-row{display:flex;gap:8px}
+.btn{height:30px;padding:0 14px;border-radius:6px;font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;border:1px solid var(--border);background:var(--bg2);color:var(--text2);transition:background .15s,color .15s}
+.btn:hover{background:var(--bg3);color:var(--text)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+.btn-primary:hover{background:var(--orange-hi);border-color:var(--orange-hi)}
+
+/* ── TAB NAV ── */
+.tab-nav{display:flex;border-bottom:1px solid var(--border);margin-bottom:0;padding:0 24px}
+.tab{padding:12px 16px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--orange);border-bottom-color:var(--orange)}
+
+/* ── VIEWS ── */
+.view{display:none}
+.view.active{display:block}
+
+/* ── REFERRAL TREE ── */
+.tree-canvas{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;overflow-x:auto}
+.tree-node{display:inline-flex;flex-direction:column;align-items:center;position:relative}
+.node-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;text-align:center;min-width:120px;position:relative;cursor:pointer;transition:border-color .15s}
+.node-card:hover{border-color:var(--orange)}
+.node-card.root{border-color:var(--orange);background:#1A1208}
+.node-name{font-size:12px;font-weight:600;color:var(--text)}
+.node-handle{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+.node-plan{margin-top:4px}
+.tree-level{display:flex;gap:16px;justify-content:center}
+.tree-connector{width:1px;height:20px;background:var(--border);margin:0 auto}
+.tree-h-line{height:1px;background:var(--border);flex:1}
+.tree-children{display:flex;gap:16px;position:relative;padding-top:20px}
+.tree-children::before{content:'';position:absolute;top:0;left:50%;right:50%;height:1px;background:var(--border)}
+
+/* ── ANALYTICS ── */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+
+/* ── AUDIT LOG ── */
+.log-entry{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px}
+.log-entry:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0;margin-top:4px}
+.log-action{font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--orange-hi)}
+.log-admin{font-size:13px;font-weight:500;color:var(--text)}
+.log-target{font-size:12px;color:var(--text2)}
+.log-time{font-size:11px;color:var(--text3);margin-left:auto;white-space:nowrap}
+
+/* ── SUBSCRIPTIONS ── */
+.sub-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <svg width="60" height="20" viewBox="0 0 60 20" fill="none">
+      <text x="0" y="15" font-family="Inter" font-weight="800" font-size="16" fill="#F7941E">VAI</text>
+    </svg>
+    <span class="sidebar-label">Admin</span>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="nav-item" onclick="showView('dashboard')" id="nav-dashboard">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-item" onclick="showView('users')" id="nav-users">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6"/></svg>
+      Users
+    </a>
+    <a class="nav-item" onclick="showView('referrals')" id="nav-referrals">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="2" r="1.5"/><circle cx="2" cy="12" r="1.5"/><circle cx="14" cy="12" r="1.5"/><path d="M8 3.5v3M8 6.5l-6 4M8 6.5l6 4"/></svg>
+      Referral Tree
+    </a>
+    <a class="nav-item" onclick="showView('subscriptions')" id="nav-subscriptions">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="10" rx="2"/><path d="M1 7h14"/></svg>
+      Subscriptions
+    </a>
+    <a class="nav-item" onclick="showView('coupons')" id="nav-coupons">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6V3h3l7 7-3 3L2 6z"/><circle cx="5.5" cy="5.5" r="1"/></svg>
+      Coupons
+      <span class="nav-badge">P1</span>
+    </a>
+    <a class="nav-item" onclick="showView('tickets')" id="nav-tickets">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 10.667A1.333 1.333 0 0112.667 12H4.667L2 14V3.333A1.333 1.333 0 013.333 2h9.334A1.333 1.333 0 0114 3.333v7.334z"/></svg>
+      Tickets
+      <span class="nav-badge">P1</span>
+    </a>
+    <a class="nav-item" onclick="showView('payouts')" id="nav-payouts">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v6M6 7h3a1 1 0 010 2H6"/></svg>
+      Payouts
+      <span class="nav-badge">P2</span>
+    </a>
+    <a class="nav-item" onclick="showView('analytics')" id="nav-analytics">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12l4-4 3 3 5-6"/></svg>
+      Analytics
+      <span class="nav-badge">P2</span>
+    </a>
+    <a class="nav-item" onclick="showView('auditlog')" id="nav-auditlog">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h8M4 9h5M2 3h12a1 1 0 011 1v9a1 1 0 01-1 1H2a1 1 0 01-1-1V4a1 1 0 011-1z"/></svg>
+      Audit Log
+      <span class="nav-badge">P2</span>
+    </a>
+    <a class="nav-item" onclick="showView('settings')" id="nav-settings">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/></svg>
+      Settings
+    </a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <span class="topbar-title" id="page-title">Dashboard</span>
+    <div class="topbar-right">
+      <div class="user-pill">
+        <div class="avatar">BW</div>
+        <span class="user-pill-name">Ben Whitesides</span>
+        <span class="role-chip">Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div class="view active" id="view-dashboard">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Operations Overview</div>
+        <div class="page-sub">VAI platform health — mock data when NEXT_PUBLIC_USE_MOCK_API=true</div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-stripe" style="background:var(--orange)"></div>
+          <div class="kpi-label">Total Users</div>
+          <div class="kpi-value">8,247</div>
+          <div class="kpi-hint">+12.4% growth this month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-stripe" style="background:var(--green)"></div>
+          <div class="kpi-label">Active Subscriptions</div>
+          <div class="kpi-value">1,083</div>
+          <div class="kpi-hint">847 VAI+ · 236 Mentor</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-stripe" style="background:var(--orange)"></div>
+          <div class="kpi-label">MRR (mock)</div>
+          <div class="kpi-value">$43,130</div>
+          <div class="kpi-hint">+$2,410 vs last month</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-stripe" style="background:var(--teal)"></div>
+          <div class="kpi-label">Open Tickets</div>
+          <div class="kpi-value">14</div>
+          <div class="kpi-hint">6 in progress</div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">User Growth — Last 30 Days</div>
+          <svg width="100%" height="220" viewBox="0 0 460 220">
+            <!-- Grid lines -->
+            <line x1="40" y1="10" x2="40" y2="185" stroke="#2A2623" stroke-width="1"/>
+            <line x1="40" y1="185" x2="455" y2="185" stroke="#2A2623" stroke-width="1"/>
+            <line x1="40" y1="50" x2="455" y2="50" stroke="#2A2623" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="40" y1="90" x2="455" y2="90" stroke="#2A2623" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="40" y1="130" x2="455" y2="130" stroke="#2A2623" stroke-width="1" stroke-dasharray="3,3"/>
+            <!-- Y labels -->
+            <text x="32" y="54" text-anchor="end" font-size="10" fill="#57534E">80</text>
+            <text x="32" y="94" text-anchor="end" font-size="10" fill="#57534E">60</text>
+            <text x="32" y="134" text-anchor="end" font-size="10" fill="#57534E">40</text>
+            <text x="32" y="189" text-anchor="end" font-size="10" fill="#57534E">0</text>
+            <!-- X labels -->
+            <text x="55" y="202" font-size="10" fill="#57534E">Apr 1</text>
+            <text x="155" y="202" font-size="10" fill="#57534E">Apr 8</text>
+            <text x="255" y="202" font-size="10" fill="#57534E">Apr 15</text>
+            <text x="355" y="202" font-size="10" fill="#57534E">Apr 22</text>
+            <!-- Line chart path (signups data approximated) -->
+            <polyline fill="none" stroke="#34D399" stroke-width="2" stroke-linejoin="round"
+              points="55,145 70,130 85,110 100,120 115,95 130,80 145,100 160,90 175,85 190,110 205,95 220,80 235,70 250,85 265,75 280,60 295,70 310,80 325,65 340,75 355,85 370,70 385,60 400,75 415,80 430,70 445,65"/>
+            <!-- Area fill -->
+            <polygon fill="url(#greenGrad)" opacity=".15"
+              points="55,145 70,130 85,110 100,120 115,95 130,80 145,100 160,90 175,85 190,110 205,95 220,80 235,70 250,85 265,75 280,60 295,70 310,80 325,65 340,75 355,85 370,70 385,60 400,75 415,80 430,70 445,65 445,185 55,185"/>
+            <defs>
+              <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#34D399"/>
+                <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">Revenue by Tier (MRR)</div>
+          <svg width="100%" height="220" viewBox="0 0 460 220">
+            <!-- Grid -->
+            <line x1="130" y1="10" x2="130" y2="175" stroke="#2A2623" stroke-width="1"/>
+            <line x1="130" y1="175" x2="455" y2="175" stroke="#2A2623" stroke-width="1"/>
+            <line x1="255" y1="10" x2="255" y2="175" stroke="#2A2623" stroke-width="1" stroke-dasharray="3,3"/>
+            <line x1="380" y1="10" x2="380" y2="175" stroke="#2A2623" stroke-width="1" stroke-dasharray="3,3"/>
+            <!-- X labels -->
+            <text x="255" y="192" text-anchor="middle" font-size="10" fill="#57534E">$8k</text>
+            <text x="380" y="192" text-anchor="middle" font-size="10" fill="#57534E">$16k</text>
+            <!-- Bars -->
+            <!-- VAI+ Monthly: $16.25k = 325px/20k * width -->
+            <text x="125" y="42" text-anchor="end" font-size="11" fill="#A8A29E">VAI+ Monthly</text>
+            <rect x="130" y="30" width="244" height="20" rx="3" fill="#F7941E"/>
+            <text x="380" y="42" font-size="11" fill="#A8A29E" dx="6">$16.3k</text>
+
+            <text x="125" y="87" text-anchor="end" font-size="11" fill="#A8A29E">VAI+ Yearly</text>
+            <rect x="130" y="75" width="147" height="20" rx="3" fill="#34D399"/>
+            <text x="283" y="87" font-size="11" fill="#A8A29E" dx="6">$9.8k</text>
+
+            <text x="125" y="132" text-anchor="end" font-size="11" fill="#A8A29E">Mentor Monthly</text>
+            <rect x="130" y="120" width="186" height="20" rx="3" fill="#F7941E"/>
+            <text x="322" y="132" font-size="11" fill="#A8A29E" dx="6">$12.4k</text>
+
+            <text x="125" y="175" text-anchor="end" font-size="11" fill="#A8A29E">Mentor Yearly</text>
+            <rect x="130" y="163" width="67" height="20" rx="3" fill="#34D399"/>
+            <text x="203" y="175" font-size="11" fill="#A8A29E" dx="6">$4.5k</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="bottom-row">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Recent Admin Actions</span></div>
+          <table>
+            <thead><tr>
+              <th>When</th><th>Admin</th><th>Action</th><th>Target</th>
+            </tr></thead>
+            <tbody>
+              <tr><td class="text-3">Apr 24 09:14</td><td>Ben W.</td><td><code class="mono" style="color:var(--orange-hi)">user.suspend</code></td><td style="color:var(--text)">@jortiz</td></tr>
+              <tr><td class="text-3">Apr 24 08:52</td><td>Ben W.</td><td><code class="mono" style="color:var(--orange-hi)">coupon.create</code></td><td style="color:var(--text)">FOUNDER50</td></tr>
+              <tr><td class="text-3">Apr 23 16:30</td><td>Ben W.</td><td><code class="mono" style="color:var(--orange-hi)">subscription.cancel</code></td><td style="color:var(--text)">@casey_n</td></tr>
+              <tr><td class="text-3">Apr 23 11:20</td><td>Jamie L.</td><td><code class="mono" style="color:var(--orange-hi)">ticket.resolve</code></td><td style="color:var(--text)">#TKT-0041</td></tr>
+              <tr><td class="text-3">Apr 22 18:05</td><td>Ben W.</td><td><code class="mono" style="color:var(--orange-hi)">user.role.update</code></td><td style="color:var(--text)">@caleb</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Recent Tickets</span></div>
+          <div class="ticket-item">
+            <div class="ticket-subject">Can't access AVANTI after upgrade</div>
+            <div class="ticket-meta">
+              <span class="badge badge-open">open</span>
+              <span class="badge badge-high">high</span>
+              <span class="ticket-updated">Updated Apr 24</span>
+            </div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-subject">Referral commission not showing</div>
+            <div class="ticket-meta">
+              <span class="badge badge-inprogress">in progress</span>
+              <span class="badge badge-medium">medium</span>
+              <span class="ticket-updated">Updated Apr 23</span>
+            </div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-subject">Profile photo not uploading on Android</div>
+            <div class="ticket-meta">
+              <span class="badge badge-open">open</span>
+              <span class="badge badge-low">low</span>
+              <span class="ticket-updated">Updated Apr 22</span>
+            </div>
+          </div>
+          <div class="ticket-item">
+            <div class="ticket-subject">Billing receipt not delivered</div>
+            <div class="ticket-meta">
+              <span class="badge badge-resolved">resolved</span>
+              <span class="badge badge-low">low</span>
+              <span class="ticket-updated">Updated Apr 21</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ USERS ═══ -->
+  <div class="view" id="view-users">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Users</div>
+        <div class="page-sub">Search, filter, and manage platform users.</div>
+      </div>
+      <div class="filters-row">
+        <div class="filter-group">
+          <label class="filter-label">Search</label>
+          <input class="filter-input" placeholder="Handle, name, or email…" type="text">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Role</label>
+          <select class="filter-select">
+            <option>All roles</option><option>User</option><option>Coach</option><option>Admin</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Subscription</label>
+          <select class="filter-select">
+            <option>All plans</option><option>Free</option><option>VAI+</option><option>Mentor</option><option>Suspended</option><option>Pending</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Referrer</label>
+          <select class="filter-select">
+            <option>All users</option><option>Has referrer</option><option>No referrer</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Page size</label>
+          <select class="filter-select" style="min-width:80px">
+            <option>25</option><option>50</option><option>100</option>
+          </select>
+        </div>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr>
+            <th></th><th>Name</th><th>Handle</th><th>Email</th><th>Role</th><th>Plan</th><th>Referrer</th><th>Created</th><th>Actions</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="avatar" style="width:28px;height:28px;font-size:10px;background:var(--orange)">BW</div></td>
+              <td style="color:var(--text);font-weight:500">Ben Whitesides</td>
+              <td><span class="mono">@whitetrainer</span></td>
+              <td style="color:var(--text2)">ben@vai.app</td>
+              <td><span class="badge badge-admin">admin</span></td>
+              <td><span class="badge badge-mentor">mentor</span></td>
+              <td style="color:var(--text3)">—</td>
+              <td style="color:var(--text3);white-space:nowrap">Jan 10, 2024</td>
+              <td><button class="btn">View</button></td>
+            </tr>
+            <tr>
+              <td><div class="avatar" style="width:28px;height:28px;font-size:10px;background:#34D399;color:#0C0A09">PL</div></td>
+              <td style="color:var(--text);font-weight:500">Poppy Livers</td>
+              <td><span class="mono">@Poppylivers</span></td>
+              <td style="color:var(--text2)">poppy@example.com</td>
+              <td><span class="badge badge-user">user</span></td>
+              <td><span class="badge badge-plus">plus</span></td>
+              <td style="color:var(--text3)">@whitetrainer</td>
+              <td style="color:var(--text3);white-space:nowrap">Jan 15, 2026</td>
+              <td><button class="btn">View</button></td>
+            </tr>
+            <tr>
+              <td><div class="avatar" style="width:28px;height:28px;font-size:10px;background:#5EEAD4;color:#0C0A09">CT</div></td>
+              <td style="color:var(--text);font-weight:500">Caleb Trainer</td>
+              <td><span class="mono">@caleb</span></td>
+              <td style="color:var(--text2)">caleb@example.com</td>
+              <td><span class="badge badge-coach">coach</span></td>
+              <td><span class="badge badge-mentor">mentor</span></td>
+              <td style="color:var(--text3)">—</td>
+              <td style="color:var(--text3);white-space:nowrap">Jun 1, 2025</td>
+              <td><button class="btn">View</button></td>
+            </tr>
+            <tr>
+              <td><div class="avatar" style="width:28px;height:28px;font-size:10px">NR</div></td>
+              <td style="color:var(--text);font-weight:500">Noah Rivera</td>
+              <td><span class="mono">@noah</span></td>
+              <td style="color:var(--text2)">noah@example.com</td>
+              <td><span class="badge badge-user">user</span></td>
+              <td><span class="badge badge-plus">plus</span></td>
+              <td style="color:var(--text3)">@caleb</td>
+              <td style="color:var(--text3);white-space:nowrap">Jul 10, 2025</td>
+              <td><button class="btn">View</button></td>
+            </tr>
+            <tr>
+              <td><div class="avatar" style="width:28px;height:28px;font-size:10px;background:#F87171;color:#fff">JO</div></td>
+              <td style="color:var(--text);font-weight:500">James Ortiz</td>
+              <td><span class="mono">@jortiz</span></td>
+              <td style="color:var(--text2)">james@example.com</td>
+              <td><span class="badge badge-user">user</span></td>
+              <td><span class="badge badge-suspended">suspended</span></td>
+              <td style="color:var(--text3)">@caleb</td>
+              <td style="color:var(--text3);white-space:nowrap">Aug 1, 2025</td>
+              <td><button class="btn">View</button></td>
+            </tr>
+            <tr>
+              <td><div class="avatar" style="width:28px;height:28px;font-size:10px">MS</div></td>
+              <td style="color:var(--text);font-weight:500">Maria Santos</td>
+              <td><span class="mono">@marias</span></td>
+              <td style="color:var(--text2)">maria@example.com</td>
+              <td><span class="badge badge-user">user</span></td>
+              <td><span class="badge badge-mentor">mentor</span></td>
+              <td style="color:var(--text3)">@caleb</td>
+              <td style="color:var(--text3);white-space:nowrap">Sep 5, 2025</td>
+              <td><button class="btn">View</button></td>
+            </tr>
+            <tr>
+              <td><div class="avatar" style="width:28px;height:28px;font-size:10px;background:#FBBF24;color:#0C0A09">MS</div></td>
+              <td style="color:var(--text);font-weight:500">May Singh</td>
+              <td><span class="mono">@may_s</span></td>
+              <td style="color:var(--text2)">may@example.com</td>
+              <td><span class="badge badge-user">user</span></td>
+              <td><span class="badge badge-pending">pending</span></td>
+              <td style="color:var(--text3)">@zoe_c</td>
+              <td style="color:var(--text3);white-space:nowrap">Apr 8, 2026</td>
+              <td><button class="btn">View</button></td>
+            </tr>
+            <tr>
+              <td><div class="avatar" style="width:28px;height:28px;font-size:10px">CN</div></td>
+              <td style="color:var(--text);font-weight:500">Casey Nguyen</td>
+              <td><span class="mono">@casey_n</span></td>
+              <td style="color:var(--text2)">casey@example.com</td>
+              <td><span class="badge badge-user">user</span></td>
+              <td><span class="badge badge-past-due">past_due</span></td>
+              <td style="color:var(--text3)">@BonnieWhitesides</td>
+              <td style="color:var(--text3);white-space:nowrap">Jul 22, 2025</td>
+              <td><button class="btn">View</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination">
+          <span class="page-info">Showing 1–8 of 23 users</span>
+          <div class="btn-row">
+            <button class="btn" disabled>Previous</button>
+            <button class="btn">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ REFERRAL TREE ═══ -->
+  <div class="view" id="view-referrals">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Referral Tree</div>
+        <div class="page-sub">Visualize the 5-level affiliate network. Drag to move nodes.</div>
+      </div>
+      <div class="tree-canvas">
+        <!-- Root level -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+          <div class="node-card root" style="min-width:140px">
+            <div class="node-name">Ben Whitesides</div>
+            <div class="node-handle">@whitetrainer</div>
+            <div class="node-plan"><span class="badge badge-admin" style="font-size:9px">admin · mentor</span></div>
+          </div>
+          <div class="tree-connector"></div>
+          <!-- L1 -->
+          <div style="display:flex;gap:48px;justify-content:center">
+            <div style="display:flex;flex-direction:column;align-items:center">
+              <div class="node-card">
+                <div class="node-name">Caleb Trainer</div>
+                <div class="node-handle">@caleb</div>
+                <div class="node-plan"><span class="badge badge-mentor" style="font-size:9px">mentor</span></div>
+              </div>
+              <div class="tree-connector"></div>
+              <!-- L2 under Caleb -->
+              <div style="display:flex;gap:24px">
+                <div style="display:flex;flex-direction:column;align-items:center">
+                  <div class="node-card">
+                    <div class="node-name">Noah Rivera</div>
+                    <div class="node-handle">@noah</div>
+                    <div class="node-plan"><span class="badge badge-plus" style="font-size:9px">plus</span></div>
+                  </div>
+                  <div class="tree-connector"></div>
+                  <div class="node-card">
+                    <div class="node-name">Ethan Brooks</div>
+                    <div class="node-handle">@ethanb</div>
+                    <div class="node-plan"><span class="badge badge-plus" style="font-size:9px">plus</span></div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center">
+                  <div class="node-card">
+                    <div class="node-name">Maria Santos</div>
+                    <div class="node-handle">@marias</div>
+                    <div class="node-plan"><span class="badge badge-mentor" style="font-size:9px">mentor</span></div>
+                  </div>
+                  <div class="tree-connector"></div>
+                  <div class="node-card">
+                    <div class="node-name">Zoe Chen</div>
+                    <div class="node-handle">@zoe_c</div>
+                    <div class="node-plan"><span class="badge badge-plus" style="font-size:9px">plus</span></div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center">
+                  <div class="node-card" style="border-color:var(--red)">
+                    <div class="node-name">James Ortiz</div>
+                    <div class="node-handle">@jortiz</div>
+                    <div class="node-plan"><span class="badge badge-suspended" style="font-size:9px">suspended</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center">
+              <div class="node-card">
+                <div class="node-name">Poppy Livers</div>
+                <div class="node-handle">@Poppylivers</div>
+                <div class="node-plan"><span class="badge badge-plus" style="font-size:9px">plus</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:20px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:var(--orange);display:inline-block"></span><span style="font-size:11px;color:var(--text3)">Root</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:var(--green);display:inline-block"></span><span style="font-size:11px;color:var(--text3)">Mentor</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#93C5FD;display:inline-block"></span><span style="font-size:11px;color:var(--text3)">VAI+</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:var(--red);display:inline-block"></span><span style="font-size:11px;color:var(--text3)">Suspended</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SUBSCRIPTIONS ═══ -->
+  <div class="view" id="view-subscriptions">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Subscriptions</div>
+        <div class="page-sub">Manage and monitor all active subscription plans.</div>
+      </div>
+      <div class="sub-stat-row">
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--green)"></div><div class="kpi-label">VAI+ Monthly</div><div class="kpi-value">612</div><div class="kpi-hint">$19.95/mo · $12.2K MRR</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--teal)"></div><div class="kpi-label">VAI+ Yearly</div><div class="kpi-value">235</div><div class="kpi-hint">$179.95/yr · $3.5K MRR</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--orange)"></div><div class="kpi-label">Mentor</div><div class="kpi-value">236</div><div class="kpi-hint">$99.95/mo · $23.6K MRR</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">All Subscriptions</span></div>
+        <table>
+          <thead><tr><th>User</th><th>Plan</th><th>Billing</th><th>Amount</th><th>Status</th><th>Next Payment</th><th>Stripe</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--text);font-weight:500">Ben Whitesides <span class="mono" style="color:var(--text3)">@whitetrainer</span></td><td>Mentor Yearly</td><td>yearly</td><td>$1,999/yr</td><td><span class="badge badge-active">active</span></td><td style="color:var(--text3)">Jan 10, 2027</td><td><a href="#" style="color:var(--orange);font-size:12px">↗ Stripe</a></td></tr>
+            <tr><td style="color:var(--text);font-weight:500">Poppy Livers <span class="mono" style="color:var(--text3)">@Poppylivers</span></td><td>VAI+ Monthly</td><td>monthly</td><td>$19.95/mo</td><td><span class="badge badge-active">active</span></td><td style="color:var(--text3)">May 15, 2026</td><td><a href="#" style="color:var(--orange);font-size:12px">↗ Stripe</a></td></tr>
+            <tr><td style="color:var(--text);font-weight:500">Caleb Trainer <span class="mono" style="color:var(--text3)">@caleb</span></td><td>Mentor Yearly</td><td>yearly</td><td>$1,999/yr</td><td><span class="badge badge-active">active</span></td><td style="color:var(--text3)">Jun 1, 2026</td><td><a href="#" style="color:var(--orange);font-size:12px">↗ Stripe</a></td></tr>
+            <tr><td style="color:var(--text);font-weight:500">Casey Nguyen <span class="mono" style="color:var(--text3)">@casey_n</span></td><td>VAI+ Monthly</td><td>monthly</td><td>$19.95/mo</td><td><span class="badge badge-past-due">past_due</span></td><td style="color:var(--red)">Apr 12, 2026</td><td><a href="#" style="color:var(--orange);font-size:12px">↗ Stripe</a></td></tr>
+            <tr><td style="color:var(--text);font-weight:500">James Ortiz <span class="mono" style="color:var(--text3)">@jortiz</span></td><td>VAI+ Monthly</td><td>monthly</td><td>$19.95/mo</td><td><span class="badge badge-suspended">cancelled</span></td><td style="color:var(--text3)">—</td><td><a href="#" style="color:var(--orange);font-size:12px">↗ Stripe</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TICKETS ═══ -->
+  <div class="view" id="view-tickets">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Support Tickets</div>
+        <div class="page-sub">Track and resolve user support requests.</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--red)"></div><div class="kpi-label">Open</div><div class="kpi-value">14</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--teal)"></div><div class="kpi-label">In Progress</div><div class="kpi-value">6</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--green)"></div><div class="kpi-label">Resolved This Week</div><div class="kpi-value">21</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--orange)"></div><div class="kpi-label">Avg Response</div><div class="kpi-value">3.2h</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">All Tickets</span>
+          <button class="btn btn-primary">+ New Ticket</button>
+        </div>
+        <table>
+          <thead><tr><th>#</th><th>Subject</th><th>User</th><th>Priority</th><th>Status</th><th>Updated</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="color:var(--text3)">TKT-0048</td><td style="color:var(--text);font-weight:500">Can't access AVANTI after upgrade</td><td style="color:var(--text2)">@riley</td><td><span class="badge badge-high">high</span></td><td><span class="badge badge-open">open</span></td><td style="color:var(--text3)">Apr 24</td><td><button class="btn">View</button></td></tr>
+            <tr><td class="mono" style="color:var(--text3)">TKT-0047</td><td style="color:var(--text);font-weight:500">Referral commission not showing</td><td style="color:var(--text2)">@may_s</td><td><span class="badge badge-medium">medium</span></td><td><span class="badge badge-inprogress">in progress</span></td><td style="color:var(--text3)">Apr 23</td><td><button class="btn">View</button></td></tr>
+            <tr><td class="mono" style="color:var(--text3)">TKT-0046</td><td style="color:var(--text);font-weight:500">Profile photo not uploading on Android</td><td style="color:var(--text2)">@kain</td><td><span class="badge badge-low">low</span></td><td><span class="badge badge-open">open</span></td><td style="color:var(--text3)">Apr 22</td><td><button class="btn">View</button></td></tr>
+            <tr><td class="mono" style="color:var(--text3)">TKT-0045</td><td style="color:var(--text);font-weight:500">Billing receipt not delivered</td><td style="color:var(--text2)">@ethanb</td><td><span class="badge badge-low">low</span></td><td><span class="badge badge-resolved">resolved</span></td><td style="color:var(--text3)">Apr 21</td><td><button class="btn">View</button></td></tr>
+            <tr><td class="mono" style="color:var(--text3)">TKT-0044</td><td style="color:var(--text);font-weight:500">AVANTI AI not responding to prompts</td><td style="color:var(--text2)">@livgrant</td><td><span class="badge badge-high">high</span></td><td><span class="badge badge-resolved">resolved</span></td><td style="color:var(--text3)">Apr 20</td><td><button class="btn">View</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ANALYTICS ═══ -->
+  <div class="view" id="view-analytics">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Analytics</div>
+        <div class="page-sub">Platform growth and revenue metrics.</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--orange)"></div><div class="kpi-label">Total Users</div><div class="kpi-value">8,247</div><div class="kpi-hint">+12.4% MoM</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--green)"></div><div class="kpi-label">MRR</div><div class="kpi-value">$43,130</div><div class="kpi-hint">+$2,410 vs Apr</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--teal)"></div><div class="kpi-label">Churn Rate</div><div class="kpi-value">2.1%</div><div class="kpi-hint">-0.4% vs last month</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--orange)"></div><div class="kpi-label">ARPU</div><div class="kpi-value">$39.82</div><div class="kpi-hint">Paid users only</div></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="chart-title">Conversion by Plan</div>
+          <svg width="100%" height="200" viewBox="0 0 400 200">
+            <text x="200" y="90" text-anchor="middle" font-size="28" font-weight="700" fill="#FAFAF9">1,083</text>
+            <text x="200" y="110" text-anchor="middle" font-size="11" fill="#A8A29E">total paid subscribers</text>
+            <circle cx="200" cy="95" r="70" fill="none" stroke="#2A2623" stroke-width="20"/>
+            <circle cx="200" cy="95" r="70" fill="none" stroke="#34D399" stroke-width="20" stroke-dasharray="263 176" stroke-dashoffset="0"/>
+            <circle cx="200" cy="95" r="70" fill="none" stroke="#F7941E" stroke-width="20" stroke-dasharray="92 347" stroke-dashoffset="-263"/>
+            <circle cx="200" cy="95" r="70" fill="none" stroke="#5EEAD4" stroke-width="20" stroke-dasharray="85 354" stroke-dashoffset="-355"/>
+            <circle cx="200" cy="95" r="52" fill="#1A1714"/>
+            <text x="30" y="165" font-size="11" fill="#34D399">■</text><text x="42" y="165" font-size="11" fill="#A8A29E">VAI+ Monthly (612)</text>
+            <text x="30" y="185" font-size="11" fill="#F7941E">■</text><text x="42" y="185" font-size="11" fill="#A8A29E">Mentor (236)</text>
+            <text x="210" y="165" font-size="11" fill="#5EEAD4">■</text><text x="222" y="165" font-size="11" fill="#A8A29E">VAI+ Yearly (235)</text>
+          </svg>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Signups per Week — Last 8 Weeks</div>
+          <svg width="100%" height="200" viewBox="0 0 400 200">
+            <line x1="30" y1="10" x2="30" y2="165" stroke="#2A2623" stroke-width="1"/>
+            <line x1="30" y1="165" x2="395" y2="165" stroke="#2A2623" stroke-width="1"/>
+            <text x="22" y="50" text-anchor="end" font-size="10" fill="#57534E">400</text>
+            <text x="22" y="100" text-anchor="end" font-size="10" fill="#57534E">200</text>
+            <text x="22" y="165" text-anchor="end" font-size="10" fill="#57534E">0</text>
+            <!-- Bars -->
+            <rect x="40" y="95" width="30" height="70" rx="3" fill="#F7941E" opacity=".7"/>
+            <rect x="87" y="75" width="30" height="90" rx="3" fill="#F7941E" opacity=".7"/>
+            <rect x="134" y="60" width="30" height="105" rx="3" fill="#F7941E" opacity=".7"/>
+            <rect x="181" y="45" width="30" height="120" rx="3" fill="#F7941E" opacity=".9"/>
+            <rect x="228" y="55" width="30" height="110" rx="3" fill="#F7941E" opacity=".8"/>
+            <rect x="275" y="40" width="30" height="125" rx="3" fill="#34D399"/>
+            <rect x="322" y="30" width="30" height="135" rx="3" fill="#34D399"/>
+            <rect x="369" y="20" width="30" height="145" rx="3" fill="#34D399"/>
+            <text x="55" y="185" text-anchor="middle" font-size="9" fill="#57534E">Wk 1</text>
+            <text x="102" y="185" text-anchor="middle" font-size="9" fill="#57534E">Wk 2</text>
+            <text x="149" y="185" text-anchor="middle" font-size="9" fill="#57534E">Wk 3</text>
+            <text x="196" y="185" text-anchor="middle" font-size="9" fill="#57534E">Wk 4</text>
+            <text x="243" y="185" text-anchor="middle" font-size="9" fill="#57534E">Wk 5</text>
+            <text x="290" y="185" text-anchor="middle" font-size="9" fill="#57534E">Wk 6</text>
+            <text x="337" y="185" text-anchor="middle" font-size="9" fill="#57534E">Wk 7</text>
+            <text x="384" y="185" text-anchor="middle" font-size="9" fill="#57534E">Wk 8</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ AUDIT LOG ═══ -->
+  <div class="view" id="view-auditlog">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Audit Log</div>
+        <div class="page-sub">Immutable record of all admin actions. 7-year retention.</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Recent Actions</span></div>
+        <div class="log-entry"><div class="log-dot"></div><div style="flex:1"><div style="display:flex;gap:8px;align-items:center;margin-bottom:3px"><span class="log-admin">Ben Whitesides</span><span class="log-action">user.suspend</span></div><span class="log-target">Target: James Ortiz (@jortiz) — reason: TOS violation</span></div><span class="log-time">Apr 24 · 09:14 MDT</span></div>
+        <div class="log-entry"><div class="log-dot"></div><div style="flex:1"><div style="display:flex;gap:8px;align-items:center;margin-bottom:3px"><span class="log-admin">Ben Whitesides</span><span class="log-action">coupon.create</span></div><span class="log-target">FOUNDER50 — 50% off, unlimited uses, expires Dec 31 2026</span></div><span class="log-time">Apr 24 · 08:52 MDT</span></div>
+        <div class="log-entry"><div class="log-dot"></div><div style="flex:1"><div style="display:flex;gap:8px;align-items:center;margin-bottom:3px"><span class="log-admin">Ben Whitesides</span><span class="log-action">subscription.cancel</span></div><span class="log-target">Casey Nguyen (@casey_n) — VAI+ Monthly cancelled at period end</span></div><span class="log-time">Apr 23 · 16:30 MDT</span></div>
+        <div class="log-entry"><div class="log-dot"></div><div style="flex:1"><div style="display:flex;gap:8px;align-items:center;margin-bottom:3px"><span class="log-admin">Jamie Lopez</span><span class="log-action">ticket.resolve</span></div><span class="log-target">TKT-0041 — AVANTI timeout resolved with server restart</span></div><span class="log-time">Apr 23 · 11:20 MDT</span></div>
+        <div class="log-entry"><div class="log-dot"></div><div style="flex:1"><div style="display:flex;gap:8px;align-items:center;margin-bottom:3px"><span class="log-admin">Ben Whitesides</span><span class="log-action">user.role.update</span></div><span class="log-target">Caleb Trainer (@caleb) — role: user → coach</span></div><span class="log-time">Apr 22 · 18:05 MDT</span></div>
+        <div class="log-entry"><div class="log-dot"></div><div style="flex:1"><div style="display:flex;gap:8px;align-items:center;margin-bottom:3px"><span class="log-admin">Ben Whitesides</span><span class="log-action">payout.approve</span></div><span class="log-target">$312.50 affiliate payout batch — 8 users</span></div><span class="log-time">Apr 22 · 14:00 MDT</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ COUPONS ═══ -->
+  <div class="view" id="view-coupons">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Coupons</div>
+        <div class="page-sub">Manage discount codes and promotional offers.</div>
+      </div>
+      <div style="margin-bottom:16px"><button class="btn btn-primary">+ Create Coupon</button></div>
+      <div class="card">
+        <table>
+          <thead><tr><th>Code</th><th>Discount</th><th>Uses</th><th>Limit</th><th>Expires</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="color:var(--orange);font-weight:600">FOUNDER50</td><td>50% off</td><td>847</td><td>Unlimited</td><td style="color:var(--text3)">Dec 31, 2026</td><td><span class="badge badge-active">active</span></td><td><button class="btn">Edit</button></td></tr>
+            <tr><td class="mono" style="color:var(--orange)">COACH2026</td><td>$10/mo off</td><td>23</td><td>100</td><td style="color:var(--text3)">Jun 30, 2026</td><td><span class="badge badge-active">active</span></td><td><button class="btn">Edit</button></td></tr>
+            <tr><td class="mono" style="color:var(--text3)">LAUNCH25</td><td>25% off</td><td>500</td><td>500</td><td style="color:var(--text3)">Jan 1, 2026</td><td><span class="badge badge-suspended">expired</span></td><td><button class="btn">Edit</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAYOUTS ═══ -->
+  <div class="view" id="view-payouts">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Payouts</div>
+        <div class="page-sub">Manage affiliate commission payouts via Tipalti.</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--green)"></div><div class="kpi-label">Pending Payouts</div><div class="kpi-value">$4,821</div><div class="kpi-hint">32 affiliates</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--orange)"></div><div class="kpi-label">Paid This Month</div><div class="kpi-value">$12,440</div><div class="kpi-hint">Apr 2026</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--teal)"></div><div class="kpi-label">Total Paid (All Time)</div><div class="kpi-value">$84,210</div></div>
+        <div class="kpi-card"><div class="kpi-stripe" style="background:var(--orange)"></div><div class="kpi-label">Active Affiliates</div><div class="kpi-value">247</div><div class="kpi-hint">earning commissions</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Pending Payouts</span><button class="btn btn-primary">Approve Batch</button></div>
+        <table>
+          <thead><tr><th>Affiliate</th><th>Level</th><th>Period</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td style="color:var(--text);font-weight:500">Caleb Trainer <span class="mono" style="color:var(--text3)">@caleb</span></td><td>L1</td><td>Apr 2026</td><td style="color:var(--green)">$892.50</td><td><span class="badge badge-pending">pending</span></td></tr>
+            <tr><td style="color:var(--text);font-weight:500">Maria Santos <span class="mono" style="color:var(--text3)">@marias</span></td><td>L2</td><td>Apr 2026</td><td style="color:var(--green)">$312.00</td><td><span class="badge badge-pending">pending</span></td></tr>
+            <tr><td style="color:var(--text);font-weight:500">Noah Rivera <span class="mono" style="color:var(--text3)">@noah</span></td><td>L2</td><td>Apr 2026</td><td style="color:var(--green)">$245.50</td><td><span class="badge badge-pending">pending</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SETTINGS ═══ -->
+  <div class="view" id="view-settings">
+    <div class="page">
+      <div class="page-header">
+        <div class="page-title">Settings</div>
+        <div class="page-sub">Platform configuration and admin management.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Admin Users</span></div>
+          <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:6px">
+              <div class="avatar">BW</div>
+              <div style="flex:1"><div style="font-weight:500;color:var(--text)">Ben Whitesides</div><div style="font-size:12px;color:var(--text3)">ben@vai.app</div></div>
+              <span class="badge badge-admin">admin</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:6px">
+              <div class="avatar" style="background:var(--teal);color:#0C0A09">JL</div>
+              <div style="flex:1"><div style="font-weight:500;color:var(--text)">Jamie Lopez</div><div style="font-size:12px;color:var(--text3)">jamie@vai.app</div></div>
+              <span class="badge badge-coach">team_lead</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Platform Config</span></div>
+          <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text2)">Mock API mode</span><span class="badge badge-active">enabled</span></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text2)">Auth0 tenant</span><span style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:12px">vai.us.auth0.com</span></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text2)">API version</span><span style="color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:12px">v1</span></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0"><span style="color:var(--text2)">Dark mode</span><span class="badge badge-active">on</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+function showView(name) {
+  // Hide all views
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  // Show target
+  const view = document.getElementById('view-' + name);
+  const nav = document.getElementById('nav-' + name);
+  if (view) view.classList.add('active');
+  if (nav) nav.classList.add('active');
+  // Update topbar title
+  const titles = {
+    dashboard: 'Dashboard',
+    users: 'Users',
+    referrals: 'Referral Tree',
+    subscriptions: 'Subscriptions',
+    coupons: 'Coupons',
+    tickets: 'Support Tickets',
+    payouts: 'Payouts',
+    analytics: 'Analytics',
+    auditlog: 'Audit Log',
+    settings: 'Settings'
+  };
+  document.getElementById('page-title').textContent = titles[name] || name;
+}
+// Set dashboard active on load
+showView('dashboard');
+</script>
+</body>
+</html>
