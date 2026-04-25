@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI Club OS — Mobile Phase 2 (Booking Flow)</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0C0A09; --card: #1A1614; --bgElev: #231E1B;
+  --textStrong: #F5F0EB; --text: #D4CBC4; --textMuted: #8B7E74;
+  --border: #2E2824;
+  --orange: #F7941E; --orangeBg: #2A1E0A; --orangeBorder: #5C4A15;
+  --green: #34D399; --greenBg: #0A2A1E; --greenBorder: #1A5C3A;
+  --red: #FF6B6B; --redBg: #3A0F0F; --redBorder: #5C2A2A;
+  --yellow: #FBBF24; --yellowBg: #2A1E00; --yellowBorder: #5C4400;
+  --blue: #5577DD; --r: 16px; --pill: 999px;
+}
+body { background: #060504; font-family: -apple-system,'Inter',sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px 48px; color: var(--textStrong); }
+h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--textMuted); margin-bottom: 4px; text-align: center; }
+.subtitle { font-size: 11px; color: var(--textMuted); margin-bottom: 24px; text-align: center; }
+.screen-nav { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 24px; max-width: 560px; }
+.nav-btn { background: var(--card); border: 1px solid var(--border); color: var(--textMuted); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; padding: 6px 12px; border-radius: var(--pill); cursor: pointer; transition: all 0.15s; }
+.nav-btn:hover { border-color: var(--orange); color: var(--orange); }
+.nav-btn.active { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.phone-frame { background: #181512; border-radius: 44px; border: 1.5px solid #3A3330; box-shadow: 0 0 0 1px #1A1614, 0 32px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; width: 375px; }
+.status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px 8px; background: var(--bg); font-size: 12px; font-weight: 600; color: var(--textStrong); }
+.nav-header { background: var(--bg); padding: 10px 16px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.nav-header-title { font-size: 16px; font-weight: 700; color: var(--textStrong); flex: 1; }
+.back-btn { font-size: 13px; color: var(--orange); cursor: pointer; }
+.screen-body { background: var(--bg); height: 720px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; scrollbar-width: none; }
+.screen-body::-webkit-scrollbar { display: none; }
+.home-indicator { background: var(--bg); padding: 8px 0 12px; display: flex; justify-content: center; }
+.home-bar { width: 120px; height: 5px; background: var(--border); border-radius: 3px; }
+
+/* Components */
+.section-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.card-title { font-size: 18px; font-weight: 700; color: var(--textStrong); }
+.card-subtitle { font-size: 13px; color: var(--textMuted); line-height: 1.5; }
+.chip { display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; border-radius: var(--pill); border: 1px solid; font-size: 13px; font-weight: 700; cursor: pointer; align-self: flex-start; transition: all 0.15s; }
+.chip.green { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.chip.orange { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.chip.red { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+.chip.yellow { background: var(--yellowBg); border-color: var(--yellowBorder); color: var(--yellow); }
+.chip.neutral { background: var(--bgElev); border-color: var(--border); color: var(--text); }
+.chip.blue { background: #1A2240; border-color: #2A3A70; color: var(--blue); }
+.chip.disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+.chip.full-width { align-self: stretch; justify-content: center; padding: 14px; font-size: 15px; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.label-sm { font-size: 11px; color: var(--textMuted); letter-spacing: 0.04em; text-transform: uppercase; }
+.text-base { font-size: 14px; color: var(--text); }
+.banner { border-radius: 10px; padding: 10px 12px; font-size: 13px; border: 1px solid; line-height: 1.4; }
+.banner.warning { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.banner.success { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.banner.info { background: #1A2240; border-color: #2A3A70; color: var(--blue); }
+.banner.neutral { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.banner.red { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+.divider { height: 1px; background: var(--border); }
+
+/* PLAY dot */
+.play-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.play-dot.green { background: var(--green); }
+.play-dot.yellow { background: var(--yellow); }
+.play-dot.red { background: var(--red); }
+
+/* Spot badge */
+.spot-badge { font-size: 11px; font-weight: 700; border-radius: var(--pill); padding: 3px 9px; border: 1px solid; }
+.spot-badge.open { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.spot-badge.few { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.spot-badge.full { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+.spot-badge.waitlist { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+
+/* Availability slot row */
+.slot-row { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--bgElev); border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: border-color 0.15s; }
+.slot-row:hover { border-color: var(--orange); }
+.slot-row.selected { border-color: var(--orangeBorder); background: var(--orangeBg); }
+.slot-time { font-size: 14px; font-weight: 700; color: var(--textStrong); min-width: 100px; }
+.slot-meta { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.slot-title { font-size: 13px; color: var(--text); }
+.slot-price { font-size: 12px; color: var(--textMuted); }
+
+/* Countdown */
+.countdown-ring { display: flex; align-items: center; justify-content: center; margin: 8px 0; }
+.countdown-box { display: flex; flex-direction: column; align-items: center; gap: 2px; background: var(--bgElev); border: 1px solid var(--orangeBorder); border-radius: 12px; padding: 12px 16px; min-width: 64px; }
+.countdown-num { font-size: 28px; font-weight: 900; color: var(--orange); line-height: 1; }
+.countdown-label { font-size: 10px; color: var(--textMuted); text-transform: uppercase; letter-spacing: 0.06em; }
+.countdown-sep { font-size: 24px; color: var(--border); margin: 0 4px; padding-bottom: 16px; }
+.countdown-row { display: flex; align-items: flex-end; }
+
+/* Detail row */
+.detail-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.detail-row:last-child { border-bottom: none; }
+.detail-icon { font-size: 16px; min-width: 24px; text-align: center; }
+.detail-content { display: flex; flex-direction: column; gap: 2px; }
+.detail-label { font-size: 11px; color: var(--textMuted); text-transform: uppercase; letter-spacing: 0.04em; }
+.detail-value { font-size: 14px; color: var(--text); }
+
+/* Mentor card */
+.mentor-card { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); }
+.mentor-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--bgElev); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: var(--orange); flex-shrink: 0; }
+.mentor-info { flex: 1; }
+.mentor-name { font-size: 15px; font-weight: 700; color: var(--textStrong); }
+.mentor-handle { font-size: 12px; color: var(--textMuted); }
+.mentor-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.mentor-tag { font-size: 10px; color: var(--textMuted); background: var(--bgElev); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; }
+
+/* Price row */
+.price-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+.price-label { font-size: 14px; color: var(--textMuted); }
+.price-value { font-size: 14px; color: var(--textStrong); font-weight: 600; }
+.price-total { font-size: 16px; color: var(--orange); font-weight: 800; }
+
+/* AVANTI overlay bottom sheet */
+.avanti-sheet { background: var(--card); border: 1px solid var(--orangeBorder); border-radius: var(--r) var(--r) 0 0; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+.avanti-header { display: flex; align-items: center; gap: 8px; }
+.avanti-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+.avanti-label { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: 0.08em; text-transform: uppercase; }
+.avanti-msg { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+/* Cancel confirm */
+.alert-modal { background: var(--bgElev); border: 1px solid var(--border); border-radius: var(--r); padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; text-align: center; }
+.alert-title { font-size: 17px; font-weight: 700; color: var(--textStrong); }
+.alert-msg { font-size: 14px; color: var(--textMuted); line-height: 1.5; }
+.alert-actions { display: flex; gap: 8px; }
+.alert-btn { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid; font-size: 14px; font-weight: 700; cursor: pointer; }
+.alert-btn.cancel { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.alert-btn.confirm { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+
+/* Screen visibility */
+.screen { display: none; }
+.screen.active { display: flex; flex-direction: column; height: 100%; }
+
+/* Booking status badge */
+.booking-status { font-size: 11px; font-weight: 700; border-radius: var(--pill); padding: 4px 10px; border: 1px solid; }
+.booking-status.confirmed { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.booking-status.awaiting { background: var(--yellowBg); border-color: var(--yellowBorder); color: var(--yellow); }
+.booking-status.waitlisted { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+</style>
+</head>
+<body>
+
+<h1>VAI Club OS</h1>
+<div class="subtitle">Mobile Phase 2 — Booking Flow · Christmas Package</div>
+
+<div class="screen-nav">
+  <button class="nav-btn active" onclick="showScreen('event-detail')">M15 · Event Detail</button>
+  <button class="nav-btn" onclick="showScreen('mentor-availability')">M16 · Mentor Browse</button>
+  <button class="nav-btn" onclick="showScreen('confirm-spot')">M17 · Confirm Spot</button>
+  <button class="nav-btn" onclick="showScreen('cancel-booking')">M18 · Cancel Booking</button>
+</div>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>●●●</span>
+    <span>⬛ 87%</span>
+  </div>
+
+  <!-- M15: Event Detail -->
+  <div id="screen-event-detail" class="screen active">
+    <div class="nav-header">
+      <span class="back-btn">‹ Schedule</span>
+      <span class="nav-header-title">Session Detail</span>
+    </div>
+    <div class="screen-body">
+      <div class="section-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+          <div>
+            <div class="card-title">Speed &amp; Agility Clinic</div>
+            <div class="card-subtitle" style="margin-top:4px;">with Marcus Johnson · VAI Mentor</div>
+          </div>
+          <span class="spot-badge few">3 left</span>
+        </div>
+        <div class="divider"></div>
+        <div class="detail-row">
+          <div class="detail-icon">📅</div>
+          <div class="detail-content">
+            <div class="detail-label">Date &amp; Time</div>
+            <div class="detail-value">Friday, Apr 26 · 9:00 – 10:30 AM</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">📍</div>
+          <div class="detail-content">
+            <div class="detail-label">Location</div>
+            <div class="detail-value">Provo Sports Complex · Field 3</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">👥</div>
+          <div class="detail-content">
+            <div class="detail-label">Group Size</div>
+            <div class="detail-value">Max 8 athletes · 5 confirmed</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">💰</div>
+          <div class="detail-content">
+            <div class="detail-label">Session Fee</div>
+            <div class="detail-value" style="color:var(--orange);font-weight:700;">$45.00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="label-sm">About This Session</div>
+        <div class="text-base" style="line-height:1.6;">
+          Advanced agility ladder drills, 40-yard dash technique, and reactive speed training. Bring cleats and water. All skill levels welcome — this session focuses on college-level mechanics.
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="play-dot green"></div>
+          <div class="label-sm">Your PLAY Status</div>
+          <div style="margin-left:auto;font-size:12px;color:var(--green);font-weight:700;">CLEARED</div>
+        </div>
+        <div class="text-base" style="font-size:13px;color:var(--textMuted);">Passport + waiver current. No blocks for this session.</div>
+      </div>
+
+      <div class="avanti-sheet">
+        <div class="avanti-header">
+          <div class="avanti-dot"></div>
+          <span class="avanti-label">AVANTI</span>
+        </div>
+        <div class="avanti-msg">"Only 3 spots left — Marcus's sessions fill in under 2 hours. Book now to lock your spot."</div>
+        <div class="chip orange" style="font-size:13px;">Book This Session · $45</div>
+      </div>
+    </div>
+    <div class="home-indicator"><div class="home-bar"></div></div>
+  </div>
+
+  <!-- M16: Mentor Availability Browser -->
+  <div id="screen-mentor-availability" class="screen">
+    <div class="nav-header">
+      <span class="back-btn">‹ Explore</span>
+      <span class="nav-header-title">Marcus Johnson</span>
+    </div>
+    <div class="screen-body">
+      <div class="mentor-card">
+        <div class="mentor-avatar">MJ</div>
+        <div class="mentor-info">
+          <div class="mentor-name">Marcus Johnson</div>
+          <div class="mentor-handle">@marcus_trains</div>
+          <div class="mentor-tags">
+            <span class="mentor-tag">Speed</span>
+            <span class="mentor-tag">Agility</span>
+            <span class="mentor-tag">D1 Prep</span>
+            <span class="mentor-tag">WR/DB</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="banner info">⭐ 4.9 · 312 sessions · Top Mentor in Utah</div>
+
+      <div class="section-card">
+        <div class="label-sm">Available Sessions — May 2026</div>
+
+        <div class="slot-row selected" onclick="this.classList.toggle('selected')">
+          <div>
+            <div class="slot-time">Mon Apr 28</div>
+            <div class="slot-title">9:00 – 10:30 AM</div>
+          </div>
+          <div class="slot-meta">
+            <div class="slot-title">Speed &amp; Agility Clinic</div>
+            <div class="slot-price">$45 · Group (8)</div>
+          </div>
+          <span class="spot-badge few">3 left</span>
+        </div>
+
+        <div class="slot-row" onclick="this.classList.toggle('selected')">
+          <div>
+            <div class="slot-time">Tue Apr 29</div>
+            <div class="slot-title">7:00 – 8:00 AM</div>
+          </div>
+          <div class="slot-meta">
+            <div class="slot-title">1-on-1 Route Running</div>
+            <div class="slot-price">$95 · Private</div>
+          </div>
+          <span class="spot-badge open">Open</span>
+        </div>
+
+        <div class="slot-row" onclick="this.classList.toggle('selected')">
+          <div>
+            <div class="slot-time">Thu May 1</div>
+            <div class="slot-title">4:00 – 5:30 PM</div>
+          </div>
+          <div class="slot-meta">
+            <div class="slot-title">Speed Combine Prep</div>
+            <div class="slot-price">$45 · Group (8)</div>
+          </div>
+          <span class="spot-badge full">FULL</span>
+        </div>
+
+        <div class="slot-row" onclick="this.classList.toggle('selected')">
+          <div>
+            <div class="slot-time">Fri May 2</div>
+            <div class="slot-title">9:00 – 10:30 AM</div>
+          </div>
+          <div class="slot-meta">
+            <div class="slot-title">Speed &amp; Agility Clinic</div>
+            <div class="slot-price">$45 · Group (8)</div>
+          </div>
+          <span class="spot-badge waitlist">Join Waitlist</span>
+        </div>
+
+        <div class="slot-row" onclick="this.classList.toggle('selected')">
+          <div>
+            <div class="slot-time">Mon May 5</div>
+            <div class="slot-title">7:00 – 8:00 AM</div>
+          </div>
+          <div class="slot-meta">
+            <div class="slot-title">1-on-1 Film Review</div>
+            <div class="slot-price">$75 · Private</div>
+          </div>
+          <span class="spot-badge open">Open</span>
+        </div>
+      </div>
+
+      <div class="chip orange full-width">Book Selected Session</div>
+    </div>
+    <div class="home-indicator"><div class="home-bar"></div></div>
+  </div>
+
+  <!-- M17: Confirm Spot -->
+  <div id="screen-confirm-spot" class="screen">
+    <div class="nav-header">
+      <span class="back-btn">‹ Session</span>
+      <span class="nav-header-title">Confirm Booking</span>
+    </div>
+    <div class="screen-body">
+      <div class="banner warning" style="text-align:center;font-weight:700;">Reserve your spot now — holds expire in:</div>
+
+      <div class="countdown-ring">
+        <div class="countdown-row">
+          <div class="countdown-box">
+            <div class="countdown-num" id="cd-min">14</div>
+            <div class="countdown-label">min</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-box">
+            <div class="countdown-num" id="cd-sec">59</div>
+            <div class="countdown-label">sec</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="label-sm">Session Details</div>
+        <div class="detail-row">
+          <div class="detail-icon">🏃</div>
+          <div class="detail-content">
+            <div class="detail-label">Session</div>
+            <div class="detail-value">Speed &amp; Agility Clinic</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">👤</div>
+          <div class="detail-content">
+            <div class="detail-label">Mentor</div>
+            <div class="detail-value">Marcus Johnson</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">📅</div>
+          <div class="detail-content">
+            <div class="detail-label">When</div>
+            <div class="detail-value">Mon Apr 28 · 9:00 – 10:30 AM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="label-sm">Payment Summary</div>
+        <div class="price-row">
+          <span class="price-label">Session fee</span>
+          <span class="price-value">$45.00</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">VAI processing</span>
+          <span class="price-value">$0.00</span>
+        </div>
+        <div class="divider"></div>
+        <div class="price-row">
+          <span class="price-label" style="font-weight:700;color:var(--textStrong);">Total</span>
+          <span class="price-total">$45.00</span>
+        </div>
+        <div class="banner neutral" style="font-size:12px;">Charged to VAI Wallet · Balance: $120.50</div>
+      </div>
+
+      <div class="section-card" style="gap:8px;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="play-dot green"></div>
+          <span class="label-sm">PLAY Status</span>
+          <span style="margin-left:auto;font-size:12px;color:var(--green);font-weight:700;">CLEARED</span>
+        </div>
+        <div class="text-base" style="font-size:12px;color:var(--textMuted);">All compliance checks passed. You're eligible for this session.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:auto;">
+        <div class="chip orange full-width">Confirm &amp; Pay · $45.00</div>
+        <div class="chip neutral full-width" style="font-size:13px;">Cancel Hold</div>
+      </div>
+    </div>
+    <div class="home-indicator"><div class="home-bar"></div></div>
+  </div>
+
+  <!-- M18: Cancel Booking -->
+  <div id="screen-cancel-booking" class="screen">
+    <div class="nav-header">
+      <span class="back-btn">‹ My Bookings</span>
+      <span class="nav-header-title">Cancel Booking</span>
+    </div>
+    <div class="screen-body">
+      <div class="section-card">
+        <div class="label-sm">Booking to Cancel</div>
+        <div class="detail-row">
+          <div class="detail-icon">🏃</div>
+          <div class="detail-content">
+            <div class="detail-label">Session</div>
+            <div class="detail-value">Speed &amp; Agility Clinic</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">📅</div>
+          <div class="detail-content">
+            <div class="detail-label">Scheduled</div>
+            <div class="detail-value">Mon Apr 28 · 9:00 – 10:30 AM</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-icon">👤</div>
+          <div class="detail-content">
+            <div class="detail-label">Mentor</div>
+            <div class="detail-value">Marcus Johnson</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+          <span class="label-sm">Status</span>
+          <span class="booking-status confirmed">CONFIRMED</span>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="label-sm">Refund Policy</div>
+        <div class="detail-row" style="padding:8px 0;">
+          <div class="detail-icon">✅</div>
+          <div class="detail-content">
+            <div class="detail-label">72+ hours before</div>
+            <div class="detail-value" style="color:var(--green);">Full refund · $45.00</div>
+          </div>
+        </div>
+        <div class="detail-row" style="padding:8px 0;">
+          <div class="detail-icon">⚠️</div>
+          <div class="detail-content">
+            <div class="detail-label">24–72 hours before</div>
+            <div class="detail-value" style="color:var(--yellow);">50% refund · $22.50</div>
+          </div>
+        </div>
+        <div class="detail-row" style="padding:8px 0;">
+          <div class="detail-icon">❌</div>
+          <div class="detail-content">
+            <div class="detail-label">Under 24 hours</div>
+            <div class="detail-value" style="color:var(--red);">No refund</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="banner success">Session is 4 days away — you qualify for a <strong>full refund of $45.00</strong> to your VAI Wallet.</div>
+
+      <div class="alert-modal" id="cancel-confirm" style="display:none;">
+        <div class="alert-title">Cancel This Booking?</div>
+        <div class="alert-msg">You'll receive a full refund of $45.00 to your VAI Wallet within 1–2 hours. Marcus's spot will re-open immediately.</div>
+        <div class="alert-actions">
+          <button class="alert-btn cancel" onclick="document.getElementById('cancel-confirm').style.display='none'">Keep It</button>
+          <button class="alert-btn confirm" onclick="showCancelSuccess()">Yes, Cancel</button>
+        </div>
+      </div>
+
+      <div class="banner success" id="cancel-success" style="display:none;">
+        ✓ Booking cancelled. $45.00 returned to your VAI Wallet.
+      </div>
+
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px;">
+        <div class="chip red full-width" onclick="document.getElementById('cancel-confirm').style.display='flex'">Request Cancellation</div>
+        <div class="chip neutral full-width" style="font-size:13px;">Keep My Booking</div>
+      </div>
+    </div>
+    <div class="home-indicator"><div class="home-bar"></div></div>
+  </div>
+
+</div>
+
+<script>
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Countdown timer
+let totalSecs = 14 * 60 + 59;
+setInterval(() => {
+  if (totalSecs <= 0) return;
+  totalSecs--;
+  const m = Math.floor(totalSecs / 60);
+  const s = totalSecs % 60;
+  const minEl = document.getElementById('cd-min');
+  const secEl = document.getElementById('cd-sec');
+  if (minEl) minEl.textContent = String(m).padStart(2, '0');
+  if (secEl) secEl.textContent = String(s).padStart(2, '0');
+}, 1000);
+
+function showCancelSuccess() {
+  document.getElementById('cancel-confirm').style.display = 'none';
+  document.getElementById('cancel-success').style.display = 'block';
+}
+</script>
+</body>
+</html>

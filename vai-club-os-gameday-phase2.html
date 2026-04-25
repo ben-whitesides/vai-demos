@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI Club OS — GAMEDAY Phase 2 (Mentor Dashboard)</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0D0B0A; --card: #171412; --elev: #1E1B18; --elev2: #252220;
+  --textStrong: #F5F0EB; --text: #C8BFB8; --textMuted: #6B605A;
+  --border: #2A2520; --borderLight: #332E29;
+  --orange: #F7941E; --orangeBg: #1E1000; --orangeBorder: #4A3200;
+  --green: #34D399; --greenBg: #051A10; --greenBorder: #0D4A28;
+  --red: #FF6B6B; --redBg: #1A0808; --redBorder: #4A1A1A;
+  --yellow: #FBBF24; --yellowBg: #1A1000; --yellowBorder: #4A3000;
+  --blue: #5577DD; --blueBg: #0A1020; --blueBorder: #1A2A50;
+  --r: 10px; --pill: 999px;
+  --sidebar: 220px; --topbar: 56px;
+}
+body { background: var(--bg); font-family: -apple-system,'Inter',sans-serif; min-height: 100vh; color: var(--textStrong); display: flex; flex-direction: column; }
+
+/* Top nav */
+.topbar { height: var(--topbar); background: var(--card); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 16px; flex-shrink: 0; }
+.topbar-logo { font-size: 15px; font-weight: 900; letter-spacing: 0.08em; color: var(--orange); text-transform: uppercase; }
+.topbar-sep { width: 1px; height: 24px; background: var(--border); }
+.topbar-context { font-size: 13px; color: var(--textMuted); }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.topbar-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--elev); border: 1px solid var(--borderLight); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--orange); cursor: pointer; }
+
+/* Layout */
+.layout { display: flex; flex: 1; overflow: hidden; min-height: calc(100vh - var(--topbar)); }
+
+/* Sidebar */
+.sidebar { width: var(--sidebar); background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 12px 0; flex-shrink: 0; }
+.sidebar-section { padding: 6px 12px 2px; font-size: 10px; font-weight: 700; color: var(--textMuted); letter-spacing: 0.1em; text-transform: uppercase; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 8px 14px; font-size: 13px; color: var(--textMuted); cursor: pointer; transition: all 0.12s; border-radius: 6px; margin: 1px 6px; }
+.sidebar-item:hover { background: var(--elev); color: var(--text); }
+.sidebar-item.active { background: var(--orangeBg); color: var(--orange); border: 1px solid var(--orangeBorder); }
+.sidebar-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+.sidebar-badge { margin-left: auto; font-size: 10px; font-weight: 700; background: var(--orange); color: #000; border-radius: var(--pill); padding: 1px 6px; }
+
+/* Main */
+.main { flex: 1; overflow-y: auto; background: var(--bg); }
+
+/* Page tab nav */
+.page-tabs { display: flex; align-items: center; gap: 4px; padding: 12px 24px 0; border-bottom: 1px solid var(--border); background: var(--card); }
+.page-tab { padding: 8px 14px; font-size: 13px; font-weight: 600; color: var(--textMuted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; }
+.page-tab:hover { color: var(--text); }
+.page-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+/* Content sections */
+.content { padding: 20px 24px; display: flex; flex-direction: column; gap: 20px; }
+.view { display: none; }
+.view.active { display: flex; flex-direction: column; gap: 20px; }
+
+/* Page header */
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; }
+.page-title { font-size: 22px; font-weight: 800; color: var(--textStrong); }
+.page-subtitle { font-size: 13px; color: var(--textMuted); margin-top: 2px; }
+.action-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--r); border: 1px solid; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+.action-btn.primary { background: var(--orange); border-color: var(--orange); color: #000; }
+.action-btn.secondary { background: var(--elev); border-color: var(--borderLight); color: var(--text); }
+.action-btn.danger { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+
+/* Stats row */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; }
+.stat-label { font-size: 11px; color: var(--textMuted); text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-value { font-size: 26px; font-weight: 900; color: var(--textStrong); margin: 4px 0 2px; line-height: 1; }
+.stat-sub { font-size: 11px; color: var(--textMuted); }
+.stat-value.orange { color: var(--orange); }
+.stat-value.green { color: var(--green); }
+
+/* Table */
+.data-table { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.table-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.table-title { font-size: 14px; font-weight: 700; color: var(--textStrong); }
+.table-actions { display: flex; gap: 8px; }
+table { width: 100%; border-collapse: collapse; }
+thead tr { border-bottom: 1px solid var(--border); background: var(--elev); }
+th { padding: 10px 14px; font-size: 11px; font-weight: 700; color: var(--textMuted); text-align: left; text-transform: uppercase; letter-spacing: 0.06em; }
+td { padding: 12px 14px; font-size: 13px; color: var(--text); border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--elev); }
+
+/* Status pill */
+.pill { font-size: 11px; font-weight: 700; border-radius: var(--pill); padding: 3px 10px; border: 1px solid; display: inline-flex; align-items: center; gap: 4px; }
+.pill.active { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.pill.draft { background: var(--elev); border-color: var(--borderLight); color: var(--textMuted); }
+.pill.full { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.pill.cancelled { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+.pill.confirmed { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.pill.waitlisted { background: var(--blueBg); border-color: var(--blueBorder); color: var(--blue); }
+
+/* Session detail panel */
+.detail-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.detail-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.detail-card-title { font-size: 13px; font-weight: 700; color: var(--textMuted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* Roster list */
+.roster-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.roster-row:last-child { border-bottom: none; }
+.roster-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--elev); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--orange); flex-shrink: 0; }
+.roster-name { flex: 1; font-size: 13px; color: var(--textStrong); font-weight: 600; }
+.roster-handle { font-size: 11px; color: var(--textMuted); }
+.play-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.play-dot.green { background: var(--green); }
+.play-dot.yellow { background: var(--yellow); }
+.play-dot.red { background: var(--red); }
+
+/* Earnings chart bar */
+.earn-bar-wrap { display: flex; flex-direction: column; gap: 4px; }
+.earn-bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.earn-bar-label { color: var(--textMuted); min-width: 32px; text-align: right; }
+.earn-bar-bg { flex: 1; background: var(--elev); border-radius: 3px; height: 8px; overflow: hidden; }
+.earn-bar-fill { height: 100%; border-radius: 3px; background: var(--orange); transition: width 1s; }
+.earn-bar-val { color: var(--textStrong); font-weight: 600; min-width: 52px; }
+
+/* Form */
+.form-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--textMuted); text-transform: uppercase; letter-spacing: 0.04em; }
+.form-input { background: var(--elev); border: 1px solid var(--borderLight); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: var(--textStrong); width: 100%; }
+.form-input:focus { outline: none; border-color: var(--orange); }
+.form-hint { font-size: 11px; color: var(--textMuted); }
+
+/* Empty state */
+.empty-state { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 40px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.empty-icon { font-size: 32px; }
+.empty-title { font-size: 15px; font-weight: 700; color: var(--textStrong); }
+.empty-msg { font-size: 13px; color: var(--textMuted); max-width: 280px; line-height: 1.5; }
+
+/* Waitlist row */
+.waitlist-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.waitlist-row:last-child { border-bottom: none; }
+.waitlist-pos { font-size: 11px; font-weight: 700; color: var(--textMuted); min-width: 24px; text-align: center; }
+.waitlist-name { flex: 1; font-size: 13px; color: var(--textStrong); }
+.waitlist-joined { font-size: 11px; color: var(--textMuted); }
+.waitlist-action { font-size: 12px; font-weight: 700; color: var(--green); cursor: pointer; }
+
+/* Inline badge */
+.inline-badge { font-size: 11px; font-weight: 700; background: var(--orangeBg); border: 1px solid var(--orangeBorder); color: var(--orange); border-radius: var(--pill); padding: 2px 8px; }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-logo">VAI</div>
+  <div class="topbar-sep"></div>
+  <div class="topbar-context">GameDay · Provo Sports Club</div>
+  <div class="topbar-right">
+    <div style="font-size:12px;color:var(--textMuted);">Marcus Johnson</div>
+    <div class="topbar-avatar">MJ</div>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-section">Club OS</div>
+    <div class="sidebar-item" onclick="setSidebar(this,'athletes')"><span class="sidebar-icon">👥</span>Athletes</div>
+    <div class="sidebar-item" onclick="setSidebar(this,'tournaments')"><span class="sidebar-icon">🏆</span>Tournaments</div>
+    <div class="sidebar-item" onclick="setSidebar(this,'standings')"><span class="sidebar-icon">📊</span>Standings</div>
+    <div class="sidebar-item" onclick="setSidebar(this,'schedule')"><span class="sidebar-icon">📅</span>Schedule</div>
+    <div class="sidebar-section" style="margin-top:8px;">Mentor</div>
+    <div class="sidebar-item active" onclick="setSidebar(this,'sessions')"><span class="sidebar-icon">🎯</span>My Sessions <span class="sidebar-badge">3</span></div>
+    <div class="sidebar-item" onclick="setSidebar(this,'earnings')"><span class="sidebar-icon">💰</span>Earnings</div>
+    <div class="sidebar-item" onclick="setSidebar(this,'new-session')"><span class="sidebar-icon">＋</span>New Session</div>
+  </div>
+
+  <!-- Main content -->
+  <div class="main">
+
+    <!-- Sessions View (default) -->
+    <div id="view-sessions" class="view active">
+      <div class="page-tabs">
+        <div class="page-tab active" onclick="setTab(this,'tab-upcoming')">Upcoming</div>
+        <div class="page-tab" onclick="setTab(this,'tab-past')">Past</div>
+        <div class="page-tab" onclick="setTab(this,'tab-roster')">Roster &amp; Waitlist</div>
+        <div class="page-tab" onclick="setTab(this,'tab-attendance')">Attendance</div>
+      </div>
+
+      <!-- Upcoming -->
+      <div class="content" id="tab-upcoming">
+        <div class="page-header">
+          <div>
+            <div class="page-title">My Sessions</div>
+            <div class="page-subtitle">3 upcoming · Apr 28 – May 5</div>
+          </div>
+          <button class="action-btn primary" onclick="setSidebar(null,'new-session')">+ New Session</button>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">This Month</div>
+            <div class="stat-value orange">12</div>
+            <div class="stat-sub">sessions total</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Confirmed Spots</div>
+            <div class="stat-value green">47</div>
+            <div class="stat-sub">across all sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Waitlisted</div>
+            <div class="stat-value">8</div>
+            <div class="stat-sub">awaiting openings</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Earnings MTD</div>
+            <div class="stat-value orange">$1,840</div>
+            <div class="stat-sub">after VAI fee</div>
+          </div>
+        </div>
+
+        <div class="data-table">
+          <div class="table-header">
+            <div class="table-title">Upcoming Sessions</div>
+            <div class="table-actions">
+              <button class="action-btn secondary" style="font-size:12px;padding:6px 12px;">Filter</button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Session</th>
+                <th>Date &amp; Time</th>
+                <th>Type</th>
+                <th>Spots</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div style="font-weight:700;color:var(--textStrong);">Speed &amp; Agility Clinic</div>
+                  <div style="font-size:11px;color:var(--textMuted);">Provo Sports Complex · Field 3</div>
+                </td>
+                <td>Mon Apr 28 · 9:00 AM</td>
+                <td><span class="inline-badge">Group</span></td>
+                <td>
+                  <div style="font-size:13px;color:var(--textStrong);font-weight:600;">5 / 8</div>
+                  <div style="font-size:11px;color:var(--textMuted);">3 spots left</div>
+                </td>
+                <td><span class="pill active">● Active</span></td>
+                <td>
+                  <div style="display:flex;gap:6px;">
+                    <button class="action-btn secondary" style="font-size:11px;padding:5px 10px;" onclick="setSidebar(null,'sessions');setTab(document.querySelector('[onclick*=tab-roster]'),'tab-roster')">Roster</button>
+                    <button class="action-btn danger" style="font-size:11px;padding:5px 10px;">Cancel</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="font-weight:700;color:var(--textStrong);">1-on-1 Route Running</div>
+                  <div style="font-size:11px;color:var(--textMuted);">Provo Sports Complex · Field 1</div>
+                </td>
+                <td>Tue Apr 29 · 7:00 AM</td>
+                <td><span style="font-size:11px;font-weight:700;border-radius:var(--pill);padding:3px 10px;border:1px solid var(--blueBorder);background:var(--blueBg);color:var(--blue);">Private</span></td>
+                <td>
+                  <div style="font-size:13px;color:var(--textStrong);font-weight:600;">1 / 1</div>
+                  <div style="font-size:11px;color:var(--orange);">FULL</div>
+                </td>
+                <td><span class="pill full">● Full</span></td>
+                <td>
+                  <div style="display:flex;gap:6px;">
+                    <button class="action-btn secondary" style="font-size:11px;padding:5px 10px;">Roster</button>
+                    <button class="action-btn danger" style="font-size:11px;padding:5px 10px;">Cancel</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="font-weight:700;color:var(--textStrong);">Speed Combine Prep</div>
+                  <div style="font-size:11px;color:var(--textMuted);">Provo Sports Complex · Field 3</div>
+                </td>
+                <td>Thu May 1 · 4:00 PM</td>
+                <td><span class="inline-badge">Group</span></td>
+                <td>
+                  <div style="font-size:13px;color:var(--textStrong);font-weight:600;">8 / 8</div>
+                  <div style="font-size:11px;color:var(--red);">Full · 2 waiting</div>
+                </td>
+                <td><span class="pill full">● Full</span></td>
+                <td>
+                  <div style="display:flex;gap:6px;">
+                    <button class="action-btn secondary" style="font-size:11px;padding:5px 10px;">Roster</button>
+                    <button class="action-btn danger" style="font-size:11px;padding:5px 10px;">Cancel</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Past (hidden by default) -->
+      <div class="content" id="tab-past" style="display:none;">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Past Sessions</div>
+            <div class="page-subtitle">April 2026 · 9 completed</div>
+          </div>
+        </div>
+        <div class="data-table">
+          <table>
+            <thead>
+              <tr><th>Session</th><th>Date</th><th>Attended</th><th>Earned</th><th>Avg Rating</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Speed &amp; Agility Clinic</td>
+                <td>Apr 21</td>
+                <td>7 / 8</td>
+                <td style="color:var(--green);font-weight:700;">$270.00</td>
+                <td>⭐ 4.9</td>
+              </tr>
+              <tr>
+                <td>1-on-1 Route Running</td>
+                <td>Apr 20</td>
+                <td>1 / 1</td>
+                <td style="color:var(--green);font-weight:700;">$85.50</td>
+                <td>⭐ 5.0</td>
+              </tr>
+              <tr>
+                <td>Speed Combine Prep</td>
+                <td>Apr 17</td>
+                <td>8 / 8</td>
+                <td style="color:var(--green);font-weight:700;">$360.00</td>
+                <td>⭐ 4.8</td>
+              </tr>
+              <tr>
+                <td>Speed &amp; Agility Clinic</td>
+                <td>Apr 14</td>
+                <td>6 / 8</td>
+                <td style="color:var(--green);font-weight:700;">$270.00</td>
+                <td>⭐ 4.9</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Roster & Waitlist (hidden) -->
+      <div class="content" id="tab-roster" style="display:none;">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Speed &amp; Agility Clinic</div>
+            <div class="page-subtitle">Mon Apr 28 · 9:00 AM · 5 confirmed, 0 waitlisted</div>
+          </div>
+          <button class="action-btn secondary">Export CSV</button>
+        </div>
+
+        <div class="detail-panel">
+          <div class="detail-card">
+            <div class="detail-card-title">Confirmed Roster · 5/8</div>
+            <div class="roster-row">
+              <div class="roster-avatar">JW</div>
+              <div><div class="roster-name">Jordan Williams</div><div class="roster-handle">@jwilliams22</div></div>
+              <div class="play-dot green"></div>
+              <span class="pill confirmed">✓</span>
+            </div>
+            <div class="roster-row">
+              <div class="roster-avatar">MM</div>
+              <div><div class="roster-name">Marcus Mills</div><div class="roster-handle">@mmills</div></div>
+              <div class="play-dot green"></div>
+              <span class="pill confirmed">✓</span>
+            </div>
+            <div class="roster-row">
+              <div class="roster-avatar">AT</div>
+              <div><div class="roster-name">Alex Thompson</div><div class="roster-handle">@athompson</div></div>
+              <div class="play-dot yellow" title="PLAY: Yellow"></div>
+              <span class="pill confirmed">✓</span>
+            </div>
+            <div class="roster-row">
+              <div class="roster-avatar">DS</div>
+              <div><div class="roster-name">Devon Smith</div><div class="roster-handle">@dsmith11</div></div>
+              <div class="play-dot green"></div>
+              <span class="pill confirmed">✓</span>
+            </div>
+            <div class="roster-row">
+              <div class="roster-avatar">KJ</div>
+              <div><div class="roster-name">Kyle Johnson</div><div class="roster-handle">@kjohnson7</div></div>
+              <div class="play-dot green"></div>
+              <span class="pill confirmed">✓</span>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-card-title">Waitlist · 0 waiting</div>
+            <div class="empty-state" style="padding:24px;">
+              <div class="empty-icon">✅</div>
+              <div class="empty-title">No waitlist</div>
+              <div class="empty-msg">3 spots remain open. Athletes can book directly.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--yellowBg);border:1px solid var(--yellowBorder);border-radius:var(--r);padding:12px 16px;font-size:13px;color:var(--yellow);">
+          ⚠ Alex Thompson has a PLAY status yellow flag — waiver expires in 6 days. AVANTI has sent a reminder.
+        </div>
+      </div>
+
+      <!-- Attendance (hidden) -->
+      <div class="content" id="tab-attendance" style="display:none;">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Attendance</div>
+            <div class="page-subtitle">Speed &amp; Agility Clinic · Mon Apr 28</div>
+          </div>
+          <button class="action-btn primary">Mark All Present</button>
+        </div>
+
+        <div class="data-table">
+          <div class="table-header">
+            <div class="table-title">Check-In Status <span style="color:var(--textMuted);font-weight:400;font-size:12px;">· Session starts in 18 min</span></div>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Athlete</th><th>PLAY</th><th>Booking</th><th>Check-In</th><th>Mark</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div style="font-weight:600;">Jordan Williams</div><div style="font-size:11px;color:var(--textMuted);">@jwilliams22</div></td>
+                <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);">● GREEN</span></td>
+                <td><span class="pill confirmed">Confirmed</span></td>
+                <td><span style="font-size:12px;color:var(--textMuted);">Not yet</span></td>
+                <td><button class="action-btn secondary" style="font-size:11px;padding:5px 10px;">Present</button></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600;">Alex Thompson</div><div style="font-size:11px;color:var(--textMuted);">@athompson</div></td>
+                <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--yellow);">● YELLOW</span></td>
+                <td><span class="pill confirmed">Confirmed</span></td>
+                <td><span style="font-size:12px;color:var(--textMuted);">Not yet</span></td>
+                <td><button class="action-btn secondary" style="font-size:11px;padding:5px 10px;">Present</button></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600;">Devon Smith</div><div style="font-size:11px;color:var(--textMuted);">@dsmith11</div></td>
+                <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);">● GREEN</span></td>
+                <td><span class="pill confirmed">Confirmed</span></td>
+                <td><span style="font-size:12px;color:var(--textMuted);">Not yet</span></td>
+                <td><button class="action-btn secondary" style="font-size:11px;padding:5px 10px;">Present</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings View -->
+    <div id="view-earnings" class="view">
+      <div class="content">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Earnings</div>
+            <div class="page-subtitle">April 2026 · VAI Wallet</div>
+          </div>
+          <button class="action-btn primary">Cash Out</button>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Total Earned MTD</div>
+            <div class="stat-value orange">$1,840</div>
+            <div class="stat-sub">after 5% VAI fee</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Sessions Run</div>
+            <div class="stat-value">9</div>
+            <div class="stat-sub">this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Pending Release</div>
+            <div class="stat-value green">$405</div>
+            <div class="stat-sub">releases May 1</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Wallet Balance</div>
+            <div class="stat-value">$1,435</div>
+            <div class="stat-sub">available now</div>
+          </div>
+        </div>
+
+        <div class="detail-panel">
+          <div class="detail-card">
+            <div class="detail-card-title">Weekly Earnings — April</div>
+            <div class="earn-bar-wrap">
+              <div class="earn-bar-row">
+                <div class="earn-bar-label">W1</div>
+                <div class="earn-bar-bg"><div class="earn-bar-fill" style="width:55%"></div></div>
+                <div class="earn-bar-val">$355</div>
+              </div>
+              <div class="earn-bar-row">
+                <div class="earn-bar-label">W2</div>
+                <div class="earn-bar-bg"><div class="earn-bar-fill" style="width:72%"></div></div>
+                <div class="earn-bar-val">$630</div>
+              </div>
+              <div class="earn-bar-row">
+                <div class="earn-bar-label">W3</div>
+                <div class="earn-bar-bg"><div class="earn-bar-fill" style="width:68%"></div></div>
+                <div class="earn-bar-val">$450</div>
+              </div>
+              <div class="earn-bar-row">
+                <div class="earn-bar-label">W4</div>
+                <div class="earn-bar-bg"><div class="earn-bar-fill" style="width:62%"></div></div>
+                <div class="earn-bar-val">$405</div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border);">
+              <span style="font-size:12px;color:var(--textMuted);">Avg / session</span>
+              <span style="font-size:13px;font-weight:700;color:var(--textStrong);">$204</span>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <div class="detail-card-title">Session Breakdown</div>
+            <div class="roster-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+              <div style="display:flex;width:100%;justify-content:space-between;align-items:center;">
+                <span style="font-size:13px;color:var(--text);">Group Clinics</span>
+                <span style="font-size:13px;font-weight:700;color:var(--textStrong);">$1,350</span>
+              </div>
+              <div style="font-size:11px;color:var(--textMuted);">7 sessions · avg $193</div>
+            </div>
+            <div class="divider" style="height:1px;background:var(--border);"></div>
+            <div class="roster-row" style="flex-direction:column;align-items:flex-start;gap:4px;">
+              <div style="display:flex;width:100%;justify-content:space-between;align-items:center;">
+                <span style="font-size:13px;color:var(--text);">Private 1-on-1</span>
+                <span style="font-size:13px;font-weight:700;color:var(--textStrong);">$490</span>
+              </div>
+              <div style="font-size:11px;color:var(--textMuted);">2 sessions · avg $245</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="data-table">
+          <div class="table-header"><div class="table-title">Recent Payouts</div></div>
+          <table>
+            <thead><tr><th>Session</th><th>Date</th><th>Athletes</th><th>Gross</th><th>Fee (5%)</th><th>Net</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Speed &amp; Agility Clinic</td>
+                <td>Apr 21</td>
+                <td>7</td>
+                <td>$315.00</td>
+                <td style="color:var(--textMuted);">−$15.75</td>
+                <td style="color:var(--green);font-weight:700;">$270.00</td>
+              </tr>
+              <tr>
+                <td>1-on-1 Route Running</td>
+                <td>Apr 20</td>
+                <td>1</td>
+                <td>$95.00</td>
+                <td style="color:var(--textMuted);">−$4.75</td>
+                <td style="color:var(--green);font-weight:700;">$85.50</td>
+              </tr>
+              <tr>
+                <td>Speed Combine Prep</td>
+                <td>Apr 17</td>
+                <td>8</td>
+                <td>$360.00</td>
+                <td style="color:var(--textMuted);">−$18.00</td>
+                <td style="color:var(--green);font-weight:700;">$324.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- New Session View -->
+    <div id="view-new-session" class="view">
+      <div class="content">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Create New Session</div>
+            <div class="page-subtitle">Sets up availability slot for athlete booking</div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="detail-card-title">Session Details</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Session Name</label>
+              <input class="form-input" type="text" placeholder="Speed &amp; Agility Clinic" value="Speed &amp; Agility Clinic" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Session Type</label>
+              <select class="form-input">
+                <option>Group (max athletes)</option>
+                <option>Private 1-on-1</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Date</label>
+              <input class="form-input" type="date" value="2026-05-05" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Start Time</label>
+              <input class="form-input" type="time" value="09:00" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Duration</label>
+              <select class="form-input">
+                <option>60 minutes</option>
+                <option selected>90 minutes</option>
+                <option>120 minutes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max Spots (group)</label>
+              <input class="form-input" type="number" value="8" min="1" max="20" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Price per Athlete ($)</label>
+              <input class="form-input" type="number" value="45" />
+              <div class="form-hint">Athletes pay via VAI Wallet · 5% platform fee applies</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Location</label>
+              <input class="form-input" type="text" value="Provo Sports Complex · Field 3" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-input" rows="3" placeholder="What athletes can expect...">Advanced agility ladder drills, 40-yard dash technique, and reactive speed training. Bring cleats and water.</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Recurrence</label>
+            <select class="form-input">
+              <option>One-time</option>
+              <option selected>Weekly (every Monday)</option>
+              <option>Bi-weekly</option>
+              <option>Custom (RRULE)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <button class="action-btn primary" style="flex:1;justify-content:center;">Create Session</button>
+          <button class="action-btn secondary">Save Draft</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function setSidebar(el, viewId) {
+  // Clear sidebar active states
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else {
+    const items = document.querySelectorAll('.sidebar-item');
+    items.forEach(i => {
+      if (i.textContent.includes(viewId === 'new-session' ? 'New Session' : viewId.charAt(0).toUpperCase() + viewId.slice(1))) {
+        i.classList.add('active');
+      }
+    });
+  }
+  // Show the right view
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const target = document.getElementById('view-' + viewId);
+  if (target) target.classList.add('active');
+}
+
+function setTab(el, tabId) {
+  // Hide all tabs in the current view
+  const allTabs = ['tab-upcoming','tab-past','tab-roster','tab-attendance'];
+  allTabs.forEach(t => {
+    const el2 = document.getElementById(t);
+    if (el2) el2.style.display = 'none';
+  });
+  document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+  // Show selected tab
+  const target = document.getElementById(tabId);
+  if (target) target.style.display = 'flex';
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
