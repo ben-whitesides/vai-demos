@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI Club OS — GAMEDAY Web Phase 1.5</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0C0A09; --card: #1A1614; --bgElev: #231E1B;
+  --textStrong: #F5F0EB; --text: #D4CBC4; --textMuted: #8B7E74;
+  --border: #2E2824;
+  --orange: #F7941E; --orangeBg: #2A1E0A; --orangeBorder: #5C4A15;
+  --green: #34D399; --greenBg: #0A2A1E; --greenBorder: #1A5C3A;
+  --red: #FF6B6B; --redBg: #3A0F0F; --redBorder: #5C2A2A;
+  --blue: #5577DD; --blueBg: #0F1A40; --blueBorder: #2A3A70;
+  --teal: #5EEAD4;
+  --pill: 999px; --r: 12px;
+}
+body { background: var(--bg); font-family: -apple-system,'Inter',sans-serif; color: var(--textStrong); min-height: 100vh; display: flex; flex-direction: column; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* Top bar */
+.topbar {
+  background: var(--card); border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-mark { width: 28px; height: 28px; background: var(--orange); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; color: #000; }
+.logo-name { font-size: 14px; font-weight: 700; color: var(--textStrong); }
+.logo-sub { font-size: 11px; color: var(--textMuted); letter-spacing: 0.08em; }
+.topbar-right { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--textMuted); }
+.topbar-club { background: var(--bgElev); border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--text); }
+
+/* Layout */
+.layout { display: flex; flex: 1; }
+.sidebar {
+  width: 220px; background: var(--card); border-right: 1px solid var(--border);
+  padding: 20px 12px; display: flex; flex-direction: column; gap: 2px;
+  position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto;
+  flex-shrink: 0;
+}
+.sidebar-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--textMuted); padding: 8px 8px 4px; margin-top: 8px; }
+.sidebar-item {
+  padding: 8px 10px; border-radius: 8px; font-size: 13px; font-weight: 500;
+  color: var(--textMuted); cursor: pointer; transition: all 0.12s;
+  display: flex; align-items: center; gap: 8px;
+}
+.sidebar-item:hover { background: var(--bgElev); color: var(--text); }
+.sidebar-item.active { background: var(--orangeBg); color: var(--orange); border: 1px solid var(--orangeBorder); }
+.sidebar-item.disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Main content */
+.main { flex: 1; padding: 28px; max-width: 1100px; display: flex; flex-direction: column; gap: 20px; }
+
+/* Page header */
+.page-header {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 20px 24px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.page-title { font-size: 22px; font-weight: 700; color: var(--textStrong); }
+.page-sub { font-size: 13px; color: var(--textMuted); margin-top: 3px; }
+.btn {
+  padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  border: 1px solid; cursor: pointer; transition: all 0.12s;
+}
+.btn-green { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.btn-orange { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.btn-blue { background: var(--blueBg); border-color: var(--blueBorder); color: var(--blue); }
+.btn-neutral { background: var(--bgElev); border-color: var(--border); color: var(--text); }
+.btn-red { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+
+/* Nav tabs */
+.tab-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab {
+  padding: 6px 14px; border-radius: var(--pill); font-size: 12px; font-weight: 600;
+  border: 1px solid var(--border); color: var(--textMuted); background: var(--bgElev);
+  cursor: pointer; transition: all 0.12s;
+}
+.tab:hover { border-color: var(--orange); color: var(--orange); }
+.tab.active { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+
+/* Pills */
+.pill {
+  display: inline-flex; align-items: center; padding: 2px 10px;
+  border-radius: var(--pill); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; border: 1px solid;
+}
+.pill-green { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.pill-orange { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.pill-red { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+.pill-neutral { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.pill-blue { background: var(--blueBg); border-color: var(--blueBorder); color: var(--blue); }
+
+/* Table */
+.table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: var(--bgElev); color: var(--textMuted); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; padding: 10px 16px; text-align: left; text-transform: uppercase; }
+td { padding: 12px 16px; color: var(--text); border-top: 1px solid var(--border); }
+tr:hover td { background: var(--bgElev); }
+td.name { color: var(--textStrong); font-weight: 600; cursor: pointer; }
+td.name:hover { color: var(--orange); }
+
+/* Cards */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; }
+.card-title { font-size: 16px; font-weight: 700; color: var(--textStrong); margin-bottom: 4px; }
+.card-sub { font-size: 12px; color: var(--textMuted); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* Bracket */
+.bracket-tree { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 8px; }
+.bracket-round { display: flex; flex-direction: column; justify-content: space-around; gap: 16px; min-width: 200px; }
+.round-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--textMuted); text-transform: uppercase; margin-bottom: 8px; }
+.bracket-match {
+  background: var(--bgElev); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; min-width: 180px;
+}
+.bracket-match.live { border-color: var(--orangeBorder); }
+.bracket-match.final { border-color: var(--greenBorder); }
+.bracket-team { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.bracket-team .name { color: var(--textStrong); font-weight: 500; }
+.bracket-team .score { color: var(--green); font-weight: 700; font-size: 14px; }
+.bracket-team .score.winner { color: var(--green); }
+.bracket-sep { height: 1px; background: var(--border); }
+.bracket-meta { font-size: 11px; color: var(--textMuted); }
+
+/* Score event log */
+.event-log { display: flex; flex-direction: column; gap: 0; }
+.evt-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.evt-row:last-child { border-bottom: none; }
+.evt-time { color: var(--textMuted); font-size: 12px; min-width: 60px; }
+.evt-type {
+  padding: 2px 8px; border-radius: var(--pill); font-size: 10px;
+  font-weight: 700; letter-spacing: 0.08em; border: 1px solid;
+}
+.evt-goal { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.evt-correction { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); text-decoration: line-through; }
+.evt-card-y { background: #2A1E0A; border-color: #5C4A00; color: #FBBF24; }
+.evt-body { color: var(--text); flex: 1; }
+.evt-corrected { text-decoration: line-through; opacity: 0.5; }
+
+/* Standings */
+.standings-table table { font-size: 13px; }
+.form-badges { display: flex; gap: 3px; }
+.form-w { width: 18px; height: 18px; border-radius: 4px; background: var(--greenBg); border: 1px solid var(--greenBorder); color: var(--green); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.form-d { width: 18px; height: 18px; border-radius: 4px; background: var(--bgElev); border: 1px solid var(--border); color: var(--textMuted); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.form-l { width: 18px; height: 18px; border-radius: 4px; background: var(--redBg); border: 1px solid var(--redBorder); color: var(--red); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.freshness { font-size: 11px; color: var(--textMuted); }
+
+/* League card */
+.league-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 18px; display: flex; flex-direction: column; gap: 12px;
+}
+.league-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.league-season { font-size: 15px; font-weight: 700; color: var(--textStrong); }
+.league-dates { font-size: 12px; color: var(--textMuted); }
+.mini-standings { display: flex; flex-direction: column; gap: 4px; }
+.mini-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.mini-rank { width: 18px; color: var(--textMuted); text-align: center; }
+.mini-team { flex: 1; color: var(--text); }
+.mini-pts { color: var(--textStrong); font-weight: 700; }
+
+/* Edit log */
+.edit-row {
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+  font-size: 12px; color: var(--textMuted); display: flex; flex-direction: column; gap: 2px;
+}
+.edit-row:last-child { border-bottom: none; }
+.edit-action { color: var(--text); }
+
+/* Scoreboard */
+.scoreboard {
+  display: flex; gap: 20px; align-items: center; justify-content: center;
+  padding: 24px; background: var(--bgElev); border-radius: var(--r); border: 1px solid var(--border);
+}
+.score-team { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.score-name { font-size: 13px; color: var(--textMuted); text-align: center; }
+.score-number { font-size: 48px; font-weight: 900; color: var(--textStrong); }
+.score-sep { font-size: 32px; color: var(--border); font-weight: 200; }
+.live-badge {
+  display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700;
+  color: var(--orange); letter-spacing: 0.08em;
+}
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+/* Screen hiding */
+.view { display: none; flex-direction: column; gap: 20px; }
+.view.active { display: flex; }
+
+/* Season selector */
+.season-sel {
+  background: var(--bgElev); border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 10px; font-size: 13px; color: var(--text); cursor: pointer;
+}
+
+/* Guest star */
+.guest-badge { color: var(--orange); font-size: 11px; }
+
+/* Seed list */
+.seed-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.seed-row:last-child { border-bottom: none; }
+.seed-num { width: 24px; height: 24px; border-radius: 50%; background: var(--bgElev); border: 1px solid var(--border); color: var(--textMuted); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.seed-name { flex: 1; color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">V</div>
+    <div>
+      <div class="logo-name">VAI GAMEDAY</div>
+      <div class="logo-sub">CLUB OS · PHASE 1.5</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-club">VAI FC North</div>
+    <div>Admin</div>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-label">Club OS</div>
+    <div class="sidebar-item" onclick="nav('athletes')">🏃 Athletes</div>
+    <div class="sidebar-item" onclick="nav('greenline')">🟢 Green Line</div>
+    <div class="sidebar-item" onclick="nav('schedule')">📅 Schedule</div>
+    <div class="sidebar-item" onclick="nav('roster')">📋 Roster</div>
+    <div class="sidebar-item" onclick="nav('comms')">💬 Comms</div>
+    <div class="sidebar-item" onclick="nav('exceptions')">⚠️ Exceptions</div>
+
+    <div class="sidebar-label">Live Ops</div>
+    <div class="sidebar-item active" id="nav-tournaments" onclick="nav('tournaments')">🏆 Tournaments</div>
+    <div class="sidebar-item" id="nav-standings" onclick="nav('standings')">📊 Standings</div>
+    <div class="sidebar-item" id="nav-leagues" onclick="nav('leagues')">🏅 Leagues</div>
+
+    <div class="sidebar-label">Mentor</div>
+    <div class="sidebar-item disabled">📅 My Sessions</div>
+
+    <div class="sidebar-label">Coming Soon</div>
+    <div class="sidebar-item disabled">💰 Fundraising</div>
+    <div class="sidebar-item disabled">💳 Payments</div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- TOURNAMENTS LIST -->
+    <div class="view active" id="view-tournaments">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Tournaments</div>
+          <div class="page-sub">Brackets, seeded teams, and match control for VAI FC North.</div>
+          <div class="tab-nav" style="margin-top:12px;">
+            <div class="tab active">Tournaments</div>
+            <div class="tab" onclick="nav('standings')">Standings</div>
+            <div class="tab" onclick="nav('leagues')">Leagues</div>
+            <div class="tab" style="opacity:0.4;cursor:not-allowed">Fundraising</div>
+          </div>
+        </div>
+        <button class="btn btn-green">+ Create Tournament</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Tournament</th><th>Format</th><th>Age Group</th>
+            <th>Dates</th><th>Status</th><th></th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td class="name" onclick="nav('bracket')">Spring Invitational 2026</td>
+              <td>single_elim</td><td>U14</td>
+              <td>May 10–11, 2026</td>
+              <td><span class="pill pill-orange">LIVE</span></td>
+              <td><button class="btn btn-neutral" onclick="nav('bracket')" style="font-size:12px;padding:4px 10px;">View →</button></td>
+            </tr>
+            <tr>
+              <td class="name" onclick="nav('bracket')">Fall Cup 2026</td>
+              <td>round_robin</td><td>U12</td>
+              <td>Sep 6–7, 2026</td>
+              <td><span class="pill pill-neutral">SETUP</span></td>
+              <td><button class="btn btn-neutral" onclick="nav('bracket')" style="font-size:12px;padding:4px 10px;">View →</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BRACKET DETAIL -->
+    <div class="view" id="view-bracket">
+      <div style="font-size:13px;color:var(--blue);cursor:pointer;" onclick="nav('tournaments')">← Back to tournaments</div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Spring Invitational 2026</div>
+          <div class="page-sub">single_elim · U14 · Westfield Sports Complex · May 10–11</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="pill pill-orange">LIVE</span>
+          <button class="btn btn-blue" onclick="nav('match')">Enter Score</button>
+        </div>
+      </div>
+
+      <!-- Bracket tree -->
+      <div class="card">
+        <div class="card-title">Bracket</div>
+        <div class="card-sub" style="margin-bottom:16px;">single_elim · Visual tree</div>
+        <div class="bracket-tree">
+          <div class="bracket-round">
+            <div class="round-label">Quarterfinals</div>
+            <div class="bracket-match final">
+              <div class="bracket-team"><span class="name">① 2012 Boys Black</span><span class="score winner">3</span></div>
+              <div class="bracket-sep"></div>
+              <div class="bracket-team"><span class="name" style="color:var(--orange)">★ FC Riverside</span><span class="score" style="color:var(--textMuted)">1</span></div>
+              <div class="bracket-meta">Field A · FINAL</div>
+            </div>
+            <div class="bracket-match">
+              <div class="bracket-team"><span class="name">② 2011 Girls Blue</span><span class="score" style="color:var(--textMuted)">—</span></div>
+              <div class="bracket-sep"></div>
+              <div class="bracket-team"><span class="name">③ City Select</span><span class="score" style="color:var(--textMuted)">—</span></div>
+              <div class="bracket-meta">Field B · SCHEDULED</div>
+            </div>
+          </div>
+          <div class="bracket-round">
+            <div class="round-label">Final</div>
+            <div class="bracket-match live">
+              <div class="bracket-team"><span class="name">① 2012 Boys Black</span><span class="score" style="color:var(--orange)">2</span></div>
+              <div class="bracket-sep"></div>
+              <div class="bracket-team"><span class="name">TBD</span><span class="score" style="color:var(--textMuted)">1</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div class="bracket-meta">Field A · May 11 2PM</div>
+                <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seeds + edits -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Seeded Teams</div>
+          <div class="seed-row"><div class="seed-num">1</div><div class="seed-name">2012 Boys Black</div><span class="pill pill-neutral">VAI</span></div>
+          <div class="seed-row"><div class="seed-num">2</div><div class="seed-name">2011 Girls Blue</div><span class="pill pill-neutral">VAI</span></div>
+          <div class="seed-row"><div class="seed-num">3</div><div class="seed-name guest-badge">★ FC Riverside</div><span class="pill pill-orange">GUEST</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Recent Edits</div>
+          <div class="edit-row">
+            <div class="edit-action">Field reassigned: Field C → Field A</div>
+            <div>Admin · May 9 8:00 PM · Reason: Field C flooded</div>
+          </div>
+          <div class="edit-row">
+            <div class="edit-action">Ref assigned: Alex Johnson to Final</div>
+            <div>Admin · May 10 9:00 AM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATCH LIVE SCORING -->
+    <div class="view" id="view-match">
+      <div style="font-size:13px;color:var(--blue);cursor:pointer;" onclick="nav('bracket')">← Back to bracket</div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Final — Spring Invitational 2026</div>
+          <div class="page-sub">2012 Boys Black vs TBD · Field A · May 11 2:00 PM</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-neutral">Start Match</button>
+          <button class="btn btn-green">Finalize Match</button>
+        </div>
+      </div>
+
+      <!-- Live score -->
+      <div class="scoreboard">
+        <div class="score-team">
+          <div class="score-name">2012 Boys Black</div>
+          <div class="score-number">2</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div class="score-sep">—</div>
+          <div class="live-badge"><div class="live-dot"></div>LIVE · 67'</div>
+        </div>
+        <div class="score-team">
+          <div class="score-name">2011 Girls Blue</div>
+          <div class="score-number">1</div>
+        </div>
+      </div>
+
+      <!-- Event log -->
+      <div class="card">
+        <div class="card-title">Event Log</div>
+        <div class="card-sub" style="margin-bottom:12px;">Effective goals shown · corrections exclude superseded events</div>
+        <div class="event-log">
+          <div class="evt-row">
+            <div class="evt-time">P1 · 14'</div>
+            <div class="evt-type evt-goal">GOAL</div>
+            <div class="evt-body">2012 Boys Black · Athlete #7</div>
+          </div>
+          <div class="evt-row">
+            <div class="evt-time">P1 · 29'</div>
+            <div class="evt-type evt-correction">GOAL</div>
+            <div class="evt-body evt-corrected">2011 Girls Blue · <span style="color:var(--orange);text-decoration:none;">[CORRECTED]</span></div>
+          </div>
+          <div class="evt-row">
+            <div class="evt-time">P1 · 31'</div>
+            <div class="evt-type" style="background:var(--orangeBg);border-color:var(--orangeBorder);color:var(--orange);">CORRECTION</div>
+            <div class="evt-body" style="color:var(--orange);">Replaces event #2 — Wrong team credited</div>
+          </div>
+          <div class="evt-row">
+            <div class="evt-time">P2 · 58'</div>
+            <div class="evt-type evt-goal">GOAL</div>
+            <div class="evt-body">2012 Boys Black · Athlete #11</div>
+          </div>
+          <div class="evt-row">
+            <div class="evt-time">P2 · 63'</div>
+            <div class="evt-type evt-goal">GOAL</div>
+            <div class="evt-body">2011 Girls Blue · Athlete #9</div>
+          </div>
+          <div class="evt-row">
+            <div class="evt-time">P2 · 67'</div>
+            <div class="evt-type evt-card-y">YELLOW</div>
+            <div class="evt-body">2012 Boys Black · Athlete #4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STANDINGS -->
+    <div class="view" id="view-standings">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Standings</div>
+          <div class="page-sub">Live snapshots · freshness metadata · trace-ready rows.</div>
+          <div class="tab-nav" style="margin-top:12px;">
+            <div class="tab" onclick="nav('tournaments')">Tournaments</div>
+            <div class="tab active">Standings</div>
+            <div class="tab" onclick="nav('leagues')">Leagues</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select class="season-sel"><option>Spring 2026</option><option>Fall 2025</option></select>
+          <button class="btn btn-green">Refresh Standings</button>
+        </div>
+      </div>
+
+      <div class="freshness">Standings as of 2 minutes ago — Apr 24, 2026 3:41 PM</div>
+
+      <div class="table-wrap standings-table">
+        <table>
+          <thead><tr>
+            <th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th>
+            <th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Form</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td><td class="name">2012 Boys Black</td>
+              <td>8</td><td>6</td><td>1</td><td>1</td>
+              <td>18</td><td>7</td><td>+11</td><td><strong>19</strong></td>
+              <td><div class="form-badges"><div class="form-w">W</div><div class="form-w">W</div><div class="form-d">D</div><div class="form-w">W</div><div class="form-w">W</div></div></td>
+            </tr>
+            <tr>
+              <td>2</td><td class="name">2011 Girls Blue</td>
+              <td>8</td><td>5</td><td>2</td><td>1</td>
+              <td>15</td><td>9</td><td>+6</td><td><strong>17</strong></td>
+              <td><div class="form-badges"><div class="form-w">W</div><div class="form-w">W</div><div class="form-w">W</div><div class="form-d">D</div><div class="form-l">L</div></div></td>
+            </tr>
+            <tr>
+              <td>3</td><td class="name">City Select</td>
+              <td>8</td><td>4</td><td>1</td><td>3</td>
+              <td>12</td><td>11</td><td>+1</td><td><strong>13</strong></td>
+              <td><div class="form-badges"><div class="form-l">L</div><div class="form-w">W</div><div class="form-w">W</div><div class="form-l">L</div><div class="form-d">D</div></div></td>
+            </tr>
+            <tr>
+              <td>4</td><td class="name">FC Riverside ★</td>
+              <td>7</td><td>3</td><td>1</td><td>3</td>
+              <td>9</td><td>12</td><td>-3</td><td><strong>10</strong></td>
+              <td><div class="form-badges"><div class="form-l">L</div><div class="form-l">L</div><div class="form-w">W</div><div class="form-d">D</div><div class="form-l">L</div></div></td>
+            </tr>
+            <tr>
+              <td>5</td><td class="name">Valley United</td>
+              <td>8</td><td>2</td><td>2</td><td>4</td>
+              <td>8</td><td>15</td><td>-7</td><td><strong>8</strong></td>
+              <td><div class="form-badges"><div class="form-l">L</div><div class="form-d">D</div><div class="form-l">L</div><div class="form-l">L</div><div class="form-d">D</div></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LEAGUES -->
+    <div class="view" id="view-leagues">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Leagues</div>
+          <div class="page-sub">Season snapshots with embedded standings for VAI FC North.</div>
+          <div class="tab-nav" style="margin-top:12px;">
+            <div class="tab" onclick="nav('tournaments')">Tournaments</div>
+            <div class="tab" onclick="nav('standings')">Standings</div>
+            <div class="tab active">Leagues</div>
+          </div>
+        </div>
+        <button class="btn btn-green">+ Create Season</button>
+      </div>
+
+      <div class="grid-2">
+        <div class="league-card">
+          <div class="league-header">
+            <div>
+              <div class="league-season">Spring 2026</div>
+              <div class="league-dates">Apr 1 – Jun 30, 2026 · U14 · 8 teams</div>
+            </div>
+            <span class="pill pill-orange">ACTIVE</span>
+          </div>
+          <div class="mini-standings">
+            <div class="mini-row"><div class="mini-rank">1</div><div class="mini-team">2012 Boys Black</div><div class="mini-pts">19 pts</div></div>
+            <div class="mini-row"><div class="mini-rank">2</div><div class="mini-team">2011 Girls Blue</div><div class="mini-pts">17 pts</div></div>
+            <div class="mini-row"><div class="mini-rank">3</div><div class="mini-team">City Select</div><div class="mini-pts">13 pts</div></div>
+          </div>
+          <button class="btn btn-neutral" onclick="nav('standings')" style="font-size:12px;align-self:flex-start;">Full standings →</button>
+        </div>
+
+        <div class="league-card">
+          <div class="league-header">
+            <div>
+              <div class="league-season">Fall 2025</div>
+              <div class="league-dates">Sep 1 – Nov 30, 2025 · U14 · 6 teams</div>
+            </div>
+            <span class="pill pill-green">FINAL</span>
+          </div>
+          <div class="mini-standings">
+            <div class="mini-row"><div class="mini-rank">1</div><div class="mini-team">Valley United</div><div class="mini-pts">22 pts</div></div>
+            <div class="mini-row"><div class="mini-rank">2</div><div class="mini-team">2012 Boys Black</div><div class="mini-pts">19 pts</div></div>
+            <div class="mini-row"><div class="mini-rank">3</div><div class="mini-team">City Select</div><div class="mini-pts">15 pts</div></div>
+          </div>
+          <button class="btn btn-neutral" style="font-size:12px;align-self:flex-start;">Archive →</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end main -->
+</div><!-- end layout -->
+
+<script>
+const views = ['tournaments','bracket','match','standings','leagues'];
+const sidebarMap = { tournaments:'tournaments', bracket:'tournaments', match:'tournaments', standings:'standings', leagues:'leagues' };
+
+function nav(id) {
+  views.forEach(v => document.getElementById('view-'+v)?.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+  const view = document.getElementById('view-'+id);
+  if (view) view.classList.add('active');
+  const sKey = sidebarMap[id];
+  if (sKey) {
+    const sEl = document.getElementById('nav-'+sKey);
+    if (sEl) sEl.classList.add('active');
+  }
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
