@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Home Screen (Final Direction)</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0C0A09; --card: #1A1614; --bgElev: #231E1B;
+  --textStrong: #F5F0EB; --text: #D4CBC4; --textMuted: #8B7E74;
+  --border: #2E2824;
+  --orange: #F7941E; --orangeBg: #2A1E0A; --orangeBorder: #5C4A15;
+  --green: #34D399; --greenBg: #0A2A1E; --greenBorder: #1A5C3A;
+  --red: #FF6B6B; --redBg: #3A0F0F; --redBorder: #5C2A2A;
+  --yellow: #FBBF24; --yellowBg: #2A1E0A;
+  --blue: #5577DD; --blueBg: #0F1A40; --blueBorder: #2A3A70;
+  --teal: #5EEAD4; --tealBg: #0A2A28; --tealBorder: #1A5C58;
+  --pill: 999px;
+}
+body { background: #060504; font-family: -apple-system,'Inter',sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px 48px; color: var(--textStrong); }
+h1 { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--textMuted); margin-bottom: 4px; text-align: center; }
+.subtitle { font-size: 11px; color: var(--textMuted); margin-bottom: 20px; text-align: center; }
+
+/* View switcher */
+.view-nav { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+.v-btn { background: var(--card); border: 1px solid var(--border); color: var(--textMuted); font-size: 11px; font-weight: 600; padding: 6px 14px; border-radius: var(--pill); cursor: pointer; }
+.v-btn.active { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+
+/* Phone */
+.phone { background: #181512; border-radius: 44px; border: 1.5px solid #3A3330; box-shadow: 0 0 0 1px #1A1614, 0 32px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; width: 375px; position: relative; }
+.status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px 8px; background: var(--bg); font-size: 12px; font-weight: 600; color: var(--textStrong); }
+.home-indicator { background: var(--bg); padding: 6px 0 12px; display: flex; justify-content: center; }
+.home-bar { width: 120px; height: 5px; background: var(--border); border-radius: 3px; }
+
+/* App header */
+.app-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 16px 12px; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--orange); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; color: #000; }
+.logo-text { font-size: 16px; font-weight: 800; color: var(--textStrong); letter-spacing: -0.02em; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.avanti-online { font-size: 11px; color: var(--green); font-weight: 700; letter-spacing: 0.04em; display: flex; align-items: center; gap: 4px; }
+.online-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), #C4720F); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #000; }
+
+/* AVANTI strip */
+.avanti-strip { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.avanti-strip.hidden { display: none; }
+.strip-msg { font-size: 13px; color: var(--textStrong); line-height: 1.5; }
+.strip-msg.compliance { color: var(--text); }
+.strip-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.strip-chip { padding: 6px 14px; border-radius: var(--pill); border: 1px solid; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s; }
+.s-confirm { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.s-later { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.s-more { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.strip-dismiss { font-size: 11px; color: var(--textMuted); cursor: pointer; text-align: right; }
+
+/* Quick action scroll */
+.qa-section { padding: 10px 16px 6px; }
+.qa-label { font-size: 10px; color: var(--textMuted); font-weight: 700; letter-spacing: 0.1em; margin-bottom: 8px; }
+.qa-scroll { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; }
+.qa-scroll::-webkit-scrollbar { display: none; }
+.qa-chip { display: flex; align-items: center; gap: 5px; background: var(--bgElev); border: 1px solid var(--border); border-radius: var(--pill); padding: 7px 13px; font-size: 12px; font-weight: 500; color: var(--text); white-space: nowrap; flex-shrink: 0; cursor: pointer; transition: all 0.12s; }
+.qa-chip:hover { border-color: var(--orange); color: var(--orange); }
+.qa-chip.active-feature { border-color: var(--orangeBorder); background: var(--orangeBg); color: var(--orange); }
+
+/* Feature grid */
+.grid-section { padding: 10px 16px 16px; display: flex; flex-direction: column; gap: 8px; }
+.grid-label-row { display: flex; align-items: center; justify-content: space-between; }
+.grid-label { font-size: 10px; color: var(--textMuted); font-weight: 700; letter-spacing: 0.1em; }
+.customize-btn { font-size: 11px; color: var(--textMuted); cursor: pointer; display: flex; align-items: center; gap: 4px; }
+.customize-btn.editing { color: var(--orange); }
+
+.feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* Feature tile */
+.ftile {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 16px 14px; display: flex; flex-direction: column; gap: 6px;
+  cursor: pointer; transition: all 0.15s; position: relative;
+  user-select: none;
+}
+.ftile:hover { border-color: var(--border); transform: translateY(-1px); }
+.ftile.live { border-color: var(--orangeBorder); }
+.ftile.action-needed { border-color: var(--redBorder); }
+.ftile.highlight { border-color: var(--tealBorder); }
+.ftile-icon { font-size: 26px; margin-bottom: 2px; }
+.ftile-name { font-size: 14px; font-weight: 700; color: var(--textStrong); line-height: 1.2; }
+.ftile-sub { font-size: 12px; color: var(--textMuted); }
+.ftile-badge { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; padding: 3px 8px; border-radius: var(--pill); border: 1px solid; align-self: flex-start; margin-top: 2px; }
+.badge-live { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.badge-alert { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+.badge-ok { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.badge-open { background: var(--tealBg); border-color: var(--tealBorder); color: var(--teal); }
+.badge-new { background: var(--blueBg); border-color: var(--blueBorder); color: var(--blue); }
+.badge-neutral { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+
+/* Edit mode drag handles */
+.drag-handle { position: absolute; top: 8px; right: 8px; font-size: 14px; color: var(--textMuted); display: none; }
+.editing-mode .drag-handle { display: block; }
+.editing-mode .ftile { border-style: dashed; opacity: 0.85; }
+.editing-mode .ftile:hover { opacity: 1; }
+
+/* Wide tile (full width) */
+.ftile-wide { grid-column: span 2; flex-direction: row; align-items: center; gap: 14px; padding: 14px 16px; }
+.ftile-wide .ftile-icon { font-size: 30px; margin-bottom: 0; flex-shrink: 0; }
+.ftile-wide .ftile-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+
+/* Bottom nav */
+.bottom-nav { background: var(--card); border-top: 1px solid var(--border); padding: 8px 0 16px; display: flex; justify-content: space-around; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+.nav-icon { font-size: 22px; }
+.nav-label { font-size: 9px; color: var(--textMuted); letter-spacing: 0.04em; font-weight: 600; }
+.nav-active { color: var(--orange) !important; }
+
+/* Screen scroll */
+.screen-scroll { overflow-y: auto; max-height: 720px; scrollbar-width: none; background: var(--bg); }
+.screen-scroll::-webkit-scrollbar { display: none; }
+
+/* View screens */
+.view { display: none; }
+.view.active { display: block; }
+
+/* AVANTI overlay (shared from before) */
+.avanti-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--orangeBorder); border-radius: 20px 20px 0 0; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0,0.15,1); z-index: 100; max-height: 60%; display: flex; flex-direction: column; box-shadow: 0 -8px 40px rgba(0,0,0,0.6); }
+.avanti-overlay.open { transform: translateY(0); }
+.overlay-handle-row { display: flex; justify-content: center; padding: 10px 0 6px; cursor: pointer; }
+.overlay-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; }
+.overlay-header { display: flex; align-items: center; gap: 8px; padding: 0 16px 12px; border-bottom: 1px solid var(--border); }
+.ov-mark { width: 22px; height: 22px; border-radius: 6px; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; color: #000; flex-shrink: 0; }
+.ov-title { font-size: 14px; font-weight: 700; color: var(--textStrong); }
+.ov-close { margin-left: auto; font-size: 18px; color: var(--textMuted); cursor: pointer; }
+.overlay-body { padding: 14px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scrollbar-width: none; flex: 1; }
+.overlay-body::-webkit-scrollbar { display: none; }
+.ov-msg { font-size: 13px; color: var(--text); line-height: 1.6; }
+.action-card { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.ac-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--yellow); }
+.ac-title { font-size: 13px; font-weight: 600; color: var(--textStrong); }
+.ac-body { font-size: 12px; color: var(--textMuted); line-height: 1.5; }
+.ac-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.ac-btn { padding: 7px 14px; border-radius: var(--pill); border: 1px solid; font-size: 12px; font-weight: 600; cursor: pointer; }
+.btn-confirm { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.btn-neutral { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.overlay-input-row { display: flex; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid var(--border); }
+.ov-input { flex: 1; background: var(--bgElev); border: 1px solid var(--border); border-radius: var(--pill); padding: 8px 12px; font-size: 12px; color: var(--textMuted); }
+.ov-send { width: 32px; height: 32px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; cursor: pointer; }
+.overlay-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; display: none; }
+.overlay-backdrop.open { display: block; }
+</style>
+</head>
+<body>
+
+<h1>VAI — Home Screen</h1>
+<p class="subtitle">Final direction · AVANTI strip + feature grid · custom layout</p>
+
+<div class="view-nav">
+  <button class="v-btn active" onclick="setView('default', this)">Default</button>
+  <button class="v-btn" onclick="setView('coach', this)">Coach view</button>
+  <button class="v-btn" onclick="setView('mentor', this)">Mentor view</button>
+  <button class="v-btn" onclick="setView('edit', this)">✏️ Customize</button>
+</div>
+
+<div class="phone">
+  <div class="status-bar"><span>9:41</span><div style="font-size:11px;">●●● WiFi ■■■</div></div>
+
+  <!-- Shared overlay -->
+  <div class="overlay-backdrop" id="backdrop" onclick="closeOverlay()"></div>
+  <div class="avanti-overlay" id="overlay">
+    <div class="overlay-handle-row" onclick="closeOverlay()"><div class="overlay-handle"></div></div>
+    <div class="overlay-header">
+      <div class="ov-mark">A</div>
+      <div class="ov-title" id="ov-title">AVANTI</div>
+      <div class="ov-close" onclick="closeOverlay()">✕</div>
+    </div>
+    <div class="overlay-body" id="ov-body"></div>
+    <div class="overlay-input-row">
+      <div class="ov-input">Ask AVANTI…</div>
+      <div class="ov-send">↑</div>
+    </div>
+  </div>
+
+  <div class="screen-scroll">
+
+    <!-- SHARED HEADER -->
+    <div class="app-header">
+      <div class="logo"><div class="logo-mark">V</div><div class="logo-text">VAI</div></div>
+      <div class="header-right">
+        <div class="avanti-online"><div class="online-dot"></div>AVANTI ONLINE</div>
+        <div class="avatar" id="user-avatar">M</div>
+      </div>
+    </div>
+
+    <!-- AVANTI STRIP (contextual — only shows when relevant) -->
+    <div class="avanti-strip" id="avanti-strip">
+      <div class="strip-msg" id="strip-msg">
+        <strong>AVANTI:</strong> Saturday game — Mia's payment is still RED. Want me to send a reminder to VAI FC North?
+      </div>
+      <div class="strip-chips" id="strip-chips">
+        <div class="strip-chip s-confirm" onclick="openOverlay('payment')">Yes, send it</div>
+        <div class="strip-chip s-later">Later</div>
+        <div class="strip-chip s-more">Ask more →</div>
+      </div>
+      <div class="strip-dismiss" id="strip-dismiss" onclick="dismissStrip()">Dismiss ✕</div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="qa-section">
+      <div class="qa-label">QUICK ACTIONS</div>
+      <div class="qa-scroll" id="qa-scroll">
+        <div class="qa-chip">📅 Schedule</div>
+        <div class="qa-chip active-feature">🏆 Tournaments</div>
+        <div class="qa-chip">📋 Roster</div>
+        <div class="qa-chip">🪪 Passport</div>
+        <div class="qa-chip">⛺ Camps</div>
+        <div class="qa-chip">🎯 Tryouts</div>
+        <div class="qa-chip">💰 Wallet</div>
+        <div class="qa-chip">📊 Standings</div>
+      </div>
+    </div>
+
+    <!-- FEATURE GRID (Default view) -->
+    <div class="grid-section" id="grid-section">
+      <div class="grid-label-row">
+        <div class="grid-label" id="grid-label">YOUR VAI</div>
+        <div class="customize-btn" id="customize-btn" onclick="toggleEdit()">⊞ Customize</div>
+      </div>
+
+      <div class="feature-grid" id="feature-grid">
+
+        <!-- Wide tile — live now -->
+        <div class="ftile ftile-wide live" onclick="openOverlay('liveScore')">
+          <div class="drag-handle">⠿</div>
+          <div class="ftile-icon">🏆</div>
+          <div class="ftile-info">
+            <div class="ftile-name">Spring Invitational</div>
+            <div class="ftile-sub">Final · 2012 Boys Black · 2–1</div>
+            <div class="ftile-badge badge-live">● LIVE NOW</div>
+          </div>
+        </div>
+
+        <!-- Schedule -->
+        <div class="ftile" onclick="openOverlay('schedule')">
+          <div class="drag-handle">⠿</div>
+          <div class="ftile-icon">📅</div>
+          <div class="ftile-name">Schedule</div>
+          <div class="ftile-sub">2 events this week</div>
+        </div>
+
+        <!-- Roster -->
+        <div class="ftile action-needed" onclick="openOverlay('roster')">
+          <div class="drag-handle">⠿</div>
+          <div class="ftile-icon">📋</div>
+          <div class="ftile-name">Roster</div>
+          <div class="ftile-sub">16 athletes</div>
+          <div class="ftile-badge badge-alert">1 BLOCKED</div>
+        </div>
+
+        <!-- Summer Camp -->
+        <div class="ftile highlight" onclick="openOverlay('camp')">
+          <div class="drag-handle">⠿</div>
+          <div class="ftile-icon">⛺</div>
+          <div class="ftile-name">Summer Camp</div>
+          <div class="ftile-sub">14 registered</div>
+          <div class="ftile-badge badge-open">JUL 14</div>
+        </div>
+
+        <!-- Tryouts -->
+        <div class="ftile" onclick="openOverlay('tryout')">
+          <div class="drag-handle">⠿</div>
+          <div class="ftile-icon">🎯</div>
+          <div class="ftile-name">Tryouts</div>
+          <div class="ftile-sub">Fall roster open</div>
+          <div class="ftile-badge badge-open">OPEN</div>
+        </div>
+
+        <!-- Standings -->
+        <div class="ftile">
+          <div class="drag-handle">⠿</div>
+          <div class="ftile-icon">📊</div>
+          <div class="ftile-name">Standings</div>
+          <div class="ftile-sub">#1 · Spring 2026</div>
+        </div>
+
+        <!-- Wallet -->
+        <div class="ftile">
+          <div class="drag-handle">⠿</div>
+          <div class="ftile-icon">💰</div>
+          <div class="ftile-name">Wallet</div>
+          <div class="ftile-sub">$247 earned</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label nav-active">Home</div></div>
+    <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Schedule</div></div>
+    <div class="nav-item"><div class="nav-icon">💬</div><div class="nav-label">AVANTI</div></div>
+    <div class="nav-item"><div class="nav-icon">🏆</div><div class="nav-label">Events</div></div>
+    <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">Me</div></div>
+  </div>
+
+  <div class="home-indicator"><div class="home-bar"></div></div>
+</div>
+
+<script>
+/* ---- View configurations ---- */
+const views = {
+  default: {
+    avatar: 'M', label: 'YOUR VAI',
+    strip: { show: true, msg: '<strong>AVANTI:</strong> Saturday game — Mia\'s payment is still RED. Want me to send a reminder to VAI FC North?', chips: ['Yes, send it', 'Later', 'Ask more →'] },
+    qa: ['📅 Schedule', '🏆 Tournaments', '📋 Roster', '🪪 Passport', '⛺ Camps', '🎯 Tryouts', '💰 Wallet', '📊 Standings'],
+  },
+  coach: {
+    avatar: 'C', label: 'COACH DASHBOARD',
+    strip: { show: true, msg: '<strong>AVANTI:</strong> 3 athletes not GREEN for Saturday. Mia (payment), Riley (waiver), Jordan (medical). Want a summary to share with staff?', chips: ['Show me', 'Send to staff', 'Later'] },
+    qa: ['📋 Roster', '🟢 Green Line', '📅 Schedule', '⚡ Exceptions', '🏆 Tournaments', '⛺ Camps'],
+  },
+  mentor: {
+    avatar: 'D', label: 'MY SESSIONS',
+    strip: { show: true, msg: '<strong>AVANTI:</strong> Saturday Speed Camp — 14 confirmed, 2 on waitlist. Groups not yet assigned. Want me to build them?', chips: ['Build groups', 'Later', 'View roster →'] },
+    qa: ['⛺ My Sessions', '🎯 Tryouts', '📅 Calendar', '💰 Earnings', '📋 Roster', '📊 Standings'],
+  },
+  edit: {
+    avatar: 'M', label: 'YOUR VAI',
+    strip: { show: false },
+    qa: ['📅 Schedule', '🏆 Tournaments', '📋 Roster', '🪪 Passport', '⛺ Camps', '🎯 Tryouts', '💰 Wallet', '📊 Standings'],
+  }
+};
+
+let editMode = false;
+
+function setView(id, btn) {
+  document.querySelectorAll('.v-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cfg = views[id];
+  if (!cfg) return;
+
+  document.getElementById('user-avatar').textContent = cfg.avatar;
+  document.getElementById('grid-label').textContent = cfg.label;
+
+  // Strip
+  const strip = document.getElementById('avanti-strip');
+  if (cfg.strip.show) {
+    strip.classList.remove('hidden');
+    document.getElementById('strip-msg').innerHTML = cfg.strip.msg;
+    const chips = document.getElementById('strip-chips');
+    chips.innerHTML = '';
+    (cfg.strip.chips || []).forEach((label, i) => {
+      const cls = i === 0 ? 's-confirm' : 's-later';
+      chips.innerHTML += `<div class="strip-chip ${cls}">${label}</div>`;
+    });
+  } else { strip.classList.add('hidden'); }
+
+  // QA
+  const qa = document.getElementById('qa-scroll');
+  qa.innerHTML = cfg.qa.map((c, i) => `<div class="qa-chip${i===1?' active-feature':''}">${c}</div>`).join('');
+
+  // Edit mode
+  if (id === 'edit') {
+    editMode = true;
+    document.getElementById('feature-grid').classList.add('editing-mode');
+    document.getElementById('customize-btn').textContent = '✓ Done';
+    document.getElementById('customize-btn').classList.add('editing');
+  } else {
+    editMode = false;
+    document.getElementById('feature-grid').classList.remove('editing-mode');
+    document.getElementById('customize-btn').textContent = '⊞ Customize';
+    document.getElementById('customize-btn').classList.remove('editing');
+  }
+
+  closeOverlay();
+}
+
+function toggleEdit() {
+  editMode = !editMode;
+  const grid = document.getElementById('feature-grid');
+  const btn = document.getElementById('customize-btn');
+  if (editMode) {
+    grid.classList.add('editing-mode');
+    btn.textContent = '✓ Done';
+    btn.classList.add('editing');
+    document.getElementById('avanti-strip').classList.add('hidden');
+  } else {
+    grid.classList.remove('editing-mode');
+    btn.textContent = '⊞ Customize';
+    btn.classList.remove('editing');
+    document.getElementById('avanti-strip').classList.remove('hidden');
+  }
+}
+
+function dismissStrip() {
+  document.getElementById('avanti-strip').classList.add('hidden');
+}
+
+/* ---- Overlays ---- */
+const overlayContent = {
+  payment: {
+    title: 'Payment gate — Mia Chen',
+    html: `<div class="ov-msg">Mia's installment is <strong>4 days overdue</strong> at VAI FC North. She's blocked from Saturday until resolved.</div>
+    <div class="action-card" style="border-color:var(--yellowBorder);background:var(--yellowBg);">
+      <div class="ac-label">⚡ YELLOW · Your confirmation required</div>
+      <div class="ac-title">Send payment reminder to VAI FC North</div>
+      <div class="ac-body"><strong>Draft:</strong> "Mia Chen's installment is overdue. Please advise before Saturday."<br><strong>To:</strong> admin@vaifcnorth.com</div>
+      <div class="ac-btns">
+        <div class="ac-btn btn-confirm">✓ Send it</div>
+        <div class="ac-btn btn-neutral">Edit</div>
+        <div class="ac-btn btn-neutral" onclick="closeOverlay()">Later</div>
+      </div>
+    </div>`
+  },
+  liveScore: {
+    title: 'Spring Invitational Final',
+    html: `<div class="ov-msg"><strong>2012 Boys Black</strong> leads <strong>2–1</strong> in the 67th minute. Referee: Alex.</div>
+    <div class="action-card" style="border-color:var(--greenBorder);background:var(--greenBg);">
+      <div class="ac-label" style="color:var(--green);">GREEN · Read only</div>
+      <div class="ac-title">Event log</div>
+      <div class="ac-body">P2 14' — Goal · Boys Black<br>P2 58' — Goal · Boys Black<br>P2 63' — Goal · Girls Blue<br>P2 67' — Yellow card</div>
+    </div>
+    <div class="action-card" style="border-color:var(--yellowBorder);">
+      <div class="ac-label">⚡ YELLOW · Ready after final whistle</div>
+      <div class="ac-title">Finalize + notify all families</div>
+      <div class="ac-body">Standings will refresh. 24 families notified with results.</div>
+      <div class="ac-btns"><div class="ac-btn btn-confirm">Finalize match</div><div class="ac-btn btn-neutral">Not yet</div></div>
+    </div>`
+  },
+  schedule: {
+    title: 'This week',
+    html: `<div class="ov-msg">2 events on your schedule this week.</div>
+    <div style="background:var(--bgElev);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;">
+      <div><div style="font-size:10px;color:var(--orange);font-weight:700;">SAT APR 26 · 9AM</div><div style="font-size:14px;color:var(--textStrong);font-weight:600;">Game vs City Select</div><div style="font-size:12px;color:var(--textMuted);">Field 2 · 2011 Girls Blue</div></div>
+      <div style="height:1px;background:var(--border);"></div>
+      <div><div style="font-size:10px;color:var(--textMuted);font-weight:700;">THU APR 24 · 5:30PM</div><div style="font-size:14px;color:var(--textStrong);font-weight:600;">Practice</div><div style="font-size:12px;color:var(--textMuted);">Field 1 · Finishing patterns</div></div>
+    </div>`
+  },
+  roster: {
+    title: 'Roster — 1 blocked',
+    html: `<div class="ov-msg"><strong style="color:var(--red);">Mia Chen</strong> is blocked for Saturday. Payment gate RED. All other athletes are GREEN.</div>
+    <div class="action-card" style="border-color:var(--yellowBorder);">
+      <div class="ac-label">⚡ YELLOW</div>
+      <div class="ac-title">Send compliance reminder to Mia's family</div>
+      <div class="ac-body">Push notification + email. Explains what's blocking and how to resolve.</div>
+      <div class="ac-btns"><div class="ac-btn btn-confirm">✓ Send reminder</div><div class="ac-btn btn-neutral">Later</div></div>
+    </div>`
+  },
+  camp: {
+    title: 'Summer Camp · Jul 14',
+    html: `<div class="ov-msg"><strong>14 athletes registered.</strong> 12 ready, 1 waiver missing (Riley), 1 payment blocked (Jordan).</div>
+    <div class="action-card" style="border-color:var(--tealBorder);background:var(--tealBg);">
+      <div class="ac-label" style="color:var(--teal);">⚡ YELLOW</div>
+      <div class="ac-title">Build Day 1 rotation groups</div>
+      <div class="ac-body">3 groups of ~5 · sorted by age + position · AVANTI has a draft ready.</div>
+      <div class="ac-btns"><div class="ac-btn" style="background:var(--tealBg);border-color:var(--tealBorder);color:var(--teal);">View groups</div><div class="ac-btn btn-neutral">Later</div></div>
+    </div>
+    <div class="action-card" style="border-color:var(--yellowBorder);">
+      <div class="ac-label">⚡ YELLOW</div>
+      <div class="ac-title">Send Day 1 welcome to all 14 families</div>
+      <div class="ac-body">Check-in time, QR reminder, group assignment — AVANTI draft ready.</div>
+      <div class="ac-btns"><div class="ac-btn btn-confirm">✓ Confirm & send</div><div class="ac-btn btn-neutral">Edit</div></div>
+    </div>`
+  },
+  tryout: {
+    title: 'Tryouts · Fall Roster',
+    html: `<div class="ov-msg"><strong>22 athletes registered</strong> for Aug 10 tryouts. Evaluation sheets not yet built.</div>
+    <div class="action-card" style="border-color:var(--tealBorder);background:var(--tealBg);">
+      <div class="ac-label" style="color:var(--teal);">⚡ YELLOW</div>
+      <div class="ac-title">Generate evaluation sheets + groups</div>
+      <div class="ac-body">6 stations · 4 groups of 5-6 · score 1-10 per station · coaches review before outcomes.</div>
+      <div class="ac-btns"><div class="ac-btn" style="background:var(--tealBg);border-color:var(--tealBorder);color:var(--teal);">✓ Generate</div><div class="ac-btn btn-neutral">Later</div></div>
+    </div>
+    <div class="action-card" style="border-color:var(--greenBorder);background:var(--greenBg);">
+      <div class="ac-label" style="color:var(--green);">GREEN · Draft ready</div>
+      <div class="ac-title">Result message templates</div>
+      <div class="ac-body">Selected / Waitlisted / Released — 3 templates. Coach reviews before send.</div>
+    </div>`
+  }
+};
+
+function openOverlay(type) {
+  const cfg = overlayContent[type];
+  if (!cfg) return;
+  document.getElementById('ov-title').textContent = cfg.title;
+  document.getElementById('ov-body').innerHTML = cfg.html;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('backdrop').classList.add('open');
+}
+
+function closeOverlay() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('open');
+}
+</script>
+</body>
+</html>
