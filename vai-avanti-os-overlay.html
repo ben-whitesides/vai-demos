@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — AVANTI OS Overlay (Badinho Spec)</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0C0A09; --card: #1A1614; --bgElev: #231E1B;
+  --textStrong: #F5F0EB; --text: #D4CBC4; --textMuted: #8B7E74;
+  --border: #2E2824;
+  --orange: #F7941E; --orangeBg: #2A1E0A; --orangeBorder: #5C4A15;
+  --green: #34D399; --greenBg: #0A2A1E; --greenBorder: #1A5C3A;
+  --red: #FF6B6B; --redBg: #3A0F0F; --redBorder: #5C2A2A;
+  --yellow: #FBBF24; --yellowBg: #2A1E00; --yellowBorder: #5C4400;
+  --avanti: #34D399; --avantiBg: #051A10; --avantiBorder: #0D4A28;
+  --r: 16px; --pill: 999px;
+}
+body { background: #060504; font-family: -apple-system,'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:24px 16px 48px; color:var(--textStrong); }
+h1 { font-size:13px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--textMuted); margin-bottom:4px; text-align:center; }
+.subtitle { font-size:11px; color:var(--textMuted); margin-bottom:20px; text-align:center; max-width:480px; line-height:1.5; }
+.scenario-nav { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:20px; max-width:520px; }
+.nav-btn { background:var(--card); border:1px solid var(--border); color:var(--textMuted); font-size:11px; font-weight:600; letter-spacing:0.06em; padding:6px 12px; border-radius:var(--pill); cursor:pointer; transition:all 0.15s; }
+.nav-btn:hover { border-color:var(--orange); color:var(--orange); }
+.nav-btn.active { background:var(--orangeBg); border-color:var(--orangeBorder); color:var(--orange); }
+
+/* Phone */
+.phone { background:#181512; border-radius:44px; border:1.5px solid #3A3330; box-shadow:0 0 0 1px #1A1614,0 32px 80px rgba(0,0,0,0.9),inset 0 1px 0 rgba(255,255,255,0.05); overflow:hidden; width:375px; position:relative; }
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 20px 8px; background:var(--bg); font-size:12px; font-weight:600; }
+.home-indicator { background:var(--bg); padding:8px 0 12px; display:flex; justify-content:center; }
+.home-bar { width:120px; height:5px; background:var(--border); border-radius:3px; }
+
+/* Home grid (background) */
+.home-bg { background:var(--bg); padding:16px; display:flex; flex-direction:column; gap:12px; }
+.app-header { display:flex; align-items:center; justify-content:space-between; padding:4px 0 8px; }
+.vai-logo { font-size:18px; font-weight:900; letter-spacing:0.1em; color:var(--orange); }
+.avanti-indicator { display:flex; align-items:center; gap:5px; font-size:10px; font-weight:700; color:var(--avanti); letter-spacing:0.08em; }
+.avanti-dot-pulse { width:6px; height:6px; border-radius:50%; background:var(--avanti); animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
+.avatar-sm { width:28px; height:28px; border-radius:50%; background:var(--bgElev); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:var(--orange); }
+
+/* AVANTI strip */
+.avanti-strip { background:linear-gradient(135deg,#1E1000,#251500); border:1px solid var(--yellowBorder); border-radius:10px; padding:10px 12px; display:flex; align-items:center; gap:8px; }
+.strip-label { font-size:10px; font-weight:800; letter-spacing:0.1em; color:var(--yellow); text-transform:uppercase; flex-shrink:0; }
+.strip-msg { font-size:12px; color:var(--text); flex:1; line-height:1.4; }
+.strip-cta { font-size:11px; font-weight:700; color:var(--yellow); flex-shrink:0; cursor:pointer; }
+
+/* Tile grid */
+.section-label { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--textMuted); }
+.tile-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.tile { background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:14px; display:flex; flex-direction:column; gap:6px; cursor:pointer; transition:all 0.15s; position:relative; overflow:hidden; }
+.tile:hover { border-color:var(--orange); }
+.tile:active { transform:scale(0.97); }
+.tile.live { border-color:var(--orangeBorder); }
+.tile-icon { font-size:20px; }
+.tile-name { font-size:13px; font-weight:700; color:var(--textStrong); }
+.tile-summary { font-size:11px; color:var(--textMuted); line-height:1.4; }
+.tile-badge { position:absolute; top:8px; right:8px; font-size:9px; font-weight:800; border-radius:var(--pill); padding:2px 7px; border:1px solid; letter-spacing:0.04em; }
+.tile-badge.alert { background:var(--redBg); border-color:var(--redBorder); color:var(--red); }
+.tile-badge.action { background:var(--orangeBg); border-color:var(--orangeBorder); color:var(--orange); }
+.tile-badge.live-badge { background:var(--orangeBg); border-color:var(--orangeBorder); color:var(--orange); }
+.tile-badge.locked { background:var(--bgElev); border-color:var(--border); color:var(--textMuted); }
+.play-dot { display:inline-block; width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.play-dot.green { background:var(--green); }
+.play-dot.yellow { background:var(--yellow); }
+.play-dot.red { background:var(--red); }
+
+/* Half-screen AVANTI Overlay */
+.overlay-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.6); z-index:10; display:none; }
+.overlay-backdrop.visible { display:block; }
+.overlay-sheet { position:absolute; bottom:0; left:0; right:0; z-index:11; background:var(--card); border-radius:20px 20px 0 0; border:1px solid var(--border); border-bottom:none; transition:transform 0.3s cubic-bezier(0.32,0.72,0,1); display:none; max-height:72%; }
+.overlay-sheet.visible { display:flex; flex-direction:column; }
+.overlay-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:10px auto 0; flex-shrink:0; }
+.overlay-header { padding:14px 16px 10px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.overlay-feature { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--textMuted); margin-bottom:4px; }
+.overlay-title { font-size:17px; font-weight:800; color:var(--textStrong); }
+.overlay-body { padding:14px 16px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; flex:1; scrollbar-width:none; }
+.overlay-body::-webkit-scrollbar { display:none; }
+.overlay-close { position:absolute; top:14px; right:14px; width:26px; height:26px; border-radius:50%; background:var(--bgElev); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; color:var(--textMuted); }
+
+/* Risk indicator */
+.risk-row { display:flex; align-items:center; gap:6px; }
+.risk-dot { width:8px; height:8px; border-radius:50%; }
+.risk-dot.green { background:var(--green); }
+.risk-dot.yellow { background:var(--yellow); }
+.risk-dot.red { background:var(--red); }
+.risk-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; }
+.risk-label.green { color:var(--green); }
+.risk-label.yellow { color:var(--yellow); }
+.risk-label.red { color:var(--red); }
+
+/* Summary card */
+.summary-card { background:var(--bgElev); border-radius:10px; padding:12px; font-size:13px; color:var(--text); line-height:1.6; }
+
+/* Quick prompts */
+.quick-prompts { display:flex; flex-wrap:wrap; gap:6px; }
+.prompt-chip { background:var(--bgElev); border:1px solid var(--border); border-radius:var(--pill); padding:6px 12px; font-size:12px; color:var(--textMuted); cursor:pointer; transition:all 0.15s; }
+.prompt-chip:hover { border-color:var(--orange); color:var(--orange); }
+
+/* Action card (Yellow) */
+.action-card { background:var(--yellowBg); border:1px solid var(--yellowBorder); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:10px; }
+.action-card-title { font-size:13px; font-weight:700; color:var(--yellow); }
+.action-preview { background:rgba(0,0,0,0.3); border-radius:8px; padding:10px; font-size:12px; color:var(--text); line-height:1.5; }
+.action-preview strong { color:var(--textStrong); }
+.action-btns { display:flex; gap:8px; }
+.action-btn { flex:1; padding:10px; border-radius:var(--pill); border:1px solid; font-size:13px; font-weight:700; cursor:pointer; text-align:center; transition:all 0.15s; }
+.action-btn.confirm { background:var(--yellow); border-color:var(--yellow); color:#000; }
+.action-btn.dismiss { background:transparent; border-color:var(--border); color:var(--textMuted); }
+
+/* Blocked card (Red) */
+.blocked-card { background:var(--redBg); border:1px solid var(--redBorder); border-radius:10px; padding:14px; display:flex; gap:10px; }
+.blocked-icon { font-size:18px; flex-shrink:0; }
+.blocked-title { font-size:13px; font-weight:700; color:var(--red); margin-bottom:4px; }
+.blocked-msg { font-size:12px; color:var(--text); line-height:1.5; }
+.blocked-alt { margin-top:8px; font-size:12px; color:var(--orange); cursor:pointer; font-weight:600; }
+
+/* Success card */
+.success-card { background:var(--greenBg); border:1px solid var(--greenBorder); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px; }
+.success-title { font-size:13px; font-weight:700; color:var(--green); }
+.success-msg { font-size:12px; color:var(--text); line-height:1.5; }
+
+/* Navigate button */
+.nav-to-feature { display:flex; align-items:center; justify-content:space-between; background:var(--bgElev); border:1px solid var(--border); border-radius:10px; padding:12px 14px; font-size:13px; color:var(--text); cursor:pointer; }
+.nav-arrow { color:var(--textMuted); }
+
+/* AVANTI input */
+.avanti-input-row { display:flex; gap:8px; align-items:center; padding:12px 16px; border-top:1px solid var(--border); background:var(--card); flex-shrink:0; }
+.avanti-input { flex:1; background:var(--bgElev); border:1px solid var(--border); border-radius:var(--pill); padding:8px 14px; font-size:13px; color:var(--textStrong); font-family:inherit; }
+.avanti-send { width:34px; height:34px; border-radius:50%; background:var(--orange); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; color:#fff; flex-shrink:0; }
+
+/* Locked tile overlay */
+.upgrade-sheet { position:absolute; bottom:0; left:0; right:0; z-index:11; background:var(--card); border-radius:20px 20px 0 0; border:1px solid var(--border); border-bottom:none; padding:20px 16px 24px; display:none; flex-direction:column; gap:14px; text-align:center; }
+.upgrade-sheet.visible { display:flex; }
+.upgrade-icon { font-size:28px; }
+.upgrade-title { font-size:17px; font-weight:800; color:var(--textStrong); }
+.upgrade-msg { font-size:13px; color:var(--textMuted); line-height:1.5; }
+.upgrade-cta { background:var(--orange); color:#000; font-size:15px; font-weight:800; border-radius:var(--pill); padding:14px; cursor:pointer; }
+.upgrade-dismiss { font-size:13px; color:var(--textMuted); cursor:pointer; }
+
+/* Scenario views */
+.scenario { display:none; }
+.scenario.active { display:block; }
+</style>
+</head>
+<body>
+
+<h1>VAI — AVANTI OS Overlay</h1>
+<div class="subtitle">Badinho visual spec · Tile tap → AVANTI overlay → Green/Yellow/Red states · Same pattern across all screens</div>
+
+<div class="scenario-nav">
+  <button class="nav-btn active" onclick="setScenario('green',this)">Green — Summary</button>
+  <button class="nav-btn" onclick="setScenario('yellow',this)">Yellow — Confirm Action</button>
+  <button class="nav-btn" onclick="setScenario('red',this)">Red — Blocked</button>
+  <button class="nav-btn" onclick="setScenario('success',this)">Success State</button>
+  <button class="nav-btn" onclick="setScenario('locked',this)">Locked Tile Upgrade</button>
+  <button class="nav-btn" onclick="setScenario('strip',this)">AVANTI Strip</button>
+</div>
+
+<div class="phone" id="phone">
+  <div class="status-bar"><span>9:41</span><span>●●●</span><span>⬛ 87%</span></div>
+
+  <!-- Home grid (always behind overlay) -->
+  <div class="home-bg" id="home-grid">
+    <div class="app-header">
+      <div class="vai-logo">VAI</div>
+      <div class="avanti-indicator"><div class="avanti-dot-pulse"></div>AVANTI</div>
+      <div class="avatar-sm">BW</div>
+    </div>
+
+    <!-- AVANTI Strip (scenario=strip shows it) -->
+    <div class="avanti-strip" id="avanti-strip" style="display:none;">
+      <span class="strip-label">✦ AVANTI</span>
+      <span class="strip-msg">Mia's payment is RED for Saturday — 1 action ready.</span>
+      <span class="strip-cta" onclick="setScenario('yellow',document.querySelectorAll('.nav-btn')[1])">Fix →</span>
+    </div>
+
+    <div class="section-label">MOST USED</div>
+    <div class="tile-grid-2">
+      <div class="tile" onclick="openOverlay('green')">
+        <div class="tile-badge live-badge">● LIVE</div>
+        <div class="tile-icon">📅</div>
+        <div class="tile-name">Schedule</div>
+        <div class="tile-summary">2 events this week</div>
+      </div>
+      <div class="tile" onclick="openOverlay('yellow')">
+        <div class="tile-badge alert">1 BLOCKED</div>
+        <div class="tile-icon">🟢</div>
+        <div style="display:flex;align-items:center;gap:5px;"><div class="play-dot red"></div><div class="tile-name">PLAY Status</div></div>
+        <div class="tile-summary">1 RED · Saturday</div>
+      </div>
+      <div class="tile" onclick="openOverlay('green')">
+        <div class="tile-icon">👥</div>
+        <div class="tile-name">Roster</div>
+        <div class="tile-summary" style="display:flex;align-items:center;gap:4px;"><div class="play-dot green"></div>16 athletes · clear</div>
+      </div>
+      <div class="tile" onclick="openOverlay('locked')" id="locked-tile">
+        <div class="tile-badge locked">🔒 VAI+</div>
+        <div class="tile-icon">💰</div>
+        <div class="tile-name">Wallet</div>
+        <div class="tile-summary" style="color:var(--textMuted);">Upgrade to unlock</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:4px;">ALL FEATURES</div>
+    <div class="tile-grid-2">
+      <div class="tile" onclick="openOverlay('green')">
+        <div class="tile-icon">🏆</div>
+        <div class="tile-name">Tournaments</div>
+        <div class="tile-summary">Spring Invitational</div>
+      </div>
+      <div class="tile" onclick="openOverlay('green')">
+        <div class="tile-icon">📊</div>
+        <div class="tile-name">Standings</div>
+        <div class="tile-summary">#1 · Spring 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── OVERLAY: Green (summary) ── -->
+  <div class="overlay-backdrop" id="backdrop-green" onclick="closeOverlay('green')"></div>
+  <div class="overlay-sheet" id="sheet-green">
+    <div class="overlay-handle"></div>
+    <div class="overlay-header">
+      <div class="overlay-close" onclick="closeOverlay('green')">✕</div>
+      <div class="overlay-feature">Schedule</div>
+      <div class="overlay-title">This Week</div>
+    </div>
+    <div class="overlay-body">
+      <div class="risk-row"><div class="risk-dot green"></div><span class="risk-label green">All Clear</span></div>
+      <div class="summary-card">2 events this week. Saturday home game vs Salt Lake Storm at 10:00 AM. No PLAY blockers for any scheduled athlete. All waivers current.</div>
+      <div class="quick-prompts">
+        <div class="prompt-chip">What's the lineup Saturday?</div>
+        <div class="prompt-chip">Any PLAY issues for this game?</div>
+        <div class="prompt-chip">Show next 2 weeks</div>
+      </div>
+      <div class="nav-to-feature" onclick="closeOverlay('green')">
+        <span>Open Schedule</span><span class="nav-arrow">›</span>
+      </div>
+    </div>
+    <div class="avanti-input-row">
+      <input class="avanti-input" placeholder="Ask AVANTI…" />
+      <button class="avanti-send">↑</button>
+    </div>
+  </div>
+
+  <!-- ── OVERLAY: Yellow (action confirm) ── -->
+  <div class="overlay-backdrop" id="backdrop-yellow" onclick="closeOverlay('yellow')"></div>
+  <div class="overlay-sheet" id="sheet-yellow">
+    <div class="overlay-handle"></div>
+    <div class="overlay-header">
+      <div class="overlay-close" onclick="closeOverlay('yellow')">✕</div>
+      <div class="overlay-feature">PLAY Status</div>
+      <div class="overlay-title">Mia Rodriguez</div>
+    </div>
+    <div class="overlay-body">
+      <div class="risk-row"><div class="risk-dot red"></div><span class="risk-label red">RED · Action Required</span></div>
+      <div class="summary-card">Mia's payment for the Saturday game is overdue. She's currently RED and cannot play. AVANTI has prepared a reminder for her guardian.</div>
+      <div class="action-card">
+        <div class="action-card-title">✦ AVANTI — Ready to Send</div>
+        <div class="action-preview">
+          <strong>To:</strong> Alex Rodriguez (guardian)<br>
+          <strong>Message:</strong> "Hi Alex, Mia's registration fee for Saturday's game is overdue. Please complete payment to restore PLAY Status before kickoff. Tap here to pay."<br>
+          <strong>Recipients:</strong> 1 · <strong>Risk:</strong> Yellow
+        </div>
+        <div class="action-btns">
+          <div class="action-btn confirm" onclick="showSuccess()">Send It</div>
+          <div class="action-btn dismiss" onclick="closeOverlay('yellow')">Later</div>
+        </div>
+      </div>
+      <div class="quick-prompts">
+        <div class="prompt-chip">Why is Mia RED?</div>
+        <div class="prompt-chip">How long until she's cleared?</div>
+      </div>
+      <div class="nav-to-feature" onclick="closeOverlay('yellow')">
+        <span>Open PLAY Status</span><span class="nav-arrow">›</span>
+      </div>
+    </div>
+    <div class="avanti-input-row">
+      <input class="avanti-input" placeholder="Ask AVANTI…" />
+      <button class="avanti-send">↑</button>
+    </div>
+  </div>
+
+  <!-- ── OVERLAY: Red (blocked) ── -->
+  <div class="overlay-backdrop" id="backdrop-red" onclick="closeOverlay('red')"></div>
+  <div class="overlay-sheet" id="sheet-red">
+    <div class="overlay-handle"></div>
+    <div class="overlay-header">
+      <div class="overlay-close" onclick="closeOverlay('red')">✕</div>
+      <div class="overlay-feature">PLAY Status</div>
+      <div class="overlay-title">Waiver Override</div>
+    </div>
+    <div class="overlay-body">
+      <div class="risk-row"><div class="risk-dot red"></div><span class="risk-label red">Blocked — Cannot Do This</span></div>
+      <div class="blocked-card">
+        <div class="blocked-icon">🚫</div>
+        <div>
+          <div class="blocked-title">AVANTI cannot mark this waiver as signed</div>
+          <div class="blocked-msg">Marking a waiver signed without an actual signature would be a compliance violation. This action is never executable — even with Director access.</div>
+          <div class="blocked-alt" onclick="closeOverlay('red')">→ Safe alternative: Send waiver link to guardian</div>
+        </div>
+      </div>
+      <div class="quick-prompts">
+        <div class="prompt-chip">Send waiver to guardian</div>
+        <div class="prompt-chip">Why does this require a signature?</div>
+      </div>
+    </div>
+    <div class="avanti-input-row">
+      <input class="avanti-input" placeholder="Ask AVANTI…" />
+      <button class="avanti-send">↑</button>
+    </div>
+  </div>
+
+  <!-- ── OVERLAY: Success ── -->
+  <div class="overlay-backdrop" id="backdrop-success" onclick="closeOverlay('success')"></div>
+  <div class="overlay-sheet" id="sheet-success">
+    <div class="overlay-handle"></div>
+    <div class="overlay-header">
+      <div class="overlay-close" onclick="closeOverlay('success')">✕</div>
+      <div class="overlay-feature">PLAY Status · Action Complete</div>
+      <div class="overlay-title">Reminder Sent</div>
+    </div>
+    <div class="overlay-body">
+      <div class="risk-row"><div class="risk-dot green"></div><span class="risk-label green">Done</span></div>
+      <div class="success-card">
+        <div class="success-title">✓ Payment reminder sent to Alex Rodriguez</div>
+        <div class="success-msg">AVANTI will update Mia's PLAY Status automatically when payment is confirmed. You'll see a notification when she's cleared.</div>
+      </div>
+      <div class="nav-to-feature" onclick="closeOverlay('success')">
+        <span>View Action History</span><span class="nav-arrow">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Locked Tile Upgrade Sheet ── -->
+  <div class="overlay-backdrop" id="backdrop-locked" onclick="closeOverlay('locked')"></div>
+  <div class="upgrade-sheet" id="sheet-locked">
+    <div class="upgrade-icon">💰</div>
+    <div class="upgrade-title">Unlock Wallet</div>
+    <div class="upgrade-msg">Send money to athletes, receive mentor earnings, and let AVANTI manage payment reminders. VAI+ plan includes Wallet.</div>
+    <div class="upgrade-cta">Upgrade to VAI+ — $9.95/mo</div>
+    <div class="upgrade-dismiss" onclick="closeOverlay('locked')">Maybe later</div>
+  </div>
+
+  <div class="home-indicator"><div class="home-bar"></div></div>
+</div>
+
+<!-- Code reference panel -->
+<div style="margin-top:28px;background:#171412;border:1px solid #2A2520;border-radius:12px;padding:20px;max-width:480px;width:100%;">
+  <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6B605A;margin-bottom:12px;">Badinho — How to Wire Each State</div>
+  <pre style="font-size:11px;color:#C8BFB8;line-height:1.7;white-space:pre-wrap;font-family:'JetBrains Mono',monospace;">// 1. Tile tap → lazy-load overlay context
+const ctx = await avantiActionsApi.getTileContext(tileId);
+
+// 2. Show overlay
+// ctx.riskLevel = 'green' | 'yellow' | 'red'
+
+// GREEN → render ctx.summary + ctx.quickPrompts
+// No confirm needed. No action card.
+
+// YELLOW → render ctx.preparedAction card
+// Show preview, wait for user tap:
+await avantiActionsApi.confirm(ctx.preparedAction.actionRunId, {
+  confirmed: true
+});
+await avantiActionsApi.execute(ctx.preparedAction.actionRunId);
+// → show Success state
+
+// RED → render blocked explanation
+// ctx.preparedAction.status === 'blocked'
+// Show safe alternative from ctx.preparedAction.summary
+// Never call confirm or execute.
+
+// LOCKED TILE → show upgrade sheet
+// tile.isUnlocked === false
+// Do not call getTileContext for locked tiles.</pre>
+</div>
+
+<script>
+function setScenario(id, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  // Reset
+  closeAllOverlays();
+  document.getElementById('avanti-strip').style.display = 'none';
+
+  if (id === 'green') openOverlay('green');
+  else if (id === 'yellow') openOverlay('yellow');
+  else if (id === 'red') openOverlay('red');
+  else if (id === 'success') openOverlay('success');
+  else if (id === 'locked') openOverlay('locked');
+  else if (id === 'strip') {
+    document.getElementById('avanti-strip').style.display = 'flex';
+  }
+}
+
+function openOverlay(id) {
+  document.getElementById('backdrop-' + id).classList.add('visible');
+  document.getElementById('sheet-' + id).classList.add('visible');
+}
+
+function closeOverlay(id) {
+  document.getElementById('backdrop-' + id).classList.remove('visible');
+  document.getElementById('sheet-' + id).classList.remove('visible');
+  if (document.getElementById('upgrade-sheet') === null) {
+    const el = document.getElementById('sheet-' + id);
+    if (el) el.classList.remove('visible');
+  }
+}
+
+function closeAllOverlays() {
+  ['green','yellow','red','success','locked'].forEach(id => {
+    const bd = document.getElementById('backdrop-' + id);
+    const sh = document.getElementById('sheet-' + id);
+    if (bd) bd.classList.remove('visible');
+    if (sh) sh.classList.remove('visible');
+  });
+}
+
+function showSuccess() {
+  closeOverlay('yellow');
+  setTimeout(() => openOverlay('success'), 200);
+}
+
+// Default: show green on load
+openOverlay('green');
+</script>
+</body>
+</html>

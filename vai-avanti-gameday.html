@@ -15,7 +15,7 @@
   --red: #FF6B6B; --redBg: #1A0808; --redBorder: #4A1A1A;
   --yellow: #FBBF24; --yellowBg: #1A1000; --yellowBorder: #4A3000;
   --blue: #5577DD; --blueBg: #0A1020; --blueBorder: #1A2A50;
-  --purple: #A855F7; --purpleBg: #140A20; --purpleBorder: #3A1A60;
+  --avanti: #34D399; --avantiBg: #051A10; --avantiBorder: #0D4A28;
   --r: 10px; --pill: 999px;
   --sidebar: 220px; --topbar: 56px;
 }
@@ -61,9 +61,9 @@ h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: 
 .topbar-sep { width: 1px; height: 22px; background: var(--border); }
 .topbar-context { font-size: 13px; color: var(--textMuted); }
 .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-.topbar-avanti-status { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--purple); letter-spacing: 0.06em; }
-.avanti-online-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--purple); animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(168,85,247,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(168,85,247,0)} }
+.topbar-avanti-status { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--avanti); letter-spacing: 0.06em; }
+.avanti-online-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--avanti); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
 
 /* AVANTI STRIP — the main feature */
 .avanti-strip {
@@ -99,7 +99,7 @@ h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: 
 /* State: MULTI — multiple items */
 .avanti-strip.multi {
   background: linear-gradient(135deg, #140A20 0%, #1A0E28 100%);
-  border-bottom: 1px solid var(--purpleBorder);
+  border-bottom: 1px solid var(--avantiBorder);
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -117,7 +117,7 @@ h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: 
 
 .strip-avanti-label { font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; flex-shrink: 0; }
 .strip-avanti-label.yellow { color: var(--yellow); }
-.strip-avanti-label.purple { color: var(--purple); }
+.strip-avanti-label.purple { color: var(--avanti); }
 .strip-avanti-label.red { color: var(--red); }
 .strip-msg { font-size: 13px; color: var(--text); flex: 1; line-height: 1.4; }
 .strip-msg strong { color: var(--textStrong); }
@@ -130,8 +130,8 @@ h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: 
 .strip-btn.red-confirm:hover { background: var(--red); color: #fff; }
 
 /* Multi-strip items */
-.multi-strip-header { display: flex; align-items: center; gap: 12px; padding: 8px 20px; border-bottom: 1px solid var(--purpleBorder); }
-.multi-strip-item { display: flex; align-items: center; gap: 12px; padding: 9px 20px; border-bottom: 1px solid rgba(168,85,247,0.1); }
+.multi-strip-header { display: flex; align-items: center; gap: 12px; padding: 8px 20px; border-bottom: 1px solid var(--avantiBorder); }
+.multi-strip-item { display: flex; align-items: center; gap: 12px; padding: 9px 20px; border-bottom: 1px solid rgba(52,211,153,0.1); }
 .multi-strip-item:last-child { border-bottom: none; }
 .multi-item-msg { flex: 1; font-size: 12px; color: var(--text); }
 .multi-item-msg strong { color: var(--textStrong); }
@@ -215,7 +215,7 @@ tr:hover td { background: var(--elev); }
 <div class="state-legend">
   <div class="legend-item"><div class="legend-dot" style="background:#6B605A"></div>Quiet — nothing actionable</div>
   <div class="legend-item"><div class="legend-dot" style="background:#FBBF24"></div>Yellow — action ready, confirm required</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#A855F7"></div>Multi — several items queued</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#34D399"></div>Multi — several items queued</div>
   <div class="legend-item"><div class="legend-dot" style="background:#FF6B6B"></div>Red — urgent, blocks athlete</div>
 </div>
 
@@ -250,10 +250,10 @@ tr:hover td { background: var(--elev); }
       <div class="sidebar-item"><span class="sidebar-icon">💰</span>Earnings</div>
       <div class="sidebar-item"><span class="sidebar-icon">＋</span>New Session</div>
       <div style="margin-top:auto;padding:12px;border-top:1px solid var(--border);">
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 6px;background:var(--purpleBg);border:1px solid var(--purpleBorder);border-radius:8px;">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 6px;background:var(--avantiBg);border:1px solid var(--avantiBorder);border-radius:8px;">
           <div class="avanti-online-dot"></div>
           <div>
-            <div style="font-size:11px;font-weight:700;color:var(--purple);">AVANTI</div>
+            <div style="font-size:11px;font-weight:700;color:var(--avanti);">AVANTI</div>
             <div style="font-size:10px;color:var(--textMuted);">Scanning your data</div>
           </div>
         </div>
@@ -474,7 +474,7 @@ tr:hover td { background: var(--elev); }
           <div class="multi-strip-header">
             <span class="strip-avanti-label purple">✦ AVANTI</span>
             <span style="font-size:12px;color:var(--text);">4 items need your attention</span>
-            <button style="margin-left:auto;font-size:11px;padding:4px 12px;background:transparent;border:1px solid var(--purpleBorder);color:var(--purple);border-radius:var(--pill);cursor:pointer;">Dismiss All</button>
+            <button style="margin-left:auto;font-size:11px;padding:4px 12px;background:transparent;border:1px solid var(--avantiBorder);color:var(--avanti);border-radius:var(--pill);cursor:pointer;">Dismiss All</button>
           </div>
           <div class="multi-strip-item">
             <span class="multi-item-risk red">RED</span>
@@ -505,10 +505,10 @@ tr:hover td { background: var(--elev); }
             <div class="stat-card"><div class="stat-label">Open Actions</div><div class="stat-value yellow">4</div><div class="stat-sub">need attention</div></div>
             <div class="stat-card"><div class="stat-label">Sessions This Week</div><div class="stat-value orange">3</div><div class="stat-sub">upcoming</div></div>
           </div>
-          <div style="background:var(--purpleBg);border:1px solid var(--purpleBorder);border-radius:var(--r);padding:14px 18px;">
+          <div style="background:var(--avantiBg);border:1px solid var(--avantiBorder);border-radius:var(--r);padding:14px 18px;">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
               <div class="avanti-online-dot"></div>
-              <span style="font-size:11px;font-weight:800;color:var(--purple);letter-spacing:0.08em;text-transform:uppercase;">AVANTI — How It Works</span>
+              <span style="font-size:11px;font-weight:800;color:var(--avanti);letter-spacing:0.08em;text-transform:uppercase;">AVANTI — How It Works</span>
             </div>
             <div style="font-size:13px;color:var(--text);line-height:1.7;">
               AVANTI scans your sessions, roster, tournaments, and wallet every 5 minutes. It surfaces only what matters — no noise, no dashboards to check. <strong style="color:var(--textStrong);">GREEN items</strong> are handled automatically. <strong style="color:var(--yellow);">YELLOW items</strong> need one confirmation. <strong style="color:var(--red);">RED items</strong> block athletes and need immediate action. AVANTI never moves money or removes athletes without your explicit approval.
