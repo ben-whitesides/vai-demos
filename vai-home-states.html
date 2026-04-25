@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Home Grid States (Claude Design Feed)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --vai-orange:#f7941e; --vai-green:#34d399; --vai-gold:#f3d7b5;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --surface-2:#222228; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --font-oswald:'Oswald',Impact,sans-serif;
+  --font-dm:'DM Sans',Arial,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-full:9999px;
+}
+body {
+  background:#0a0a0a; font-family:var(--font-dm);
+  min-height:100vh; padding:32px 24px 64px;
+  color:var(--gray-primary); -webkit-font-smoothing:antialiased;
+}
+.page-title {
+  font-family:var(--font-oswald); font-size:11px; font-weight:600;
+  letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled);
+  text-align:center; margin-bottom:6px;
+}
+.page-sub { font-size:11px; color:var(--gray-disabled); text-align:center; margin-bottom:32px; }
+
+/* State grid layout */
+.states-row { display:flex; gap:24px; justify-content:center; flex-wrap:wrap; align-items:flex-start; }
+.state-col { display:flex; flex-direction:column; align-items:center; gap:12px; }
+.state-label {
+  font-family:var(--font-mono); font-size:10px; font-weight:500;
+  letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-disabled);
+  text-align:center; padding:4px 12px; background:var(--card-dark);
+  border:1px solid var(--border); border-radius:var(--r-full);
+}
+.state-tag {
+  font-family:var(--font-mono); font-size:9px; font-weight:500;
+  letter-spacing:0.06em; color:var(--gray-secondary); text-align:center;
+  max-width:200px; line-height:1.5;
+}
+
+/* Phone */
+.phone {
+  width:320px; background:var(--void-black);
+  border-radius:38px; border:1.5px solid var(--gray-subtle);
+  box-shadow:0 0 0 1px #0c0c10,0 24px 60px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04);
+  overflow:hidden;
+}
+.status-bar {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 20px 6px; background:var(--void-black);
+  font-family:var(--font-dm); font-size:11px; font-weight:600; color:var(--gray-primary);
+}
+.app-header {
+  background:var(--void-black); padding:8px 16px 10px;
+  display:flex; align-items:center; gap:7px; border-bottom:1px solid var(--border);
+}
+.vai-wordmark { font-family:var(--font-oswald); font-size:16px; font-weight:700; letter-spacing:0.05em; color:var(--gray-primary); }
+.tier-badge {
+  font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase;
+  background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3);
+  color:var(--vai-orange); padding:2px 7px; border-radius:var(--r-full);
+}
+.tier-badge.plus { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.avanti-ind {
+  margin-left:auto; display:flex; align-items:center; gap:4px;
+  font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.06em; color:var(--vai-green);
+}
+.a-dot { width:5px; height:5px; border-radius:50%; background:var(--vai-green); animation:glow 2s ease-in-out infinite; }
+@keyframes glow { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 3px rgba(52,211,153,0)} }
+.avatar { width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,var(--vai-orange),#c47210); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:#000; }
+
+/* Strip */
+.strip {
+  background:var(--void-black); border-bottom:1px solid var(--border);
+  padding:10px 16px; display:flex; flex-direction:column; gap:8px;
+}
+.strip.hidden { display:none; }
+.strip-ey { display:flex; align-items:center; gap:4px; }
+.strip-lbl { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--vai-green); }
+.strip-msg { font-family:var(--font-dm); font-size:12px; color:var(--gray-body); line-height:1.4; }
+.strip-chips { display:flex; gap:5px; flex-wrap:wrap; }
+.s-chip { padding:5px 11px; border-radius:var(--r-full); border:1px solid; font-family:var(--font-dm); font-size:11px; font-weight:600; }
+.s-yes { background:var(--vai-orange); border-color:var(--vai-orange); color:#000; }
+.s-later { background:transparent; border-color:var(--gray-subtle); color:var(--gray-secondary); }
+
+/* Scroll */
+.scroll { background:var(--void-black); height:520px; overflow:hidden; }
+
+/* Quick actions */
+.qa-wrap { padding:10px 16px 6px; display:flex; flex-direction:column; gap:6px; }
+.qa-lbl { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); }
+.qa-row { display:flex; gap:5px; overflow:hidden; }
+.qa-chip {
+  display:flex; align-items:center; gap:4px; background:var(--card-dark);
+  border:1px solid var(--border); border-radius:var(--r-full); padding:5px 10px;
+  font-family:var(--font-dm); font-size:11px; font-weight:500; color:var(--gray-body);
+  white-space:nowrap; flex-shrink:0;
+}
+.qa-chip svg { width:12px; height:12px; stroke:currentColor; stroke-width:1.5; }
+.qa-chip.active { background:rgba(247,148,30,0.1); border-color:var(--vai-orange); color:var(--vai-orange); }
+
+/* Grid section */
+.grid-sec { padding:10px 16px; display:flex; flex-direction:column; gap:8px; }
+.grid-hdr { display:flex; align-items:center; justify-content:space-between; }
+.grid-lbl { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); }
+.cust-btn { font-family:var(--font-dm); font-size:10px; color:var(--gray-secondary); display:flex; align-items:center; gap:3px; }
+.cust-btn svg { width:10px; height:10px; stroke:currentColor; stroke-width:1.5; }
+
+/* Wide tile */
+.tw {
+  background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg);
+  padding:12px 14px; display:flex; align-items:center; gap:12px;
+}
+.tw.live { border-color:rgba(247,148,30,0.35); }
+.tw.club { border-color:rgba(52,211,153,0.25); }
+.tw-icon { width:36px; height:36px; background:rgba(247,148,30,0.08); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.tw-icon.green-icon { background:rgba(52,211,153,0.08); }
+.tw-icon svg { width:19px; height:19px; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.tw-icon.orange-icon svg { stroke:var(--vai-orange); }
+.tw-icon.green-icon svg { stroke:var(--vai-green); }
+.tw-body { flex:1; min-width:0; }
+.tw-title { font-family:var(--font-oswald); font-size:13px; font-weight:600; color:var(--gray-primary); margin-bottom:1px; }
+.tw-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); }
+.live-pill { display:inline-flex; align-items:center; gap:3px; margin-top:3px; background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); border-radius:var(--r-full); padding:1px 7px; font-family:var(--font-mono); font-size:8px; font-weight:500; letter-spacing:0.08em; color:var(--vai-orange); }
+.live-dot { width:4px; height:4px; border-radius:50%; background:var(--vai-orange); animation:glow 1.2s ease-in-out infinite; }
+.camp-pill { display:inline-flex; align-items:center; gap:3px; margin-top:3px; background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); border-radius:var(--r-full); padding:1px 7px; font-family:var(--font-mono); font-size:8px; font-weight:500; letter-spacing:0.08em; color:var(--vai-green); }
+
+/* 2-col tiles */
+.tg { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.t {
+  background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg);
+  padding:12px; display:flex; flex-direction:column; gap:5px;
+  position:relative; min-height:88px;
+}
+.t.alert { border-color:rgba(247,148,30,0.2); }
+.t.locked { opacity:0.45; }
+.t-icon { width:28px; height:28px; background:rgba(255,255,255,0.04); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; }
+.t-icon svg { width:16px; height:16px; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.t-icon.oi svg { stroke:var(--vai-orange); }
+.t-icon.gi svg { stroke:var(--vai-green); }
+.t-icon.xi svg { stroke:var(--gray-secondary); }
+.t-name { font-family:var(--font-oswald); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.t-sub { font-family:var(--font-dm); font-size:10px; color:var(--gray-secondary); line-height:1.3; }
+.t-badge {
+  position:absolute; top:7px; right:7px;
+  font-family:var(--font-mono); font-size:8px; font-weight:500; letter-spacing:0.04em;
+  border-radius:var(--r-sm); padding:2px 5px; border:1px solid;
+}
+.b-red { background:rgba(248,113,113,0.1); border-color:rgba(248,113,113,0.3); color:#f87171; }
+.b-open { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.b-date { background:var(--surface-1); border-color:var(--border); color:var(--gray-secondary); }
+.b-alert { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--vai-orange); }
+.b-lock { background:var(--surface-1); border-color:var(--border); color:var(--gray-disabled); }
+
+/* Association divider */
+.assoc-divider {
+  display:flex; align-items:center; gap:8px; padding:0 16px;
+}
+.assoc-line { flex:1; height:1px; background:var(--border); }
+.assoc-label { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-disabled); white-space:nowrap; }
+
+/* Bottom nav */
+.bnav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:6px 4px 16px; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.ni-icon { width:22px; height:22px; display:flex; align-items:center; justify-content:center; }
+.ni-icon svg { width:20px; height:20px; stroke:var(--gray-disabled); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ni-lbl { font-family:var(--font-dm); font-size:9px; font-weight:500; color:var(--gray-disabled); }
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+.ni.av .ni-icon { background:rgba(52,211,153,0.08); border-radius:var(--r-md); }
+.ni.av .ni-icon svg { stroke:var(--vai-green); }
+.ni.av .ni-lbl { color:var(--vai-green); }
+
+/* SVG shortcuts */
+.ico-cal { /* calendar */ }
+.ico-trp { /* trophy */ }
+.ico-usr { /* users */ }
+.ico-wal { /* wallet */ }
+</style>
+</head>
+<body>
+
+<div class="page-title">VAI — Home Screen Grid States</div>
+<div class="page-sub">Claude Design feed · All home states · Association-based dynamic tiles</div>
+
+<div class="states-row">
+
+  <!-- ── STATE 1: Standard (no club/league association) ── -->
+  <div class="state-col">
+    <div class="state-label">State 1 — Standard</div>
+    <div class="state-tag">Free user · No club/league/camp<br>Core tiles only</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span>••• WiFi</span></div>
+      <div class="app-header">
+        <svg width="15" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g1)"/><defs><radialGradient id="g1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-badge">Free</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+        <div class="avatar">B</div>
+      </div>
+      <!-- Strip: quiet (no active issues) -->
+      <div class="strip hidden"></div>
+      <div class="scroll">
+        <div class="qa-wrap">
+          <div class="qa-lbl">Quick Actions</div>
+          <div class="qa-row">
+            <div class="qa-chip active"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Schedule</div>
+            <div class="qa-chip"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Passport</div>
+            <div class="qa-chip"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>PLAY</div>
+          </div>
+        </div>
+        <div class="grid-sec">
+          <div class="grid-hdr">
+            <div class="grid-lbl">YOUR VAI</div>
+            <div class="cust-btn"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Customize</div>
+          </div>
+          <div class="tg">
+            <div class="t"><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="t-name">Schedule</div><div class="t-sub">No upcoming events</div></div>
+            <div class="t"><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="t-name">Passport</div><div class="t-sub">1 grant active</div></div>
+            <div class="t"><div class="t-icon gi"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg></div><div class="t-name">PLAY Status</div><div class="t-sub" style="color:var(--vai-green)">GREEN · Clear</div></div>
+            <div class="t"><div class="t-icon xi"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6l8-4 8 4v6c0 5-8 9-8 9s-8-4-8-9V6z"/></svg></div><div class="t-name">Leagues</div><div class="t-sub">Browse leagues</div></div>
+          </div>
+          <!-- Locked Plus tiles -->
+          <div style="margin-top:4px;">
+            <div class="assoc-divider"><div class="assoc-line"></div><div class="assoc-label">Unlock with VAI+</div><div class="assoc-line"></div></div>
+          </div>
+          <div class="tg" style="margin-top:4px;">
+            <div class="t locked"><div class="t-badge b-lock">🔒</div><div class="t-icon xi"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/></svg></div><div class="t-name">Wallet</div><div class="t-sub">VAI+ required</div></div>
+            <div class="t locked"><div class="t-badge b-lock">🔒</div><div class="t-icon xi"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="t-name">AVANTI Connect</div><div class="t-sub">VAI+ required</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ni-lbl">Schedule</div></div>
+        <div class="ni av"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ni-lbl" style="color:var(--vai-green)">AVANTI</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div><div class="ni-lbl">Events</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STATE 2: League Member (user joined VAI FC North) ── -->
+  <div class="state-col">
+    <div class="state-label">State 2 — League Member</div>
+    <div class="state-tag">VAI+ user · Joined VAI FC North<br>Club tiles appear dynamically</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span>••• WiFi</span></div>
+      <div class="app-header">
+        <svg width="15" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g2)"/><defs><radialGradient id="g2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-badge plus">VAI+</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+        <div class="avatar">M</div>
+      </div>
+      <!-- AVANTI strip: compliance alert for league -->
+      <div class="strip">
+        <div class="strip-ey"><div class="a-dot" style="width:4px;height:4px;"></div><span class="strip-lbl">AVANTI</span></div>
+        <div class="strip-msg"><strong style="color:var(--gray-primary)">Saturday game</strong> — Mia's payment is RED for VAI FC North. Want me to send a reminder?</div>
+        <div class="strip-chips"><div class="s-chip s-yes">Yes, send it</div><div class="s-chip s-later">Later</div></div>
+      </div>
+      <div class="scroll">
+        <div class="qa-wrap">
+          <div class="qa-lbl">Quick Actions</div>
+          <div class="qa-row">
+            <div class="qa-chip active"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Schedule</div>
+            <div class="qa-chip"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg>Tournament</div>
+            <div class="qa-chip"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Roster</div>
+          </div>
+        </div>
+        <div class="grid-sec">
+          <div class="grid-hdr"><div class="grid-lbl">YOUR VAI</div><div class="cust-btn"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Customize</div></div>
+
+          <!-- Club entry tile -->
+          <div class="tw live">
+            <div class="tw-icon orange-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
+            <div class="tw-body">
+              <div class="tw-title">Spring Invitational</div>
+              <div class="tw-sub">VAI FC North · Final · 2–1</div>
+              <div class="live-pill"><div class="live-dot"></div>LIVE NOW</div>
+            </div>
+          </div>
+
+          <!-- Standard tiles first -->
+          <div class="tg">
+            <div class="t"><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="t-name">Schedule</div><div class="t-sub">Sat 10am · game</div></div>
+            <div class="t"><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="t-name">Passport</div><div class="t-sub">1 grant active</div></div>
+            <div class="t"><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/></svg></div><div class="t-name">Wallet</div><div class="t-sub">$247 available</div></div>
+            <div class="t"><div class="t-icon gi"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg></div><div class="t-name">PLAY Status</div><div class="t-sub" style="color:var(--vai-green)">GREEN · Clear</div></div>
+          </div>
+
+          <!-- Club OS tiles (association-based) -->
+          <div class="assoc-divider" style="margin-top:4px;"><div class="assoc-line"></div><div class="assoc-label">VAI FC North</div><div class="assoc-line"></div></div>
+          <div class="tg" style="margin-top:4px;">
+            <div class="t alert"><div class="t-badge b-red">1 BLOCKED</div><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="t-name">Roster</div><div class="t-sub">16 athletes</div></div>
+            <div class="t"><div class="t-icon xi"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="t-name">Standings</div><div class="t-sub">#1 · Spring 2026</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ni-lbl">Schedule</div></div>
+        <div class="ni av"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ni-lbl" style="color:var(--vai-green)">AVANTI</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div><div class="ni-lbl">Events</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STATE 3: Camp Registered ── -->
+  <div class="state-col">
+    <div class="state-label">State 3 — Camp Registered</div>
+    <div class="state-tag">VAI+ user · Registered for Summer Camp<br>Camp tile appears, session countdown</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span>••• WiFi</span></div>
+      <div class="app-header">
+        <svg width="15" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g3)"/><defs><radialGradient id="g3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-badge plus">VAI+</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+        <div class="avatar">M</div>
+      </div>
+      <div class="strip">
+        <div class="strip-ey"><div class="a-dot" style="width:4px;height:4px;"></div><span class="strip-lbl">AVANTI</span></div>
+        <div class="strip-msg"><strong style="color:var(--gray-primary)">Summer Camp starts Jul 14</strong> — Mia's waiver expires before camp. Send renewal now?</div>
+        <div class="strip-chips"><div class="s-chip s-yes">Send renewal</div><div class="s-chip s-later">Later</div></div>
+      </div>
+      <div class="scroll">
+        <div class="qa-wrap">
+          <div class="qa-lbl">Quick Actions</div>
+          <div class="qa-row">
+            <div class="qa-chip active"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Schedule</div>
+            <div class="qa-chip"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 20L12 4l8.5 16"/><path d="M12 4v16"/><path d="M7 20L12 11l5 9"/></svg>Camp</div>
+            <div class="qa-chip"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>PLAY</div>
+          </div>
+        </div>
+        <div class="grid-sec">
+          <div class="grid-hdr"><div class="grid-lbl">YOUR VAI</div><div class="cust-btn"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Customize</div></div>
+
+          <!-- Camp entry tile -->
+          <div class="tw club">
+            <div class="tw-icon green-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3.5 20L12 4l8.5 16"/><path d="M12 4v16"/><path d="M7 20L12 11l5 9"/></svg></div>
+            <div class="tw-body">
+              <div class="tw-title">Summer Skills Camp</div>
+              <div class="tw-sub">Group A · Provo Sports Complex</div>
+              <div class="camp-pill">JUL 14 · 5 days</div>
+            </div>
+          </div>
+
+          <div class="tg">
+            <div class="t"><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="t-name">Schedule</div><div class="t-sub">2 events this week</div></div>
+            <div class="t"><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="t-name">Passport</div><div class="t-sub">1 grant active</div></div>
+          </div>
+
+          <!-- Camp sub-tiles (association) -->
+          <div class="assoc-divider" style="margin-top:4px;"><div class="assoc-line"></div><div class="assoc-label">Summer Camp</div><div class="assoc-line"></div></div>
+          <div class="tg" style="margin-top:4px;">
+            <div class="t"><div class="t-badge b-date">QR READY</div><div class="t-icon gi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><path d="M14 14h.01M14 17h.01M17 14h.01M17 17h.01"/></svg></div><div class="t-name">My QR</div><div class="t-sub">Jul 14 check-in</div></div>
+            <div class="t alert"><div class="t-badge b-alert">ACTION</div><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg></div><div class="t-name">PLAY Status</div><div class="t-sub">Waiver expiring</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ni-lbl">Schedule</div></div>
+        <div class="ni av"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ni-lbl" style="color:var(--vai-green)">AVANTI</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div><div class="ni-lbl">Events</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STATE 4: Coach View ── -->
+  <div class="state-col">
+    <div class="state-label">State 4 — Coach View</div>
+    <div class="state-tag">Coach role · Club OS enabled<br>Team-first tile priority</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span>••• WiFi</span></div>
+      <div class="app-header">
+        <svg width="15" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g4)"/><defs><radialGradient id="g4" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-badge">Coach</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+        <div class="avatar">C</div>
+      </div>
+      <div class="strip">
+        <div class="strip-ey"><div class="a-dot" style="width:4px;height:4px;"></div><span class="strip-lbl">AVANTI</span></div>
+        <div class="strip-msg"><strong style="color:var(--gray-primary)">3 athletes not GREEN</strong> for Saturday. Mia (payment), Riley (waiver), Jordan (medical). Send reminders?</div>
+        <div class="strip-chips"><div class="s-chip s-yes">Remind all</div><div class="s-chip s-later">Review first</div></div>
+      </div>
+      <div class="scroll">
+        <div class="qa-wrap">
+          <div class="qa-lbl">Quick Actions</div>
+          <div class="qa-row">
+            <div class="qa-chip active"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Roster</div>
+            <div class="qa-chip"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>PLAY Status</div>
+            <div class="qa-chip"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Schedule</div>
+          </div>
+        </div>
+        <div class="grid-sec">
+          <div class="grid-hdr"><div class="grid-lbl">YOUR VAI · VAI FC NORTH</div></div>
+
+          <!-- Roster first for coach -->
+          <div class="tg">
+            <div class="t alert"><div class="t-badge b-red">3 BLOCKED</div><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="t-name">Roster</div><div class="t-sub">16 · 3 blocked</div></div>
+            <div class="t alert"><div class="t-badge b-alert">3 ACTION</div><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg></div><div class="t-name">PLAY Status</div><div class="t-sub">13 GREEN · 3 RED</div></div>
+            <div class="t"><div class="t-badge b-date">SAT 10AM</div><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="t-name">Schedule</div><div class="t-sub">Game · Home</div></div>
+            <div class="t"><div class="t-icon xi"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="t-name">Standings</div><div class="t-sub">#1 · Spring 2026</div></div>
+            <div class="t"><div class="t-badge b-live" style="background:rgba(247,148,30,0.1);border-color:rgba(247,148,30,0.3);color:var(--vai-orange);">● LIVE</div><div class="t-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div><div class="t-name">Tournament</div><div class="t-sub">Spring Invitational</div></div>
+            <div class="t"><div class="t-icon xi"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="t-name">Comms</div><div class="t-sub">2 drafts</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="bnav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ni-lbl">Schedule</div></div>
+        <div class="ni av"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ni-lbl" style="color:var(--vai-green)">AVANTI</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div><div class="ni-lbl">Events</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Design notes for Claude Design -->
+<div style="margin-top:40px;max-width:900px;margin-left:auto;margin-right:auto;background:var(--card-dark);border:1px solid var(--border);border-radius:12px;padding:24px;">
+  <div style="font-family:var(--font-oswald);font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--gray-disabled);margin-bottom:16px;">Design Notes — Claude Design Feed</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--vai-green);margin-bottom:6px;">TILE LOGIC</div>
+      <div style="font-size:12px;color:var(--gray-body);line-height:1.7;">
+        • Standard tiles always visible (tier-gated)<br>
+        • Club tiles only when user is member<br>
+        • Camp tiles only when registered<br>
+        • Divider labels show the association name<br>
+        • Wide hero tile for active/live events<br>
+        • Locked tiles show upgrade CTA on tap
+      </div>
+    </div>
+    <div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--vai-green);margin-bottom:6px;">AVANTI STRIP</div>
+      <div style="font-size:12px;color:var(--gray-body);line-height:1.7;">
+        • Quiet by default (State 1 — no issues)<br>
+        • Shows when: RED PLAY, waiver deadline, camp action<br>
+        • Yellow = confirm chip (black text, orange bg)<br>
+        • Dismiss stores 24h preference<br>
+        • AVANTI label in --vai-green #34d399
+      </div>
+    </div>
+    <div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--vai-green);margin-bottom:6px;">COACH DIFFERENCE</div>
+      <div style="font-size:12px;color:var(--gray-body);line-height:1.7;">
+        • Roster is tile #1 (not Schedule)<br>
+        • PLAY Status shows team aggregate<br>
+        • AVANTI strip = team-level alerts<br>
+        • No Wallet/Bookings/Wearables by default<br>
+        • QA chip row reorders to: Roster, PLAY, Schedule
+      </div>
+    </div>
+    <div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--vai-green);margin-bottom:6px;">DESIGN TOKENS</div>
+      <div style="font-size:12px;color:var(--gray-body);line-height:1.7;">
+        • Page: #060608 · Card: #0c0c10<br>
+        • Orange: #f7941e · Green: #34d399<br>
+        • Font: Oswald 600 (labels) + DM Sans (body)<br>
+        • Icons: SVG 1.5px stroke, rounded<br>
+        • Black text on all colored buttons
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
