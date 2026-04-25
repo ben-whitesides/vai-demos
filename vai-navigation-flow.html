@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Navigation Flow (Claude Design)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --void:#060608; --card:#0c0c10; --elevated:#141418;
+  --s1:#1a1a20; --s2:#222228; --border:#1e1e26; --subtle:#2a2a35;
+  --disa:#555568; --sec:#8888a0; --body:#c8c8d0; --prim:#e8e8ec;
+  --orange:#f7941e; --green:#34d399; --gold:#f3d7b5;
+  --fo:'Oswald',Impact,sans-serif; --fd:'DM Sans',Arial,sans-serif; --fm:'JetBrains Mono','Courier New',monospace;
+  --rlg:12px; --rfull:9999px;
+}
+body {
+  background: radial-gradient(ellipse at 20% 20%, rgba(247,148,30,0.06) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 80%, rgba(52,211,153,0.04) 0%, transparent 60%),
+              #060608;
+  font-family: var(--fd); min-height:100vh; padding:40px 24px 80px; color:var(--prim); -webkit-font-smoothing:antialiased;
+}
+
+/* Page header */
+.page-head { text-align:center; margin-bottom:48px; }
+.page-eyebrow { font-family:var(--fm); font-size:10px; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--green); margin-bottom:8px; }
+.page-title { font-family:var(--fo); font-size:32px; font-weight:700; letter-spacing:-0.01em; color:var(--prim); margin-bottom:8px; }
+.page-sub { font-size:13px; color:var(--sec); max-width:560px; margin:0 auto; line-height:1.6; }
+
+/* Mermaid section */
+.section-head { font-family:var(--fm); font-size:10px; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--disa); margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+.section-head::after { content:''; flex:1; height:1px; background:var(--border); }
+.mermaid-wrap { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:32px; margin-bottom:64px; overflow-x:auto; }
+.mermaid { display:flex; justify-content:center; }
+
+/* Screen flow section */
+.flow-row { display:flex; gap:0; justify-content:center; align-items:flex-start; flex-wrap:wrap; margin-bottom:64px; }
+.flow-node { display:flex; flex-direction:column; align-items:center; }
+.flow-arrow { display:flex; align-items:center; padding:0 8px; padding-top:120px; }
+.flow-arrow svg { width:28px; height:28px; stroke:var(--subtle); }
+.flow-label { font-family:var(--fm); font-size:9px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--disa); margin-bottom:10px; text-align:center; max-width:200px; }
+.flow-tap { font-family:var(--fd); font-size:10px; color:var(--sec); margin-top:8px; text-align:center; }
+
+/* Phone — compact for flow */
+.ph { width:200px; background:var(--void); border-radius:28px; border:1px solid var(--subtle); box-shadow:0 0 0 1px var(--card), 0 20px 50px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden; position:relative; }
+.ph-sb { display:flex; justify-content:space-between; align-items:center; padding:8px 14px 4px; background:var(--void); font-family:var(--fd); font-size:10px; font-weight:600; color:var(--prim); }
+.ph-hdr { background:var(--void); padding:6px 12px 8px; display:flex; align-items:center; gap:5px; border-bottom:1px solid var(--border); }
+.ph-logo { font-family:var(--fo); font-size:13px; font-weight:700; letter-spacing:0.05em; color:var(--prim); }
+.ph-badge { font-family:var(--fm); font-size:8px; font-weight:500; background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); color:var(--orange); padding:1px 6px; border-radius:var(--rfull); }
+.ph-badge.g { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--green); }
+.ph-aind { margin-left:auto; display:flex; align-items:center; gap:3px; font-family:var(--fm); font-size:8px; color:var(--green); }
+.ph-adot { width:5px; height:5px; border-radius:50%; background:var(--green); animation:glow 2s ease-in-out infinite; }
+@keyframes glow { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 3px rgba(52,211,153,0)} }
+.ph-av { width:22px; height:22px; border-radius:50%; background:linear-gradient(135deg,var(--orange),#c47210); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; color:#000; }
+
+/* Strip (compact) */
+.ph-strip { background:var(--void); border-bottom:1px solid var(--border); padding:8px 12px; display:flex; flex-direction:column; gap:6px; }
+.ph-strip-lbl { font-family:var(--fm); font-size:8px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--green); }
+.ph-strip-msg { font-family:var(--fd); font-size:10px; color:var(--body); line-height:1.4; }
+.ph-strip-chip { background:var(--orange); border:none; border-radius:var(--rfull); padding:4px 10px; font-family:var(--fd); font-size:10px; font-weight:600; color:#000; display:inline-block; }
+
+/* Compact scroll */
+.ph-scroll { background:var(--void); height:320px; overflow:hidden; padding:8px 12px; display:flex; flex-direction:column; gap:8px; }
+.ph-sec-lbl { font-family:var(--fo); font-size:9px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--disa); }
+
+/* Compact tiles */
+.ph-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.ph-tile { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:8px; display:flex; flex-direction:column; gap:3px; position:relative; min-height:64px; }
+.ph-tile.alert { border-color:rgba(247,148,30,0.25); }
+.ph-tile.live { border-color:rgba(247,148,30,0.4); }
+.ph-tile.green-tile { border-color:rgba(52,211,153,0.25); }
+.ph-tile-icon { width:22px; height:22px; border-radius:5px; background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; }
+.ph-tile-icon svg { width:13px; height:13px; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ph-tile-icon.oi svg { stroke:var(--orange); }
+.ph-tile-icon.gi svg { stroke:var(--green); }
+.ph-tile-icon.xi svg { stroke:var(--sec); }
+.ph-tile-name { font-family:var(--fo); font-size:11px; font-weight:600; color:var(--prim); }
+.ph-tile-sub { font-family:var(--fd); font-size:9px; color:var(--sec); line-height:1.3; }
+.ph-tile-badge { position:absolute; top:5px; right:5px; font-family:var(--fm); font-size:7px; font-weight:500; border-radius:3px; padding:1px 4px; border:1px solid; }
+.b-r { background:rgba(248,113,113,0.1); border-color:rgba(248,113,113,0.3); color:#f87171; }
+.b-o { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--orange); }
+.b-g { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--green); }
+.b-d { background:var(--s1); border-color:var(--border); color:var(--sec); }
+
+/* Wide tile compact */
+.ph-wide { background:var(--card); border:1px solid rgba(247,148,30,0.35); border-radius:8px; padding:8px 10px; display:flex; align-items:center; gap:8px; }
+.ph-wide-icon { width:28px; height:28px; background:rgba(247,148,30,0.08); border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ph-wide-icon svg { width:16px; height:16px; stroke:var(--orange); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ph-wide.gw { border-color:rgba(52,211,153,0.3); }
+.ph-wide.gw .ph-wide-icon { background:rgba(52,211,153,0.08); }
+.ph-wide.gw .ph-wide-icon svg { stroke:var(--green); }
+.ph-wide-body { flex:1; min-width:0; }
+.ph-wide-title { font-family:var(--fo); font-size:11px; font-weight:600; color:var(--prim); }
+.ph-wide-sub { font-family:var(--fd); font-size:9px; color:var(--sec); }
+.ph-live { display:inline-flex; align-items:center; gap:3px; background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); border-radius:var(--rfull); padding:1px 6px; font-family:var(--fm); font-size:7px; font-weight:500; color:var(--orange); margin-top:2px; }
+.ph-live-dot { width:4px; height:4px; border-radius:50%; background:var(--orange); animation:glow 1.2s ease-in-out infinite; }
+.ph-camp-pill { display:inline-flex; align-items:center; background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); border-radius:var(--rfull); padding:1px 6px; font-family:var(--fm); font-size:7px; font-weight:500; color:var(--green); margin-top:2px; }
+
+/* Assoc divider */
+.ph-assoc { display:flex; align-items:center; gap:6px; }
+.ph-assoc-line { flex:1; height:1px; background:var(--border); }
+.ph-assoc-lbl { font-family:var(--fm); font-size:8px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--disa); white-space:nowrap; }
+
+/* Bottom nav compact */
+.ph-nav { background:var(--card); border-top:1px solid var(--border); display:flex; padding:5px 4px 12px; }
+.ph-ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.ph-ni svg { width:16px; height:16px; stroke:var(--disa); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ph-ni-lbl { font-family:var(--fd); font-size:8px; color:var(--disa); }
+.ph-ni.act svg { stroke:var(--orange); }
+.ph-ni.act .ph-ni-lbl { color:var(--orange); }
+.ph-ni.av svg { stroke:var(--green); }
+.ph-ni.av .ph-ni-lbl { color:var(--green); }
+
+/* Drill-in indicator */
+.drill-highlight { position:absolute; inset:0; border-radius:8px; border:2px solid var(--orange); animation:highlight 1.5s ease-in-out infinite; pointer-events:none; }
+@keyframes highlight { 0%,100%{opacity:0.6} 50%{opacity:1} }
+
+/* Annotation cards */
+.annot-row { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-bottom:64px; }
+.annot-card { background:var(--card); border:1px solid var(--border); border-radius:var(--rlg); padding:20px; max-width:240px; flex:1; min-width:180px; }
+.annot-title { font-family:var(--fm); font-size:9px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--green); margin-bottom:10px; }
+.annot-item { font-family:var(--fd); font-size:12px; color:var(--body); line-height:1.6; padding-left:12px; position:relative; }
+.annot-item::before { content:'→'; position:absolute; left:0; color:var(--disa); }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <div class="page-eyebrow">Claude Design Feed</div>
+  <div class="page-title">VAI Navigation Flow</div>
+  <div class="page-sub">Information architecture · Home grid states · Drill-in paths · Association-based dynamic tiles</div>
+</div>
+
+<!-- Mermaid IA Diagram -->
+<div class="section-head">Information Architecture</div>
+<div class="mermaid-wrap">
+<div class="mermaid">
+flowchart TD
+    APP([VAI App]) --> HOME
+
+    HOME[🏠 Home Grid\nFeed · Groups · Schedule\nChat · Wallet · Share]
+
+    HOME -->|tap tile| FEED[Feed\nActivity + Posts]
+    HOME -->|tap tile| GROUPS[Groups\nTeams + Clubs]
+    HOME -->|tap tile| SCHED[Schedule\nCalendar Phase 1]
+    HOME -->|tap tile| CHAT[Chat\nStream Chat]
+    HOME -->|tap tile| WALLET[Wallet\nBalance + Affiliate Dashboard]
+    HOME -->|tap tile| SHARE[Share\nAffiliate Link]
+
+    HOME -->|joined league| LEAGUE_TILE[League Hero Tile\nVAI FC North · Live]
+    LEAGUE_TILE -->|tap| LEAGUE_GRID[League Sub-Grid\nRoster · Standings · Tournament\nSchedule · PLAY Status · Comms]
+
+    HOME -->|registered for camp| CAMP_TILE[Camp Hero Tile\nSummer Camp · Jul 14]
+    CAMP_TILE -->|tap| CAMP_GRID[Camp Sub-Grid\nMy QR · Sessions · Groups\nPLAY Status · Attendance]
+
+    HOME -->|coach role| COACH_TILE[Coach Hero Tile\nLive Tournament]
+    COACH_TILE -->|tap| COACH_GRID[Coach Sub-Grid\nRoster · PLAY Status\nSchedule · Tournament · Comms]
+
+    HOME -->|bottom nav| ME[Me · Profile\nPassport · PLAY Status\nSettings · Referrals]
+    HOME -->|bottom nav| AVANTI_TAB[AVANTI Tab\nAction History · Chat\nEscalation Room]
+
+    WALLET -->|inside| AFFILIATE[Affiliate Dashboard\nReferral tree · Earnings\nPayout history]
+    SHARE -->|links to| AFFILIATE
+
+    style HOME fill:#141418,stroke:#f7941e,color:#e8e8ec
+    style LEAGUE_TILE fill:#1e1000,stroke:#f7941e,color:#e8e8ec
+    style CAMP_TILE fill:#051a10,stroke:#34d399,color:#e8e8ec
+    style COACH_TILE fill:#1e1000,stroke:#f7941e,color:#e8e8ec
+    style WALLET fill:#141418,stroke:#34d399,color:#e8e8ec
+    style AFFILIATE fill:#051a10,stroke:#34d399,color:#c8c8d0
+    style AVANTI_TAB fill:#141418,stroke:#34d399,color:#34d399
+    style ME fill:#141418,stroke:#555568,color:#c8c8d0
+</div>
+</div>
+
+<!-- Visual Screen Flow -->
+<div class="section-head">Screen Flow — Athlete · League Member</div>
+<div class="flow-row">
+
+  <!-- Screen 1: Home (standard) -->
+  <div class="flow-node">
+    <div class="flow-label">1 · Home Grid<br>Standard State</div>
+    <div class="ph">
+      <div class="ph-sb"><span>9:41</span><span>••• WiFi</span></div>
+      <div class="ph-hdr">
+        <svg width="11" height="14" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g1)"/><defs><radialGradient id="g1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="ph-logo">VAI</div>
+        <div class="ph-badge">Free</div>
+        <div class="ph-aind"><div class="ph-adot"></div>AVANTI</div>
+        <div class="ph-av">B</div>
+      </div>
+      <div class="ph-scroll">
+        <div class="ph-sec-lbl">YOUR VAI</div>
+        <div class="ph-grid">
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-9-9 18-2-8-7-1z"/></svg></div><div class="ph-tile-name">Feed</div><div class="ph-tile-sub">3 new updates</div></div>
+          <div class="ph-tile"><div class="ph-tile-badge b-o">3</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="ph-tile-name">Groups</div><div class="ph-tile-sub">Builder Club</div></div>
+          <div class="ph-tile"><div class="ph-tile-badge b-d">SAT</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">2 events</div></div>
+          <div class="ph-tile"><div class="ph-tile-badge b-r">5</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ph-tile-name">Chat</div><div class="ph-tile-sub">5 unread</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/></svg></div><div class="ph-tile-name">Wallet</div><div class="ph-tile-sub">$247 · 3 refs</div></div>
+          <div class="ph-tile"><div class="ph-tile-badge b-g">EARN</div><div class="ph-tile-icon gi"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div><div class="ph-tile-name">Share</div><div class="ph-tile-sub">Refer &amp; earn</div></div>
+        </div>
+      </div>
+      <div class="ph-nav">
+        <div class="ph-ni act"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="ph-ni-lbl">Home</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="ph-ni-lbl">Schedule</div></div>
+        <div class="ph-ni av"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="ph-ni-lbl" style="color:var(--green)">AVANTI</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="ph-ni-lbl">Groups</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="ph-ni-lbl">Me</div></div>
+      </div>
+    </div>
+    <div class="flow-tap">Joins VAI FC North ↓</div>
+  </div>
+
+  <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none"><polyline points="9 18 15 12 9 6"/></svg></div>
+
+  <!-- Screen 2: Home with League tile -->
+  <div class="flow-node">
+    <div class="flow-label">2 · Home + League<br>Association tile appears</div>
+    <div class="ph">
+      <div class="ph-sb"><span>9:41</span><span>••• WiFi</span></div>
+      <div class="ph-hdr">
+        <svg width="11" height="14" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g2)"/><defs><radialGradient id="g2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="ph-logo">VAI</div>
+        <div class="ph-badge g">VAI+</div>
+        <div class="ph-aind"><div class="ph-adot"></div>AVANTI</div>
+        <div class="ph-av">M</div>
+      </div>
+      <div class="ph-strip">
+        <div class="ph-strip-lbl">✦ AVANTI</div>
+        <div class="ph-strip-msg">Saturday — Mia's payment is RED for VAI FC North.</div>
+        <div class="ph-strip-chip">Yes, send it</div>
+      </div>
+      <div class="ph-scroll" style="height:280px;">
+        <div class="ph-sec-lbl">YOUR VAI</div>
+        <!-- Hero tile with highlight -->
+        <div class="ph-wide" style="position:relative;">
+          <div class="drill-highlight"></div>
+          <div class="ph-wide-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
+          <div class="ph-wide-body"><div class="ph-wide-title">Spring Invitational</div><div class="ph-wide-sub">VAI FC North · 2–1</div><div class="ph-live"><div class="ph-live-dot"></div>LIVE</div></div>
+        </div>
+        <div class="ph-grid">
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-9-9 18-2-8-7-1z"/></svg></div><div class="ph-tile-name">Feed</div><div class="ph-tile-sub">3 new</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="ph-tile-name">Groups</div><div class="ph-tile-sub">Builder Club</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">Sat 10am</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/></svg></div><div class="ph-tile-name">Wallet</div><div class="ph-tile-sub">$247</div></div>
+        </div>
+        <div class="ph-assoc"><div class="ph-assoc-line"></div><div class="ph-assoc-lbl">VAI FC North</div><div class="ph-assoc-line"></div></div>
+        <div class="ph-grid">
+          <div class="ph-tile alert"><div class="ph-tile-badge b-r">1 BLOCKED</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="ph-tile-name">Roster</div><div class="ph-tile-sub">16 athletes</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="ph-tile-name">Standings</div><div class="ph-tile-sub">#1 · Spring</div></div>
+        </div>
+      </div>
+      <div class="ph-nav">
+        <div class="ph-ni act"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="ph-ni-lbl">Home</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="ph-ni-lbl">Schedule</div></div>
+        <div class="ph-ni av"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="ph-ni-lbl" style="color:var(--green)">AVANTI</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="ph-ni-lbl">Groups</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="ph-ni-lbl">Me</div></div>
+      </div>
+    </div>
+    <div class="flow-tap">Taps highlighted tile ↓</div>
+  </div>
+
+  <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none"><polyline points="9 18 15 12 9 6"/></svg></div>
+
+  <!-- Screen 3: League Sub-Grid -->
+  <div class="flow-node">
+    <div class="flow-label">3 · League Sub-Grid<br>VAI FC North</div>
+    <div class="ph">
+      <div class="ph-sb"><span>9:41</span><span>••• WiFi</span></div>
+      <div class="ph-hdr">
+        <div style="font-size:10px;color:var(--sec);cursor:pointer;">‹ Home</div>
+        <div class="ph-logo" style="margin-left:8px;font-size:13px;">VAI FC North</div>
+        <div class="ph-aind" style="margin-left:auto;"><div class="ph-adot"></div>AVANTI</div>
+      </div>
+      <div class="ph-strip">
+        <div class="ph-strip-lbl">✦ AVANTI</div>
+        <div class="ph-strip-msg">1 athlete RED — Mia blocked for Saturday.</div>
+        <div class="ph-strip-chip">Send reminder</div>
+      </div>
+      <div class="ph-scroll" style="height:285px;">
+        <div class="ph-wide">
+          <div class="ph-wide-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
+          <div class="ph-wide-body"><div class="ph-wide-title">Spring Invitational</div><div class="ph-wide-sub">Final · 2–1 · 12 min left</div><div class="ph-live"><div class="ph-live-dot"></div>LIVE</div></div>
+        </div>
+        <div class="ph-sec-lbl" style="margin-top:4px;">CLUB FEATURES</div>
+        <div class="ph-grid">
+          <div class="ph-tile alert"><div class="ph-tile-badge b-r">1</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="ph-tile-name">Roster</div><div class="ph-tile-sub">16 · 1 blocked</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="ph-tile-name">Standings</div><div class="ph-tile-sub">#1 · 19pts</div></div>
+          <div class="ph-tile"><div class="ph-tile-badge b-d">SAT</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">Home 10am</div></div>
+          <div class="ph-tile alert"><div class="ph-tile-badge b-o">ACTION</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg></div><div class="ph-tile-name">PLAY Status</div><div class="ph-tile-sub">15 ✓ · 1 ✗</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ph-tile-name">Comms</div><div class="ph-tile-sub">2 drafts</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="ph-tile-name">Leagues</div><div class="ph-tile-sub">Spring 2026</div></div>
+        </div>
+      </div>
+      <div class="ph-nav">
+        <div class="ph-ni act"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="ph-ni-lbl">Home</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="ph-ni-lbl">Schedule</div></div>
+        <div class="ph-ni av"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="ph-ni-lbl" style="color:var(--green)">AVANTI</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="ph-ni-lbl">Groups</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="ph-ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Coach Flow -->
+<div class="section-head">Screen Flow — Coach Drill-In</div>
+<div class="flow-row">
+
+  <!-- Coach Home -->
+  <div class="flow-node">
+    <div class="flow-label">1 · Home · Coach Role</div>
+    <div class="ph">
+      <div class="ph-sb"><span>9:41</span><span>••• WiFi</span></div>
+      <div class="ph-hdr">
+        <svg width="11" height="14" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g3)"/><defs><radialGradient id="g3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="ph-logo">VAI</div>
+        <div class="ph-badge">Coach</div>
+        <div class="ph-aind"><div class="ph-adot"></div>AVANTI</div>
+        <div class="ph-av">C</div>
+      </div>
+      <div class="ph-strip">
+        <div class="ph-strip-lbl">✦ AVANTI</div>
+        <div class="ph-strip-msg">3 athletes not GREEN for Saturday. Remind all?</div>
+        <div class="ph-strip-chip">Remind all</div>
+      </div>
+      <div class="ph-scroll" style="height:280px;">
+        <div class="ph-wide" style="position:relative;">
+          <div class="drill-highlight"></div>
+          <div class="ph-wide-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
+          <div class="ph-wide-body"><div class="ph-wide-title">VAI FC North</div><div class="ph-wide-sub">Spring Invitational · Live</div><div class="ph-live"><div class="ph-live-dot"></div>LIVE</div></div>
+        </div>
+        <div class="ph-grid">
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-9-9 18-2-8-7-1z"/></svg></div><div class="ph-tile-name">Feed</div><div class="ph-tile-sub">Game recap</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ph-tile-name">Chat</div><div class="ph-tile-sub">Team chat</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">Sat 10am</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/></svg></div><div class="ph-tile-name">Wallet</div><div class="ph-tile-sub">Earnings</div></div>
+        </div>
+      </div>
+      <div class="ph-nav">
+        <div class="ph-ni act"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="ph-ni-lbl">Home</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="ph-ni-lbl">Schedule</div></div>
+        <div class="ph-ni av"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="ph-ni-lbl" style="color:var(--green)">AVANTI</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="ph-ni-lbl">Groups</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="ph-ni-lbl">Me</div></div>
+      </div>
+    </div>
+    <div class="flow-tap">Taps club tile ↓</div>
+  </div>
+
+  <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none"><polyline points="9 18 15 12 9 6"/></svg></div>
+
+  <!-- Coach Sub-Grid -->
+  <div class="flow-node">
+    <div class="flow-label">2 · Coach Command Grid<br>VAI FC North</div>
+    <div class="ph">
+      <div class="ph-sb"><span>9:41</span><span>••• WiFi</span></div>
+      <div class="ph-hdr">
+        <div style="font-size:10px;color:var(--sec);cursor:pointer;">‹ Home</div>
+        <div class="ph-logo" style="margin-left:8px;font-size:13px;">VAI FC North</div>
+        <div class="ph-aind" style="margin-left:auto;"><div class="ph-adot"></div>AVANTI</div>
+      </div>
+      <div class="ph-strip">
+        <div class="ph-strip-lbl">✦ AVANTI</div>
+        <div class="ph-strip-msg">3 athletes blocked. Mia (payment), Riley (waiver), Jordan (medical).</div>
+        <div class="ph-strip-chip">Remind all 3</div>
+      </div>
+      <div class="ph-scroll" style="height:285px;">
+        <div class="ph-wide">
+          <div class="ph-wide-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
+          <div class="ph-wide-body"><div class="ph-wide-title">Spring Invitational</div><div class="ph-wide-sub">Final · 2–1 · 12 min</div><div class="ph-live"><div class="ph-live-dot"></div>LIVE</div></div>
+        </div>
+        <div class="ph-sec-lbl" style="margin-top:4px;">COACHING TOOLS</div>
+        <div class="ph-grid">
+          <div class="ph-tile alert"><div class="ph-tile-badge b-r">3</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="ph-tile-name">Roster</div><div class="ph-tile-sub">16 · 3 blocked</div></div>
+          <div class="ph-tile alert"><div class="ph-tile-badge b-r">3 RED</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg></div><div class="ph-tile-name">PLAY Status</div><div class="ph-tile-sub">13 ✓ · 3 ✗</div></div>
+          <div class="ph-tile"><div class="ph-tile-badge b-d">SAT</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">Home 10am</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="ph-tile-name">Standings</div><div class="ph-tile-sub">#1 · 19pts</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ph-tile-name">Comms</div><div class="ph-tile-sub">2 drafts</div></div>
+          <div class="ph-tile"><div class="ph-tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6l8-4 8 4v6c0 5-8 9-8 9s-8-4-8-9V6z"/></svg></div><div class="ph-tile-name">Exceptions</div><div class="ph-tile-sub">1 open</div></div>
+        </div>
+      </div>
+      <div class="ph-nav">
+        <div class="ph-ni act"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="ph-ni-lbl">Home</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="ph-ni-lbl">Schedule</div></div>
+        <div class="ph-ni av"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="ph-ni-lbl" style="color:var(--green)">AVANTI</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="ph-ni-lbl">Groups</div></div>
+        <div class="ph-ni"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div class="ph-ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Design annotation cards -->
+<div class="section-head">Design Rules for Claude Design</div>
+<div class="annot-row">
+  <div class="annot-card">
+    <div class="annot-title">Home Grid Logic</div>
+    <div class="annot-item">Core tiles always visible: Feed, Groups, Schedule, Chat, Wallet, Share</div>
+    <div class="annot-item">PLAY Status + Passport → Me/Profile tab only</div>
+    <div class="annot-item">Association hero tile appears when user joins a club/camp</div>
+    <div class="annot-item">Club OS tiles appear in sub-section below core grid</div>
+    <div class="annot-item">Animate hero tile in with a gentle slide from top</div>
+  </div>
+  <div class="annot-card">
+    <div class="annot-title">Wallet Tile</div>
+    <div class="annot-item">Sub-text shows balance + referral count</div>
+    <div class="annot-item">Affiliate dashboard lives INSIDE Wallet (not behind Share button)</div>
+    <div class="annot-item">Share tile is separate — links directly to user's affiliate link</div>
+    <div class="annot-item">Share tile always shows EARN badge in green</div>
+  </div>
+  <div class="annot-card">
+    <div class="annot-title">Drill-In Navigation</div>
+    <div class="annot-item">Hero tile tap → new screen with club-specific sub-grid</div>
+    <div class="annot-item">Back navigation: "‹ Home" in header, never back button</div>
+    <div class="annot-item">AVANTI strip persists on drill-in screens, scoped to that context</div>
+    <div class="annot-item">Sub-grid tiles use same tile component — not a separate design</div>
+  </div>
+  <div class="annot-card">
+    <div class="annot-title">AVANTI Green</div>
+    <div class="annot-item">AVANTI ONLINE indicator: #34d399, pulsing dot</div>
+    <div class="annot-item">AVANTI strip label: #34d399, JetBrains Mono caps</div>
+    <div class="annot-item">AVANTI nav tab: green icon + label, subtle green bg</div>
+    <div class="annot-item">Confirm chips: orange bg, BLACK text (non-negotiable)</div>
+  </div>
+</div>
+
+<script>
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'dark',
+  themeVariables: {
+    primaryColor: '#141418',
+    primaryTextColor: '#e8e8ec',
+    primaryBorderColor: '#f7941e',
+    lineColor: '#2a2a35',
+    secondaryColor: '#0c0c10',
+    tertiaryColor: '#1a1a20',
+    background: '#060608',
+    mainBkg: '#141418',
+    nodeBorder: '#2a2a35',
+    clusterBkg: '#0c0c10',
+    titleColor: '#e8e8ec',
+    edgeLabelBackground: '#141418',
+    fontFamily: 'JetBrains Mono, Courier New, monospace',
+    fontSize: '12px'
+  }
+});
+</script>
+</body>
+</html>
