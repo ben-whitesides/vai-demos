@@ -8,372 +8,218 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-/* ── Design System Tokens (DESIGN.md — single source of truth) ── */
 :root {
-  --vai-orange:    #f7941e;
-  --vai-green:     #34d399;
-  --vai-gold:      #f3d7b5;
-  --void-black:    #060608;
-  --card-dark:     #0c0c10;
-  --elevated:      #141418;
-  --surface-1:     #1a1a20;
-  --surface-2:     #222228;
-  --border:        #1e1e26;
-  --gray-subtle:   #2a2a35;
-  --gray-disabled: #555568;
-  --gray-secondary:#8888a0;
-  --gray-body:     #c8c8d0;
-  --gray-primary:  #e8e8ec;
-  --font-oswald:   'Oswald', Impact, Arial Black, sans-serif;
-  --font-dm:       'DM Sans', Arial, Helvetica, sans-serif;
-  --font-mono:     'JetBrains Mono', 'Courier New', monospace;
-  --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-full: 9999px;
+  --vai-orange:#f7941e; --vai-green:#34d399; --vai-gold:#f3d7b5;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --surface-2:#222228; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --font-oswald:'Oswald',Impact,Arial Black,sans-serif;
+  --font-dm:'DM Sans',Arial,Helvetica,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-full:9999px;
 }
+body { background:#111; font-family:var(--font-dm); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:24px 16px 48px; color:var(--gray-primary); -webkit-font-smoothing:antialiased; }
+h1 { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:4px; text-align:center; }
+.subtitle { font-size:11px; color:var(--gray-disabled); margin-bottom:16px; text-align:center; }
 
-body {
-  background: #111;
-  font-family: var(--font-dm);
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center;
-  padding: 24px 16px 48px;
-  color: var(--gray-primary);
-  -webkit-font-smoothing: antialiased;
-}
-h1 {
-  font-family: var(--font-oswald); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--gray-disabled); margin-bottom: 4px; text-align: center;
-}
-.subtitle { font-size: 11px; color: var(--gray-disabled); margin-bottom: 16px; text-align: center; }
-
-.view-nav { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; }
-.v-btn {
-  background: var(--card-dark); border: 1px solid var(--border);
-  color: var(--gray-secondary); font-family: var(--font-dm); font-size: 11px; font-weight: 500;
-  padding: 5px 12px; border-radius: var(--r-full); cursor: pointer; transition: all 0.15s;
-}
-.v-btn:hover { color: var(--gray-primary); border-color: var(--gray-subtle); }
-.v-btn.active { background: rgba(247,148,30,0.1); border-color: var(--vai-orange); color: var(--vai-orange); }
+.view-nav { display:flex; gap:6px; justify-content:center; margin-bottom:16px; flex-wrap:wrap; }
+.v-btn { background:var(--card-dark); border:1px solid var(--border); color:var(--gray-secondary); font-family:var(--font-dm); font-size:11px; font-weight:500; padding:5px 12px; border-radius:var(--r-full); cursor:pointer; transition:all 0.15s; }
+.v-btn:hover { color:var(--gray-primary); border-color:var(--gray-subtle); }
+.v-btn.active { background:rgba(247,148,30,0.1); border-color:var(--vai-orange); color:var(--vai-orange); }
 
 /* Phone */
-.phone {
-  width: 375px; background: var(--void-black);
-  border-radius: 44px; border: 1.5px solid var(--gray-subtle);
-  box-shadow: 0 0 0 1px #0c0c10, 0 32px 80px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.04);
-  overflow: hidden; position: relative;
-}
+.phone { width:375px; background:var(--void-black); border-radius:44px; border:1.5px solid var(--gray-subtle); box-shadow:0 0 0 1px #0c0c10,0 32px 80px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden; position:relative; }
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 22px 8px; background:var(--void-black); font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
 
-/* Status bar */
-.status-bar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 22px 8px; background: var(--void-black);
-  font-family: var(--font-dm); font-size: 12px; font-weight: 600; color: var(--gray-primary);
-}
-
-/* App header */
-.app-header {
-  background: var(--void-black); padding: 10px 18px 12px;
-  display: flex; align-items: center; gap: 8px;
-  border-bottom: 1px solid var(--border);
-}
-.vai-wordmark { font-family: var(--font-oswald); font-size: 18px; font-weight: 700; letter-spacing: 0.05em; color: var(--gray-primary); }
-.tier-badge {
-  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  background: rgba(247,148,30,0.1); border: 1px solid rgba(247,148,30,0.3);
-  color: var(--vai-orange); padding: 2px 8px; border-radius: var(--r-full);
-}
-.avanti-indicator {
-  margin-left: auto; display: flex; align-items: center; gap: 5px;
-  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
-  letter-spacing: 0.06em; color: var(--vai-green);
-}
-.avanti-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--vai-green);
-  animation: glow 2s ease-in-out infinite;
-}
-@keyframes glow {
-  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)}
-  50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)}
-}
-.avatar {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: linear-gradient(135deg,var(--vai-orange),#c47210);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--font-dm); font-size: 12px; font-weight: 600; color: #000; flex-shrink: 0;
-}
+/* Header */
+.app-header { background:var(--void-black); padding:10px 18px 12px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.vai-wordmark { font-family:var(--font-oswald); font-size:18px; font-weight:700; letter-spacing:0.05em; color:var(--gray-primary); }
+.tier-badge { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); color:var(--vai-orange); padding:2px 8px; border-radius:var(--r-full); }
+.tier-badge.g { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.avanti-ind { margin-left:auto; display:flex; align-items:center; gap:5px; font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.06em; color:var(--vai-green); }
+.a-dot { width:6px; height:6px; border-radius:50%; background:var(--vai-green); animation:glow 2s ease-in-out infinite; }
+@keyframes glow { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
+.avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--vai-orange),#c47210); display:flex; align-items:center; justify-content:center; font-family:var(--font-dm); font-size:12px; font-weight:600; color:#000; flex-shrink:0; }
 
 /* AVANTI Strip */
-.avanti-strip {
-  background: var(--void-black); border-bottom: 1px solid var(--border);
-  padding: 12px 18px; display: flex; flex-direction: column; gap: 10px;
-}
-.avanti-strip.hidden { display: none; }
-.strip-eyebrow { display: flex; align-items: center; gap: 5px; }
-.strip-avanti-label {
-  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--vai-green);
-}
-.strip-msg { font-family: var(--font-dm); font-size: 13px; color: var(--gray-body); line-height: 1.5; }
-.strip-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.strip-chip {
-  padding: 6px 14px; border-radius: var(--r-full); border: 1px solid;
-  font-family: var(--font-dm); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s;
-}
-/* BLACK text on colored buttons — DESIGN.md non-negotiable */
-.sc-confirm { background: var(--vai-orange); border-color: var(--vai-orange); color: #000; }
-.sc-later { background: transparent; border-color: var(--gray-subtle); color: var(--gray-secondary); }
-.sc-more { background: transparent; border-color: var(--gray-subtle); color: var(--gray-secondary); }
-.strip-dismiss { font-size: 11px; color: var(--gray-disabled); cursor: pointer; text-align: right; }
+.avanti-strip { background:var(--void-black); border-bottom:1px solid var(--border); padding:12px 18px; display:flex; flex-direction:column; gap:10px; }
+.avanti-strip.hidden { display:none; }
+.strip-ey { display:flex; align-items:center; gap:5px; }
+.strip-avanti-lbl { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--vai-green); }
+.strip-msg { font-family:var(--font-dm); font-size:13px; color:var(--gray-body); line-height:1.5; }
+.strip-chips { display:flex; gap:6px; flex-wrap:wrap; }
+.strip-chip { padding:6px 14px; border-radius:var(--r-full); border:1px solid; font-family:var(--font-dm); font-size:12px; font-weight:600; cursor:pointer; }
+.sc-yes { background:var(--vai-orange); border-color:var(--vai-orange); color:#000; } /* BLACK text — DESIGN.md */
+.sc-later { background:transparent; border-color:var(--gray-subtle); color:var(--gray-secondary); }
+.strip-dismiss { font-size:11px; color:var(--gray-disabled); cursor:pointer; text-align:right; }
 
 /* Scroll body */
-.scroll-body { background: var(--void-black); height: 600px; overflow-y: auto; scrollbar-width: none; }
-.scroll-body::-webkit-scrollbar { display: none; }
+.scroll-body { background:var(--void-black); height:600px; overflow-y:auto; scrollbar-width:none; }
+.scroll-body::-webkit-scrollbar { display:none; }
 
-/* Quick actions */
-.quick-actions { padding: 12px 18px 8px; display: flex; flex-direction: column; gap: 8px; }
-.qa-label {
-  font-family: var(--font-oswald); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray-disabled);
-}
-.qa-chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-.qa-chips::-webkit-scrollbar { display: none; }
-.qa-chip {
-  display: flex; align-items: center; gap: 5px;
-  background: var(--card-dark); border: 1px solid var(--border); border-radius: var(--r-full);
-  padding: 6px 12px; font-family: var(--font-dm); font-size: 12px; font-weight: 500;
-  color: var(--gray-body); cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.12s;
-}
-.qa-chip svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 1.5; }
-.qa-chip:hover { border-color: var(--vai-orange); color: var(--vai-orange); }
-.qa-chip.qa-active { background: rgba(247,148,30,0.1); border-color: var(--vai-orange); color: var(--vai-orange); }
+/* Quick actions row */
+.qa-section { padding:12px 18px 8px; display:flex; flex-direction:column; gap:8px; }
+.section-label { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); }
+.qa-chips { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+.qa-chips::-webkit-scrollbar { display:none; }
+.qa-chip { display:flex; align-items:center; gap:5px; background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-full); padding:6px 12px; font-family:var(--font-dm); font-size:12px; font-weight:500; color:var(--gray-body); cursor:pointer; white-space:nowrap; flex-shrink:0; transition:all 0.12s; }
+.qa-chip svg { width:13px; height:13px; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.qa-chip:hover,.qa-chip.active { background:rgba(247,148,30,0.1); border-color:var(--vai-orange); color:var(--vai-orange); }
 
 /* Grid section */
-.grid-section { padding: 12px 18px; display: flex; flex-direction: column; gap: 10px; }
-.grid-header { display: flex; align-items: center; justify-content: space-between; }
-.grid-label {
-  font-family: var(--font-oswald); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray-disabled);
-}
-.customize-btn {
-  font-family: var(--font-dm); font-size: 11px; font-weight: 500;
-  color: var(--gray-secondary); cursor: pointer; display: flex; align-items: center; gap: 4px;
-}
-.customize-btn svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 1.5; }
-.customize-btn:hover { color: var(--vai-orange); }
-.done-btn {
-  font-family: var(--font-dm); font-size: 12px; font-weight: 600;
-  color: var(--vai-orange); cursor: pointer; display: none;
-}
-.edit-banner {
-  display: none; background: rgba(247,148,30,0.06);
-  border: 1px solid rgba(247,148,30,0.2); border-radius: var(--r-md);
-  padding: 8px 12px; font-size: 11px; color: var(--gray-secondary); text-align: center;
-}
+.grid-section { padding:10px 18px 12px; display:flex; flex-direction:column; gap:10px; }
+.grid-hdr { display:flex; align-items:center; justify-content:space-between; }
+.grid-lbl { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); }
+.cust-btn { font-family:var(--font-dm); font-size:11px; font-weight:500; color:var(--gray-secondary); cursor:pointer; display:flex; align-items:center; gap:4px; }
+.cust-btn svg { width:12px; height:12px; stroke:currentColor; stroke-width:1.5; }
+.cust-btn:hover { color:var(--vai-orange); }
+.done-btn { font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--vai-orange); cursor:pointer; display:none; }
+.edit-banner { display:none; background:rgba(247,148,30,0.06); border:1px solid rgba(247,148,30,0.2); border-radius:var(--r-md); padding:8px 12px; font-size:11px; color:var(--gray-secondary); text-align:center; }
 
-/* Wide tile */
-.tile-wide {
-  background: var(--card-dark); border: 1px solid var(--border); border-radius: var(--r-lg);
-  padding: 14px 16px; display: flex; align-items: center; gap: 14px;
-  cursor: pointer; transition: border-color 0.15s; position: relative;
-}
-.tile-wide:hover { border-color: var(--gray-subtle); }
-.tile-wide.tile-live { border-color: rgba(247,148,30,0.35); }
-.wide-icon {
-  width: 40px; height: 40px; background: rgba(247,148,30,0.08); border-radius: var(--r-md);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.wide-icon svg { width: 22px; height: 22px; stroke: var(--vai-orange); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.wide-body { flex: 1; min-width: 0; }
-.wide-title { font-family: var(--font-oswald); font-size: 15px; font-weight: 600; color: var(--gray-primary); margin-bottom: 2px; }
-.wide-sub { font-family: var(--font-dm); font-size: 12px; color: var(--gray-secondary); }
-.live-pill {
-  display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;
-  background: rgba(247,148,30,0.1); border: 1px solid rgba(247,148,30,0.3);
-  border-radius: var(--r-full); padding: 2px 8px;
-  font-family: var(--font-mono); font-size: 9px; font-weight: 500; letter-spacing: 0.08em; color: var(--vai-orange);
-}
-.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--vai-orange); animation: glow 1.2s ease-in-out infinite; }
+/* Wide hero tile */
+.tile-wide { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px 16px; display:flex; align-items:center; gap:14px; cursor:pointer; transition:border-color 0.15s; position:relative; }
+.tile-wide:hover { border-color:var(--gray-subtle); }
+.tile-wide.live { border-color:rgba(247,148,30,0.4); }
+.tw-icon { width:40px; height:40px; background:rgba(247,148,30,0.08); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.tw-icon svg { width:22px; height:22px; stroke:var(--vai-orange); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.tw-body { flex:1; min-width:0; }
+.tw-title { font-family:var(--font-oswald); font-size:15px; font-weight:600; color:var(--gray-primary); margin-bottom:2px; }
+.tw-sub { font-family:var(--font-dm); font-size:12px; color:var(--gray-secondary); }
+.live-pill { display:inline-flex; align-items:center; gap:4px; margin-top:4px; background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); border-radius:var(--r-full); padding:2px 8px; font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.08em; color:var(--vai-orange); }
+.live-dot { width:5px; height:5px; border-radius:50%; background:var(--vai-orange); animation:glow 1.2s ease-in-out infinite; }
 
-/* 2-col grid tiles */
-.tile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.tile {
-  background: var(--card-dark); border: 1px solid var(--border); border-radius: var(--r-lg);
-  padding: 14px; display: flex; flex-direction: column; gap: 6px;
-  cursor: pointer; transition: border-color 0.15s; position: relative; min-height: 100px;
-}
-.tile:hover { border-color: var(--gray-subtle); }
-.tile.t-alert { border-color: rgba(247,148,30,0.2); }
-.tile-icon {
-  width: 32px; height: 32px; background: rgba(255,255,255,0.04); border-radius: var(--r-md);
-  display: flex; align-items: center; justify-content: center;
-}
-.tile-icon svg { width: 18px; height: 18px; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.icon-orange svg { stroke: var(--vai-orange); }
-.icon-green svg { stroke: var(--vai-green); }
-.icon-gray svg { stroke: var(--gray-secondary); }
-.tile-name { font-family: var(--font-oswald); font-size: 14px; font-weight: 600; color: var(--gray-primary); }
-.tile-sub { font-family: var(--font-dm); font-size: 11px; color: var(--gray-secondary); line-height: 1.4; }
-.tile-badge {
-  position: absolute; top: 8px; right: 8px;
-  font-family: var(--font-mono); font-size: 9px; font-weight: 500; letter-spacing: 0.04em;
-  border-radius: var(--r-sm); padding: 2px 6px; border: 1px solid;
-}
-.b-red { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); color: #f87171; }
-.b-open { background: rgba(52,211,153,0.1); border-color: rgba(52,211,153,0.3); color: var(--vai-green); }
-.b-date { background: var(--surface-1); border-color: var(--border); color: var(--gray-secondary); }
-.b-alert { background: rgba(247,148,30,0.1); border-color: rgba(247,148,30,0.3); color: var(--vai-orange); }
+/* 2-col tile grid */
+.tile-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.tile { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px; display:flex; flex-direction:column; gap:6px; cursor:pointer; transition:border-color 0.15s; position:relative; min-height:100px; }
+.tile:hover { border-color:var(--gray-subtle); }
+.tile.alert { border-color:rgba(247,148,30,0.2); }
+.tile-icon { width:32px; height:32px; background:rgba(255,255,255,0.04); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; }
+.tile-icon svg { width:18px; height:18px; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.oi svg { stroke:var(--vai-orange); }
+.gi svg { stroke:var(--vai-green); }
+.xi svg { stroke:var(--gray-secondary); }
+.tile-name { font-family:var(--font-oswald); font-size:14px; font-weight:600; color:var(--gray-primary); }
+.tile-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); line-height:1.4; }
+.tile-badge { position:absolute; top:8px; right:8px; font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.04em; border-radius:var(--r-sm); padding:2px 6px; border:1px solid; }
+.b-red { background:rgba(248,113,113,0.1); border-color:rgba(248,113,113,0.3); color:#f87171; }
+.b-open { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.b-date { background:var(--surface-1); border-color:var(--border); color:var(--gray-secondary); }
+.b-alert { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--vai-orange); }
+.b-notif { background:rgba(248,113,113,0.1); border-color:rgba(248,113,113,0.3); color:#f87171; }
 
-/* Edit handles */
-.drag-handle { display: none; position: absolute; top: 8px; right: 8px; }
-.drag-handle svg { width: 14px; height: 14px; stroke: var(--gray-disabled); stroke-width: 1.5; }
+/* Association divider */
+.assoc-div { display:flex; align-items:center; gap:8px; margin-top:4px; }
+.assoc-line { flex:1; height:1px; background:var(--border); }
+.assoc-lbl { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-disabled); white-space:nowrap; }
+
+/* Drag handles (edit mode) */
+.drag-h { display:none; position:absolute; top:8px; right:8px; }
+.drag-h svg { width:14px; height:14px; stroke:var(--gray-disabled); stroke-width:1.5; }
 
 /* Bottom nav */
-.bottom-nav {
-  background: var(--card-dark); border-top: 1px solid var(--border);
-  display: flex; padding: 8px 4px 20px; flex-shrink: 0;
-}
-.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; padding: 4px 0; }
-.nav-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
-.nav-icon svg { width: 22px; height: 22px; stroke: var(--gray-disabled); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-.nav-label { font-family: var(--font-dm); font-size: 10px; font-weight: 500; color: var(--gray-disabled); }
-.nav-active .nav-icon svg { stroke: var(--vai-orange); }
-.nav-active .nav-label { color: var(--vai-orange); }
-.nav-avanti .nav-icon { background: rgba(52,211,153,0.08); border-radius: var(--r-md); }
-.nav-avanti .nav-icon svg { stroke: var(--vai-green); }
-.nav-avanti .nav-label { color: var(--vai-green); }
+.bottom-nav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:8px 4px 20px; flex-shrink:0; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer; padding:4px 0; }
+.ni-icon { width:24px; height:24px; display:flex; align-items:center; justify-content:center; }
+.ni-icon svg { width:22px; height:22px; stroke:var(--gray-disabled); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ni-lbl { font-family:var(--font-dm); font-size:10px; font-weight:500; color:var(--gray-disabled); }
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+.ni.av .ni-icon { background:rgba(52,211,153,0.08); border-radius:var(--r-md); }
+.ni.av .ni-icon svg { stroke:var(--vai-green); }
+.ni.av .ni-lbl { color:var(--vai-green); }
 
-/* AVANTI Overlay */
-.overlay {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: var(--elevated); border-top: 1px solid var(--gray-subtle);
-  border-radius: 20px 20px 0 0;
-  transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0,0.15,1);
-  z-index: 100; max-height: 60%; display: flex; flex-direction: column;
-  box-shadow: 0 -8px 40px rgba(0,0,0,0.7);
-}
-.overlay.open { transform: translateY(0); }
-.ov-handle { width: 36px; height: 4px; background: var(--gray-subtle); border-radius: 2px; margin: 10px auto 0; flex-shrink: 0; }
-.ov-header {
-  padding: 12px 16px 10px; display: flex; align-items: center; gap: 10px;
-  border-bottom: 1px solid var(--border); flex-shrink: 0;
-}
-.ov-logo { flex-shrink: 0; }
-.ov-title { font-family: var(--font-oswald); font-size: 15px; font-weight: 600; color: var(--gray-primary); flex: 1; }
-.ov-close {
-  width: 24px; height: 24px; border-radius: 50%; background: var(--surface-1);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 12px; color: var(--gray-secondary);
-}
-.ov-body { padding: 14px 16px; overflow-y: auto; scrollbar-width: none; flex: 1; display: flex; flex-direction: column; gap: 12px; }
-.ov-body::-webkit-scrollbar { display: none; }
-.ov-msg { font-family: var(--font-dm); font-size: 13px; color: var(--gray-body); line-height: 1.6; }
-.ov-card {
-  background: var(--surface-1); border: 1px solid var(--gray-subtle);
-  border-radius: var(--r-md); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
-}
-.ov-card-label { font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
-.ov-card-body { font-family: var(--font-dm); font-size: 12px; color: var(--gray-body); line-height: 1.5; }
-.ov-btns { display: flex; gap: 8px; }
-.ov-btn { flex: 1; padding: 9px; border-radius: var(--r-full); border: 1px solid; font-family: var(--font-dm); font-size: 12px; font-weight: 600; cursor: pointer; text-align: center; }
-.btn-confirm { background: var(--vai-orange); border-color: var(--vai-orange); color: #000; }
-.btn-later { background: transparent; border-color: var(--gray-subtle); color: var(--gray-secondary); }
-.ov-input-row {
-  display: flex; gap: 8px; align-items: center;
-  padding: 10px 16px 12px; border-top: 1px solid var(--border); background: var(--elevated); flex-shrink: 0;
-}
-.ov-input {
-  flex: 1; background: var(--surface-1); border: 1px solid var(--border);
-  border-radius: var(--r-full); padding: 8px 14px;
-  font-family: var(--font-dm); font-size: 12px; color: var(--gray-disabled);
-}
-.ov-send {
-  width: 30px; height: 30px; border-radius: 50%; background: var(--vai-orange);
-  display: flex; align-items: center; justify-content: center; cursor: pointer;
-}
-.ov-send svg { width: 14px; height: 14px; stroke: #000; stroke-width: 2; }
+/* Overlay */
+.overlay { position:absolute; bottom:0; left:0; right:0; background:var(--elevated); border-top:1px solid var(--gray-subtle); border-radius:20px 20px 0 0; transform:translateY(100%); transition:transform 0.3s cubic-bezier(0.32,0,0.15,1); z-index:100; max-height:62%; display:flex; flex-direction:column; box-shadow:0 -8px 40px rgba(0,0,0,0.7); }
+.overlay.open { transform:translateY(0); }
+.ov-handle { width:36px; height:4px; background:var(--gray-subtle); border-radius:2px; margin:10px auto 0; flex-shrink:0; }
+.ov-header { padding:12px 16px 10px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.ov-title { font-family:var(--font-oswald); font-size:15px; font-weight:600; color:var(--gray-primary); flex:1; }
+.ov-close { width:24px; height:24px; border-radius:50%; background:var(--surface-1); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12px; color:var(--gray-secondary); }
+.ov-body { padding:14px 16px; overflow-y:auto; scrollbar-width:none; flex:1; display:flex; flex-direction:column; gap:12px; }
+.ov-body::-webkit-scrollbar { display:none; }
+.ov-msg { font-family:var(--font-dm); font-size:13px; color:var(--gray-body); line-height:1.6; }
+.ov-card { background:var(--surface-1); border:1px solid rgba(247,148,30,0.4); background:rgba(247,148,30,0.06); border-radius:var(--r-md); padding:12px 14px; display:flex; flex-direction:column; gap:8px; }
+.ov-card-label { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--vai-orange); }
+.ov-card-body { font-family:var(--font-dm); font-size:12px; color:var(--gray-body); line-height:1.5; }
+.ov-btns { display:flex; gap:8px; }
+.ov-btn { flex:1; padding:9px; border-radius:var(--r-full); border:1px solid; font-family:var(--font-dm); font-size:12px; font-weight:600; cursor:pointer; text-align:center; }
+.btn-yes { background:var(--vai-orange); border-color:var(--vai-orange); color:#000; }
+.btn-no { background:transparent; border-color:var(--gray-subtle); color:var(--gray-secondary); }
+.ov-input-row { display:flex; gap:8px; align-items:center; padding:10px 16px 12px; border-top:1px solid var(--border); background:var(--elevated); flex-shrink:0; }
+.ov-input { flex:1; background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-full); padding:8px 14px; font-family:var(--font-dm); font-size:12px; color:var(--gray-disabled); }
+.ov-send { width:30px; height:30px; border-radius:50%; background:var(--vai-orange); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.ov-send svg { width:14px; height:14px; stroke:#000; stroke-width:2; }
 </style>
 </head>
 <body>
 
 <h1>VAI — Home Screen</h1>
-<div class="subtitle">Final direction · AVANTI strip + feature grid · custom layout</div>
+<div class="subtitle">Final direction · AVANTI strip + feature grid · existing features preserved</div>
 
 <div class="view-nav">
   <button class="v-btn active" onclick="setView('default',this)">Default</button>
-  <button class="v-btn" onclick="setView('coach',this)">Coach view</button>
-  <button class="v-btn" onclick="setView('mentor',this)">Mentor view</button>
+  <button class="v-btn" onclick="setView('league',this)">League Member</button>
+  <button class="v-btn" onclick="setView('camp',this)">Camp Registered</button>
+  <button class="v-btn" onclick="setView('coach',this)">Coach</button>
   <button class="v-btn" onclick="setView('customize',this)">✦ Customize</button>
 </div>
 
 <div class="phone" id="phone">
-  <div class="status-bar">
-    <span>9:41</span>
-    <span style="font-size:13px;letter-spacing:0.04em;">••• WiFi ···</span>
-  </div>
+  <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
 
   <!-- Header -->
   <div class="app-header">
-    <!-- Real VAI wingmark SVG -->
-    <svg width="18" height="22" viewBox="0 0 139 167" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg1)"/>
-      <defs><radialGradient id="vg1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs>
-    </svg>
+    <svg width="18" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg1)"/><defs><radialGradient id="vg1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
     <div class="vai-wordmark">VAI</div>
     <div class="tier-badge" id="tier-badge">Mentor</div>
-    <div class="avanti-indicator"><div class="avanti-dot"></div>AVANTI ONLINE</div>
+    <div class="avanti-ind"><div class="a-dot"></div>AVANTI ONLINE</div>
     <div class="avatar" id="avatar">M</div>
   </div>
 
   <!-- AVANTI Strip -->
   <div class="avanti-strip" id="avanti-strip">
-    <div class="strip-eyebrow">
-      <div class="avanti-dot" style="width:5px;height:5px;"></div>
-      <span class="strip-avanti-label">AVANTI</span>
-    </div>
-    <div class="strip-msg" id="strip-msg">
-      <strong style="color:var(--gray-primary)">AVANTI:</strong> Saturday game — Mia's payment is still RED. Want me to send a reminder to VAI FC North?
-    </div>
+    <div class="strip-ey"><div class="a-dot" style="width:5px;height:5px;"></div><span class="strip-avanti-lbl">AVANTI</span></div>
+    <div class="strip-msg" id="strip-msg"><strong style="color:var(--gray-primary)">Saturday game</strong> — Mia's payment is RED for VAI FC North. Send reminder?</div>
     <div class="strip-chips">
-      <div class="strip-chip sc-confirm" onclick="openOverlay('payment')">Yes, send it</div>
+      <div class="strip-chip sc-yes" onclick="openOverlay('reminder')">Yes, send it</div>
       <div class="strip-chip sc-later">Later</div>
-      <div class="strip-chip sc-more">Ask more →</div>
+      <div class="strip-chip sc-later">Ask more →</div>
     </div>
     <div class="strip-dismiss" onclick="document.getElementById('avanti-strip').classList.add('hidden')">Dismiss ✕</div>
   </div>
 
-  <!-- Scroll body -->
+  <!-- Scroll -->
   <div class="scroll-body">
 
-    <!-- Quick Actions -->
-    <div class="quick-actions">
-      <div class="qa-label">Quick Actions</div>
-      <div class="qa-chips">
-        <div class="qa-chip qa-active" onclick="setChip(this)">
+    <!-- Quick actions -->
+    <div class="qa-section">
+      <div class="section-label">Quick Actions</div>
+      <div class="qa-chips" id="qa-chips">
+        <div class="qa-chip active" onclick="setChip(this)">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-9-9 18-2-8-7-1z"/></svg>
+          Feed
+        </div>
+        <div class="qa-chip" onclick="setChip(this)">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Groups
+        </div>
+        <div class="qa-chip" onclick="setChip(this)">
           <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           Schedule
         </div>
         <div class="qa-chip" onclick="setChip(this)">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg>
-          Tournaments
-        </div>
-        <div class="qa-chip" onclick="setChip(this)">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Roster
-        </div>
-        <div class="qa-chip" onclick="setChip(this)">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/></svg>
-          Wallet
+          <svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat
         </div>
       </div>
     </div>
 
     <!-- Feature Grid -->
-    <div class="grid-section">
-      <div class="grid-header">
-        <div class="grid-label" id="grid-label">YOUR VAI</div>
-        <div class="customize-btn" id="customize-btn" onclick="enterEdit()">
+    <div class="grid-section" id="grid-section">
+      <div class="grid-hdr">
+        <div class="grid-lbl" id="grid-lbl">YOUR VAI</div>
+        <div class="cust-btn" id="cust-btn" onclick="enterEdit()">
           <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           Customize
         </div>
@@ -381,85 +227,82 @@ h1 {
       </div>
       <div class="edit-banner" id="edit-banner">Top 4 always above the fold · Drag to reorder</div>
 
-      <!-- Tournament hero tile (wide) -->
-      <div class="tile-wide tile-live" onclick="openOverlay('tournament')">
-        <div class="wide-icon">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg>
-        </div>
-        <div class="wide-body">
-          <div class="wide-title">Spring Invitational</div>
-          <div class="wide-sub">Final · 2012 Boys Black · 2–1</div>
+      <!-- Dynamic club/camp hero tile (hidden by default) -->
+      <div class="tile-wide live" id="hero-tile" style="display:none;" onclick="openOverlay('tournament')">
+        <div class="tw-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
+        <div class="tw-body">
+          <div class="tw-title" id="hero-title">Spring Invitational</div>
+          <div class="tw-sub" id="hero-sub">VAI FC North · Final · 2–1</div>
           <div class="live-pill"><div class="live-dot"></div>LIVE NOW</div>
         </div>
-        <div class="drag-handle">
-          <svg viewBox="0 0 24 24"><circle cx="9" cy="5" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="19" r="1" fill="#555568"/><circle cx="15" cy="5" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="19" r="1" fill="#555568"/></svg>
-        </div>
+        <div class="drag-h"><svg viewBox="0 0 24 24"><circle cx="9" cy="5" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="19" r="1" fill="#555568"/><circle cx="15" cy="5" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="19" r="1" fill="#555568"/></svg></div>
       </div>
 
-      <!-- 2-col tiles -->
-      <div class="tile-grid">
+      <!-- Core tile grid (always visible) -->
+      <div class="tile-grid" id="core-grid">
 
+        <!-- Feed -->
+        <div class="tile" onclick="openOverlay('feed')">
+          <div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-9-9 18-2-8-7-1z"/></svg></div>
+          <div class="tile-name">Feed</div>
+          <div class="tile-sub">3 new updates</div>
+          <div class="drag-h"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
+        </div>
+
+        <!-- Groups -->
+        <div class="tile" onclick="openOverlay('groups')">
+          <div class="tile-badge b-notif">3 NEW</div>
+          <div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="tile-name">Groups</div>
+          <div class="tile-sub">VAI Builder Club +2</div>
+          <div class="drag-h"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
+        </div>
+
+        <!-- Schedule -->
         <div class="tile" onclick="openOverlay('schedule')">
-          <div class="tile-badge b-date">2 THIS WEEK</div>
-          <div class="tile-icon icon-orange">
-            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
+          <div class="tile-badge b-date">SAT 10AM</div>
+          <div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
           <div class="tile-name">Schedule</div>
           <div class="tile-sub">2 events this week</div>
-          <div class="drag-handle"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
+          <div class="drag-h"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
         </div>
 
-        <div class="tile t-alert" onclick="openOverlay('roster')">
-          <div class="tile-badge b-red">1 BLOCKED</div>
-          <div class="tile-icon icon-orange">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <div class="tile-name">Roster</div>
-          <div class="tile-sub">16 athletes</div>
-          <div class="drag-handle"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
+        <!-- Chat (Stream Chat) -->
+        <div class="tile" onclick="openOverlay('chat')">
+          <div class="tile-badge b-notif">5</div>
+          <div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <div class="tile-name">Chat</div>
+          <div class="tile-sub">5 unread messages</div>
+          <div class="drag-h"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
         </div>
 
-        <div class="tile" onclick="openOverlay('camp')">
-          <div class="tile-badge b-date">JUL 14</div>
-          <div class="tile-icon icon-orange">
-            <!-- Tent / camp icon -->
-            <svg viewBox="0 0 24 24" fill="none"><path d="M3.5 20L12 4l8.5 16"/><path d="M12 4v16"/><path d="M7 20L12 11l5 9"/></svg>
-          </div>
-          <div class="tile-name">Summer Camp</div>
-          <div class="tile-sub">14 registered</div>
-          <div class="drag-handle"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
-        </div>
-
-        <div class="tile" onclick="openOverlay('tryouts')">
-          <div class="tile-badge b-open">OPEN</div>
-          <div class="tile-icon icon-green">
-            <!-- Target / tryouts -->
-            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-          </div>
-          <div class="tile-name">Tryouts</div>
-          <div class="tile-sub">Fall roster open</div>
-          <div class="drag-handle"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
-        </div>
-
-        <div class="tile" onclick="openOverlay('standings')">
-          <div class="tile-icon icon-gray">
-            <svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          </div>
-          <div class="tile-name">Standings</div>
-          <div class="tile-sub">#1 · Spring 2026</div>
-          <div class="drag-handle"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
-        </div>
-
+        <!-- Wallet (includes Affiliate dashboard — formerly Share & Earn) -->
         <div class="tile" onclick="openOverlay('wallet')">
-          <div class="tile-icon icon-gray">
-            <svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/></svg>
-          </div>
+          <div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/><circle cx="16" cy="16" r="1" fill="currentColor"/></svg></div>
           <div class="tile-name">Wallet</div>
-          <div class="tile-sub">$247 earned</div>
-          <div class="drag-handle"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
+          <div class="tile-sub">$247 · 3 referrals</div>
+          <div class="drag-h"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
+        </div>
+
+        <!-- Share (permanent tile — affiliate link) -->
+        <div class="tile" onclick="openOverlay('share')">
+          <div class="tile-badge b-open">EARN</div>
+          <div class="tile-icon gi"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+          <div class="tile-name">Share</div>
+          <div class="tile-sub">Refer &amp; earn 50% off</div>
+          <div class="drag-h"><svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1" fill="#555568"/><circle cx="9" cy="12" r="1" fill="#555568"/><circle cx="9" cy="18" r="1" fill="#555568"/><circle cx="15" cy="6" r="1" fill="#555568"/><circle cx="15" cy="12" r="1" fill="#555568"/><circle cx="15" cy="18" r="1" fill="#555568"/></svg></div>
         </div>
 
       </div>
+
+      <!-- Association tiles (dynamic — hidden by default) -->
+      <div id="assoc-section" style="display:none;">
+        <div class="assoc-div"><div class="assoc-line"></div><div class="assoc-lbl" id="assoc-lbl">VAI FC North</div><div class="assoc-line"></div></div>
+        <div class="tile-grid" style="margin-top:8px;" id="assoc-grid">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
     </div>
 
     <div style="height:16px;"></div>
@@ -467,35 +310,18 @@ h1 {
 
   <!-- Bottom Nav -->
   <div class="bottom-nav">
-    <div class="nav-item nav-active">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div class="nav-label">Home</div>
-    </div>
-    <div class="nav-item">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-      <div class="nav-label">Schedule</div>
-    </div>
-    <div class="nav-item nav-avanti">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-      <div class="nav-label" style="color:var(--vai-green);">AVANTI</div>
-    </div>
-    <div class="nav-item">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
-      <div class="nav-label">Events</div>
-    </div>
-    <div class="nav-item">
-      <div class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-      <div class="nav-label">Me</div>
-    </div>
+    <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+    <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ni-lbl">Schedule</div></div>
+    <div class="ni av"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#34d399"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ni-lbl" style="color:var(--vai-green)">AVANTI</div></div>
+    <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="ni-lbl">Groups</div></div>
+    <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
   </div>
 
   <!-- AVANTI Overlay -->
   <div class="overlay" id="overlay">
     <div class="ov-handle"></div>
     <div class="ov-header">
-      <div class="ov-logo">
-        <svg width="16" height="20" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg3)"/><defs><radialGradient id="vg3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
-      </div>
+      <svg width="16" height="20" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg2)"/><defs><radialGradient id="vg2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
       <div class="ov-title" id="ov-title">AVANTI</div>
       <div class="ov-close" onclick="closeOverlay()">✕</div>
     </div>
@@ -511,75 +337,143 @@ h1 {
 </div>
 
 <script>
-const ovData = {
-  payment:    { title:'PLAY Status · Mia Rodriguez', msg:"Mia's installment is <strong>4 days overdue</strong>. She's blocked from Saturday until resolved.", card:{label:'⚡ YELLOW · Confirm to send', body:'Send payment reminder to VAI FC North', btns:['Yes, send it','Review first']} },
-  tournament: { title:'Spring Invitational · Live', msg:"Final in progress. 2012 Boys Black leads <strong>2–1</strong> with 12 min remaining. AVANTI tracking live.", card:null, btns:['View bracket','Share update'] },
-  schedule:   { title:'Schedule · This Week', msg:"2 events this week. Saturday home game 10:00 AM vs Salt Lake Storm. No PLAY blockers across your roster.", card:null, btns:['View schedule'] },
-  roster:     { title:'Roster · 16 Athletes', msg:"15 GREEN · 1 RED. Mia Rodriguez blocked — payment overdue. AVANTI has a reminder ready.", card:{label:'⚡ YELLOW · Confirm to send', body:'Send payment reminder to guardian', btns:['Send it','Later']} },
-  camp:       { title:'Summer Camp · Jul 14', msg:"14 registered. 2 on waitlist. AVANTI recommends building <strong>3 groups of ~5</strong> by age + position now.", card:{label:'⚡ YELLOW · Build groups', body:'Auto-assign from registered athletes', btns:['Build groups','Later']} },
-  tryouts:    { title:'Tryouts · Fall Roster', msg:"Registration open. 41 registered. Evaluation rubrics not published. AVANTI has a draft template ready.", card:null, btns:['View registrations','Publish rubric'] },
-  standings:  { title:'Standings · #1', msg:"VAI FC North <strong>#1</strong> in Spring 2026. 19 pts, +11 GD. Saturday win guarantees top seed.", card:null, btns:['View full table'] },
-  wallet:     { title:'Wallet · $247 Available', msg:"$247 ready. Payout releases May 1. AVANTI can initiate cashout — confirm before sending.", card:{label:'⚡ YELLOW · Confirm cashout', body:'$247.00 → your linked Venmo', btns:['Yes, cash out','Later']} }
+const overlayData = {
+  reminder: { title:'PLAY Status · Mia Rodriguez', msg:"Mia's payment is <strong>4 days overdue</strong> for Saturday's game at VAI FC North. AVANTI prepared a reminder for her guardian.", card:{ label:'⚡ YELLOW · Confirm before sending', body:'Send payment reminder to Alex Rodriguez (guardian)', btns:['Yes, send it','Review first'] } },
+  feed:       { title:'Feed', msg:"Bryce Romney just posted game recap from Monday's win. 3 new updates in VAI Builder Club. Riley Whitesides hit a new speed milestone.", card:null, btns:['View Feed'] },
+  groups:     { title:'My Groups', msg:"VAI Builder Club: 3 new posts. 6th Grade Tractor Trailers: game recap posted. VAI Leadership Team: new announcement.", card:null, btns:['Open Groups'] },
+  schedule:   { title:'Schedule · This Week', msg:"Saturday home game 10:00 AM vs Salt Lake Storm. Tuesday practice 5:45 PM. No PLAY blockers for any scheduled athletes.", card:null, btns:['View Schedule'] },
+  chat:       { title:'Chat', msg:"5 unread messages across 3 conversations. Bryce Romney in 6th Grade Tractor Trailers, 2 group messages in VAI Builder Club.", card:null, btns:['Open Chat'] },
+  wallet:     { title:'Wallet + Affiliate', msg:"$247 available balance. 3 active referrals earning 25% each. Your affiliate link: <strong>vai.app/share/benw</strong>. Payout releases May 1.", card:{ label:'⚡ YELLOW · Confirm cashout', body:'$247.00 → linked Venmo account', btns:['Cash out','Later'] } },
+  share:      { title:'Share &amp; Earn', msg:"Your link gives friends <strong>50% off</strong> — they pay $4.97 instead of $9.95. You earn 25% recurring on every active referral. 3 active referrals today.", card:{ label:'GREEN · Copy your link', body:'vai.app/share/benw — tap to copy', btns:['Copy Link','Share via…'] } },
+  tournament: { title:'Spring Invitational · Live', msg:"Final in progress. VAI FC North leads <strong>2–1</strong> with 12 minutes remaining. AVANTI tracking live.", card:null, btns:['View Bracket','Share Update'] },
+  roster:     { title:'Roster · 16 Athletes', msg:"15 GREEN · 1 RED. Mia Rodriguez blocked — payment overdue. AVANTI has a reminder ready.", card:{ label:'⚡ YELLOW · Confirm before sending', body:'Send payment reminder to Mia\'s guardian', btns:['Send it','Later'] } },
+  standings:  { title:'Standings · #1', msg:"VAI FC North <strong>#1</strong> in Spring 2026. 19 pts, +11 GD. Saturday win guarantees top seed.", card:null, btns:['View Standings'] },
+  camp:       { title:'Summer Camp · Jul 14', msg:"14 registered. Group A assigned. Check-in opens Jul 14 at 7:45 AM. QR code issued — Mia's waiver renewal needed before camp.", card:{ label:'⚡ YELLOW · Action needed', body:'Send waiver renewal to guardian before Jul 14', btns:['Send renewal','Later'] } }
 };
 
-const viewData = {
-  default:   { tier:'Mentor', av:'M', strip:true, msg:'<strong style="color:var(--gray-primary)">AVANTI:</strong> Saturday game — Mia\'s payment is still RED. Want me to send a reminder to VAI FC North?' },
-  coach:     { tier:'VAI+', av:'C', strip:true, msg:'<strong style="color:var(--gray-primary)">AVANTI:</strong> 3 athletes not GREEN for Saturday. Mia (payment), Riley (waiver), Jordan (medical). Remind all?' },
-  mentor:    { tier:'Mentor', av:'M', strip:true, msg:'<strong style="color:var(--gray-primary)">AVANTI:</strong> Saturday Speed Camp — 14 confirmed, 2 waitlisted. Groups not assigned. Build them now?' },
-  customize: { tier:'Mentor', av:'M', strip:false }
+const assocTiles = {
+  league: `
+    <div class="tile alert" onclick="openOverlay('roster')"><div class="tile-badge b-red">1 BLOCKED</div><div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="tile-name">Roster</div><div class="tile-sub">16 athletes</div></div>
+    <div class="tile" onclick="openOverlay('standings')"><div class="tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="tile-name">Standings</div><div class="tile-sub">#1 · Spring 2026</div></div>`,
+  camp: `
+    <div class="tile"><div class="tile-badge b-date">QR READY</div><div class="tile-icon gi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><path d="M14 14h.01M14 17h.01M17 14h.01M17 17h.01"/></svg></div><div class="tile-name">My QR</div><div class="tile-sub">Jul 14 check-in</div></div>
+    <div class="tile alert" onclick="openOverlay('camp')"><div class="tile-badge b-alert">ACTION</div><div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg></div><div class="tile-name">PLAY Status</div><div class="tile-sub">Waiver expiring</div></div>`,
+  coach: `
+    <div class="tile alert"><div class="tile-badge b-red">3 BLOCKED</div><div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="tile-name">Roster</div><div class="tile-sub">16 · 3 blocked</div></div>
+    <div class="tile alert"><div class="tile-badge b-alert">3 RED</div><div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg></div><div class="tile-name">PLAY Status</div><div class="tile-sub">13 GREEN · 3 RED</div></div>
+    <div class="tile"><div class="tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="tile-name">Standings</div><div class="tile-sub">#1 · Spring 2026</div></div>
+    <div class="tile"><div class="tile-badge b-alert" style="background:rgba(247,148,30,0.1);border-color:rgba(247,148,30,0.3);color:var(--vai-orange);">● LIVE</div><div class="tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div><div class="tile-name">Tournament</div><div class="tile-sub">Spring Invitational</div></div>`
+};
+
+const stripMessages = {
+  default: '<strong style="color:var(--gray-primary)">Saturday game</strong> — Mia\'s payment is RED for VAI FC North. Send reminder?',
+  league:  '<strong style="color:var(--gray-primary)">Saturday game</strong> — Mia\'s payment is RED for VAI FC North. Send reminder?',
+  camp:    '<strong style="color:var(--gray-primary)">Summer Camp · Jul 14</strong> — Mia\'s waiver expires before camp. Send renewal now?',
+  coach:   '<strong style="color:var(--gray-primary)">3 athletes not GREEN</strong> for Saturday. Mia (payment), Riley (waiver), Jordan (medical). Remind all?',
+  customize: null
 };
 
 function setView(id, btn) {
   document.querySelectorAll('.v-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const v = viewData[id] || viewData.default;
-  document.getElementById('tier-badge').textContent = v.tier;
-  document.getElementById('avatar').textContent = v.av;
-  document.getElementById('strip-msg').innerHTML = v.msg || '';
-  document.getElementById('avanti-strip').classList.toggle('hidden', !v.strip);
   closeOverlay();
-  if (id === 'customize') enterEdit(); else exitEdit();
+
+  const strip = document.getElementById('avanti-strip');
+  const heroTile = document.getElementById('hero-tile');
+  const assocSection = document.getElementById('assoc-section');
+  const assocGrid = document.getElementById('assoc-grid');
+  const assocLbl = document.getElementById('assoc-lbl');
+  const tierBadge = document.getElementById('tier-badge');
+  const avatar = document.getElementById('avatar');
+  const stripMsg = document.getElementById('strip-msg');
+
+  // Reset
+  heroTile.style.display = 'none';
+  assocSection.style.display = 'none';
+  assocGrid.innerHTML = '';
+  strip.classList.remove('hidden');
+
+  if (id === 'default') {
+    tierBadge.textContent = 'Mentor'; tierBadge.className = 'tier-badge';
+    avatar.textContent = 'M';
+    stripMsg.innerHTML = stripMessages.default;
+  } else if (id === 'league') {
+    tierBadge.textContent = 'VAI+'; tierBadge.className = 'tier-badge g';
+    avatar.textContent = 'M';
+    stripMsg.innerHTML = stripMessages.league;
+    heroTile.style.display = 'flex';
+    document.getElementById('hero-title').textContent = 'Spring Invitational';
+    document.getElementById('hero-sub').textContent = 'VAI FC North · Final · 2–1';
+    assocSection.style.display = 'block';
+    assocLbl.textContent = 'VAI FC North';
+    assocGrid.innerHTML = assocTiles.league;
+  } else if (id === 'camp') {
+    tierBadge.textContent = 'VAI+'; tierBadge.className = 'tier-badge g';
+    avatar.textContent = 'M';
+    stripMsg.innerHTML = stripMessages.camp;
+    heroTile.style.display = 'flex';
+    document.getElementById('hero-title').textContent = 'Summer Skills Camp';
+    document.getElementById('hero-sub').textContent = 'Group A · Provo Sports Complex';
+    heroTile.querySelector('.live-pill').innerHTML = '<span style="color:var(--vai-green);font-size:9px;font-weight:700;letter-spacing:0.06em;">JUL 14 · 5 days</span>';
+    heroTile.querySelector('.tw-icon svg').style.stroke = 'var(--vai-green)';
+    heroTile.style.borderColor = 'rgba(52,211,153,0.3)';
+    assocSection.style.display = 'block';
+    assocLbl.textContent = 'Summer Camp';
+    assocGrid.innerHTML = assocTiles.camp;
+  } else if (id === 'coach') {
+    tierBadge.textContent = 'Coach'; tierBadge.className = 'tier-badge';
+    avatar.textContent = 'C';
+    stripMsg.innerHTML = stripMessages.coach;
+    heroTile.style.display = 'flex';
+    document.getElementById('hero-title').textContent = 'Spring Invitational';
+    document.getElementById('hero-sub').textContent = 'VAI FC North · Final · 2–1';
+    heroTile.querySelector('.live-pill').innerHTML = '<span style="display:flex;align-items:center;gap:3px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--vai-orange);"></span>LIVE NOW</span>';
+    assocSection.style.display = 'block';
+    assocLbl.textContent = 'VAI FC North';
+    assocGrid.innerHTML = assocTiles.coach;
+  } else if (id === 'customize') {
+    tierBadge.textContent = 'Mentor'; tierBadge.className = 'tier-badge';
+    avatar.textContent = 'M';
+    strip.classList.add('hidden');
+    enterEdit();
+    return;
+  }
+
+  exitEdit();
 }
 
 function setChip(el) {
-  document.querySelectorAll('.qa-chip').forEach(c => c.classList.remove('qa-active'));
-  el.classList.add('qa-active');
+  document.querySelectorAll('.qa-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
 }
 
 function openOverlay(type) {
-  const d = ovData[type]; if (!d) return;
+  const d = overlayData[type]; if (!d) return;
   document.getElementById('ov-title').textContent = d.title;
   document.getElementById('ov-msg').innerHTML = d.msg;
   const cc = document.getElementById('ov-card');
   if (d.card) {
-    cc.innerHTML = `<div class="ov-card" style="border-color:rgba(247,148,30,0.4);background:rgba(247,148,30,0.06)">
-      <div class="ov-card-label" style="color:var(--vai-orange)">${d.card.label}</div>
-      <div class="ov-card-body">${d.card.body}</div>
-      <div class="ov-btns">
-        <div class="ov-btn btn-confirm" onclick="closeOverlay()">${d.card.btns[0]}</div>
-        <div class="ov-btn btn-later" onclick="closeOverlay()">${d.card.btns[1]||'Later'}</div>
-      </div></div>`;
+    cc.innerHTML = `<div class="ov-card"><div class="ov-card-label">${d.card.label}</div><div class="ov-card-body">${d.card.body}</div><div class="ov-btns"><div class="ov-btn btn-yes" onclick="closeOverlay()">${d.card.btns[0]}</div><div class="ov-btn btn-no" onclick="closeOverlay()">${d.card.btns[1]||'Later'}</div></div></div>`;
   } else {
-    cc.innerHTML = d.btns ? `<div class="ov-btns">${d.btns.map(b=>`<div class="ov-btn btn-confirm" onclick="closeOverlay()">${b}</div>`).join('')}</div>` : '';
+    cc.innerHTML = d.btns ? `<div class="ov-btns">${d.btns.map(b=>`<div class="ov-btn btn-yes" onclick="closeOverlay()">${b}</div>`).join('')}</div>` : '';
   }
   document.getElementById('overlay').classList.add('open');
 }
 function closeOverlay() { document.getElementById('overlay').classList.remove('open'); }
 
 function enterEdit() {
-  document.querySelectorAll('.drag-handle').forEach(h=>h.style.display='flex');
-  document.getElementById('edit-banner').style.display='block';
-  document.getElementById('customize-btn').style.display='none';
-  document.getElementById('done-btn').style.display='block';
-  document.getElementById('grid-label').textContent='CUSTOMIZE';
-  document.getElementById('avanti-strip').classList.add('hidden');
+  document.querySelectorAll('.drag-h').forEach(h => h.style.display = 'flex');
+  document.getElementById('edit-banner').style.display = 'block';
+  document.getElementById('cust-btn').style.display = 'none';
+  document.getElementById('done-btn').style.display = 'block';
+  document.getElementById('grid-lbl').textContent = 'CUSTOMIZE';
 }
 function exitEdit() {
-  document.querySelectorAll('.drag-handle').forEach(h=>h.style.display='none');
-  document.getElementById('edit-banner').style.display='none';
-  document.getElementById('customize-btn').style.display='flex';
-  document.getElementById('done-btn').style.display='none';
-  document.getElementById('grid-label').textContent='YOUR VAI';
+  document.querySelectorAll('.drag-h').forEach(h => h.style.display = 'none');
+  document.getElementById('edit-banner').style.display = 'none';
+  document.getElementById('cust-btn').style.display = 'flex';
+  document.getElementById('done-btn').style.display = 'none';
+  document.getElementById('grid-lbl').textContent = 'YOUR VAI';
 }
 </script>
 </body>
