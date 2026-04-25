@@ -6,7 +6,7 @@
 <title>VAI — Navigation Flow (Claude Design)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -141,28 +141,51 @@ body {
 flowchart TD
     APP([VAI App]) --> HOME
 
-    HOME[🏠 Home Grid\nFeed · Groups · Schedule\nChat · Wallet · Share]
+    HOME["Home Grid
+    Groups · Schedule · Chat
+    Wallet · Share"]
 
-    HOME -->|tap tile| FEED[Feed\nActivity + Posts]
-    HOME -->|tap tile| GROUPS[Groups\nTeams + Clubs]
-    HOME -->|tap tile| SCHED[Schedule\nCalendar Phase 1]
-    HOME -->|tap tile| CHAT[Chat\nStream Chat]
-    HOME -->|tap tile| WALLET[Wallet\nBalance + Affiliate Dashboard]
-    HOME -->|tap tile| SHARE[Share\nAffiliate Link]
+    HOME -->|tap tile| FEED["Feed
+    Activity + Posts"]
+    HOME -->|tap tile| GROUPS["Groups
+    Teams + Clubs"]
+    HOME -->|tap tile| SCHED["Schedule
+    Calendar"]
+    HOME -->|tap tile| CHAT["Chat
+    Stream Chat"]
+    HOME -->|tap tile| WALLET["Wallet
+    Balance + Affiliate"]
+    HOME -->|tap tile| SHARE["Share
+    Affiliate Link"]
 
-    HOME -->|joined league| LEAGUE_TILE[League Hero Tile\nVAI FC North · Live]
-    LEAGUE_TILE -->|tap| LEAGUE_GRID[League Sub-Grid\nRoster · Standings · Tournament\nSchedule · PLAY Status · Comms]
+    HOME -->|joined league| LEAGUE_TILE["League Hero Tile
+    VAI FC North · Live"]
+    LEAGUE_TILE -->|tap| LEAGUE_GRID["League Sub-Grid
+    Roster · Standings
+    Tournament · PLAY · Comms"]
 
-    HOME -->|registered for camp| CAMP_TILE[Camp Hero Tile\nSummer Camp · Jul 14]
-    CAMP_TILE -->|tap| CAMP_GRID[Camp Sub-Grid\nMy QR · Sessions · Groups\nPLAY Status · Attendance]
+    HOME -->|registered for camp| CAMP_TILE["Camp Hero Tile
+    Summer Camp · Jul 14"]
+    CAMP_TILE -->|tap| CAMP_GRID["Camp Sub-Grid
+    My QR · Sessions
+    PLAY Status · Groups"]
 
-    HOME -->|coach role| COACH_TILE[Coach Hero Tile\nLive Tournament]
-    COACH_TILE -->|tap| COACH_GRID[Coach Sub-Grid\nRoster · PLAY Status\nSchedule · Tournament · Comms]
+    HOME -->|coach role| COACH_TILE["Coach Hero Tile
+    Live Tournament"]
+    COACH_TILE -->|tap| COACH_GRID["Coach Sub-Grid
+    Roster · PLAY Status
+    Schedule · Tournament · Comms"]
 
-    HOME -->|bottom nav| ME[Me · Profile\nPassport · PLAY Status\nSettings · Referrals]
-    HOME -->|bottom nav| AVANTI_TAB[AVANTI Tab\nAction History · Chat\nEscalation Room]
+    HOME -->|bottom nav| ME["Me · Profile
+    Passport · PLAY Status
+    Settings"]
+    HOME -->|bottom nav| AVANTI_TAB["AVANTI Tab
+    Action History · Chat
+    Escalation Room"]
 
-    WALLET -->|inside| AFFILIATE[Affiliate Dashboard\nReferral tree · Earnings\nPayout history]
+    WALLET -->|inside| AFFILIATE["Affiliate Dashboard
+    Referral tree · Earnings
+    Payouts"]
     SHARE -->|links to| AFFILIATE
 
     style HOME fill:#141418,stroke:#f7941e,color:#e8e8ec
@@ -440,12 +463,12 @@ flowchart TD
 <script>
 mermaid.initialize({
   startOnLoad: true,
-  theme: 'dark',
+  theme: 'base',
   themeVariables: {
     primaryColor: '#141418',
     primaryTextColor: '#e8e8ec',
-    primaryBorderColor: '#f7941e',
-    lineColor: '#2a2a35',
+    primaryBorderColor: '#2a2a35',
+    lineColor: '#555568',
     secondaryColor: '#0c0c10',
     tertiaryColor: '#1a1a20',
     background: '#060608',
@@ -453,9 +476,10 @@ mermaid.initialize({
     nodeBorder: '#2a2a35',
     clusterBkg: '#0c0c10',
     titleColor: '#e8e8ec',
-    edgeLabelBackground: '#141418',
-    fontFamily: 'JetBrains Mono, Courier New, monospace',
-    fontSize: '12px'
+    edgeLabelBackground: '#1a1a20',
+    fontFamily: 'DM Sans, Arial, sans-serif',
+    fontSize: '12px',
+    darkMode: true
   }
 });
 </script>
