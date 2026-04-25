@@ -113,6 +113,8 @@ body {
 .ph-ni.act .ph-ni-lbl { color:var(--orange); }
 .ph-ni.av svg { stroke:var(--green); }
 .ph-ni.av .ph-ni-lbl { color:var(--green); }
+.ph-av-pill { display:inline-flex; align-items:center; background:var(--green); border-radius:12px; padding:3px 9px; font-family:var(--fd); font-size:9px; font-weight:800; color:#000; letter-spacing:0.04em; line-height:1; }
+.ph-aind { display:flex; align-items:center; gap:4px; }
 
 /* Drill-in indicator */
 .drill-highlight { position:absolute; inset:0; border-radius:8px; border:2px solid var(--orange); animation:highlight 1.5s ease-in-out infinite; pointer-events:none; }
@@ -256,7 +258,7 @@ flowchart TD
         <svg viewBox="0 0 24 24" fill="none" width="14" height="14" style="stroke:#555568;stroke-width:1.5;stroke-linecap:round;"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </div>
       <div class="ph-strip">
-        <div class="ph-strip-lbl">✦ AVANTI</div>
+        <div class="ph-strip-lbl"><span class="ph-av-pill">AVANTI</span></div>
         <div class="ph-strip-msg">Saturday — Mia's payment is RED for VAI FC North.</div>
         <div class="ph-strip-chip">Yes, send it</div>
       </div>
@@ -301,10 +303,10 @@ flowchart TD
       <div class="ph-hdr">
         <div style="font-size:10px;color:var(--sec);cursor:pointer;">‹ Home</div>
         <div class="ph-logo" style="margin-left:8px;font-size:13px;">VAI FC North</div>
-        <div class="ph-aind" style="margin-left:auto;"><div class="ph-adot"></div>AVANTI</div>
+        <div class="ph-aind" style="margin-left:auto;"><span class="ph-av-pill">AVANTI</span></div>
       </div>
       <div class="ph-strip">
-        <div class="ph-strip-lbl">✦ AVANTI</div>
+        <div class="ph-strip-lbl"><span class="ph-av-pill">AVANTI</span></div>
         <div class="ph-strip-msg">1 athlete RED — Mia blocked for Saturday.</div>
         <div class="ph-strip-chip">Send reminder</div>
       </div>
@@ -354,7 +356,7 @@ flowchart TD
         <svg viewBox="0 0 24 24" fill="none" width="14" height="14" style="stroke:#555568;stroke-width:1.5;stroke-linecap:round;"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </div>
       <div class="ph-strip">
-        <div class="ph-strip-lbl">✦ AVANTI</div>
+        <div class="ph-strip-lbl"><span class="ph-av-pill">AVANTI</span></div>
         <div class="ph-strip-msg">3 athletes not GREEN for Saturday. Remind all?</div>
         <div class="ph-strip-chip">Remind all</div>
       </div>
@@ -392,10 +394,10 @@ flowchart TD
       <div class="ph-hdr">
         <div style="font-size:10px;color:var(--sec);cursor:pointer;">‹ Home</div>
         <div class="ph-logo" style="margin-left:8px;font-size:13px;">VAI FC North</div>
-        <div class="ph-aind" style="margin-left:auto;"><div class="ph-adot"></div>AVANTI</div>
+        <div class="ph-aind" style="margin-left:auto;"><span class="ph-av-pill">AVANTI</span></div>
       </div>
       <div class="ph-strip">
-        <div class="ph-strip-lbl">✦ AVANTI</div>
+        <div class="ph-strip-lbl"><span class="ph-av-pill">AVANTI</span></div>
         <div class="ph-strip-msg">3 athletes blocked. Mia (payment), Riley (waiver), Jordan (medical).</div>
         <div class="ph-strip-chip">Remind all 3</div>
       </div>
