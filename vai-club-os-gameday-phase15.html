@@ -234,12 +234,12 @@ td.name:hover { color: var(--orange); }
   <!-- Sidebar -->
   <div class="sidebar">
     <div class="sidebar-label">Club OS</div>
-    <div class="sidebar-item" onclick="nav('athletes')">🏃 Athletes</div>
-    <div class="sidebar-item" onclick="nav('greenline')">🟢 Green Line</div>
-    <div class="sidebar-item" onclick="nav('schedule')">📅 Schedule</div>
-    <div class="sidebar-item" onclick="nav('roster')">📋 Roster</div>
-    <div class="sidebar-item" onclick="nav('comms')">💬 Comms</div>
-    <div class="sidebar-item" onclick="nav('exceptions')">⚠️ Exceptions</div>
+    <div class="sidebar-item" id="nav-athletes" onclick="nav('athletes')">🏃 Athletes</div>
+    <div class="sidebar-item" id="nav-greenline" onclick="nav('greenline')">🟢 Green Line</div>
+    <div class="sidebar-item" id="nav-schedule" onclick="nav('schedule')">📅 Schedule</div>
+    <div class="sidebar-item" id="nav-roster" onclick="nav('roster')">📋 Roster</div>
+    <div class="sidebar-item" id="nav-comms" onclick="nav('comms')">💬 Comms</div>
+    <div class="sidebar-item" id="nav-exceptions" onclick="nav('exceptions')">⚠️ Exceptions</div>
 
     <div class="sidebar-label">Live Ops</div>
     <div class="sidebar-item active" id="nav-tournaments" onclick="nav('tournaments')">🏆 Tournaments</div>
@@ -256,6 +256,280 @@ td.name:hover { color: var(--orange); }
 
   <!-- Main -->
   <div class="main">
+
+    <!-- GREEN LINE -->
+    <div class="view" id="view-greenline">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Green Line</div>
+          <div class="page-sub">Compliance heatmap — all athletes, real-time eligibility state for VAI FC North.</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--green);">● 12 GREEN</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--yellow);">● 3 YELLOW</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--red);">● 1 RED</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Athlete</th><th>Team</th><th>Status</th><th>Blocking gate</th><th>Next event</th><th></th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="name">Mia Chen</td><td>2011 Girls Blue</td>
+              <td><span class="pill pill-red">RED</span></td>
+              <td style="color:var(--red);font-size:12px;">Payment overdue · 4 days</td>
+              <td style="font-size:12px;color:var(--textMuted);">Sat Apr 26 · 9AM</td>
+              <td><button class="btn btn-neutral" style="font-size:11px;padding:4px 8px;">Ask AVANTI</button></td>
+            </tr>
+            <tr>
+              <td class="name">Avery Patel</td><td>2011 Girls Blue</td>
+              <td><span class="pill pill-green">GREEN</span></td>
+              <td style="color:var(--textMuted);font-size:12px;">—</td>
+              <td style="font-size:12px;color:var(--textMuted);">Sat Apr 26 · 9AM</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="name">Jordan Mills</td><td>2012 Boys Black</td>
+              <td><span class="pill" style="background:var(--yellowBg,#2A1E0A);border-color:#5C4A00;color:#FBBF24;">YELLOW</span></td>
+              <td style="color:#FBBF24;font-size:12px;">Medical expires in 7 days</td>
+              <td style="font-size:12px;color:var(--textMuted);">Sat Apr 26 · 11AM</td>
+              <td><button class="btn btn-neutral" style="font-size:11px;padding:4px 8px;">Send reminder</button></td>
+            </tr>
+            <tr>
+              <td class="name">Sam Torres</td><td>2012 Boys Black</td>
+              <td><span class="pill pill-green">GREEN</span></td>
+              <td style="color:var(--textMuted);font-size:12px;">—</td>
+              <td style="font-size:12px;color:var(--textMuted);">Sat Apr 26 · 11AM</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="name">Riley Park</td><td>2012 Boys Black</td>
+              <td><span class="pill" style="background:var(--yellowBg,#2A1E0A);border-color:#5C4A00;color:#FBBF24;">YELLOW</span></td>
+              <td style="color:#FBBF24;font-size:12px;">Waiver not signed</td>
+              <td style="font-size:12px;color:var(--textMuted);">Sat Apr 26 · 11AM</td>
+              <td><button class="btn btn-neutral" style="font-size:11px;padding:4px 8px;">Send reminder</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-3">
+        <div class="card" style="border-color:var(--greenBorder);background:var(--greenBg);">
+          <div style="font-size:32px;font-weight:900;color:var(--green);">12</div>
+          <div style="font-size:13px;color:var(--green);">GREEN — Eligible</div>
+        </div>
+        <div class="card" style="border-color:#5C4A00;background:#2A1E0A;">
+          <div style="font-size:32px;font-weight:900;color:#FBBF24;">3</div>
+          <div style="font-size:13px;color:#FBBF24;">YELLOW — Action needed</div>
+        </div>
+        <div class="card" style="border-color:var(--redBorder);background:var(--redBg);">
+          <div style="font-size:32px;font-weight:900;color:var(--red);">1</div>
+          <div style="font-size:13px;color:var(--red);">RED — Blocked</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ATHLETES -->
+    <div class="view" id="view-athletes">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Athletes</div>
+          <div class="page-sub">All athletes with active passport grants to VAI FC North.</div>
+        </div>
+        <button class="btn btn-green">+ Invite athlete</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>DOB</th><th>Sport</th><th>Passport</th><th>Green Line</th><th>Grants</th></tr></thead>
+          <tbody>
+            <tr><td class="name">Mia Chen</td><td>2011-09-17</td><td>Soccer</td><td><span class="pill pill-blue">ACTIVE</span></td><td><span class="pill pill-red">RED</span></td><td>governance · medical</td></tr>
+            <tr><td class="name">Avery Patel</td><td>2010-03-22</td><td>Soccer</td><td><span class="pill pill-blue">ACTIVE</span></td><td><span class="pill pill-green">GREEN</span></td><td>governance</td></tr>
+            <tr><td class="name">Jordan Mills</td><td>2012-07-04</td><td>Soccer</td><td><span class="pill pill-blue">ACTIVE</span></td><td><span class="pill" style="background:var(--yellowBg,#2A1E0A);border-color:#5C4A00;color:#FBBF24;">YELLOW</span></td><td>governance · medical</td></tr>
+            <tr><td class="name">Sam Torres</td><td>2012-01-15</td><td>Soccer</td><td><span class="pill pill-blue">ACTIVE</span></td><td><span class="pill pill-green">GREEN</span></td><td>governance</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="view" id="view-schedule">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Schedule</div>
+          <div class="page-sub">Weekly events, games, and practices for VAI FC North.</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-neutral">← Prev week</button>
+          <span style="padding:8px 14px;font-size:13px;font-weight:600;color:var(--textStrong);">Week of Apr 24</span>
+          <button class="btn btn-neutral">Next week →</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Event</th><th>Teams</th><th>Date / Time</th><th>Field</th><th>Ref</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Tournament Match — Final</td>
+              <td>2012 Boys Black vs TBD</td>
+              <td>Sat Apr 26 · 2:00 PM</td><td>Field A</td><td>Alex</td>
+              <td><span class="pill pill-orange">LIVE</span></td>
+            </tr>
+            <tr>
+              <td>Game</td>
+              <td>2011 Girls Blue vs City Select</td>
+              <td>Sat Apr 26 · 9:00 AM</td><td>Field 2</td><td>Alex</td>
+              <td><span class="pill pill-orange">LIVE</span></td>
+            </tr>
+            <tr>
+              <td>Practice</td>
+              <td>2011 Girls Blue</td>
+              <td>Thu Apr 24 · 5:30 PM</td><td>Field 1</td><td>—</td>
+              <td><span class="pill pill-neutral">SCHEDULED</span></td>
+            </tr>
+            <tr>
+              <td>Game</td>
+              <td>2011 Girls Blue vs FC Riverside</td>
+              <td>Wed Apr 23 · 6:00 PM</td><td>Field 1</td><td>Jordan</td>
+              <td><span class="pill pill-green">FINAL</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ROSTER -->
+    <div class="view" id="view-roster">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Roster</div>
+          <div class="page-sub">Team rosters with live Green Line status per athlete.</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select class="season-sel"><option>2011 Girls Blue</option><option>2012 Boys Black</option></select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Athlete</th><th>Position</th><th>Green Line</th><th>Blocking gate</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td><td class="name">Mia Chen</td><td>Goalkeeper</td>
+              <td><span class="pill pill-red">RED</span></td>
+              <td style="font-size:12px;color:var(--red);">Payment overdue</td>
+            </tr>
+            <tr>
+              <td>4</td><td class="name">Avery Patel</td><td>Defender</td>
+              <td><span class="pill pill-green">GREEN</span></td>
+              <td style="font-size:12px;color:var(--textMuted);">—</td>
+            </tr>
+            <tr>
+              <td>7</td><td class="name">Casey Nguyen</td><td>Midfielder</td>
+              <td><span class="pill pill-green">GREEN</span></td>
+              <td style="font-size:12px;color:var(--textMuted);">—</td>
+            </tr>
+            <tr>
+              <td>11</td><td class="name">Morgan Lee</td><td>Forward</td>
+              <td><span class="pill pill-green">GREEN</span></td>
+              <td style="font-size:12px;color:var(--textMuted);">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:14px;color:var(--red);">⚠️ 1 athlete blocked for Saturday</div>
+        <div class="card-sub">Mia Chen — payment gate RED. Resolve before kickoff or they cannot participate.</div>
+      </div>
+    </div>
+
+    <!-- COMMS -->
+    <div class="view" id="view-comms">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Comms</div>
+          <div class="page-sub">AVANTI-drafted messages and outbound communication to athletes and parents.</div>
+        </div>
+        <button class="btn btn-green">+ New message</button>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div class="card-title" style="font-size:14px;">Payment reminder — Mia Chen</div>
+            <span class="pill pill-orange">DRAFT</span>
+          </div>
+          <div class="card-sub" style="margin-bottom:12px;">"Hi, this is a reminder that Mia's installment payment is overdue. Resolve before Saturday's match to restore Green Line eligibility."</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-green" style="font-size:12px;">Send</button>
+            <button class="btn btn-neutral" style="font-size:12px;">Edit</button>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div class="card-title" style="font-size:14px;">Medical renewal — Jordan Mills</div>
+            <span class="pill pill-orange">DRAFT</span>
+          </div>
+          <div class="card-sub" style="margin-bottom:12px;">"Medical clearance for Jordan expires in 7 days. Please upload the updated physician form to VAI Passport to avoid a gate block."</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-green" style="font-size:12px;">Send</button>
+            <button class="btn btn-neutral" style="font-size:12px;">Edit</button>
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div class="card-title" style="font-size:14px;">Waiver reminder — Riley Park</div>
+            <span class="pill pill-neutral">SENT</span>
+          </div>
+          <div class="card-sub">"Season participation waiver has not been signed. Please sign via VAI mobile before the first match."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXCEPTIONS -->
+    <div class="view" id="view-exceptions">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Exceptions</div>
+          <div class="page-sub">Items AVANTI flagged for human judgment — sorted by severity.</div>
+        </div>
+        <div style="font-size:13px;color:var(--textMuted);">3 open · 0 urgent</div>
+      </div>
+
+      <div class="card" style="border-color:var(--redBorder);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div class="card-title" style="font-size:15px;">Mia Chen — same-day override request</div>
+          <span class="pill pill-red">HIGH</span>
+        </div>
+        <div class="card-sub" style="margin-bottom:12px;">Coach requested same-day participation override while payment remains open. Medical is cleared. Waiver valid 9 more days. AVANTI recommends denial until payment resolves.</div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-orange">Deny override</button>
+          <button class="btn btn-neutral">Ask AVANTI</button>
+          <button class="btn btn-neutral">View passport</button>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:#5C4A00;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div class="card-title" style="font-size:15px;">Jordan Mills — medical expiring</div>
+          <span class="pill" style="background:var(--yellowBg,#2A1E0A);border-color:#5C4A00;color:#FBBF24;">MEDIUM</span>
+        </div>
+        <div class="card-sub" style="margin-bottom:12px;">Medical clearance expires Apr 30. AVANTI sent reminder on Apr 22. No upload received. At risk of gate block before next match.</div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-neutral">Send reminder</button>
+          <button class="btn btn-neutral">Mark as resolved</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div class="card-title" style="font-size:15px;">Riley Park — waiver unsigned</div>
+          <span class="pill pill-neutral">LOW</span>
+        </div>
+        <div class="card-sub" style="margin-bottom:12px;">Season participation waiver not signed. Reminder sent Apr 22. No action taken. Currently YELLOW — will block if not resolved before first match.</div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-neutral">Send final reminder</button>
+        </div>
+      </div>
+    </div>
 
     <!-- TOURNAMENTS LIST -->
     <div class="view active" id="view-tournaments">
@@ -557,8 +831,8 @@ td.name:hover { color: var(--orange); }
 </div><!-- end layout -->
 
 <script>
-const views = ['tournaments','bracket','match','standings','leagues'];
-const sidebarMap = { tournaments:'tournaments', bracket:'tournaments', match:'tournaments', standings:'standings', leagues:'leagues' };
+const views = ['greenline','athletes','schedule','roster','comms','exceptions','tournaments','bracket','match','standings','leagues'];
+const sidebarMap = { greenline:'greenline', athletes:'athletes', schedule:'schedule', roster:'roster', comms:'comms', exceptions:'exceptions', tournaments:'tournaments', bracket:'tournaments', match:'tournaments', standings:'standings', leagues:'leagues' };
 
 function nav(id) {
   views.forEach(v => document.getElementById('view-'+v)?.classList.remove('active'));
