@@ -61,7 +61,7 @@ h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: 
 .topbar-sep { width: 1px; height: 22px; background: var(--border); }
 .topbar-context { font-size: 13px; color: var(--textMuted); }
 .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-.topbar-avanti-status { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--avanti); letter-spacing: 0.06em; }
+.topbar-avanti-status { display:inline-flex; align-items:center; background:var(--avanti); border-radius:14px; padding:4px 12px; font-size:11px; font-weight:800; color:#000; letter-spacing:0.04em; }
 .avanti-online-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--avanti); animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
 
@@ -115,10 +115,8 @@ h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: 
   gap: 14px;
 }
 
-.strip-avanti-label { font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; flex-shrink: 0; }
-.strip-avanti-label.yellow { color: var(--yellow); }
-.strip-avanti-label.purple { color: var(--avanti); }
-.strip-avanti-label.red { color: var(--red); }
+.strip-avanti-label { display:inline-flex; align-items:center; background:var(--avanti); border-radius:12px; padding:3px 10px; font-size:10px; font-weight:800; color:#000; letter-spacing:0.04em; text-transform:uppercase; line-height:1; flex-shrink:0; }
+.strip-avanti-label.yellow, .strip-avanti-label.red, .strip-avanti-label.purple { color:#000; }
 .strip-msg { font-size: 13px; color: var(--text); flex: 1; line-height: 1.4; }
 .strip-msg strong { color: var(--textStrong); }
 .strip-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
@@ -267,10 +265,7 @@ tr:hover td { background: var(--elev); }
         <div class="topbar-sep"></div>
         <div class="topbar-context" id="ctx-label">My Sessions</div>
         <div class="topbar-right">
-          <div class="topbar-avanti-status">
-            <div class="avanti-online-dot"></div>
-            AVANTI
-          </div>
+          <div class="topbar-avanti-status">AVANTI</div>
           <div style="width:1px;height:22px;background:var(--border);"></div>
           <div style="font-size:12px;color:var(--textMuted);">Marcus Johnson</div>
           <div style="width:30px;height:30px;border-radius:50%;background:var(--elev);border:1px solid var(--borderLight);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--orange);">MJ</div>
@@ -311,7 +306,7 @@ tr:hover td { background: var(--elev); }
       <!-- SCENARIO 2: Sessions · Yellow Action -->
       <div id="sc-sessions-yellow" class="scenario">
         <div class="avanti-strip yellow">
-          <span class="strip-avanti-label yellow">✦ AVANTI</span>
+          <span class="strip-avanti-label yellow">AVANTI</span>
           <span class="strip-msg"><strong>Alex Thompson</strong> has a PLAY status yellow flag — waiver expires in 6 days, before Thursday's session. Send reminder now?</span>
           <div class="strip-actions">
             <button class="strip-btn confirm" onclick="showConfirmCard()">Send Reminder</button>
@@ -359,7 +354,7 @@ tr:hover td { background: var(--elev); }
       <!-- SCENARIO 3: Tournament · Bracket Conflict -->
       <div id="sc-tournament-conflict" class="scenario">
         <div class="avanti-strip red">
-          <span class="strip-avanti-label red">✦ AVANTI</span>
+          <span class="strip-avanti-label red">AVANTI</span>
           <span class="strip-msg"><strong>Spring Invitational R2 has a bye conflict</strong> — 3 teams have no opponent. This will break the bracket if not fixed before Sunday's games. Review now?</span>
           <div class="strip-actions">
             <button class="strip-btn red-confirm">Review Bracket</button>
@@ -420,7 +415,7 @@ tr:hover td { background: var(--elev); }
       <!-- SCENARIO 4: Roster · PLAY Block -->
       <div id="sc-roster-red" class="scenario">
         <div class="avanti-strip red">
-          <span class="strip-avanti-label red">✦ AVANTI</span>
+          <span class="strip-avanti-label red">AVANTI</span>
           <span class="strip-msg"><strong>Mia Rodriguez is RED</strong> — medical clearance expired yesterday. She's on the roster for Saturday's tournament. She cannot play until cleared. Notify parent?</span>
           <div class="strip-actions">
             <button class="strip-btn red-confirm">Notify Parent</button>
@@ -472,7 +467,7 @@ tr:hover td { background: var(--elev); }
       <div id="sc-multi-intel" class="scenario">
         <div class="avanti-strip multi">
           <div class="multi-strip-header">
-            <span class="strip-avanti-label purple">✦ AVANTI</span>
+            <span class="strip-avanti-label purple">AVANTI</span>
             <span style="font-size:12px;color:var(--text);">4 items need your attention</span>
             <button style="margin-left:auto;font-size:11px;padding:4px 12px;background:transparent;border:1px solid var(--avantiBorder);color:var(--avanti);border-radius:var(--pill);cursor:pointer;">Dismiss All</button>
           </div>
