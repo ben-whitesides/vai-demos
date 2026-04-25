@@ -85,6 +85,8 @@ body {
 .b-o { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--orange); }
 .b-g { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--green); }
 .b-d { background:var(--s1); border-color:var(--border); color:var(--sec); }
+.b-plus { background:rgba(52,211,153,0.12); border-color:rgba(52,211,153,0.35); color:var(--green); }
+.ph-tile.locked { opacity:0.55; }
 
 /* Wide tile compact */
 .ph-wide { background:var(--card); border:1px solid rgba(247,148,30,0.35); border-radius:8px; padding:8px 10px; display:flex; align-items:center; gap:8px; }
@@ -223,11 +225,11 @@ flowchart TD
         <div class="ph-sec-lbl">YOUR VAI</div>
         <div class="ph-grid">
           <div class="ph-tile"><div class="ph-tile-badge b-o">3</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="ph-tile-name">Groups</div><div class="ph-tile-sub">Builder Club</div></div>
-          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">2 events</div></div>
           <div class="ph-tile"><div class="ph-tile-badge b-d">SAT</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">2 events</div></div>
           <div class="ph-tile"><div class="ph-tile-badge b-r">5</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="ph-tile-name">Chat</div><div class="ph-tile-sub">5 unread</div></div>
           <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/></svg></div><div class="ph-tile-name">Wallet</div><div class="ph-tile-sub">$247 · 3 refs</div></div>
           <div class="ph-tile"><div class="ph-tile-badge b-g">EARN</div><div class="ph-tile-icon gi"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div><div class="ph-tile-name">Share</div><div class="ph-tile-sub">Refer &amp; earn</div></div>
+          <div class="ph-tile locked"><div class="ph-tile-badge b-plus">VAI+</div><div class="ph-tile-icon xi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/><polyline points="20 8 23 11 20 14"/></svg></div><div class="ph-tile-name">Connect</div><div class="ph-tile-sub">Unlock</div></div>
         </div>
       </div>
       <div class="ph-nav">
@@ -271,9 +273,9 @@ flowchart TD
         </div>
         <div class="ph-grid">
           <div class="ph-tile"><div class="ph-tile-badge b-o">3</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="ph-tile-name">Groups</div><div class="ph-tile-sub">Builder Club</div></div>
-          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">Sat 10am</div></div>
-          <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">Sat 10am</div></div>
+          <div class="ph-tile"><div class="ph-tile-badge b-d">SAT</div><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="ph-tile-name">Schedule</div><div class="ph-tile-sub">Sat 10am</div></div>
           <div class="ph-tile"><div class="ph-tile-icon oi"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="6" width="22" height="14" rx="2"/><path d="M1 10h22"/></svg></div><div class="ph-tile-name">Wallet</div><div class="ph-tile-sub">$247</div></div>
+          <div class="ph-tile"><div class="ph-tile-badge b-g">3 ON</div><div class="ph-tile-icon gi"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/><polyline points="20 8 23 11 20 14"/></svg></div><div class="ph-tile-name">Connect</div><div class="ph-tile-sub">3 active</div></div>
         </div>
         <div class="ph-assoc"><div class="ph-assoc-line"></div><div class="ph-assoc-lbl">VAI FC North</div><div class="ph-assoc-line"></div></div>
         <div class="ph-grid">
