@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Home Screen Layout Concepts</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0C0A09; --card: #1A1614; --bgElev: #231E1B;
+  --textStrong: #F5F0EB; --text: #D4CBC4; --textMuted: #8B7E74;
+  --border: #2E2824;
+  --orange: #F7941E; --orangeBg: #2A1E0A; --orangeBorder: #5C4A15;
+  --green: #34D399; --greenBg: #0A2A1E; --greenBorder: #1A5C3A;
+  --red: #FF6B6B; --redBg: #3A0F0F; --redBorder: #5C2A2A;
+  --yellow: #FBBF24;
+  --blue: #5577DD; --blueBg: #0F1A40; --blueBorder: #2A3A70;
+  --teal: #5EEAD4; --tealBg: #0A2A28;
+  --pill: 999px;
+}
+body { background: #060504; font-family: -apple-system,'Inter',sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px 16px 48px; color: var(--textStrong); }
+h1 { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--textMuted); margin-bottom: 4px; text-align: center; }
+.subtitle { font-size: 11px; color: var(--textMuted); margin-bottom: 20px; text-align: center; }
+
+/* Concept selector */
+.concept-nav { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; max-width: 440px; }
+.c-btn { background: var(--card); border: 1px solid var(--border); color: var(--textMuted); font-size: 11px; font-weight: 600; padding: 6px 14px; border-radius: var(--pill); cursor: pointer; }
+.c-btn.active { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.concept-label { font-size: 11px; color: var(--textMuted); text-align: center; margin-bottom: 16px; max-width: 360px; line-height: 1.5; }
+
+/* Phone */
+.phone { background: #181512; border-radius: 44px; border: 1.5px solid #3A3330; box-shadow: 0 0 0 1px #1A1614, 0 32px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; width: 375px; }
+.status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px 8px; background: var(--bg); font-size: 12px; font-weight: 600; color: var(--textStrong); }
+.home-indicator { background: var(--bg); padding: 6px 0 12px; display: flex; justify-content: center; }
+.home-bar { width: 120px; height: 5px; background: var(--border); border-radius: 3px; }
+.screen-body { background: var(--bg); height: 720px; overflow-y: auto; scrollbar-width: none; }
+.screen-body::-webkit-scrollbar { display: none; }
+
+/* Shared bottom nav */
+.bottom-nav { background: var(--card); border-top: 1px solid var(--border); padding: 8px 0 16px; display: flex; justify-content: space-around; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.nav-icon { font-size: 20px; }
+.nav-label { font-size: 9px; color: var(--textMuted); letter-spacing: 0.04em; font-weight: 600; }
+.nav-label.active { color: var(--orange); }
+
+/* Shared header */
+.app-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 16px 12px; display: flex; align-items: center; justify-content: space-between; }
+.app-logo { display: flex; align-items: center; gap: 8px; }
+.logo-mark { width: 26px; height: 26px; border-radius: 7px; background: var(--orange); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 13px; color: #000; }
+.logo-text { font-size: 15px; font-weight: 800; color: var(--textStrong); letter-spacing: -0.02em; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), #C4720F); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #000; }
+
+/* --- SHARED COMPONENTS --- */
+.section-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+.chip { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: var(--pill); border: 1px solid; font-size: 12px; font-weight: 600; cursor: pointer; }
+.chip-orange { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.chip-green { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.chip-neutral { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.chip-blue { background: var(--blueBg); border-color: var(--blueBorder); color: var(--blue); }
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); display: inline-block; margin-right: 4px; }
+
+/* Feature tile grid */
+.feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.feature-tile { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+.tile-icon { font-size: 22px; }
+.tile-label { font-size: 12px; font-weight: 700; color: var(--textStrong); }
+.tile-sub { font-size: 11px; color: var(--textMuted); }
+.tile-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: var(--pill); border: 1px solid; align-self: flex-start; }
+.tile-live { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.tile-action { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+.tile-ok { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+
+/* Event row */
+.evt-row { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.evt-row:last-child { border-bottom: none; }
+.evt-time-block { width: 40px; text-align: center; flex-shrink: 0; }
+.evt-time { font-size: 11px; color: var(--orange); font-weight: 700; }
+.evt-day { font-size: 9px; color: var(--textMuted); }
+.evt-info { flex: 1; }
+.evt-name { font-size: 13px; color: var(--textStrong); font-weight: 600; }
+.evt-meta { font-size: 11px; color: var(--textMuted); }
+
+/* AVANTI chat bubble small */
+.avanti-bubble { background: var(--card); border: 1px solid var(--border); border-radius: 4px 14px 14px 14px; padding: 10px 12px; font-size: 12px; color: var(--text); line-height: 1.5; }
+.avanti-bubble strong { color: var(--textStrong); }
+.avanti-meta { font-size: 10px; color: var(--textMuted); margin-top: 4px; }
+
+/* Chat input bar variants */
+.chat-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--card); border-top: 1px solid var(--border); }
+.chat-input { flex: 1; background: var(--bgElev); border: 1px solid var(--border); border-radius: var(--pill); padding: 9px 14px; font-size: 12px; color: var(--textMuted); }
+.chat-send { width: 34px; height: 34px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+
+/* Concept screens */
+.concept { display: none; flex-direction: column; height: 100%; }
+.concept.active { display: flex; }
+
+/* Quick action row */
+.qa-row { display: flex; gap: 6px; overflow-x: auto; padding: 0 16px; scrollbar-width: none; }
+.qa-row::-webkit-scrollbar { display: none; }
+.qa-chip { background: var(--bgElev); border: 1px solid var(--border); border-radius: var(--pill); padding: 7px 12px; font-size: 11px; color: var(--textMuted); white-space: nowrap; flex-shrink: 0; }
+
+/* Stat row */
+.stat-row { display: flex; gap: 8px; }
+.stat-card { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
+.stat-num { font-size: 22px; font-weight: 900; }
+.stat-label { font-size: 10px; color: var(--textMuted); margin-top: 2px; letter-spacing: 0.04em; }
+
+/* Concepts hidden */
+</style>
+</head>
+<body>
+
+<h1>VAI — Home Screen Concepts</h1>
+<p class="subtitle">4 layout options · Toggle to compare</p>
+
+<div class="concept-nav">
+  <button class="c-btn active" onclick="show('A', this)">A · Brief + Feed</button>
+  <button class="c-btn" onclick="show('B', this)">B · Grid + Chat strip</button>
+  <button class="c-btn" onclick="show('C', this)">C · Chat dock</button>
+  <button class="c-btn" onclick="show('D', this)">D · Today card</button>
+</div>
+
+<div class="concept-label" id="concept-desc">
+  <strong>Concept A — Morning Brief + Feature Feed:</strong> AVANTI delivers a 1-2 line brief at the top (what matters today), then a scrollable feature feed below. Chat is always accessible via the bottom nav or the brief card.
+</div>
+
+<div class="phone">
+  <div class="status-bar"><span>9:41</span><div style="font-size:11px;">●●● WiFi ■■■</div></div>
+
+  <div class="screen-body">
+
+    <!-- CONCEPT A: Morning Brief + Feature Feed -->
+    <div class="concept active" id="concept-A">
+      <div class="app-header">
+        <div class="app-logo"><div class="logo-mark">V</div><div class="logo-text">VAI</div></div>
+        <div class="avatar">M</div>
+      </div>
+
+      <div style="background:var(--orangeBg);border-bottom:1px solid var(--orangeBorder);padding:12px 16px;display:flex;align-items:flex-start;gap:10px;">
+        <div style="font-size:18px;flex-shrink:0;">🏈</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;color:var(--textStrong);font-weight:600;line-height:1.5;">Saturday game — <span style="color:var(--red);">Mia's payment is overdue.</span> She's blocked until resolved.</div>
+          <div style="display:flex;gap:6px;margin-top:8px;">
+            <div class="chip chip-orange" style="font-size:11px;padding:4px 10px;">Fix this →</div>
+            <div class="chip chip-neutral" style="font-size:11px;padding:4px 10px;">Ask AVANTI</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:16px;display:flex;flex-direction:column;gap:12px;">
+
+        <!-- Next event -->
+        <div class="section-card">
+          <div style="font-size:11px;color:var(--textMuted);font-weight:700;letter-spacing:0.1em;margin-bottom:10px;">NEXT UP</div>
+          <div class="evt-row">
+            <div class="evt-time-block"><div class="evt-time">9AM</div><div class="evt-day">SAT</div></div>
+            <div class="evt-info"><div class="evt-name">Game vs City Select</div><div class="evt-meta">Field 2 · 2011 Girls Blue</div></div>
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0;"></div>
+          </div>
+          <div class="evt-row">
+            <div class="evt-time-block"><div class="evt-time">5:30</div><div class="evt-day">THU</div></div>
+            <div class="evt-info"><div class="evt-name">Practice</div><div class="evt-meta">Field 1 · Finishing patterns</div></div>
+          </div>
+        </div>
+
+        <!-- Feature tiles -->
+        <div class="feature-grid">
+          <div class="feature-tile">
+            <div class="tile-icon">🏆</div>
+            <div class="tile-label">Tournament</div>
+            <div class="tile-sub">Spring Invitational</div>
+            <div class="tile-badge tile-live">LIVE</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">🪪</div>
+            <div class="tile-label">Passport</div>
+            <div class="tile-sub">1 grant active</div>
+            <div class="tile-badge tile-action">1 ACTION</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">📋</div>
+            <div class="tile-label">Roster</div>
+            <div class="tile-sub">16 athletes</div>
+            <div class="tile-badge tile-ok">ALL GREEN</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">💰</div>
+            <div class="tile-label">Earnings</div>
+            <div class="tile-sub">$247 this month</div>
+            <div class="tile-badge tile-ok">↑ 12%</div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-num" style="color:var(--green);">12</div><div class="stat-label">GREEN</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:var(--yellow);">3</div><div class="stat-label">YELLOW</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:var(--red);">1</div><div class="stat-label">RED</div></div>
+        </div>
+
+      </div>
+
+      <div style="flex:1;"></div>
+      <div class="chat-bar">
+        <div class="chat-input">Ask AVANTI anything…</div>
+        <div class="chat-send">↑</div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label active">Home</div></div>
+        <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Schedule</div></div>
+        <div class="nav-item"><div class="nav-icon">💬</div><div class="nav-label">AVANTI</div></div>
+        <div class="nav-item"><div class="nav-icon">🏆</div><div class="nav-label">Events</div></div>
+        <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">Me</div></div>
+      </div>
+    </div>
+
+    <!-- CONCEPT B: Feature Grid + Chat strip -->
+    <div class="concept" id="concept-B">
+      <div class="app-header">
+        <div class="app-logo"><div class="logo-mark">V</div><div class="logo-text">VAI</div></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="font-size:11px;color:var(--orange);font-weight:600;">● AVANTI ONLINE</div>
+          <div class="avatar">M</div>
+        </div>
+      </div>
+
+      <!-- AVANTI message strip - persistent, compact -->
+      <div style="padding:10px 12px;background:var(--card);border-bottom:1px solid var(--border);">
+        <div class="avanti-bubble">
+          <strong>AVANTI:</strong> Saturday game — Mia's payment is still RED. Want me to send a reminder to VAI FC North?
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px;">
+          <div class="chip chip-orange" style="font-size:11px;padding:5px 10px;">Yes, send it</div>
+          <div class="chip chip-neutral" style="font-size:11px;padding:5px 10px;">Later</div>
+          <div class="chip chip-neutral" style="font-size:11px;padding:5px 10px;">Ask more →</div>
+        </div>
+      </div>
+
+      <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex:1;">
+
+        <!-- Quick actions -->
+        <div style="font-size:10px;color:var(--textMuted);font-weight:700;letter-spacing:0.1em;">QUICK ACTIONS</div>
+        <div class="qa-row" style="padding:0;">
+          <div class="qa-chip">📅 Schedule</div>
+          <div class="qa-chip">🏆 Tournaments</div>
+          <div class="qa-chip">📋 Roster</div>
+          <div class="qa-chip">🪪 Passport</div>
+          <div class="qa-chip">⛺ Camps</div>
+          <div class="qa-chip">💰 Wallet</div>
+        </div>
+
+        <!-- Feature grid -->
+        <div class="feature-grid">
+          <div class="feature-tile">
+            <div class="tile-icon">📅</div>
+            <div class="tile-label">Schedule</div>
+            <div class="tile-sub">2 events this week</div>
+          </div>
+          <div class="feature-tile" style="border-color:var(--orangeBorder);">
+            <div class="tile-icon">🏆</div>
+            <div class="tile-label">Tournament</div>
+            <div class="tile-sub">Spring Invitational</div>
+            <div class="tile-badge tile-live">LIVE</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">⛺</div>
+            <div class="tile-label">Summer Camp</div>
+            <div class="tile-sub">14 registered</div>
+            <div class="tile-badge tile-ok">JUL 14</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">🎯</div>
+            <div class="tile-label">Tryouts</div>
+            <div class="tile-sub">Fall roster open</div>
+            <div class="tile-badge" style="background:var(--tealBg);border-color:#1A5C58;color:var(--teal);">OPEN</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">📊</div>
+            <div class="tile-label">Standings</div>
+            <div class="tile-sub">#1 · Spring 2026</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">💰</div>
+            <div class="tile-label">Wallet</div>
+            <div class="tile-sub">$247 earned</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label active">Home</div></div>
+        <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Schedule</div></div>
+        <div class="nav-item"><div class="nav-icon">💬</div><div class="nav-label">AVANTI</div></div>
+        <div class="nav-item"><div class="nav-icon">🏆</div><div class="nav-label">Events</div></div>
+        <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">Me</div></div>
+      </div>
+    </div>
+
+    <!-- CONCEPT C: Chat Dock (half/half expandable) -->
+    <div class="concept" id="concept-C">
+      <div class="app-header">
+        <div class="app-logo"><div class="logo-mark">V</div><div class="logo-text">VAI</div></div>
+        <div class="avatar">M</div>
+      </div>
+
+      <!-- Top half: feature cards scrollable -->
+      <div style="padding:12px 16px;display:flex;flex-direction:column;gap:10px;flex:1;overflow-y:auto;border-bottom:2px solid var(--border);">
+        <div style="font-size:10px;color:var(--textMuted);font-weight:700;letter-spacing:0.1em;">YOUR VAI</div>
+
+        <!-- Live event banner -->
+        <div style="background:var(--orangeBg);border:1px solid var(--orangeBorder);border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:10px;color:var(--orange);font-weight:700;letter-spacing:0.1em;"><span class="live-dot"></span>LIVE NOW</div>
+            <div style="font-size:14px;color:var(--textStrong);font-weight:700;margin-top:2px;">Spring Invitational Final</div>
+            <div style="font-size:11px;color:var(--textMuted);">2012 Boys Black · 2 – 1</div>
+          </div>
+          <div style="font-size:28px;">🏆</div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-tile">
+            <div class="tile-icon">📅</div>
+            <div class="tile-label">Schedule</div>
+            <div class="tile-sub">Sat 9AM · Game</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">⛺</div>
+            <div class="tile-label">Camp</div>
+            <div class="tile-sub">Jul 14 · 14 reg'd</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">🎯</div>
+            <div class="tile-label">Tryouts</div>
+            <div class="tile-sub">Aug 10 · Open</div>
+          </div>
+          <div class="feature-tile">
+            <div class="tile-icon">💰</div>
+            <div class="tile-label">Earnings</div>
+            <div class="tile-sub">$247 this month</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom dock: AVANTI always present -->
+      <div style="background:var(--card);padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+          <div style="width:6px;height:6px;border-radius:50%;background:var(--green);"></div>
+          <div style="font-size:10px;color:var(--green);font-weight:700;letter-spacing:0.08em;">AVANTI</div>
+          <div style="font-size:10px;color:var(--textMuted);">· Saturday game has a compliance issue</div>
+        </div>
+        <div class="avanti-bubble" style="font-size:12px;">
+          Mia's payment gate is RED. Want me to handle the reminder to the club?
+        </div>
+        <div style="display:flex;gap:6px;">
+          <div class="chip chip-orange" style="font-size:11px;padding:5px 10px;flex:1;justify-content:center;">Yes, send it</div>
+          <div class="chip chip-neutral" style="font-size:11px;padding:5px 10px;">Later</div>
+        </div>
+        <div class="chat-bar" style="padding:0;background:transparent;border:none;">
+          <div class="chat-input">Ask AVANTI…</div>
+          <div class="chat-send">↑</div>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label active">Home</div></div>
+        <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Schedule</div></div>
+        <div class="nav-item"><div class="nav-icon">🏆</div><div class="nav-label">Events</div></div>
+        <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">Me</div></div>
+      </div>
+    </div>
+
+    <!-- CONCEPT D: Today Card — AVANTI is the card -->
+    <div class="concept" id="concept-D">
+      <div class="app-header">
+        <div class="app-logo"><div class="logo-mark">V</div><div class="logo-text">VAI</div></div>
+        <div class="avatar">M</div>
+      </div>
+
+      <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;flex:1;">
+
+        <!-- Today card — AVANTI authored -->
+        <div style="background:linear-gradient(135deg,#1A1614,#231E1B);border:1px solid var(--border);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:22px;height:22px;border-radius:6px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#000;">A</div>
+            <div style="font-size:11px;color:var(--textMuted);font-weight:600;">AVANTI · Your day, Apr 24</div>
+          </div>
+          <div style="font-size:14px;color:var(--textStrong);line-height:1.6;">
+            You have <strong>2 events this week.</strong> Saturday's game has <strong style="color:var(--red);">1 compliance issue</strong> — Mia Chen needs a payment resolved. Everything else is green.
+          </div>
+          <div style="height:1px;background:var(--border);"></div>
+          <!-- Inline action -->
+          <div>
+            <div style="font-size:10px;color:var(--yellow);font-weight:700;letter-spacing:0.1em;margin-bottom:6px;">⚡ ACTION READY</div>
+            <div style="font-size:13px;color:var(--textStrong);font-weight:600;">Send payment reminder → VAI FC North</div>
+            <div style="font-size:12px;color:var(--textMuted);margin:4px 0 8px;">1 message · 1 contact · cannot be undone</div>
+            <div style="display:flex;gap:6px;">
+              <div class="chip chip-orange" style="font-size:12px;">Confirm & send</div>
+              <div class="chip chip-neutral" style="font-size:12px;">Skip</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature scroll row -->
+        <div style="font-size:10px;color:var(--textMuted);font-weight:700;letter-spacing:0.1em;">FEATURES</div>
+        <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;">
+          <div class="feature-tile" style="min-width:110px;flex-shrink:0;"><div class="tile-icon">📅</div><div class="tile-label">Schedule</div><div class="tile-sub">2 this week</div></div>
+          <div class="feature-tile" style="min-width:110px;flex-shrink:0;border-color:var(--orangeBorder);"><div class="tile-icon">🏆</div><div class="tile-label">Tournament</div><div class="tile-badge tile-live">LIVE</div></div>
+          <div class="feature-tile" style="min-width:110px;flex-shrink:0;"><div class="tile-icon">⛺</div><div class="tile-label">Camp</div><div class="tile-sub">Jul 14</div></div>
+          <div class="feature-tile" style="min-width:110px;flex-shrink:0;"><div class="tile-icon">🎯</div><div class="tile-label">Tryouts</div><div class="tile-sub">Aug 10</div></div>
+          <div class="feature-tile" style="min-width:110px;flex-shrink:0;"><div class="tile-icon">📊</div><div class="tile-label">Standings</div><div class="tile-sub">#1</div></div>
+          <div class="feature-tile" style="min-width:110px;flex-shrink:0;"><div class="tile-icon">💰</div><div class="tile-label">Wallet</div><div class="tile-sub">$247</div></div>
+        </div>
+
+        <!-- Next event -->
+        <div class="section-card">
+          <div style="font-size:10px;color:var(--textMuted);font-weight:700;letter-spacing:0.1em;margin-bottom:10px;">NEXT EVENT</div>
+          <div class="evt-row" style="border:none;padding:0;">
+            <div class="evt-time-block"><div class="evt-time">9AM</div><div class="evt-day">SAT</div></div>
+            <div class="evt-info"><div class="evt-name">Game vs City Select</div><div class="evt-meta">Field 2 · 2011 Girls Blue</div></div>
+            <div class="chip chip-orange" style="font-size:11px;padding:4px 10px;">View →</div>
+          </div>
+        </div>
+
+        <div class="chat-bar" style="border-radius:12px;border:1px solid var(--border);background:var(--card);">
+          <div class="chat-input">Ask AVANTI…</div>
+          <div class="chat-send">↑</div>
+        </div>
+
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label active">Home</div></div>
+        <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Schedule</div></div>
+        <div class="nav-item"><div class="nav-icon">🏆</div><div class="nav-label">Events</div></div>
+        <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">Me</div></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="home-indicator"><div class="home-bar"></div></div>
+</div>
+
+<script>
+const descs = {
+  A: '<strong>Concept A — Morning Brief + Feature Feed:</strong> AVANTI alert banner at top (only shows when something needs attention). Feature tiles below. Chat input always at bottom. Cleanest separation — features are browsable, AVANTI is surfaced when relevant.',
+  B: '<strong>Concept B — Feature Grid + Persistent AVANTI Strip:</strong> AVANTI lives as a persistent message strip below the header — always visible, always proposing the next action. Feature grid is the body. Quick action chips for fast navigation.',
+  C: '<strong>Concept C — Split Dock:</strong> Top half = scrollable feature area. Bottom dock = AVANTI always present with current context + input. The dock expands to full chat when tapped. Clearest visual separation of features vs AI layer.',
+  D: '<strong>Concept D — Today Card:</strong> AVANTI authors a "today" card at the top — what matters, one action ready to confirm. Features scroll horizontally below. Next event prominent. Chat input inline at bottom. Most like a daily brief.'
+};
+
+function show(id, btn) {
+  document.querySelectorAll('.concept').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.c-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('concept-' + id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('concept-desc').innerHTML = descs[id];
+}
+</script>
+</body>
+</html>
