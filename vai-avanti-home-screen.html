@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — AVANTI Home Screen (AI-Native)</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0C0A09; --card: #1A1614; --bgElev: #231E1B;
+  --textStrong: #F5F0EB; --text: #D4CBC4; --textMuted: #8B7E74;
+  --border: #2E2824;
+  --orange: #F7941E; --orangeBg: #2A1E0A; --orangeBorder: #5C4A15;
+  --green: #34D399; --greenBg: #0A2A1E; --greenBorder: #1A5C3A;
+  --red: #FF6B6B; --redBg: #3A0F0F; --redBorder: #5C2A2A;
+  --yellow: #FBBF24; --yellowBg: #2A1E0A; --yellowBorder: #5C4A00;
+  --blue: #5577DD; --blueBg: #0F1A40; --blueBorder: #2A3A70;
+  --pill: 999px; --r: 16px;
+}
+body { background: #060504; font-family: -apple-system,'Inter',sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px 16px 48px; color: var(--textStrong); }
+
+h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--textMuted); margin-bottom: 4px; text-align: center; }
+.subtitle { font-size: 11px; color: var(--textMuted); margin-bottom: 24px; text-align: center; }
+
+/* Tier switcher */
+.tier-nav { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+.tier-btn { background: var(--card); border: 1px solid var(--border); color: var(--textMuted); font-size: 11px; font-weight: 600; letter-spacing: 0.06em; padding: 6px 14px; border-radius: var(--pill); cursor: pointer; transition: all 0.15s; }
+.tier-btn:hover { border-color: var(--orange); color: var(--orange); }
+.tier-btn.active { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+
+/* Phone */
+.phone-frame { background: #181512; border-radius: 44px; border: 1.5px solid #3A3330; box-shadow: 0 0 0 1px #1A1614, 0 32px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; width: 375px; }
+.status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px 8px; background: var(--bg); font-size: 12px; font-weight: 600; color: var(--textStrong); }
+
+/* AVANTI header bar */
+.avanti-header {
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  padding: 10px 16px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.avanti-logo { display: flex; align-items: center; gap: 8px; }
+.avanti-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--orange), #C4720F); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: #000; }
+.avanti-name { font-size: 15px; font-weight: 700; color: var(--textStrong); }
+.avanti-status { font-size: 10px; color: var(--green); letter-spacing: 0.08em; font-weight: 600; }
+.header-right { display: flex; align-items: center; gap: 8px; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), #C4720F); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #000; }
+.tier-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 7px; border-radius: var(--pill); border: 1px solid; }
+.tier-free { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.tier-plus { background: var(--blueBg); border-color: var(--blueBorder); color: var(--blue); }
+.tier-mentor { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+
+/* Screen body */
+.screen-body { background: var(--bg); height: 720px; overflow-y: auto; display: flex; flex-direction: column; scrollbar-width: none; }
+.screen-body::-webkit-scrollbar { display: none; }
+
+/* Context strip */
+.context-strip { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+.gl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.gl-red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+.gl-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.gl-yellow { background: var(--yellow); }
+.context-text { font-size: 12px; color: var(--textMuted); flex: 1; }
+.context-text strong { color: var(--textStrong); }
+
+/* Chat area */
+.chat-area { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
+
+/* Messages */
+.msg { display: flex; flex-direction: column; gap: 2px; }
+.msg.avanti { align-items: flex-start; }
+.msg.user { align-items: flex-end; }
+.bubble { max-width: 82%; padding: 11px 14px; border-radius: 18px; font-size: 13px; line-height: 1.55; }
+.bubble.avanti { background: var(--card); border: 1px solid var(--border); color: var(--text); border-radius: 4px 18px 18px 18px; }
+.bubble.user { background: var(--orange); color: #fff; border-radius: 18px 18px 4px 18px; }
+.bubble.avanti.alert { border-color: var(--redBorder); background: var(--redBg); }
+.bubble.avanti.success { border-color: var(--greenBorder); background: var(--greenBg); }
+.msg-time { font-size: 10px; color: var(--textMuted); margin: 0 4px; }
+
+/* Action cards */
+.action-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; max-width: 82%; }
+.action-card.yellow { border-color: var(--yellowBorder); }
+.action-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--textMuted); text-transform: uppercase; }
+.action-card-label.yellow { color: var(--yellow); }
+.action-card-label.green { color: var(--green); }
+.action-title { font-size: 13px; font-weight: 600; color: var(--textStrong); }
+.action-body { font-size: 12px; color: var(--textMuted); line-height: 1.5; }
+.action-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.action-btn { padding: 6px 12px; border-radius: var(--pill); border: 1px solid; font-size: 12px; font-weight: 600; cursor: pointer; }
+.action-btn.confirm { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.action-btn.dismiss { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.action-btn.upgrade { background: var(--blueBg); border-color: var(--blueBorder); color: var(--blue); }
+.risk-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; padding: 2px 8px; border-radius: var(--pill); align-self: flex-start; }
+.risk-green { background: var(--greenBg); border: 1px solid var(--greenBorder); color: var(--green); }
+.risk-yellow { background: var(--yellowBg); border: 1px solid var(--yellowBorder); color: var(--yellow); }
+
+/* Quick chips */
+.quick-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 16px 4px; }
+.q-chip { background: var(--bgElev); border: 1px solid var(--border); border-radius: var(--pill); padding: 6px 12px; font-size: 12px; color: var(--textMuted); cursor: pointer; }
+.q-chip:hover { border-color: var(--orange); color: var(--orange); }
+.q-chip.locked { opacity: 0.4; cursor: not-allowed; }
+
+/* Bottom bar */
+.bottom-bar { background: var(--card); border-top: 1px solid var(--border); padding: 10px 12px 8px; display: flex; align-items: center; gap: 8px; }
+.chat-input { flex: 1; background: var(--bgElev); border: 1px solid var(--border); border-radius: var(--pill); padding: 9px 14px; font-size: 13px; color: var(--textMuted); }
+.send-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; cursor: pointer; }
+
+/* Nav tabs */
+.bottom-nav { background: var(--card); border-top: 1px solid var(--border); padding: 8px 0 16px; display: flex; justify-content: space-around; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+.nav-icon { font-size: 20px; }
+.nav-label { font-size: 9px; color: var(--textMuted); letter-spacing: 0.05em; font-weight: 600; }
+.nav-item.active .nav-label { color: var(--orange); }
+
+/* Upsell banner */
+.upsell { background: var(--blueBg); border: 1px solid var(--blueBorder); border-radius: 12px; padding: 10px 14px; margin: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.upsell-text { font-size: 12px; color: var(--blue); flex: 1; }
+.upsell-btn { background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: var(--pill); border: none; cursor: pointer; white-space: nowrap; }
+
+/* Screens */
+.screen { display: none; flex-direction: column; height: 100%; }
+.screen.active { display: flex; }
+
+/* Home indicator */
+.home-indicator { background: var(--bg); padding: 6px 0 10px; display: flex; justify-content: center; }
+.home-bar { width: 120px; height: 5px; background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<h1>VAI — AVANTI Home Screen</h1>
+<p class="subtitle">AI-native home · Tier-gated actions · Green / Yellow / Red risk model</p>
+
+<div class="tier-nav">
+  <button class="tier-btn active" onclick="setTier('free')">Free</button>
+  <button class="tier-btn" onclick="setTier('plus')">VAI+ $9.95</button>
+  <button class="tier-btn" onclick="setTier('mentor')">Mentor $99.95</button>
+</div>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div style="display:flex;gap:5px;font-size:11px;">●●● WiFi ■■■</div>
+  </div>
+
+  <div class="avanti-header">
+    <div class="avanti-logo">
+      <div class="avanti-mark">A</div>
+      <div>
+        <div class="avanti-name">AVANTI</div>
+        <div class="avanti-status">● ONLINE</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="tier-badge tier-free" id="header-tier-badge">FREE</div>
+      <div class="avatar">M</div>
+    </div>
+  </div>
+
+  <div class="screen-body">
+
+    <!-- Context strip: Green Line status -->
+    <div class="context-strip" id="context-strip">
+      <div class="gl-dot gl-red" id="gl-dot"></div>
+      <div class="context-text" id="context-text"><strong>Mia Chen</strong> — RED · VAI FC North</div>
+    </div>
+
+    <!-- FREE tier -->
+    <div class="screen active" id="screen-free">
+      <div class="chat-area">
+
+        <div class="msg avanti">
+          <div class="bubble avanti alert">
+            Hey Mia — I need your attention before Saturday.<br><br>
+            <strong>VAI FC North</strong> has blocked your participation. Your payment installment is <strong>4 days overdue</strong>. Until it's resolved, you cannot practice or play.<br><br>
+            I'll walk you through it.
+          </div>
+          <div class="msg-time">AVANTI · just now</div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-card-label">AVANTI FOUND</div>
+          <div class="action-title">🔴 Payment gate — overdue</div>
+          <div class="action-body">Installment 2 is 4 days late. Green Line will recompute automatically once payment is received by VAI FC North.</div>
+          <div class="risk-badge risk-green">GREEN · read only</div>
+        </div>
+
+        <div class="msg avanti">
+          <div class="bubble avanti">
+            To resolve this, you need to contact VAI FC North directly or pay through the club's payment link. I can show you their contact info.<br><br>
+            <span style="color:var(--textMuted);font-size:11px;">⬆️ Upgrade to VAI+ to let me draft and send the message for you.</span>
+          </div>
+        </div>
+
+        <div class="upsell">
+          <div class="upsell-text">VAI+ lets AVANTI take action — send reminders, draft messages, and track your Green Line in real time.</div>
+          <button class="upsell-btn">Upgrade · $9.95</button>
+        </div>
+
+        <div class="msg user">
+          <div class="bubble user">What else is missing before Saturday?</div>
+        </div>
+
+        <div class="msg avanti">
+          <div class="bubble avanti">
+            Here's your full checklist for Saturday:<br><br>
+            🔴 Payment — overdue (blocking)<br>
+            ✅ Waiver — signed, valid<br>
+            ✅ Medical — cleared<br><br>
+            Fix the payment and you're good to go.
+          </div>
+          <div class="msg-time">AVANTI · just now</div>
+        </div>
+
+      </div>
+
+      <div class="quick-chips">
+        <div class="q-chip">What's my Green Line?</div>
+        <div class="q-chip">Next event?</div>
+        <div class="q-chip locked">📤 Send reminder (VAI+)</div>
+        <div class="q-chip locked">📅 Reschedule (Mentor)</div>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="chat-input">Ask AVANTI…</div>
+        <div class="send-btn">↑</div>
+      </div>
+    </div>
+
+    <!-- VAI+ tier -->
+    <div class="screen" id="screen-plus">
+      <div class="chat-area">
+
+        <div class="msg avanti">
+          <div class="bubble avanti alert">
+            Morning Mia. Before Saturday — Mia's payment gate is still RED at VAI FC North. 4 days overdue.<br><br>
+            I've drafted a payment reminder to send to the club. Want me to send it?
+          </div>
+          <div class="msg-time">AVANTI · just now</div>
+        </div>
+
+        <div class="action-card yellow">
+          <div class="action-card-label yellow">⚡ YELLOW ACTION · Requires your confirmation</div>
+          <div class="action-title">Send payment reminder to VAI FC North</div>
+          <div class="action-body">
+            <strong>To:</strong> admin@vaifcnorth.com<br>
+            <strong>Message:</strong> "Hi — this is a reminder that Mia Chen's installment payment is overdue. Please advise on the fastest way to resolve."<br><br>
+            <strong>Affects:</strong> 1 contact · 1 message<br>
+            <strong>Undoable:</strong> No
+          </div>
+          <div class="risk-badge risk-yellow">YELLOW · confirm required</div>
+          <div class="action-btns">
+            <div class="action-btn confirm">✓ Send it</div>
+            <div class="action-btn dismiss">Edit first</div>
+            <div class="action-btn dismiss">Dismiss</div>
+          </div>
+        </div>
+
+        <div class="msg avanti">
+          <div class="bubble avanti success">
+            ✅ Reminder sent to VAI FC North at 9:41 AM. I'll notify you when Mia's Green Line updates.
+          </div>
+          <div class="msg-time">AVANTI · just now</div>
+        </div>
+
+        <div class="msg user">
+          <div class="bubble user">Notify me when she goes GREEN</div>
+        </div>
+
+        <div class="msg avanti">
+          <div class="bubble avanti">
+            Done — I'll push you a notification the moment Mia's Green Line recomputes to GREEN. Usually within minutes of payment confirmation.
+          </div>
+        </div>
+
+      </div>
+
+      <div class="quick-chips">
+        <div class="q-chip">Who's blocking on my roster?</div>
+        <div class="q-chip">Send waiver reminder</div>
+        <div class="q-chip">Next event?</div>
+        <div class="q-chip locked">📅 Create session (Mentor)</div>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="chat-input">Ask AVANTI…</div>
+        <div class="send-btn">↑</div>
+      </div>
+    </div>
+
+    <!-- Mentor tier -->
+    <div class="screen" id="screen-mentor">
+      <div class="chat-area">
+
+        <div class="msg avanti">
+          <div class="bubble avanti">
+            Morning. Here's your week:<br><br>
+            <strong>Saturday · Speed Camp</strong> — 14 confirmed, 2 waitlist, 1 unsigned waiver<br>
+            <strong>Wednesday · Conditioning</strong> — 8 confirmed<br><br>
+            One athlete (Riley Park) hasn't signed Saturday's waiver. Want me to send a reminder?
+          </div>
+          <div class="msg-time">AVANTI · 9:41 AM</div>
+        </div>
+
+        <div class="msg user">
+          <div class="bubble user">Send the waiver reminder and build groups for Saturday</div>
+        </div>
+
+        <div class="action-card yellow">
+          <div class="action-card-label yellow">⚡ YELLOW · 2 actions queued</div>
+          <div class="action-title">1 — Send waiver reminder to Riley Park</div>
+          <div class="action-body">Draft: "Hi Riley, please sign Saturday's participation waiver in the VAI app before camp. Link attached."<br><br><strong>Affects:</strong> 1 athlete · 1 push notification<br><strong>Undoable:</strong> No</div>
+          <div class="risk-badge risk-yellow">YELLOW · confirm required</div>
+          <div class="action-btns">
+            <div class="action-btn confirm">✓ Send</div>
+            <div class="action-btn dismiss">Skip</div>
+          </div>
+        </div>
+
+        <div class="action-card yellow">
+          <div class="action-card-label yellow">⚡ YELLOW · Group assignment</div>
+          <div class="action-title">2 — Build 3 groups for Saturday Speed Camp</div>
+          <div class="action-body">
+            <strong>Group A (5):</strong> Mia, Avery, Jordan, Sam, Casey<br>
+            <strong>Group B (5):</strong> Riley, Morgan, Alex, Jordan M., Kai<br>
+            <strong>Group C (4):</strong> Drew, Taylor, Sage, Quinn<br><br>
+            <strong>Sorted by:</strong> age group · position<br>
+            <strong>Undoable:</strong> Yes — you can reassign
+          </div>
+          <div class="risk-badge risk-yellow">YELLOW · confirm required</div>
+          <div class="action-btns">
+            <div class="action-btn confirm">✓ Confirm groups</div>
+            <div class="action-btn dismiss">Adjust</div>
+          </div>
+        </div>
+
+        <div class="msg user">
+          <div class="bubble user">Create a 3-day camp for July</div>
+        </div>
+
+        <div class="action-card yellow">
+          <div class="action-card-label yellow">⚡ YELLOW · New camp draft</div>
+          <div class="action-title">Elite Summer Camp — July 2026</div>
+          <div class="action-body">
+            <strong>Dates:</strong> Jul 14–16 (3 days)<br>
+            <strong>Max athletes:</strong> 80<br>
+            <strong>Price:</strong> $149 / athlete<br>
+            <strong>Waivers:</strong> season + camp-specific<br>
+            <strong>Format:</strong> daily sessions + Day 3 tournament<br><br>
+            Registration page ready to publish once confirmed.
+          </div>
+          <div class="risk-badge risk-yellow">YELLOW · confirm to publish</div>
+          <div class="action-btns">
+            <div class="action-btn confirm">✓ Publish camp</div>
+            <div class="action-btn dismiss">Edit details</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="quick-chips">
+        <div class="q-chip">Who's booked Saturday?</div>
+        <div class="q-chip">Missing waivers?</div>
+        <div class="q-chip">Camp attendance</div>
+        <div class="q-chip">My earnings</div>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="chat-input">Ask AVANTI…</div>
+        <div class="send-btn">↑</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon">💬</div>
+      <div class="nav-label" style="color:var(--orange);">AVANTI</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">🪪</div>
+      <div class="nav-label">Passport</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">📅</div>
+      <div class="nav-label">Schedule</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">📋</div>
+      <div class="nav-label">Roster</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">Settings</div>
+    </div>
+  </div>
+
+  <div class="home-indicator"><div class="home-bar"></div></div>
+</div>
+
+<script>
+function setTier(tier) {
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('screen-' + tier).classList.add('active');
+
+  const badge = document.getElementById('header-tier-badge');
+  const dot = document.getElementById('gl-dot');
+  const ctx = document.getElementById('context-text');
+
+  if (tier === 'free') {
+    badge.textContent = 'FREE';
+    badge.className = 'tier-badge tier-free';
+    dot.className = 'gl-dot gl-red';
+    ctx.innerHTML = '<strong>Mia Chen</strong> — RED · VAI FC North';
+  } else if (tier === 'plus') {
+    badge.textContent = 'VAI+';
+    badge.className = 'tier-badge tier-plus';
+    dot.className = 'gl-dot gl-red';
+    ctx.innerHTML = '<strong>Mia Chen</strong> — RED · VAI FC North';
+  } else {
+    badge.textContent = 'MENTOR';
+    badge.className = 'tier-badge tier-mentor';
+    dot.className = 'gl-dot gl-green';
+    ctx.innerHTML = '<strong>Coach Dana</strong> — VAI FC North · 16 athletes';
+  }
+}
+</script>
+</body>
+</html>
