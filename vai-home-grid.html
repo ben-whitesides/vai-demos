@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Dynamic Grid Home</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0C0A09; --card: #1A1614; --bgElev: #231E1B;
+  --textStrong: #F5F0EB; --text: #D4CBC4; --textMuted: #8B7E74;
+  --border: #2E2824;
+  --orange: #F7941E; --orangeBg: #2A1E0A; --orangeBorder: #5C4A15;
+  --green: #34D399; --greenBg: #0A2A1E; --greenBorder: #1A5C3A;
+  --red: #FF6B6B; --redBg: #3A0F0F; --redBorder: #5C2A2A;
+  --yellow: #FBBF24;
+  --blue: #5577DD; --blueBg: #0F1A40; --blueBorder: #2A3A70;
+  --teal: #5EEAD4; --tealBg: #0A2A28; --tealBorder: #1A5C58;
+  --pill: 999px;
+}
+body { background: #060504; font-family: -apple-system,'Inter',sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px 16px 48px; color: var(--textStrong); }
+h1 { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--textMuted); margin-bottom: 4px; text-align: center; }
+.subtitle { font-size: 11px; color: var(--textMuted); margin-bottom: 20px; text-align: center; }
+
+/* Tier switcher */
+.tier-nav { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+.t-btn { background: var(--card); border: 1px solid var(--border); color: var(--textMuted); font-size: 11px; font-weight: 600; padding: 6px 14px; border-radius: var(--pill); cursor: pointer; }
+.t-btn.active { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+
+/* Phone */
+.phone { background: #181512; border-radius: 44px; border: 1.5px solid #3A3330; box-shadow: 0 0 0 1px #1A1614, 0 32px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; width: 375px; position: relative; }
+.status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px 8px; background: var(--bg); font-size: 12px; font-weight: 600; color: var(--textStrong); }
+.home-indicator { background: var(--bg); padding: 6px 0 12px; display: flex; justify-content: center; }
+.home-bar { width: 120px; height: 5px; background: var(--border); border-radius: 3px; }
+
+/* App header */
+.app-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 16px 12px; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--orange); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; color: #000; }
+.logo-text { font-size: 16px; font-weight: 800; color: var(--textStrong); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), #C4720F); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #000; }
+
+/* AVANTI strip */
+.avanti-strip { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; flex-direction: column; gap: 9px; }
+.strip-msg { font-size: 13px; color: var(--textStrong); line-height: 1.5; }
+.strip-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.s-chip { padding: 6px 13px; border-radius: var(--pill); border: 1px solid; font-size: 12px; font-weight: 600; cursor: pointer; }
+.s-yes { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.s-no { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.strip-meta { font-size: 10px; color: var(--textMuted); display: flex; justify-content: space-between; }
+
+/* Scrollable grid body */
+.grid-body { overflow-y: auto; max-height: 580px; scrollbar-width: none; background: var(--bg); padding: 12px 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.grid-body::-webkit-scrollbar { display: none; }
+
+/* Section labels */
+.section-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+.s-label { font-size: 10px; color: var(--textMuted); font-weight: 700; letter-spacing: 0.1em; }
+.s-action { font-size: 11px; color: var(--textMuted); cursor: pointer; }
+.s-action.edit { color: var(--orange); }
+
+/* Grid layouts */
+.grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.grid-3x3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+/* Feature tile base */
+.tile {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 14px 12px; display: flex; flex-direction: column; gap: 5px;
+  cursor: pointer; transition: all 0.15s; position: relative; user-select: none;
+}
+.tile:active { transform: scale(0.96); }
+.tile.live { border-color: var(--orangeBorder); }
+.tile.alert { border-color: var(--redBorder); }
+.tile.highlight { border-color: var(--tealBorder); }
+.tile.locked { opacity: 0.45; cursor: default; }
+
+/* Tile sizes */
+.tile-sm { padding: 11px 10px; border-radius: 14px; gap: 3px; } /* 3x3 */
+.tile-wide { grid-column: span 2; flex-direction: row; align-items: center; gap: 12px; padding: 14px; }
+.tile-wide .tile-icon { margin-bottom: 0; flex-shrink: 0; }
+.tile-wide .tile-body { flex: 1; }
+
+.tile-icon { font-size: 24px; margin-bottom: 2px; }
+.tile-sm .tile-icon { font-size: 20px; margin-bottom: 1px; }
+.tile-name { font-size: 13px; font-weight: 700; color: var(--textStrong); line-height: 1.2; }
+.tile-sm .tile-name { font-size: 12px; }
+.tile-sub { font-size: 11px; color: var(--textMuted); }
+.tile-sm .tile-sub { font-size: 10px; }
+.tile-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.07em; padding: 2px 7px; border-radius: var(--pill); border: 1px solid; align-self: flex-start; margin-top: 2px; }
+.b-live { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.b-alert { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+.b-ok { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
+.b-open { background: var(--tealBg); border-color: var(--tealBorder); color: var(--teal); }
+.b-blue { background: var(--blueBg); border-color: var(--blueBorder); color: var(--blue); }
+.b-neutral { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.b-yellow { background: #2A1E0A; border-color: #5C4A00; color: var(--yellow); }
+
+/* Lock icon */
+.lock-icon { position: absolute; top: 8px; right: 8px; font-size: 12px; color: var(--textMuted); }
+
+/* Edit mode */
+.edit-mode .tile { border-style: dashed; animation: wiggle 0.4s ease infinite alternate; }
+.edit-mode .tile:nth-child(even) { animation-delay: 0.1s; }
+@keyframes wiggle { 0%{transform:rotate(-0.5deg)}100%{transform:rotate(0.5deg)} }
+.drag-dot { position: absolute; top: 8px; right: 8px; font-size: 14px; color: var(--textMuted); display: none; }
+.edit-mode .drag-dot { display: block; }
+
+/* Scroll hint */
+.scroll-hint { text-align: center; font-size: 11px; color: var(--textMuted); padding: 4px 0 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.scroll-arrow { font-size: 14px; color: var(--border); }
+
+/* Bottom nav */
+.bottom-nav { background: var(--card); border-top: 1px solid var(--border); padding: 8px 0 16px; display: flex; justify-content: space-around; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+.nav-icon { font-size: 22px; }
+.nav-label { font-size: 9px; color: var(--textMuted); letter-spacing: 0.04em; font-weight: 600; }
+.nav-active { color: var(--orange) !important; }
+
+/* AVANTI overlay */
+.avanti-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--orangeBorder); border-radius: 20px 20px 0 0; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0,0.15,1); z-index: 100; max-height: 60%; display: flex; flex-direction: column; box-shadow: 0 -8px 40px rgba(0,0,0,0.7); }
+.avanti-overlay.open { transform: translateY(0); }
+.ov-handle-row { display: flex; justify-content: center; padding: 10px 0 6px; cursor: pointer; }
+.ov-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; }
+.ov-head { display: flex; align-items: center; gap: 8px; padding: 0 16px 12px; border-bottom: 1px solid var(--border); }
+.ov-mark { width: 22px; height: 22px; border-radius: 6px; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; color: #000; flex-shrink: 0; }
+.ov-title { font-size: 14px; font-weight: 700; color: var(--textStrong); }
+.ov-close { margin-left: auto; font-size: 18px; color: var(--textMuted); cursor: pointer; }
+.ov-body { padding: 14px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scrollbar-width: none; flex: 1; }
+.ov-body::-webkit-scrollbar { display: none; }
+.ov-msg { font-size: 13px; color: var(--text); line-height: 1.6; }
+.ov-card { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.ov-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--yellow); }
+.ov-card-title { font-size: 13px; font-weight: 600; color: var(--textStrong); }
+.ov-card-body { font-size: 12px; color: var(--textMuted); line-height: 1.5; }
+.ov-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.ov-btn { padding: 7px 13px; border-radius: var(--pill); border: 1px solid; font-size: 12px; font-weight: 600; cursor: pointer; }
+.btn-c { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.btn-n { background: var(--bgElev); border-color: var(--border); color: var(--textMuted); }
+.ov-input-row { display: flex; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid var(--border); }
+.ov-input { flex: 1; background: var(--bgElev); border: 1px solid var(--border); border-radius: var(--pill); padding: 8px 12px; font-size: 12px; color: var(--textMuted); }
+.ov-send { width: 32px; height: 32px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 13px; cursor: pointer; }
+.backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; display: none; }
+.backdrop.open { display: block; }
+</style>
+</head>
+<body>
+
+<h1>VAI — Dynamic Grid Home</h1>
+<p class="subtitle">Scrollable · tier-gated · user-configurable · AVANTI context on every tap</p>
+
+<div class="tier-nav">
+  <button class="t-btn active" onclick="setTier('free', this)">Free</button>
+  <button class="t-btn" onclick="setTier('plus', this)">VAI+ $9.95</button>
+  <button class="t-btn" onclick="setTier('mentor', this)">Mentor $99.95</button>
+  <button class="t-btn" onclick="setTier('edit', this)">✏️ My Layout</button>
+</div>
+
+<div class="phone">
+  <div class="status-bar"><span>9:41</span><div style="font-size:11px;">●●● WiFi ■■■</div></div>
+
+  <!-- Backdrop + overlay -->
+  <div class="backdrop" id="bd" onclick="closeOv()"></div>
+  <div class="avanti-overlay" id="av-overlay">
+    <div class="ov-handle-row" onclick="closeOv()"><div class="ov-handle"></div></div>
+    <div class="ov-head">
+      <div class="ov-mark">A</div>
+      <div class="ov-title" id="ov-title">AVANTI</div>
+      <div class="ov-close" onclick="closeOv()">✕</div>
+    </div>
+    <div class="ov-body" id="ov-body"></div>
+    <div class="ov-input-row">
+      <div class="ov-input" id="ov-input">Ask AVANTI about this…</div>
+      <div class="ov-send">↑</div>
+    </div>
+  </div>
+
+  <div class="app-header">
+    <div class="logo"><div class="logo-mark">V</div><div class="logo-text">VAI</div></div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="font-size:11px;color:var(--green);font-weight:700;display:flex;align-items:center;gap:4px;"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);"></div>AVANTI</div>
+      <div class="avatar" id="u-avatar">M</div>
+    </div>
+  </div>
+
+  <!-- AVANTI strip -->
+  <div class="avanti-strip" id="a-strip">
+    <div class="strip-msg" id="a-msg"><strong>AVANTI:</strong> Saturday game — Mia's payment is RED. Want me to send a reminder to VAI FC North?</div>
+    <div class="strip-chips" id="a-chips">
+      <div class="s-chip s-yes">Yes, send it</div>
+      <div class="s-chip s-no">Later</div>
+      <div class="s-chip s-no">Ask more →</div>
+    </div>
+    <div class="strip-meta">
+      <span id="strip-context">Sat game · 2011 Girls Blue</span>
+      <span style="cursor:pointer;" onclick="document.getElementById('a-strip').style.display='none'">Dismiss ✕</span>
+    </div>
+  </div>
+
+  <!-- GRID BODY — scrollable -->
+  <div class="grid-body" id="grid-body">
+    <!-- dynamically populated by JS -->
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label nav-active">Home</div></div>
+    <div class="nav-item"><div class="nav-icon">📅</div><div class="nav-label">Schedule</div></div>
+    <div class="nav-item"><div class="nav-icon">💬</div><div class="nav-label">AVANTI</div></div>
+    <div class="nav-item"><div class="nav-icon">🏆</div><div class="nav-label">Events</div></div>
+    <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">Me</div></div>
+  </div>
+
+  <div class="home-indicator"><div class="home-bar"></div></div>
+</div>
+
+<script>
+/* ─── FEATURE REGISTRY ─── */
+const ALL_FEATURES = [
+  // id, icon, name, sub, badge, badgeClass, tier, ovType, isWide
+  { id:'tournament', icon:'🏆', name:'Tournament', sub:'Spring Invitational', badge:'● LIVE', bc:'b-live', tier:0, ov:'tournament', wide:true },
+  { id:'schedule',   icon:'📅', name:'Schedule',   sub:'2 events this week', badge:null, bc:'', tier:0, ov:'schedule' },
+  { id:'roster',     icon:'📋', name:'Roster',      sub:'16 athletes', badge:'1 BLOCKED', bc:'b-alert', tier:0, ov:'roster', alert:true },
+  { id:'passport',   icon:'🪪', name:'Passport',    sub:'1 grant active', badge:null, bc:'', tier:0, ov:'passport' },
+  { id:'greenline',  icon:'🟢', name:'Green Line',  sub:'12 green · 1 red', badge:'1 ACTION', bc:'b-alert', tier:0, ov:'greenline' },
+  { id:'connect',    icon:'🔗', name:'AVANTI Connect', sub:'Recruiting outreach', badge:'NEW', bc:'b-blue', tier:1, ov:'connect' },
+  { id:'wallet',     icon:'💰', name:'Wallet',      sub:'$247 earned', badge:null, bc:'', tier:1, ov:'wallet' },
+  { id:'camp',       icon:'⛺', name:'Summer Camp', sub:'14 registered', badge:'JUL 14', bc:'b-open', tier:1, ov:'camp' },
+  { id:'tryouts',    icon:'🎯', name:'Tryouts',     sub:'Fall roster open', badge:'OPEN', bc:'b-open', tier:1, ov:'tryouts' },
+  { id:'standings',  icon:'📊', name:'Standings',   sub:'#1 · Spring 2026', badge:null, bc:'', tier:0, ov:'standings' },
+  { id:'leagues',    icon:'🏅', name:'Leagues',     sub:'Spring 2026', badge:null, bc:'', tier:0, ov:'leagues' },
+  { id:'sessions',   icon:'📆', name:'My Sessions', sub:'14 booked · Sat', badge:null, bc:'', tier:2, ov:'sessions' },
+  { id:'earnings',   icon:'💵', name:'Earnings',    sub:'$247 this month', badge:'↑ 12%', bc:'b-ok', tier:2, ov:'earnings' },
+  { id:'bookings',   icon:'🎟️', name:'Bookings',    sub:'2 upcoming', badge:null, bc:'', tier:1, ov:'bookings' },
+  { id:'wearables',  icon:'⌚', name:'Wearables',   sub:'HealthKit synced', badge:'NEW', bc:'b-blue', tier:1, ov:'wearables' },
+  { id:'exceptions', icon:'⚡', name:'Exceptions',  sub:'3 open', badge:'3', bc:'b-yellow', tier:0, ov:'exceptions' },
+  { id:'comms',      icon:'💬', name:'Comms',       sub:'2 drafts', badge:null, bc:'', tier:0, ov:'comms' },
+];
+
+/* tier: 0=all, 1=plus+, 2=mentor only */
+const TIER_MAP = { free:0, plus:1, mentor:2, edit:2 };
+
+/* Strips per tier */
+const STRIPS = {
+  free:   { msg: '<strong>AVANTI:</strong> Saturday game — Mia\'s payment is RED. Want me to send a reminder?', chips:['Yes, send it','Later'], ctx:'Sat game · 2011 Girls Blue' },
+  plus:   { msg: '<strong>AVANTI:</strong> 3 athletes not GREEN for Saturday. Want a compliance summary to share with staff?', chips:['Show me','Send to staff','Later'], ctx:'Sat game · 3 issues' },
+  mentor: { msg: '<strong>AVANTI:</strong> Saturday Speed Camp — groups not yet assigned. Want me to build them now?', chips:['Build groups','View roster','Later'], ctx:'Speed Camp · 14 confirmed' },
+  edit:   null
+};
+
+const OVERLAY_CONTENT = {
+  tournament: { title:'Tournament · Live now', msg:'<strong>Spring Invitational Final</strong> is live. 2012 Boys Black leads 2–1 in the 67th minute.',
+    card:'Final whistle approaching. AVANTI can finalize the match and notify all 24 families with results.', cardLabel:'⚡ YELLOW · After final whistle', btns:['Finalize + notify','Not yet'] },
+  schedule: { title:'This week', msg:'2 events on your schedule this week.',
+    card:'Saturday game at 9AM — Field 2. Practice Thursday 5:30PM.', cardLabel:'GREEN · Read only', btns:[] },
+  roster: { title:'Roster · 1 blocked', msg:'<strong style="color:var(--red)">Mia Chen</strong> is blocked for Saturday. Payment gate RED.',
+    card:'Send compliance reminder to Mia\'s family — push + email. Explains what\'s blocking and how to resolve.', cardLabel:'⚡ YELLOW · Confirm to send', btns:['Send reminder','Later'] },
+  passport: { title:'My Passport', msg:'1 active grant to VAI FC North. Scopes: governance · medical_sharing. Valid until Aug 2026.',
+    card:null, btns:[] },
+  greenline: { title:'Green Line status', msg:'12 GREEN · 3 YELLOW · 1 RED across all teams.',
+    card:'Send bulk reminder to YELLOW athletes before eligibility expires.', cardLabel:'⚡ YELLOW · Bulk remind', btns:['Send reminders','Review first'] },
+  connect: { title:'AVANTI Connect', msg:'Your recruiting outreach pipeline. 3,006 football coaches loaded. AVANTI drafts personalized emails — you approve.',
+    card:'14 coaches viewed your profile this week. 3 have not been contacted yet. Want AVANTI to draft outreach?', cardLabel:'⚡ YELLOW · Draft outreach', btns:['Draft 3 emails','Later'] },
+  wallet: { title:'Wallet', msg:'Balance: <strong>$247.00</strong> · Last payout: Apr 18 · Next eligible: Apr 28.',
+    card:'$89 pending release in 4 days. Want a summary of this month\'s earnings breakdown?', cardLabel:'GREEN · Read only', btns:['Show breakdown','Dismiss'] },
+  camp: { title:'Summer Camp · Jul 14', msg:'14 athletes registered. 12 ready, 1 waiver missing (Riley), 1 payment blocked (Jordan).',
+    card:'Build Day 1 rotation groups (3 groups of ~5). AVANTI has a draft ready.', cardLabel:'⚡ YELLOW · Confirm groups', btns:['View groups','Later'] },
+  tryouts: { title:'Tryouts · Aug 10', msg:'22 athletes registered for Fall Roster Tryouts. Evaluation sheets not yet built.',
+    card:'Generate evaluation sheets + 4 rotation groups. Score 1-10 per station.', cardLabel:'⚡ YELLOW · Generate sheets', btns:['Generate','Later'] },
+  standings: { title:'Standings', msg:'Spring 2026 · VAI FC North is ranked <strong>#1</strong>. 19 points, +11 goal difference.',
+    card:null, btns:[] },
+  leagues: { title:'Leagues', msg:'Spring 2026 active · 8 teams · 8 matches played. Fall 2025 final — Valley United won.',
+    card:null, btns:[] },
+  sessions: { title:'My Sessions', msg:'14 confirmed for Saturday Speed Camp. 2 on waitlist.',
+    card:'Groups not yet assigned. AVANTI has a 3-group draft based on age + position.', cardLabel:'⚡ YELLOW · Build groups', btns:['Confirm groups','Later'] },
+  earnings: { title:'Earnings · April', msg:'$247 earned this month — up 12% from March. $89 pending. $158 settled.',
+    card:null, btns:[] },
+  bookings: { title:'Bookings', msg:'2 upcoming bookings. Speed Camp Saturday · Conditioning Wednesday.',
+    card:null, btns:[] },
+  wearables: { title:'Wearables', msg:'HealthKit synced. Heart rate, sleep score, step count visible to AVANTI for coaching context.',
+    card:null, btns:[] },
+  exceptions: { title:'Exceptions · 3 open', msg:'3 items flagged for your attention. Mia (payment), Riley (waiver), Jordan (medical).',
+    card:'Send bulk reminder to all 3 families. AVANTI drafts personalized messages per issue.', cardLabel:'⚡ YELLOW · Bulk remind', btns:['Send all','Review first'] },
+  comms: { title:'Comms', msg:'2 AVANTI drafts waiting for your approval. Payment reminder + waiver reminder.',
+    card:'Approve both and send in one tap.', cardLabel:'⚡ YELLOW · Send 2 messages', btns:['Approve & send','Review each'] },
+};
+
+let currentTier = 'free';
+let isEdit = false;
+let userOrder = null; // null = default order
+
+function render(tier) {
+  currentTier = tier;
+  isEdit = tier === 'edit';
+  const tierNum = TIER_MAP[tier];
+
+  // Strip
+  const strip = document.getElementById('a-strip');
+  const stripCfg = STRIPS[tier];
+  if (!stripCfg) {
+    strip.style.display = 'none';
+  } else {
+    strip.style.display = 'flex';
+    document.getElementById('a-msg').innerHTML = stripCfg.msg;
+    document.getElementById('strip-context').textContent = stripCfg.ctx;
+    const chipsEl = document.getElementById('a-chips');
+    chipsEl.innerHTML = stripCfg.chips.map((c,i) => `<div class="s-chip ${i===0?'s-yes':'s-no'}">${c}</div>`).join('');
+  }
+
+  // Filter + order features
+  let features = ALL_FEATURES.filter(f => f.tier <= tierNum);
+  if (userOrder && tier === currentTier) {
+    // apply custom order if set
+  }
+
+  const gb = document.getElementById('grid-body');
+  gb.innerHTML = '';
+  gb.className = isEdit ? 'grid-body edit-mode' : 'grid-body';
+
+  if (isEdit) {
+    // Edit mode header
+    const hdr = document.createElement('div');
+    hdr.innerHTML = `
+      <div class="section-label">
+        <div class="s-label">YOUR LAYOUT · Long press to rearrange</div>
+        <div class="s-action edit">✓ Done</div>
+      </div>
+      <div style="background:var(--orangeBg);border:1px solid var(--orangeBorder);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--orange);margin-bottom:4px;">
+        Drag tiles to reorder. Top 4 always appear above the fold. Tap to pin or hide.
+      </div>`;
+    gb.appendChild(hdr);
+  }
+
+  // Pinned / Most Used section (top 2x2)
+  const pinLabel = document.createElement('div');
+  pinLabel.innerHTML = `<div class="section-label" style="margin-bottom:6px;">
+    <div class="s-label">${isEdit ? 'PINNED · TOP 4' : 'MOST USED'}</div>
+    ${!isEdit ? '<div class="s-action" onclick="setTier(\'edit\',document.querySelectorAll(\'.t-btn\')[3])">Customize</div>' : ''}
+  </div>`;
+  gb.appendChild(pinLabel);
+
+  // Top 4 (2x2 grid)
+  const top4 = features.slice(0, 4);
+  const top4Grid = document.createElement('div');
+  top4Grid.className = 'grid-2x2';
+  top4.forEach(f => top4Grid.appendChild(makeTile(f, false)));
+  gb.appendChild(top4Grid);
+
+  // Scroll hint
+  const hint = document.createElement('div');
+  hint.className = 'scroll-hint';
+  hint.innerHTML = '<div class="scroll-arrow">↓</div><div>Scroll for more</div><div class="scroll-arrow">↓</div>';
+  gb.appendChild(hint);
+
+  // Remaining features by category
+  const rest = features.slice(4);
+  if (rest.length > 0) {
+    const moreLabel = document.createElement('div');
+    moreLabel.innerHTML = `<div class="section-label" style="margin-bottom:6px;"><div class="s-label">ALL FEATURES</div></div>`;
+    gb.appendChild(moreLabel);
+
+    // Show as 2x2 or 3x3 depending on tier
+    const useSmall = tierNum >= 2 && rest.length > 6;
+    const moreGrid = document.createElement('div');
+    moreGrid.className = useSmall ? 'grid-3x3' : 'grid-2x2';
+    rest.forEach(f => moreGrid.appendChild(makeTile(f, useSmall)));
+    gb.appendChild(moreGrid);
+  }
+
+  // Locked tiles (features not in this tier) — shown as upgrade prompts
+  const locked = ALL_FEATURES.filter(f => f.tier > tierNum);
+  if (locked.length > 0 && tier !== 'edit') {
+    const lockLabel = document.createElement('div');
+    lockLabel.innerHTML = `<div class="section-label" style="margin-bottom:6px;margin-top:4px;"><div class="s-label">UNLOCK MORE</div></div>`;
+    gb.appendChild(lockLabel);
+    const lockGrid = document.createElement('div');
+    lockGrid.className = 'grid-2x2';
+    locked.slice(0, 4).forEach(f => {
+      const t = makeTile(f, false, true);
+      lockGrid.appendChild(t);
+    });
+    gb.appendChild(lockGrid);
+  }
+
+  closeOv();
+}
+
+function makeTile(f, small, locked) {
+  const div = document.createElement('div');
+  let cls = 'tile';
+  if (small) cls += ' tile-sm';
+  if (f.live || f.bc === 'b-live') cls += ' live';
+  if (f.alert || f.bc === 'b-alert') cls += ' alert';
+  if (f.bc === 'b-open') cls += ' highlight';
+  if (locked) cls += ' locked';
+  div.className = cls;
+
+  const badge = f.badge ? `<div class="tile-badge ${f.bc}">${f.badge}</div>` : '';
+  const lockIcon = locked ? '<div class="lock-icon">🔒</div>' : '';
+  const dragDot = '<div class="drag-dot">⠿</div>';
+
+  div.innerHTML = `
+    ${dragDot}
+    ${lockIcon}
+    <div class="tile-icon">${f.icon}</div>
+    <div class="tile-name">${f.name}</div>
+    <div class="tile-sub">${locked ? 'Upgrade to unlock' : f.sub}</div>
+    ${badge}
+  `;
+
+  if (!locked && !isEdit) {
+    div.onclick = () => openOv(f.id);
+  }
+  return div;
+}
+
+function openOv(id) {
+  const cfg = OVERLAY_CONTENT[id];
+  if (!cfg) return;
+  document.getElementById('ov-title').textContent = cfg.title;
+  // Update input placeholder with context
+  document.getElementById('ov-input').placeholder = `Ask AVANTI about ${cfg.title.split(' ·')[0]}…`;
+
+  let html = `<div class="ov-msg">${cfg.msg}</div>`;
+  if (cfg.card) {
+    const btnHtml = cfg.btns.map((b,i) =>
+      `<div class="ov-btn ${i===0?'btn-c':'btn-n'}">${b}</div>`).join('');
+    html += `
+      <div class="ov-card" style="${cfg.cardLabel.includes('YELLOW')?'border-color:var(--yellowBorder);background:var(--yellowBg)':'border-color:var(--greenBorder);background:var(--greenBg)'}">
+        <div class="ov-card-label" style="${cfg.cardLabel.includes('GREEN')?'color:var(--green)':'color:var(--yellow)'}">${cfg.cardLabel}</div>
+        <div class="ov-card-body">${cfg.card}</div>
+        ${btnHtml ? `<div class="ov-btns">${btnHtml}</div>` : ''}
+      </div>`;
+  }
+  document.getElementById('ov-body').innerHTML = html;
+  document.getElementById('av-overlay').classList.add('open');
+  document.getElementById('bd').classList.add('open');
+}
+
+function closeOv() {
+  document.getElementById('av-overlay').classList.remove('open');
+  document.getElementById('bd').classList.remove('open');
+}
+
+function setTier(tier, btn) {
+  document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  render(tier);
+}
+
+// Initial render
+render('free');
+</script>
+</body>
+</html>
