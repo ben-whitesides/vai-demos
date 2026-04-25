@@ -157,6 +157,33 @@ h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: 
 .stat-value.yellow { color: var(--yellow); }
 .stat-sub { font-size: 11px; color: var(--textMuted); }
 
+/* Connect screen */
+.connect-progress { background: var(--card); border: 1px solid var(--avantiBorder); border-radius: var(--r); padding: 16px 20px; }
+.connect-prog-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.connect-prog-title { font-size: 15px; font-weight: 800; color: var(--textStrong); }
+.connect-prog-meta { font-size: 12px; color: var(--green); font-weight: 700; }
+.connect-prog-bar { height: 5px; background: var(--elev); border-radius: 3px; overflow: hidden; }
+.connect-prog-fill { height: 100%; background: var(--green); border-radius: 3px; width: 35%; }
+.connect-prog-sub { font-size: 11px; color: var(--textMuted); margin-top: 6px; }
+.connect-audience { display: flex; gap: 8px; flex-wrap: wrap; }
+.connect-aud-btn { padding: 7px 16px; border-radius: var(--pill); border: 1px solid var(--border); background: var(--elev); color: var(--textMuted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.12s; }
+.connect-aud-btn.active { background: var(--avantiBg); border-color: var(--avantiBorder); color: var(--green); }
+.connect-filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.connect-filter-lbl { font-size: 11px; font-weight: 700; color: var(--textMuted); letter-spacing: 0.06em; text-transform: uppercase; width: 100%; }
+.connect-chip { padding: 5px 12px; border-radius: var(--pill); border: 1px solid var(--border); background: transparent; color: var(--textMuted); font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.12s; }
+.connect-chip.on { background: var(--avantiBg); border-color: var(--avantiBorder); color: var(--green); }
+.connect-cta { background: var(--orange); color: #000; border: none; border-radius: var(--r); padding: 14px 24px; font-size: 14px; font-weight: 800; cursor: pointer; letter-spacing: 0.03em; align-self: flex-start; }
+.outreach-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.outreach-row:last-child { border-bottom: none; }
+.outreach-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--avantiBg); border: 1px solid var(--avantiBorder); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--green); flex-shrink: 0; }
+.outreach-info { flex: 1; }
+.outreach-name { font-size: 13px; font-weight: 700; color: var(--textStrong); }
+.outreach-meta { font-size: 11px; color: var(--textMuted); margin-top: 1px; }
+.outreach-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--pill); border: 1px solid; }
+.outreach-status.viewed { background: var(--avantiBg); border-color: var(--avantiBorder); color: var(--green); }
+.outreach-status.sent { background: var(--elev); border-color: var(--border); color: var(--textMuted); }
+.outreach-status.replied { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+
 .table-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
 .table-head { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .table-head-title { font-size: 13px; font-weight: 700; color: var(--textStrong); }
@@ -223,6 +250,7 @@ tr:hover td { background: var(--elev); }
   <button class="nav-btn" onclick="showScenario('tournament-conflict')">Tournament · Bracket Conflict</button>
   <button class="nav-btn" onclick="showScenario('roster-red')">Roster · PLAY Block</button>
   <button class="nav-btn" onclick="showScenario('multi-intel')">Multi-Item Intel</button>
+  <button class="nav-btn" onclick="showScenario('connect')">Connect · Outreach</button>
 </div>
 
 <div class="browser">
@@ -247,6 +275,7 @@ tr:hover td { background: var(--elev); }
       <div class="sidebar-item active"><span class="sidebar-icon">🎯</span>My Sessions <span class="sidebar-badge">3</span></div>
       <div class="sidebar-item"><span class="sidebar-icon">💰</span>Earnings</div>
       <div class="sidebar-item"><span class="sidebar-icon">＋</span>New Session</div>
+      <div class="sidebar-item" onclick="showScenario('connect')"><span class="sidebar-icon">🔗</span>Connect <span class="sidebar-badge" style="background:var(--green);color:#000;">3</span></div>
       <div style="margin-top:auto;padding:12px;border-top:1px solid var(--border);">
         <div style="display:flex;align-items:center;gap:8px;padding:8px 6px;background:var(--avantiBg);border:1px solid var(--avantiBorder);border-radius:8px;">
           <div class="avanti-online-dot"></div>
@@ -512,6 +541,101 @@ tr:hover td { background: var(--elev); }
         </div>
       </div>
 
+      <!-- ─────────────────────────────────────────────────── -->
+      <!-- SCENARIO 6: AVANTI Connect · Outreach -->
+      <div id="sc-connect" class="scenario">
+        <div class="avanti-strip" style="background:var(--avantiBg);border-bottom:1px solid var(--avantiBorder);padding:10px 20px;display:flex;align-items:center;gap:12px;">
+          <span class="strip-avanti-label">AVANTI</span>
+          <span class="strip-msg"><strong>3 active outreaches</strong> in progress. 14 profile views this week — 2 contacts replied.</span>
+          <div class="strip-actions">
+            <button class="strip-btn confirm">View Replies</button>
+          </div>
+        </div>
+        <div class="page-content">
+          <div><div class="section-title">AVANTI Connect</div><div class="section-sub">Reach clients, find new leads, re-engage lapsed customers</div></div>
+
+          <!-- Stats -->
+          <div class="data-row">
+            <div class="stat-card"><div class="stat-label">Active Outreaches</div><div class="stat-value green">3</div><div class="stat-sub">in progress</div></div>
+            <div class="stat-card"><div class="stat-label">Sent This Week</div><div class="stat-value orange">47</div><div class="stat-sub">of 200 weekly</div></div>
+            <div class="stat-card"><div class="stat-label">Profile Views</div><div class="stat-value">14</div><div class="stat-sub">from outreach</div></div>
+            <div class="stat-card"><div class="stat-label">Replies</div><div class="stat-value green">2</div><div class="stat-sub">this week</div></div>
+          </div>
+
+          <!-- Progress -->
+          <div class="connect-progress">
+            <div class="connect-prog-row">
+              <div class="connect-prog-title">My Outreaches</div>
+              <div class="connect-prog-meta">3 active ›</div>
+            </div>
+            <div class="connect-prog-row" style="margin-bottom:6px;">
+              <span style="font-size:12px;color:var(--textMuted);">Weekly progress</span>
+              <span style="font-size:12px;color:var(--textMuted);">47 / 200 sent</span>
+            </div>
+            <div class="connect-prog-bar"><div class="connect-prog-fill" style="width:23%;"></div></div>
+          </div>
+
+          <!-- New Outreach -->
+          <div class="table-card">
+            <div class="table-head"><div class="table-head-title">New Outreach</div></div>
+            <div style="padding:16px 20px;display:flex;flex-direction:column;gap:14px;">
+              <!-- Audience -->
+              <div>
+                <div class="connect-filter-lbl" style="margin-bottom:8px;">Who do you want to reach?</div>
+                <div class="connect-audience">
+                  <div class="connect-aud-btn active">Existing Clients</div>
+                  <div class="connect-aud-btn">New Leads</div>
+                  <div class="connect-aud-btn">Lapsed Customers</div>
+                </div>
+              </div>
+              <!-- Category filter -->
+              <div>
+                <div class="connect-filter-lbl" style="margin-bottom:8px;">Category</div>
+                <div class="connect-filters">
+                  <div class="connect-chip on">All</div>
+                  <div class="connect-chip">Gyms</div>
+                  <div class="connect-chip">Studios</div>
+                  <div class="connect-chip">Corporate</div>
+                  <div class="connect-chip">Schools</div>
+                  <div class="connect-chip">Youth Sports</div>
+                </div>
+              </div>
+              <!-- Location -->
+              <div>
+                <div class="connect-filter-lbl" style="margin-bottom:8px;">Location</div>
+                <div style="background:var(--elev);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:13px;color:var(--textMuted);">Denver, CO · 25 mi radius</div>
+              </div>
+              <button class="connect-cta">Find Contacts →</button>
+            </div>
+          </div>
+
+          <!-- Active outreach list -->
+          <div class="table-card">
+            <div class="table-head"><div class="table-head-title">Recent Activity</div><span style="font-size:12px;color:var(--textMuted);">Last 7 days</span></div>
+            <div class="outreach-row">
+              <div class="outreach-avatar">CF</div>
+              <div class="outreach-info"><div class="outreach-name">CrossFit Elevate</div><div class="outreach-meta">Denver · Batch 2 · Apr 23</div></div>
+              <div class="outreach-status replied">Replied</div>
+            </div>
+            <div class="outreach-row">
+              <div class="outreach-avatar">PM</div>
+              <div class="outreach-info"><div class="outreach-name">Peak Performance Gym</div><div class="outreach-meta">Littleton · Batch 2 · Apr 23</div></div>
+              <div class="outreach-status viewed">Viewed profile</div>
+            </div>
+            <div class="outreach-row">
+              <div class="outreach-avatar">FA</div>
+              <div class="outreach-info"><div class="outreach-name">Functional Athletics</div><div class="outreach-meta">Aurora · Batch 1 · Apr 21</div></div>
+              <div class="outreach-status replied">Replied</div>
+            </div>
+            <div class="outreach-row">
+              <div class="outreach-avatar">YS</div>
+              <div class="outreach-info"><div class="outreach-name">Youth Sports Academy</div><div class="outreach-meta">Englewood · Batch 1 · Apr 21</div></div>
+              <div class="outreach-status sent">Sent</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /main -->
   </div><!-- /app -->
 </div><!-- /browser -->
@@ -528,7 +652,8 @@ function showScenario(id) {
     'sessions-yellow': 'My Sessions — PLAY Alert',
     'tournament-conflict': 'Spring Invitational · Bracket',
     'roster-red': 'Athletes · PLAY Status',
-    'multi-intel': 'Club OS Overview'
+    'multi-intel': 'Club OS Overview',
+    'connect': 'AVANTI Connect'
   };
   document.getElementById('ctx-label').textContent = labels[id] || 'Club OS';
   document.getElementById('confirm-card-wrap').style.display = 'none';
