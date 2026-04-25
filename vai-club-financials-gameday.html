@@ -367,52 +367,91 @@ body { background: var(--bg); font-family: -apple-system,'Inter',sans-serif; min
           </div>
         </div>
 
-        <div class="setup-card">
-          <div class="setup-icon">💳</div>
-          <div class="setup-title">Connect Club Finances</div>
-          <div class="setup-text">Link QuickBooks, Stripe, PayPal or Venmo to manage your club's finances from one place. VAI is the hub — your data stays in your tools.</div>
+        <!-- Entity selector -->
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;gap:16px;">
+          <div style="font-size:13px;color:var(--textMuted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;flex-shrink:0;">Connecting for</div>
+          <div style="display:flex;align-items:center;gap:8px;flex:1;">
+            <div style="font-size:15px;font-weight:800;color:var(--textStrong);">VAI FC North</div>
+            <div style="font-size:11px;color:var(--textMuted);background:var(--elev);border:1px solid var(--border);border-radius:var(--pill);padding:2px 10px;">Club</div>
+          </div>
+          <div style="font-size:13px;color:var(--orange);cursor:pointer;font-weight:600;">Switch entity ↓</div>
+        </div>
 
-          <div class="setup-steps">
-            <div class="setup-step"><div class="setup-step-num">1</div>Go to <strong style="color:var(--textStrong)">VAI Mobile → Wallet Settings → Club Finances</strong></div>
-            <div class="setup-step"><div class="setup-step-num">2</div>Select your entity and connect QuickBooks, Stripe, PayPal or Venmo</div>
-            <div class="setup-step"><div class="setup-step-num">3</div>Return here — Finances tab activates instantly</div>
+        <!-- Connect grid — direct from GAMEDAY -->
+        <div class="provider-grid">
+          <!-- QuickBooks -->
+          <div class="provider-card" style="cursor:pointer;" onmouseenter="this.style.borderColor='#4A3200'" onmouseleave="this.style.borderColor=''">
+            <div class="provider-header">
+              <div class="provider-icon qb">📗</div>
+              <div>
+                <div class="provider-name">QuickBooks</div>
+                <div class="provider-type">Accounting & Invoicing</div>
+              </div>
+              <div class="provider-status"><span class="pill not-connected">Not connected</span></div>
+            </div>
+            <div style="font-size:13px;color:var(--textMuted);line-height:1.5;">Connect your QuickBooks account to surface outstanding dues, invoice counts, and receivables in AVANTI.</div>
+            <button class="action-btn primary" style="align-self:flex-start;">Connect QuickBooks →</button>
           </div>
 
-          <div class="connect-grid">
-            <div class="connect-card">
-              <div class="connect-card-icon">📗</div>
+          <!-- Stripe -->
+          <div class="provider-card" style="cursor:pointer;" onmouseenter="this.style.borderColor='#3A2A70'" onmouseleave="this.style.borderColor=''">
+            <div class="provider-header">
+              <div class="provider-icon stripe">⚡</div>
               <div>
-                <div class="connect-card-name">QuickBooks</div>
-                <div style="font-size:11px;color:var(--textMuted);">OAuth 2.0</div>
+                <div class="provider-name">Stripe</div>
+                <div class="provider-type">Payments & Payouts</div>
               </div>
-              <div class="connect-card-action">Connect →</div>
+              <div class="provider-status"><span class="pill not-connected">Not connected</span></div>
             </div>
-            <div class="connect-card">
-              <div class="connect-card-icon">⚡</div>
+            <div style="font-size:13px;color:var(--textMuted);line-height:1.5;">Link your Stripe connected account for one-click dashboard access and balance visibility in AVANTI.</div>
+            <button class="action-btn secondary" style="align-self:flex-start;border-color:#3A2A70;color:#8B83FF;">Connect Stripe →</button>
+          </div>
+
+          <!-- PayPal -->
+          <div class="provider-card" style="cursor:pointer;" onmouseenter="this.style.borderColor='#0A3060'" onmouseleave="this.style.borderColor=''">
+            <div class="provider-header">
+              <div class="provider-icon paypal">🅿</div>
               <div>
-                <div class="connect-card-name">Stripe</div>
-                <div style="font-size:11px;color:var(--textMuted);">Existing Connect flow</div>
+                <div class="provider-name">PayPal</div>
+                <div class="provider-type">Online Payments</div>
               </div>
-              <div class="connect-card-action">Connect →</div>
+              <div class="provider-status"><span class="pill not-connected">Not connected</span></div>
             </div>
-            <div class="connect-card">
-              <div class="connect-card-icon">🅿</div>
+            <div style="font-size:13px;color:var(--textMuted);line-height:1.5;">Start PayPal merchant onboarding to accept online payments. Typically takes 1–2 business days to verify.</div>
+            <button class="action-btn secondary" style="align-self:flex-start;border-color:#0A3060;color:#4DB3FF;">Start PayPal onboarding →</button>
+          </div>
+
+          <!-- Venmo -->
+          <div class="provider-card">
+            <div class="provider-header">
+              <div class="provider-icon venmo">Ⓥ</div>
               <div>
-                <div class="connect-card-name">PayPal</div>
-                <div style="font-size:11px;color:var(--textMuted);">Merchant onboarding</div>
+                <div class="provider-name">Venmo Business</div>
+                <div class="provider-type">Dashboard shortcut only</div>
               </div>
-              <div class="connect-card-action">Connect →</div>
+              <div class="provider-status"><span class="pill not-connected">Not added</span></div>
             </div>
-            <div class="connect-card">
-              <div class="connect-card-icon">Ⓥ</div>
-              <div>
-                <div class="connect-card-name">Venmo Business</div>
-                <div style="font-size:11px;color:var(--textMuted);">Dashboard shortcut</div>
-              </div>
-              <div class="connect-card-action">Add →</div>
+            <div style="font-size:13px;color:var(--textMuted);line-height:1.5;">Add your Venmo Business profile handle for a one-click shortcut. VAI does not process Venmo payments.</div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input placeholder="@vaifcnorth" style="flex:1;background:var(--elev);border:1px solid var(--borderLight);border-radius:6px;padding:7px 12px;font-size:13px;color:var(--textStrong);outline:none;" />
+              <button class="action-btn secondary" style="flex-shrink:0;">Save</button>
             </div>
           </div>
-          <div style="font-size:11px;color:var(--textMuted);text-align:center;">Setup happens in the VAI mobile app. This tab activates automatically once connected.</div>
+        </div>
+
+        <!-- AVANTI opt-in -->
+        <div style="background:var(--card);border:1px solid var(--greenBorder);border-radius:var(--r);padding:16px 20px;display:flex;align-items:center;gap:16px;">
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:var(--textStrong);margin-bottom:3px;">Allow AVANTI to read financial data?</div>
+            <div style="font-size:13px;color:var(--textMuted);">Read-only insights — outstanding dues, balance, payout timing. AVANTI never writes or moves money.</div>
+          </div>
+          <div style="width:48px;height:28px;border-radius:999px;background:var(--elev);border:1px solid var(--border);display:flex;align-items:center;padding:2px;cursor:pointer;flex-shrink:0;">
+            <div style="width:22px;height:22px;border-radius:50%;background:#fff;opacity:0.3;"></div>
+          </div>
+        </div>
+
+        <div style="font-size:12px;color:var(--textMuted);text-align:center;padding:4px 0;">
+          Connect at least one tool to activate the Finances dashboard. Also available in VAI mobile → Wallet Settings.
         </div>
       </div>
 
