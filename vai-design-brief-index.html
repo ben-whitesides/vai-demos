@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Design Brief Screen Index</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #060608; font-family: -apple-system, 'Inter', sans-serif; color: #e8e8ec; padding: 40px 32px 80px; }
+.page-header { margin-bottom: 48px; text-align: center; }
+.page-title { font-size: 28px; font-weight: 900; letter-spacing: 0.04em; color: #F7941E; text-transform: uppercase; margin-bottom: 6px; }
+.page-sub { font-size: 14px; color: #8888a0; }
+.page-meta { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+.meta-pill { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 4px 12px; border: 1px solid; }
+.meta-pill.orange { background: #1E1000; border-color: #4A3200; color: #F7941E; }
+.meta-pill.green { background: #051A10; border-color: #0D4A28; color: #34D399; }
+.meta-pill.gray { background: #141418; border-color: #2a2a35; color: #8888a0; }
+
+.group { margin-bottom: 56px; }
+.group-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #1a1a20; }
+.group-letter { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; flex-shrink: 0; }
+.group-letter.a { background: #1E1000; color: #F7941E; border: 1px solid #4A3200; }
+.group-letter.b { background: #051A10; color: #34D399; border: 1px solid #0D4A28; }
+.group-letter.c { background: #0A1020; color: #5577DD; border: 1px solid #1A2A50; }
+.group-letter.d { background: #1A1000; color: #FBBF24; border: 1px solid #4A3000; }
+.group-letter.e { background: #1A0808; color: #FF6B6B; border: 1px solid #4A1A1A; }
+.group-title { font-size: 18px; font-weight: 800; color: #F5F0EB; }
+.group-desc { font-size: 13px; color: #8888a0; margin-top: 2px; }
+
+.screen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.screen-card { background: #0c0c10; border: 1px solid #1a1a20; border-radius: 12px; overflow: hidden; transition: border-color 0.15s; cursor: pointer; text-decoration: none; display: block; }
+.screen-card:hover { border-color: #F7941E; }
+.screen-card.gold { border-color: #4A3200; }
+.screen-card.gold:hover { border-color: #F7941E; box-shadow: 0 0 20px rgba(247,148,30,0.1); }
+.screen-preview { width: 100%; height: 180px; border: none; background: #0c0c10; pointer-events: none; transform-origin: top left; }
+.screen-info { padding: 12px 14px; border-top: 1px solid #1a1a20; }
+.screen-id { font-size: 10px; font-weight: 700; color: #8888a0; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3px; }
+.screen-name { font-size: 13px; font-weight: 700; color: #F5F0EB; margin-bottom: 4px; }
+.screen-desc { font-size: 11px; color: #555568; line-height: 1.4; }
+.screen-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.tag { font-size: 10px; font-weight: 600; border-radius: 999px; padding: 2px 8px; border: 1px solid; }
+.tag.mobile { background: #0A1020; border-color: #1A2A50; color: #5577DD; }
+.tag.web { background: #1A1000; border-color: #4A3000; color: #FBBF24; }
+.tag.gold { background: #1E1000; border-color: #4A3200; color: #F7941E; }
+.tag.new { background: #051A10; border-color: #0D4A28; color: #34D399; }
+.tag.existing { background: #141418; border-color: #2a2a35; color: #555568; }
+
+.gold-banner { background: linear-gradient(90deg, rgba(247,148,30,0.08), rgba(247,148,30,0.03)); border: 1px solid #4A3200; border-radius: 10px; padding: 12px 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #F7941E; font-weight: 600; }
+
+.open-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; border: 1px solid #4A3200; background: #1E1000; color: #F7941E; font-size: 11px; font-weight: 700; text-decoration: none; margin-top: 8px; transition: all 0.15s; }
+.open-btn:hover { background: #2A1800; }
+
+.divider { height: 1px; background: #1a1a20; margin: 40px 0; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">VAI Design Brief — Screen Index</div>
+  <div class="page-sub">All locked screens across Club OS · AVANTI · Home Grid · Club Financials</div>
+  <div class="page-meta">
+    <span class="meta-pill orange">🥇 3 Gold Standard Priority</span>
+    <span class="meta-pill green">22 Total Screens</span>
+    <span class="meta-pill gray">5 Groups</span>
+    <span class="meta-pill gray">Apr 25, 2026</span>
+  </div>
+</div>
+
+<!-- GROUP A: VAI HOME -->
+<div class="group">
+  <div class="group-header">
+    <div class="group-letter a">A</div>
+    <div>
+      <div class="group-title">VAI Home (Mobile) 🥇 GOLD STANDARD</div>
+      <div class="group-desc">Dynamic grid home screen — all tiers + club drill-in + navigation flow</div>
+    </div>
+  </div>
+  <div class="gold-banner">🥇 Gold Standard Priority — Generate A1–A4 first. Highest user-facing impact.</div>
+  <div class="screen-grid">
+    <a class="screen-card gold" href="vai-home-final.html" target="_blank">
+      <iframe class="screen-preview" src="vai-home-final.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">A1 / A2 / A3</div>
+        <div class="screen-name">Home Screen — All Tiers</div>
+        <div class="screen-desc">Basic, VAI+, Mentor tier variants. Locked bottom nav. Dynamic grid.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-home-final.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card gold" href="vai-home-grid.html" target="_blank">
+      <iframe class="screen-preview" src="vai-home-grid.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">A1 — Grid Detail</div>
+        <div class="screen-name">Home Grid — Tile System</div>
+        <div class="screen-desc">Tile grid layout, tier gating, Club hero tile, locked/unlocked states.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-home-grid.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card gold" href="vai-home-states.html" target="_blank">
+      <iframe class="screen-preview" src="vai-home-states.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">A2 — States</div>
+        <div class="screen-name">Home States</div>
+        <div class="screen-desc">Empty, loading, basic, VAI+, Mentor state variants.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-home-states.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card gold" href="vai-navigation-flow.html" target="_blank">
+      <iframe class="screen-preview" src="vai-navigation-flow.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">A4 / A5</div>
+        <div class="screen-name">Navigation Flow + Club Drill-In</div>
+        <div class="screen-desc">Home → Club tile → sub-grid. AVANTI overlay. Back nav pattern.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-navigation-flow.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- GROUP B: AVANTI -->
+<div class="group">
+  <div class="group-header">
+    <div class="group-letter b">B</div>
+    <div>
+      <div class="group-title">AVANTI OS 🥇 GOLD STANDARD</div>
+      <div class="group-desc">Half-screen overlay, GAMEDAY tiles, club context — the AI command layer</div>
+    </div>
+  </div>
+  <div class="gold-banner">🥇 Gold Standard Priority — Core brand differentiator. Must feel like a living intelligence.</div>
+  <div class="screen-grid">
+    <a class="screen-card gold" href="vai-avanti-layered-os.html" target="_blank">
+      <iframe class="screen-preview" src="vai-avanti-layered-os.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">B1 / B2</div>
+        <div class="screen-name">AVANTI Layered OS Overlay</div>
+        <div class="screen-desc">Half-screen bottom sheet over Home + Club contexts. Green pulse. Action cards.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-avanti-layered-os.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card gold" href="vai-avanti-os-overlay.html" target="_blank">
+      <iframe class="screen-preview" src="vai-avanti-os-overlay.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">B1 — OS Overlay</div>
+        <div class="screen-name">AVANTI OS Overlay Detail</div>
+        <div class="screen-desc">Overlay with green/yellow action cards. Confirm pattern. Read-only callout.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-avanti-os-overlay.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card gold" href="vai-avanti-home-screen.html" target="_blank">
+      <iframe class="screen-preview" src="vai-avanti-home-screen.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">B1 — Home</div>
+        <div class="screen-name">AVANTI Home Screen</div>
+        <div class="screen-desc">AVANTI tab destination. Full-screen AI hub with insights feed.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-avanti-home-screen.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card gold" href="vai-avanti-gameday.html" target="_blank">
+      <iframe class="screen-preview" src="vai-avanti-gameday.html" scrolling="no" style="width:300%;height:600px;transform:scale(0.333);margin-bottom:-400px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">B3</div>
+        <div class="screen-name">AVANTI in GAMEDAY</div>
+        <div class="screen-desc">GAMEDAY Insights sidebar. Green/yellow card feed. Confirm CTAs.</div>
+        <div class="screen-tags"><span class="tag web">Web</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-avanti-gameday.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- GROUP C: CLUB OS MOBILE -->
+<div class="group">
+  <div class="group-header">
+    <div class="group-letter c">C</div>
+    <div>
+      <div class="group-title">Club OS Mobile (C1–C5)</div>
+      <div class="group-desc">Sub-grid, Roster, Compliance, Schedule, Booking Flow</div>
+    </div>
+  </div>
+  <div class="screen-grid">
+    <a class="screen-card" href="vai-club-os-mobile-phase1.html" target="_blank">
+      <iframe class="screen-preview" src="vai-club-os-mobile-phase1.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">C1–C3 (M1–M11)</div>
+        <div class="screen-name">Club OS Mobile Phase 1</div>
+        <div class="screen-desc">Sub-grid, Roster, Compliance, Tournament, Scoring, Standings.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-club-os-mobile-phase1.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card" href="vai-club-os-mobile-phase15.html" target="_blank">
+      <iframe class="screen-preview" src="vai-club-os-mobile-phase15.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">C4 (M13–M14)</div>
+        <div class="screen-name">Club OS Mobile Phase 1.5</div>
+        <div class="screen-desc">Scheduling engine, availability, booking entry points.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-club-os-mobile-phase15.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card" href="vai-club-os-mobile-phase2.html" target="_blank">
+      <iframe class="screen-preview" src="vai-club-os-mobile-phase2.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">C5</div>
+        <div class="screen-name">Club OS Mobile Phase 2 — Booking Flow</div>
+        <div class="screen-desc">Select session → pick slot → confirm + pay. Countdown timer.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-club-os-mobile-phase2.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- GROUP D: GAMEDAY WEB -->
+<div class="group">
+  <div class="group-header">
+    <div class="group-letter d">D</div>
+    <div>
+      <div class="group-title">GAMEDAY Web (D1–D6) 🥇 GOLD STANDARD</div>
+      <div class="group-desc">Club admin command center — Dashboard, Roster, Schedule, Mentor, Finances</div>
+    </div>
+  </div>
+  <div class="gold-banner">🥇 Gold Standard Priority — D1–D4 need fresh renders. D5–D6 already built.</div>
+  <div class="screen-grid">
+    <a class="screen-card gold" href="vai-club-os-gameday-phase15.html" target="_blank">
+      <iframe class="screen-preview" src="vai-club-os-gameday-phase15.html" scrolling="no" style="width:300%;height:600px;transform:scale(0.333);margin-bottom:-400px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">D1 / D2 / D3</div>
+        <div class="screen-name">GAMEDAY Phase 1.5 — Dashboard + Roster + Schedule</div>
+        <div class="screen-desc">Overview stats, roster table, schedule calendar view.</div>
+        <div class="screen-tags"><span class="tag web">Web</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-club-os-gameday-phase15.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card gold" href="vai-club-os-gameday-phase2.html" target="_blank">
+      <iframe class="screen-preview" src="vai-club-os-gameday-phase2.html" scrolling="no" style="width:300%;height:600px;transform:scale(0.333);margin-bottom:-400px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">D4</div>
+        <div class="screen-name">GAMEDAY Phase 2 — Mentor Dashboard</div>
+        <div class="screen-desc">Earnings, booking requests, availability settings, calendar integration.</div>
+        <div class="screen-tags"><span class="tag web">Web</span><span class="tag gold">Gold Priority</span><span class="tag existing">Existing</span></div>
+        <a class="open-btn" href="vai-club-os-gameday-phase2.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+    <a class="screen-card" href="vai-club-financials-gameday.html" target="_blank">
+      <iframe class="screen-preview" src="vai-club-financials-gameday.html" scrolling="no" style="width:300%;height:600px;transform:scale(0.333);margin-bottom:-400px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">D5 / D6</div>
+        <div class="screen-name">GAMEDAY Finances — Connected + Setup</div>
+        <div class="screen-desc">QB/Stripe/PayPal/Venmo hub. AVANTI strip. Import table. Setup flow.</div>
+        <div class="screen-tags"><span class="tag web">Web</span><span class="tag new">New</span></div>
+        <a class="open-btn" href="vai-club-financials-gameday.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- GROUP E: CLUB FINANCIALS MOBILE -->
+<div class="group">
+  <div class="group-header">
+    <div class="group-letter e">E</div>
+    <div>
+      <div class="group-title">Club Financials Mobile (E1–E4)</div>
+      <div class="group-desc">Wallet Settings, Setup Modal, PayPal Onboarding, Connected State</div>
+    </div>
+  </div>
+  <div class="screen-grid">
+    <a class="screen-card" href="vai-club-financials-mobile.html" target="_blank">
+      <iframe class="screen-preview" src="vai-club-financials-mobile.html" scrolling="no" style="width:400%;height:720px;transform:scale(0.25);margin-bottom:-540px;"></iframe>
+      <div class="screen-info">
+        <div class="screen-id">E1–E4</div>
+        <div class="screen-name">Club Financials Mobile — All 4 Screens</div>
+        <div class="screen-desc">Wallet Settings CTA → Setup Modal → PayPal Pending → Connected State.</div>
+        <div class="screen-tags"><span class="tag mobile">Mobile</span><span class="tag new">New</span></div>
+        <a class="open-btn" href="vai-club-financials-mobile.html" target="_blank">Open full screen ↗</a>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div style="text-align:center;padding:20px 0;">
+  <div style="font-size:13px;color:#555568;margin-bottom:8px;">All screens confirmed in master design brief</div>
+  <div style="font-size:11px;color:#2a2a35;">~/Desktop/VAI Master/specs/CLAUDE-DESIGN-MASTER-BRIEF-2026-04-25.md</div>
+</div>
+
+</body>
+</html>
