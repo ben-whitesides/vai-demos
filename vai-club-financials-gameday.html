@@ -27,15 +27,21 @@ body { background: var(--bg); font-family: -apple-system,'Inter',sans-serif; min
 .topbar-pill { font-size: 11px; font-weight: 700; border-radius: var(--pill); padding: 3px 10px; background: var(--greenBg); border: 1px solid var(--greenBorder); color: var(--green); }
 .topbar-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--elev); border: 1px solid var(--borderLight); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--orange); }
 .layout { display: flex; flex: 1; overflow: hidden; min-height: calc(100vh - var(--topbar)); }
-.sidebar { width: var(--sidebar); background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 12px 0; flex-shrink: 0; }
+.sidebar { width: var(--sidebar); background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 0; flex-shrink: 0; }
+.sidebar-logo { padding: 14px 16px 14px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+.sidebar-logo img { height: 20px; display: block; }
 .sidebar-section { padding: 6px 12px 2px; font-size: 10px; font-weight: 700; color: var(--textMuted); letter-spacing: 0.1em; text-transform: uppercase; }
 .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 8px 14px; font-size: 13px; color: var(--textMuted); cursor: pointer; border-radius: 6px; margin: 1px 6px; transition: all 0.12s; }
 .sidebar-item:hover { background: var(--elev); color: var(--text); }
 .sidebar-item.active { background: var(--orangeBg); color: var(--orange); border: 1px solid var(--orangeBorder); }
 .sidebar-item.finances-active { background: var(--greenBg); color: var(--green); border: 1px solid var(--greenBorder); }
-.sidebar-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+.sidebar-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sidebar-icon svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
 .sidebar-badge { margin-left: auto; font-size: 10px; font-weight: 700; background: var(--orange); color: #000; border-radius: var(--pill); padding: 1px 6px; }
 .sidebar-new { margin-left: auto; font-size: 9px; font-weight: 700; background: var(--greenBg); border: 1px solid var(--greenBorder); color: var(--green); border-radius: var(--pill); padding: 1px 6px; }
+.topbar-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
+.topbar-icon svg { width: 18px; height: 18px; stroke: #6B605A; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.topbar-notif { position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); border: 1.5px solid var(--card); }
 .main { flex: 1; overflow-y: auto; background: var(--bg); }
 .view-nav { display: flex; gap: 6px; padding: 14px 24px 0; background: var(--card); border-bottom: 1px solid var(--border); }
 .view-btn { padding: 8px 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; border-radius: 6px 6px 0 0; cursor: pointer; border: 1px solid transparent; border-bottom: none; color: var(--textMuted); background: transparent; transition: all 0.15s; }
@@ -131,28 +137,49 @@ body { background: var(--bg); font-family: -apple-system,'Inter',sans-serif; min
 
 <!-- Top bar -->
 <div class="topbar">
-  <img src="gameday-logo.png" alt="GAMEDAY" style="height:20px;display:block;"/>
-  <div class="topbar-sep"></div>
-  <div class="topbar-context">VAI FC North</div>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <span style="font-size:13px;color:var(--textMuted);">VAI FC North</span>
+    <span style="color:var(--border);">›</span>
+    <span style="font-size:13px;font-weight:600;color:var(--textStrong);">Finances</span>
+  </div>
   <div class="topbar-right">
+    <div class="topbar-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+    <div class="topbar-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="topbar-notif"></div></div>
     <div class="topbar-pill">● AVANTI ON</div>
-    <div class="topbar-avatar">CW</div>
+    <div class="topbar-avatar" title="Coach tier" style="background:var(--orange);color:#000;border:none;font-family:'Oswald',sans-serif;font-weight:700;">C</div>
   </div>
 </div>
 
 <div class="layout">
   <!-- Sidebar -->
   <div class="sidebar">
+    <div class="sidebar-logo"><img src="gameday-logo.png" alt="GAMEDAY"/></div>
     <div class="sidebar-section">Club OS</div>
-    <div class="sidebar-item"><span class="sidebar-icon">📋</span>Overview</div>
-    <div class="sidebar-item"><span class="sidebar-icon">📅</span>Schedule</div>
-    <div class="sidebar-item"><span class="sidebar-icon">👥</span>Roster</div>
-    <div class="sidebar-item"><span class="sidebar-icon">🏆</span>GAMEDAY</div>
-    <div class="sidebar-item"><span class="sidebar-icon">💬</span>Messages <span class="sidebar-badge">3</span></div>
-    <div class="sidebar-item finances-active"><span class="sidebar-icon">💳</span>Finances <span class="sidebar-new">NEW</span></div>
+    <div class="sidebar-item">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>Overview
+    </div>
+    <div class="sidebar-item">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>Roster
+    </div>
+    <div class="sidebar-item">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>Schedule
+    </div>
+    <div class="sidebar-item">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>Compliance
+    </div>
+    <div class="sidebar-item">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>Messages <span class="sidebar-badge">3</span>
+    </div>
+    <div class="sidebar-item finances-active">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>Finances <span class="sidebar-new">NEW</span>
+    </div>
     <div class="sidebar-section" style="margin-top:12px;">AVANTI</div>
-    <div class="sidebar-item"><span class="sidebar-icon">🤖</span>Insights</div>
-    <div class="sidebar-item"><span class="sidebar-icon">📊</span>Reports</div>
+    <div class="sidebar-item">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Insights
+    </div>
+    <div class="sidebar-item">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>Reports
+    </div>
   </div>
 
   <!-- Main -->
