@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Formation View (Mobile)</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060608;
+  --body: #0C0A09;
+  --card: #111114;
+  --elevated: #1a1a20;
+  --border: #222228;
+  --orange: #F7941E;
+  --green: #34D399;
+  --red: #FF6B6B;
+  --yellow: #FBBF24;
+  --text-strong: #F5F0EB;
+  --text-body: #C8C8D0;
+  --text-muted: #8888A0;
+  --field-green: #0a1a0a;
+  --field-line: rgba(255,255,255,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text-strong);
+  padding: 48px 40px;
+}
+.page-label { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; }
+.page-title { font-family:'Oswald',sans-serif; font-size:28px; font-weight:700; margin-bottom:8px; }
+.page-subtitle { font-size:13px; color:var(--text-muted); margin-bottom:40px; }
+
+.phone-row { display:flex; gap:20px; align-items:flex-start; }
+.phone {
+  width: 300px;
+  background: var(--body);
+  border-radius: 40px;
+  overflow: hidden;
+  border: 1.5px solid #252530;
+  box-shadow: 0 0 0 6px #080809, 0 24px 64px rgba(0,0,0,0.9);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.phone-label { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
+
+/* Status bar */
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 20px 4px; font-size:11px; font-weight:600; color:var(--text-strong); }
+
+/* VAI Header */
+.vai-header { display:flex; align-items:center; justify-content:space-between; padding:6px 16px 10px; }
+.vai-logo { display:flex; align-items:center; gap:5px; }
+.vai-full-logo { width:42px; height:29px; }
+.tier-badge { width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Oswald',sans-serif; font-size:9px; font-weight:700; color:#000; margin-left:4px; background:var(--orange); }
+.header-icons { display:flex; gap:12px; align-items:center; }
+.h-icon { color:var(--text-muted); }
+.h-bell { display:inline-flex; align-items:center; height:16px; position:relative; }
+.h-bell svg { display:block; }
+.h-bell::after { content:''; width:5px; height:5px; background:var(--red); border-radius:50%; position:absolute; top:0; right:-2px; }
+
+/* AVANTI Strip */
+.avanti-strip { background:rgba(52,211,153,0.05); border-bottom:1px solid rgba(52,211,153,0.12); padding:8px 14px; }
+.a-row { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
+.a-dot { width:6px; height:6px; background:var(--green); border-radius:50%; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.a-label { font-family:'Oswald',sans-serif; font-size:10px; font-weight:600; color:var(--green); letter-spacing:0.08em; }
+.a-text { font-size:11px; color:var(--text-body); line-height:1.4; }
+.a-text strong { color:var(--red); }
+.a-row-inline { display:flex; gap:8px; margin-top:5px; }
+.a-tag { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; padding:2px 7px; border-radius:4px; }
+.a-tag-red { background:rgba(255,107,107,0.15); color:var(--red); border:1px solid rgba(255,107,107,0.3); }
+.a-tag-yellow { background:rgba(251,191,36,0.12); color:var(--yellow); border:1px solid rgba(251,191,36,0.25); }
+
+/* Sport + formation selectors */
+.selectors { padding:8px 14px; display:flex; flex-direction:column; gap:6px; border-bottom:1px solid var(--border); }
+.sport-tabs { display:flex; gap:0; }
+.s-tab { font-family:'Oswald',sans-serif; font-size:10px; font-weight:600; color:var(--text-muted); padding:5px 10px; border-bottom:2px solid transparent; text-transform:uppercase; letter-spacing:0.05em; }
+.s-tab.active { color:var(--orange); border-bottom-color:var(--orange); }
+.formation-chips { display:flex; gap:6px; }
+.f-chip { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; padding:4px 8px; border-radius:999px; border:1px solid var(--border); color:var(--text-muted); }
+.f-chip.active { background:var(--orange); border-color:var(--orange); color:#000; }
+
+/* Field */
+.field-wrap { position:relative; flex:1; overflow:hidden; }
+.field {
+  width:100%;
+  height:380px;
+  background: linear-gradient(180deg, #0a1a0a 0%, #0d1f0d 100%);
+  position:relative;
+  overflow:hidden;
+}
+
+/* Field markings */
+.field-lines {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(transparent 0%, transparent calc(100% - 1px), var(--field-line) 100%),
+    repeating-linear-gradient(180deg, transparent, transparent 47px, var(--field-line) 47px, var(--field-line) 48px);
+  background-size: 100% 48px;
+}
+.field-center-line {
+  position:absolute; left:0; right:0; top:50%; height:1px;
+  background: rgba(255,255,255,0.2);
+}
+.end-zone-top {
+  position:absolute; left:0; right:0; top:0; height:44px;
+  background: rgba(255,255,255,0.04);
+  display:flex; align-items:center; justify-content:center;
+}
+.end-zone-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:rgba(255,255,255,0.25); letter-spacing:0.15em; }
+
+/* Hash marks */
+.hash-marks {
+  position:absolute; inset:44px 0 0 0;
+}
+
+/* Position circles */
+.position {
+  position:absolute;
+  transform:translate(-50%, -50%);
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  cursor:pointer;
+}
+.pos-circle {
+  width:38px; height:38px;
+  border-radius:50%;
+  background: rgba(255,255,255,0.08);
+  border:2px solid rgba(255,255,255,0.25);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
+  color:var(--text-strong);
+  position:relative;
+  transition: transform 0.15s;
+}
+.pos-circle:hover { transform:scale(1.1); }
+.pos-circle.green-ring { border-color:var(--green); background:rgba(52,211,153,0.12); }
+.pos-circle.red-ring { border-color:var(--red); background:rgba(255,107,107,0.15); box-shadow:0 0 12px rgba(255,107,107,0.3); }
+.pos-circle.yellow-ring { border-color:var(--yellow); background:rgba(251,191,36,0.12); }
+
+.play-dot {
+  position:absolute; top:-2px; right:-2px;
+  width:9px; height:9px; border-radius:50%;
+  border:2px solid var(--body);
+}
+.play-dot.green { background:var(--green); }
+.play-dot.red { background:var(--red); }
+.play-dot.yellow { background:var(--yellow); }
+
+.pos-name { font-family:'DM Sans',sans-serif; font-size:9px; color:var(--text-body); text-align:center; max-width:52px; line-height:1.2; white-space:nowrap; }
+.pos-depth { font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--text-muted); }
+
+/* Tapped position highlight */
+.pos-circle.tapped { border-color:var(--orange); box-shadow:0 0 0 3px rgba(247,148,30,0.3); background:rgba(247,148,30,0.15); }
+
+/* Bench strip */
+.bench-strip { padding:8px 14px; border-top:1px solid var(--border); background:var(--card); }
+.bench-label { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.bench-row { display:flex; gap:8px; flex-wrap:wrap; }
+.bench-player { display:flex; align-items:center; gap:5px; }
+.bench-circle { width:28px; height:28px; border-radius:50%; background:var(--elevated); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:'Oswald',sans-serif; font-size:9px; font-weight:700; color:var(--text-muted); position:relative; }
+.bench-info { font-size:9px; color:var(--text-muted); }
+
+/* AVANTI floating pill */
+.avanti-pill {
+  position:absolute; bottom:80px; right:12px;
+  background:var(--green); border-radius:999px;
+  padding:8px 14px; display:flex; align-items:center; gap:6px;
+  box-shadow: 0 0 0 4px rgba(52,211,153,0.15), 0 0 20px rgba(52,211,153,0.3);
+  cursor:pointer; z-index:10;
+}
+.avanti-pill-text { font-family:'Oswald',sans-serif; font-size:12px; font-weight:700; color:#000; }
+.avanti-pill-dot { width:6px; height:6px; background:#000; border-radius:50%; opacity:0.5; }
+.avanti-badge { width:18px; height:18px; background:var(--orange); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; color:#000; margin-left:2px; }
+
+/* Bottom nav */
+.bottom-nav { display:flex; align-items:center; justify-content:space-around; padding:8px 6px 14px; border-top:1px solid var(--border); background:var(--body); }
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.nav-label { font-size:9px; color:var(--text-muted); }
+.nav-label.active { color:var(--orange); }
+.nav-avanti { background:var(--green); border-radius:999px; padding:6px 14px; font-family:'Oswald',sans-serif; font-size:12px; font-weight:700; color:#000; box-shadow:0 0 14px rgba(52,211,153,0.35); }
+
+/* AVANTI bottom sheet (Mode 3) */
+.bottom-sheet {
+  position:absolute; bottom:0; left:0; right:0;
+  background:var(--card);
+  border-radius:20px 20px 0 0;
+  border-top:1px solid var(--border);
+  padding:0 0 16px;
+  z-index:20;
+  box-shadow:0 -8px 32px rgba(0,0,0,0.6);
+}
+.sheet-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:10px auto 14px; }
+.sheet-header { padding:0 16px 12px; border-bottom:1px solid var(--border); }
+.sheet-context { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.sheet-pos-badge { width:32px; height:32px; border-radius:50%; background:rgba(247,148,30,0.15); border:2px solid var(--orange); display:flex; align-items:center; justify-content:center; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; color:var(--orange); }
+.sheet-athlete-name { font-family:'Oswald',sans-serif; font-size:16px; font-weight:700; }
+.sheet-meta { font-size:10px; color:var(--text-muted); }
+.play-badge-inline { display:inline-flex; align-items:center; gap:4px; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; padding:2px 7px; border-radius:999px; }
+.play-green { background:rgba(52,211,153,0.12); color:var(--green); border:1px solid rgba(52,211,153,0.3); }
+.play-red { background:rgba(255,107,107,0.12); color:var(--red); border:1px solid rgba(255,107,107,0.3); }
+.play-yellow { background:rgba(251,191,36,0.1); color:var(--yellow); border:1px solid rgba(251,191,36,0.25); }
+
+.sheet-cards { padding:10px 16px 0; display:flex; flex-direction:column; gap:8px; }
+.insight-card { border-radius:8px; padding:9px 10px; }
+.insight-card.green { background:rgba(52,211,153,0.07); border:1px solid rgba(52,211,153,0.2); }
+.insight-card.yellow { background:rgba(251,191,36,0.07); border:1px solid rgba(251,191,36,0.2); }
+.insight-card.red { background:rgba(255,107,107,0.07); border:1px solid rgba(255,107,107,0.2); }
+.insight-label { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+.insight-label.green { color:var(--green); }
+.insight-label.yellow { color:var(--yellow); }
+.insight-label.red { color:var(--red); }
+.insight-text { font-size:11px; color:var(--text-body); line-height:1.4; }
+.insight-cta { display:inline-flex; align-items:center; background:var(--orange); color:#000; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; padding:5px 12px; border-radius:6px; margin-top:6px; text-transform:uppercase; letter-spacing:0.04em; }
+
+.sheet-prompts { padding:10px 16px 0; display:flex; gap:6px; flex-wrap:wrap; }
+.prompt-chip { font-size:10px; color:var(--text-body); background:var(--elevated); padding:5px 10px; border-radius:6px; border:1px solid var(--border); }
+.sheet-input { margin:10px 16px 0; background:var(--elevated); border:1px solid var(--border); border-radius:8px; padding:8px 12px; display:flex; align-items:center; justify-content:space-between; }
+.sheet-input-text { font-size:11px; color:var(--text-muted); }
+.sheet-input-send { width:24px; height:24px; background:var(--orange); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+</style>
+</head>
+<body>
+
+<div class="page-label">VAI — Formation View</div>
+<div class="page-title">Mobile Formation / Depth Chart</div>
+<div class="page-subtitle">Portrait field view · Touch position → AVANTI athlete panel (Mode 3) · Phone + Tablet</div>
+
+<div class="phone-row">
+
+  <!-- Phone 1: Field View -->
+  <div>
+    <div class="phone-label">Formation View — I-Form 11 · Football</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="color:var(--text-muted)">··· WiFi</span></div>
+      <div class="vai-header">
+        <div class="vai-logo">
+          <svg class="vai-full-logo" viewBox="0 0 285 194" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M160.629 0L88.5482 53.0803V101.568L81.1401 91.6626L0 10.6842V102.773L88.6142 193.745V102.724L160.629 49.8154V0ZM217.053 108.971L159.072 193.139H184.193L194.196 178.101L205.861 160.074L221.46 136.197V136.216L227.226 127.302L221.46 145.093V160.074V178.101V193.139H244.666V108.971H217.053ZM132.421 165.25L169.924 109.567H195.876L139.801 193.744H112.537V109.567H132.421V157.509L127.051 173.067L132.421 165.108V165.25ZM262.04 109.567H285.142V193.139H262.04V109.567Z" fill="#F7941E"/></svg>
+          <div class="tier-badge">M</div>
+        </div>
+        <div class="header-icons">
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div class="h-bell"><svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+      </div>
+
+      <!-- AVANTI strip -->
+      <div class="avanti-strip">
+        <div class="a-row"><div class="a-dot"></div><span class="a-label">AVANTI</span></div>
+        <div class="a-text"><strong>2 starters RED</strong> for Saturday — depth chart adjusted below.</div>
+        <div class="a-row-inline">
+          <div class="a-tag a-tag-red">Caleb F. TE · BLOCKED</div>
+          <div class="a-tag a-tag-yellow">Devin H. RB · WATCH</div>
+        </div>
+      </div>
+
+      <!-- Selectors -->
+      <div class="selectors">
+        <div class="sport-tabs">
+          <div class="s-tab active">Football</div>
+          <div class="s-tab">Soccer</div>
+          <div class="s-tab">Basketball</div>
+        </div>
+        <div class="formation-chips">
+          <div class="f-chip active">I-FORM 11</div>
+          <div class="f-chip">SPREAD 10</div>
+          <div class="f-chip">PISTOL 21</div>
+        </div>
+      </div>
+
+      <!-- Field -->
+      <div class="field-wrap">
+        <div class="field">
+          <div class="field-lines"></div>
+          <div class="field-center-line"></div>
+          <div class="end-zone-top"><span class="end-zone-label">OPP. END ZONE</span></div>
+
+          <!-- WR left -->
+          <div class="position" style="left:14%;top:68%">
+            <div class="pos-circle green-ring">WR<div class="play-dot green"></div></div>
+            <div class="pos-name">Tyrese J.</div>
+            <div class="pos-depth">#84</div>
+          </div>
+
+          <!-- LT -->
+          <div class="position" style="left:28%;top:80%">
+            <div class="pos-circle green-ring">LT<div class="play-dot green"></div></div>
+            <div class="pos-name">Big A. Cole</div>
+            <div class="pos-depth">#74</div>
+          </div>
+
+          <!-- LG -->
+          <div class="position" style="left:38%;top:80%">
+            <div class="pos-circle green-ring">LG<div class="play-dot green"></div></div>
+            <div class="pos-name">Pat Reyes</div>
+            <div class="pos-depth">#66</div>
+          </div>
+
+          <!-- C -->
+          <div class="position" style="left:50%;top:80%">
+            <div class="pos-circle green-ring">C<div class="play-dot green"></div></div>
+            <div class="pos-name">Sam Q.</div>
+            <div class="pos-depth">#58</div>
+          </div>
+
+          <!-- RG -->
+          <div class="position" style="left:62%;top:80%">
+            <div class="pos-circle green-ring">RG<div class="play-dot green"></div></div>
+            <div class="pos-name">Will K.</div>
+            <div class="pos-depth">#67</div>
+          </div>
+
+          <!-- RT -->
+          <div class="position" style="left:72%;top:80%">
+            <div class="pos-circle green-ring">RT<div class="play-dot green"></div></div>
+            <div class="pos-name">T. Brown</div>
+            <div class="pos-depth">#76</div>
+          </div>
+
+          <!-- TE — RED/BLOCKED -->
+          <div class="position" style="left:86%;top:78%">
+            <div class="pos-circle red-ring">TE<div class="play-dot red"></div></div>
+            <div class="pos-name" style="color:var(--red)">Caleb F.</div>
+            <div class="pos-depth" style="color:var(--red)">#87 ·+1</div>
+          </div>
+
+          <!-- QB -->
+          <div class="position" style="left:50%;top:64%">
+            <div class="pos-circle green-ring">QB<div class="play-dot green"></div></div>
+            <div class="pos-name">M. Rivera</div>
+            <div class="pos-depth">#12</div>
+          </div>
+
+          <!-- FB -->
+          <div class="position" style="left:42%;top:52%">
+            <div class="pos-circle green-ring">FB<div class="play-dot green"></div></div>
+            <div class="pos-name">Hank P.</div>
+            <div class="pos-depth">#34</div>
+          </div>
+
+          <!-- RB — YELLOW/WATCH -->
+          <div class="position" style="left:58%;top:48%">
+            <div class="pos-circle yellow-ring">RB<div class="play-dot yellow"></div></div>
+            <div class="pos-name" style="color:var(--yellow)">Devin H.</div>
+            <div class="pos-depth">#22</div>
+          </div>
+
+          <!-- WR right -->
+          <div class="position" style="left:86%;top:68%">
+            <div class="pos-circle green-ring">WR<div class="play-dot green"></div></div>
+            <div class="pos-name">Jay Park</div>
+            <div class="pos-depth">#11</div>
+          </div>
+
+          <!-- AVANTI pill -->
+          <div class="avanti-pill">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span class="avanti-pill-text">AVANTI</span>
+            <div class="avanti-pill-dot"></div>
+            <div class="avanti-badge">2</div>
+          </div>
+        </div>
+
+        <!-- Bench -->
+        <div class="bench-strip">
+          <div class="bench-label">Bench · Substitutes</div>
+          <div class="bench-row">
+            <div class="bench-player">
+              <div class="bench-circle">K<div class="play-dot green" style="top:-1px;right:-1px;width:7px;height:7px;"></div></div>
+              <div class="bench-info">Kais B.</div>
+            </div>
+            <div class="bench-player">
+              <div class="bench-circle" style="border-color:var(--orange);color:var(--orange)">D2</div>
+              <div class="bench-info" style="color:var(--orange)">Depth TE</div>
+            </div>
+            <div class="bench-player">
+              <div class="bench-circle">MJ<div class="play-dot green" style="top:-1px;right:-1px;width:7px;height:7px;"></div></div>
+              <div class="bench-info">M. Jones</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg><span class="nav-label">Home</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#8888A0"/></svg><span class="nav-label">Feed</span></div>
+        <div class="nav-avanti">AVANTI</div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-label">Me</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phone 2: Position tapped — AVANTI bottom sheet -->
+  <div>
+    <div class="phone-label">TE Position Tapped → AVANTI Athlete Panel</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="color:var(--text-muted)">··· WiFi</span></div>
+      <div class="vai-header">
+        <div class="vai-logo">
+          <svg class="vai-full-logo" viewBox="0 0 285 194" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M160.629 0L88.5482 53.0803V101.568L81.1401 91.6626L0 10.6842V102.773L88.6142 193.745V102.724L160.629 49.8154V0ZM217.053 108.971L159.072 193.139H184.193L194.196 178.101L205.861 160.074L221.46 136.197V136.216L227.226 127.302L221.46 145.093V160.074V178.101V193.139H244.666V108.971H217.053ZM132.421 165.25L169.924 109.567H195.876L139.801 193.744H112.537V109.567H132.421V157.509L127.051 173.067L132.421 165.108V165.25ZM262.04 109.567H285.142V193.139H262.04V109.567Z" fill="#F7941E"/></svg>
+          <div class="tier-badge">M</div>
+        </div>
+        <div class="header-icons">
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div class="h-bell"><svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+      </div>
+      <div class="avanti-strip">
+        <div class="a-row"><div class="a-dot"></div><span class="a-label">AVANTI</span></div>
+        <div class="a-text"><strong>2 starters RED</strong> for Saturday — depth chart adjusted below.</div>
+      </div>
+      <div class="selectors">
+        <div class="sport-tabs"><div class="s-tab active">Football</div><div class="s-tab">Soccer</div><div class="s-tab">Basketball</div></div>
+        <div class="formation-chips"><div class="f-chip active">I-FORM 11</div><div class="f-chip">SPREAD 10</div><div class="f-chip">PISTOL 21</div></div>
+      </div>
+
+      <!-- Field dimmed -->
+      <div class="field-wrap">
+        <div class="field" style="opacity:0.35">
+          <div class="field-lines"></div>
+          <div class="end-zone-top"><span class="end-zone-label">OPP. END ZONE</span></div>
+          <div class="position" style="left:14%;top:68%"><div class="pos-circle green-ring">WR</div></div>
+          <div class="position" style="left:28%;top:80%"><div class="pos-circle green-ring">LT</div></div>
+          <div class="position" style="left:38%;top:80%"><div class="pos-circle green-ring">LG</div></div>
+          <div class="position" style="left:50%;top:80%"><div class="pos-circle green-ring">C</div></div>
+          <div class="position" style="left:62%;top:80%"><div class="pos-circle green-ring">RG</div></div>
+          <div class="position" style="left:72%;top:80%"><div class="pos-circle green-ring">RT</div></div>
+          <!-- TE highlighted/tapped -->
+          <div class="position" style="left:86%;top:78%;opacity:1 !important">
+            <div class="pos-circle tapped" style="opacity:1">TE<div class="play-dot red"></div></div>
+          </div>
+          <div class="position" style="left:50%;top:64%"><div class="pos-circle green-ring">QB</div></div>
+          <div class="position" style="left:42%;top:52%"><div class="pos-circle green-ring">FB</div></div>
+          <div class="position" style="left:58%;top:48%"><div class="pos-circle yellow-ring">RB</div></div>
+          <div class="position" style="left:86%;top:68%"><div class="pos-circle green-ring">WR</div></div>
+        </div>
+
+        <!-- AVANTI Bottom Sheet -->
+        <div class="bottom-sheet">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <div class="sheet-context">
+              <div class="sheet-pos-badge">TE</div>
+              <div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div class="sheet-athlete-name">Caleb Fletcher</div>
+                  <div class="play-badge-inline play-red">● RED · BLOCKED</div>
+                </div>
+                <div class="sheet-meta">#87 · Tight End · Junior · I-FORM Starter</div>
+              </div>
+            </div>
+          </div>
+          <div class="sheet-cards">
+            <div class="insight-card red">
+              <div class="insight-label red">PLAY BLOCKED</div>
+              <div class="insight-text">Payment 4 days overdue. Cannot play Saturday. Depth: Marcus Hill (#89) promoted to starter.</div>
+              <div class="insight-cta">Notify Parent</div>
+            </div>
+            <div class="insight-card green">
+              <div class="insight-label green">DEPTH COVERED</div>
+              <div class="insight-text">Marcus Hill (#89) steps in. Cleared GREEN, waivers signed, 3 sessions this week.</div>
+            </div>
+          </div>
+          <div class="sheet-prompts">
+            <div class="prompt-chip">Who's the backup?</div>
+            <div class="prompt-chip">When can Caleb return?</div>
+            <div class="prompt-chip">Flag for coach</div>
+          </div>
+          <div class="sheet-input">
+            <div class="sheet-input-text">Ask AVANTI about Caleb F...</div>
+            <div class="sheet-input-send">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg><span class="nav-label">Home</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#8888A0"/></svg><span class="nav-label">Feed</span></div>
+        <div class="nav-avanti">AVANTI</div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-label">Me</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
