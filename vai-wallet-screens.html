@@ -3,638 +3,460 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAI Wallet - Gold Standard Screens</title>
+<title>VAI — Wallet Screens (F1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: #1a1a2e;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-    color: #FAFAF9;
-    padding: 40px 20px;
-  }
-  h1 {
-    text-align: center;
-    font-size: 32px;
-    color: #F7941E;
-    margin-bottom: 12px;
-    font-weight: 700;
-  }
-  .page-subtitle {
-    text-align: center;
-    color: #A8A29E;
-    font-size: 14px;
-    margin-bottom: 50px;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --vai-orange:#f7941e; --vai-green:#34d399; --vai-gold:#f3d7b5;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --red:#FF6B6B; --yellow:#FBBF24; --blue:#5577DD;
+  --font-oswald:'Oswald',Impact,Arial Black,sans-serif;
+  --font-dm:'DM Sans',Arial,Helvetica,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-full:9999px;
+}
+body { background:var(--void-black); font-family:var(--font-dm); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:32px 16px 60px; color:var(--gray-primary); -webkit-font-smoothing:antialiased; }
+.page-title { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:4px; text-align:center; }
+.page-sub { font-size:11px; color:var(--gray-disabled); margin-bottom:32px; text-align:center; }
+.phones-row { display:flex; gap:24px; align-items:flex-start; justify-content:center; flex-wrap:nowrap; }
+.phone-wrap { display:flex; flex-direction:column; align-items:center; gap:10px; }
+.phone-label { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gray-disabled); text-align:center; }
 
-  .screens-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 60px;
-  }
+/* Phone */
+.phone { width:375px; background:var(--void-black); border-radius:44px; border:1.5px solid var(--gray-subtle); box-shadow:0 0 0 1px #0c0c10,0 32px 80px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden; position:relative; flex-shrink:0; }
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 22px 8px; background:var(--void-black); font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
 
-  .screen-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+/* Locked header */
+.app-header { background:var(--void-black); padding:10px 18px 12px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.vai-wordmark { font-family:var(--font-oswald); font-size:18px; font-weight:700; letter-spacing:0.05em; color:var(--gray-primary); }
+.tier-bubble { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; font-family:var(--font-dm); font-size:12px; font-weight:900; color:#000; flex-shrink:0; }
+.hdr-icons { display:flex; gap:12px; align-items:center; margin-left:auto; }
+.hdr-icon { width:20px; height:20px; display:flex; align-items:center; justify-content:center; }
+.hdr-icon svg { width:18px; height:18px; stroke:var(--gray-secondary); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.a-dot { width:6px; height:6px; border-radius:50%; background:var(--vai-green); animation:glow 2s ease-in-out infinite; flex-shrink:0; }
+@keyframes glow { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
 
-  .screen-label {
-    color: #F7941E;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    min-width: 380px;
-    text-align: center;
-  }
+/* AVANTI strip */
+.avanti-strip { background:var(--void-black); border-bottom:1px solid var(--border); padding:9px 18px; display:flex; align-items:center; gap:6px; }
+.strip-lbl { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--vai-green); }
+.strip-msg { font-family:var(--font-dm); font-size:12px; color:var(--gray-body); flex:1; line-height:1.4; }
+.strip-chip { padding:4px 10px; border-radius:var(--r-full); background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); font-family:var(--font-dm); font-size:11px; font-weight:600; color:var(--vai-orange); cursor:pointer; white-space:nowrap; flex-shrink:0; }
 
-  .phone-frame {
-    width: 380px;
-    height: 820px;
-    background: #0C0A09;
-    border-radius: 40px;
-    border: 3px solid #333;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
-  }
+/* Scroll body */
+.scroll-body { background:var(--void-black); overflow-y:auto; scrollbar-width:none; }
+.scroll-body::-webkit-scrollbar { display:none; }
 
-  .status-bar {
-    height: 44px;
-    background: #0C0A09;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #FAFAF9;
-    border-bottom: 1px solid #2A2623;
-  }
+/* Balance card */
+.balance-card { margin:14px 16px 0; background:var(--card-dark); border:1px solid rgba(247,148,30,0.3); border-radius:var(--r-lg); padding:16px; position:relative; overflow:hidden; }
+.balance-card::before { content:''; position:absolute; top:-30px; right:-30px; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle,rgba(247,148,30,0.12),transparent 70%); pointer-events:none; }
+.balance-label { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:6px; }
+.balance-amount { font-family:var(--font-oswald); font-size:34px; font-weight:700; color:var(--vai-orange); margin-bottom:12px; }
+.balance-actions { display:flex; gap:8px; }
+.bal-btn { flex:1; padding:11px; border-radius:var(--r-md); border:none; font-family:var(--font-oswald); font-size:13px; font-weight:700; letter-spacing:0.04em; cursor:pointer; }
+.bal-btn-primary { background:var(--vai-orange); color:#000; }
+.bal-btn-secondary { background:var(--surface-1); border:1px solid var(--gray-subtle); color:var(--gray-primary); font-family:var(--font-oswald); }
+.balance-sub { display:flex; gap:16px; margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
+.balance-sub-item { display:flex; flex-direction:column; gap:2px; }
+.balance-sub-lbl { font-family:var(--font-mono); font-size:9px; letter-spacing:0.06em; text-transform:uppercase; color:var(--gray-disabled); }
+.balance-sub-val { font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
 
-  .screen-content {
-    height: 776px;
-    overflow-y: auto;
-    padding: 16px;
-  }
+/* Section header */
+.section-hdr { padding:14px 18px 6px; display:flex; align-items:center; justify-content:space-between; }
+.section-lbl { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); }
+.section-link { font-family:var(--font-dm); font-size:11px; color:var(--vai-orange); cursor:pointer; }
 
-  .card {
-    background: #151210;
-    border-radius: 16px;
-    padding: 20px;
-    border: 1px solid #2A2623;
-    margin-bottom: 16px;
-  }
+/* Filter chips */
+.filter-row { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:0 16px 8px; }
+.filter-row::-webkit-scrollbar { display:none; }
+.fchip { display:flex; align-items:center; gap:4px; background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-full); padding:5px 12px; font-family:var(--font-dm); font-size:11px; font-weight:500; color:var(--gray-secondary); white-space:nowrap; flex-shrink:0; cursor:pointer; }
+.fchip.active { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--vai-orange); }
 
-  .card.balance {
-    background: linear-gradient(135deg, #2A1810 0%, #1A1210 100%);
-    border-color: #F7941E;
-    padding: 24px;
-  }
+/* Transaction rows */
+.tx-list { display:flex; flex-direction:column; padding:0 16px; }
+.tx-row { display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
+.tx-row:last-child { border-bottom:none; }
+.tx-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-oswald); font-size:13px; font-weight:700; color:#000; flex-shrink:0; }
+.tx-info { flex:1; min-width:0; }
+.tx-name { font-family:var(--font-dm); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.tx-meta { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); margin-top:2px; }
+.tx-amount { font-family:var(--font-oswald); font-size:14px; font-weight:700; }
+.tx-amount.positive { color:var(--vai-green); }
+.tx-amount.negative { color:var(--gray-primary); }
+.tx-amount.pending { color:var(--yellow); }
+.tx-badge { display:inline-flex; align-items:center; margin-left:6px; font-family:var(--font-mono); font-size:9px; font-weight:500; padding:2px 6px; border-radius:var(--r-sm); border:1px solid; }
+.tb-pending { background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.3); color:var(--yellow); }
+.tb-green { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
 
-  .balance-amount {
-    font-size: 36px;
-    font-weight: 700;
-    color: #F7941E;
-    margin-bottom: 20px;
-  }
+/* Affiliate / Earnings */
+.earn-card { margin:14px 16px 0; background:var(--card-dark); border:1px solid rgba(247,148,30,0.25); border-radius:var(--r-lg); padding:14px 16px; }
+.earn-row { display:flex; gap:0; }
+.earn-item { flex:1; display:flex; flex-direction:column; gap:3px; }
+.earn-item + .earn-item { border-left:1px solid var(--border); padding-left:14px; }
+.earn-lbl { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--gray-disabled); }
+.earn-val { font-family:var(--font-oswald); font-size:20px; font-weight:700; color:var(--vai-orange); }
+.earn-sub { font-family:var(--font-dm); font-size:10px; color:var(--gray-secondary); }
 
-  .balance-label {
-    font-size: 12px;
-    color: #A8A29E;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-  }
+/* Affiliate link card */
+.link-card { margin:10px 16px 0; background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-md); padding:11px 14px; display:flex; align-items:center; gap:10px; }
+.link-url { font-family:var(--font-mono); font-size:11px; color:var(--vai-orange); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.link-copy { padding:5px 10px; background:var(--vai-orange); border-radius:4px; font-family:var(--font-dm); font-size:11px; font-weight:700; color:#000; cursor:pointer; flex-shrink:0; }
 
-  .btn-group {
-    display: flex;
-    gap: 12px;
-    margin-top: 16px;
-  }
+/* Commission tiers */
+.tier-row { display:flex; align-items:center; gap:10px; padding:10px 16px; border-bottom:1px solid var(--border); }
+.tier-level { font-family:var(--font-mono); font-size:10px; font-weight:700; color:var(--gray-disabled); min-width:48px; }
+.tier-bar-wrap { flex:1; height:6px; background:var(--surface-1); border-radius:999px; overflow:hidden; }
+.tier-bar { height:100%; border-radius:999px; }
+.tier-pct { font-family:var(--font-oswald); font-size:13px; font-weight:700; color:var(--vai-orange); min-width:34px; text-align:right; }
+.tier-sub { font-family:var(--font-dm); font-size:10px; color:var(--gray-secondary); min-width:60px; text-align:right; }
 
-  .btn {
-    flex: 1;
-    padding: 14px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 15px;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-  }
+/* Referral list */
+.ref-row { display:flex; align-items:center; gap:10px; padding:9px 16px; border-bottom:1px solid var(--border); }
+.ref-avatar { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-oswald); font-size:11px; font-weight:700; color:#000; flex-shrink:0; }
+.ref-info { flex:1; }
+.ref-name { font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
+.ref-meta { font-family:var(--font-dm); font-size:10px; color:var(--gray-secondary); }
+.ref-earn { font-family:var(--font-oswald); font-size:13px; font-weight:700; color:var(--vai-green); }
 
-  .btn-primary {
-    background: #F7941E;
-    color: #FAFAF9;
-  }
+/* Cashout / Payout */
+.bank-card { margin:14px 16px 0; background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px 16px; display:flex; align-items:center; gap:12px; }
+.bank-icon { width:40px; height:40px; border-radius:var(--r-md); background:rgba(85,119,221,0.1); border:1px solid rgba(85,119,221,0.3); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.bank-icon svg { width:20px; height:20px; stroke:var(--blue); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.bank-name { font-family:var(--font-dm); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.bank-acct { font-family:var(--font-mono); font-size:11px; color:var(--gray-secondary); margin-top:2px; }
+.bank-status { margin-left:auto; font-family:var(--font-mono); font-size:9px; font-weight:500; padding:2px 7px; border-radius:999px; background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); color:var(--vai-green); }
+.amount-field { margin:10px 16px 0; background:var(--surface-1); border:1px solid var(--gray-subtle); border-radius:var(--r-md); padding:14px 16px; display:flex; align-items:center; gap:8px; }
+.amount-currency { font-family:var(--font-oswald); font-size:18px; font-weight:700; color:var(--gray-secondary); }
+.amount-input { font-family:var(--font-oswald); font-size:28px; font-weight:700; color:var(--gray-primary); flex:1; }
+.amount-max { font-family:var(--font-dm); font-size:11px; color:var(--vai-orange); cursor:pointer; }
+.payout-detail { margin:10px 16px 0; background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-md); padding:12px 14px; display:flex; flex-direction:column; gap:8px; }
+.pd-row { display:flex; justify-content:space-between; align-items:center; }
+.pd-label { font-family:var(--font-dm); font-size:12px; color:var(--gray-secondary); }
+.pd-value { font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
+.pd-divider { height:1px; background:var(--border); }
+.pd-total { font-family:var(--font-oswald); font-size:18px; font-weight:700; color:var(--vai-orange); }
 
-  .btn-secondary {
-    background: #1A1714;
-    border: 1px solid #2A2623;
-    color: #FAFAF9;
-  }
+/* CTA */
+.cta-btn { display:block; width:calc(100% - 32px); margin:10px 16px 0; padding:14px; background:var(--vai-orange); border:none; border-radius:var(--r-md); font-family:var(--font-oswald); font-size:15px; font-weight:700; letter-spacing:0.06em; color:#000; text-align:center; cursor:pointer; }
+.cta-outline { background:transparent; border:1px solid var(--gray-subtle); color:var(--gray-secondary); font-family:var(--font-dm); font-size:13px; font-weight:500; padding:11px; }
 
-  .tx-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 0;
-    border-bottom: 1px solid #2A2623;
-  }
-
-  .tx-row:last-child {
-    border-bottom: none;
-  }
-
-  .tx-left {
-    flex: 1;
-  }
-
-  .tx-name {
-    color: #FAFAF9;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-
-  .tx-time {
-    color: #57534E;
-    font-size: 12px;
-  }
-
-  .tx-amount {
-    font-size: 14px;
-    font-weight: 700;
-  }
-
-  .tx-amount.plus {
-    color: #34D399;
-  }
-
-  .tx-amount.minus {
-    color: #EF4444;
-  }
-
-  .badge {
-    display: inline-block;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: 700;
-    margin-left: 6px;
-  }
-
-  .badge-pending {
-    background: rgba(247, 148, 30, 0.2);
-    color: #F7941E;
-  }
-
-  .filter-bar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #2A2623;
-  }
-
-  .filter-tab {
-    padding: 6px 12px;
-    border-radius: 16px;
-    background: #151210;
-    border: 1px solid #2A2623;
-    font-size: 12px;
-    font-weight: 600;
-    color: #A8A29E;
-  }
-
-  .filter-tab.active {
-    background: rgba(247, 148, 30, 0.2);
-    border-color: #F7941E;
-    color: #F7941E;
-  }
-
-  .avatar-bar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #2A2623;
-  }
-
-  .avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 24px;
-    background: #1A1714;
-    border: 2px solid #2A2623;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-
-  .keypad {
-    background: #151210;
-    border: 1px solid #2A2623;
-    border-radius: 12px;
-    padding: 16px;
-    margin: 16px 0;
-  }
-
-  .keypad-display {
-    background: #0C0A09;
-    border-radius: 8px;
-    padding: 16px;
-    text-align: right;
-    margin-bottom: 16px;
-    font-size: 32px;
-    font-weight: 700;
-    color: #F7941E;
-  }
-
-  .keypad-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-
-  .keypad-btn {
-    background: #0C0A09;
-    border: 1px solid #2A2623;
-    border-radius: 8px;
-    padding: 12px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 700;
-    color: #FAFAF9;
-    cursor: pointer;
-  }
-
-  .pending-item {
-    background: #151210;
-    border: 1px solid #2A2623;
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
-  }
-
-  .pending-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-
-  .pending-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .mini-btn {
-    flex: 1;
-    padding: 6px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    border: 1px solid #2A2623;
-    background: #0C0A09;
-    color: #A8A29E;
-  }
-
-  .mini-btn.primary {
-    background: #F7941E;
-    color: #FAFAF9;
-    border-color: #F7941E;
-  }
-
-  .timer {
-    font-size: 11px;
-    color: #F7941E;
-    font-weight: 600;
-  }
-
-  .receiving-account {
-    background: #151210;
-    border: 1px solid #2A2623;
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .account-info {
-    flex: 1;
-  }
-
-  .account-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: #FAFAF9;
-    margin-bottom: 4px;
-  }
-
-  .account-handle {
-    font-size: 12px;
-    color: #57534E;
-  }
-
-  .account-actions {
-    display: flex;
-    gap: 8px;
-    font-size: 11px;
-  }
-
-  .account-actions span {
-    color: #57534E;
-    cursor: pointer;
-  }
-
-  .divider-thick {
-    height: 2px;
-    background: #2A2623;
-    margin: 20px 0;
-  }
+/* Bottom nav */
+.bottom-nav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:8px 4px 20px; flex-shrink:0; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:4px 0; }
+.ni-icon { width:24px; height:24px; display:flex; align-items:center; justify-content:center; }
+.ni-icon svg { width:22px; height:22px; stroke:var(--gray-disabled); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ni-lbl { font-family:var(--font-dm); font-size:10px; font-weight:500; color:var(--gray-disabled); }
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+.av-pill { background:var(--vai-green); border-radius:20px; padding:7px 12px; display:flex; align-items:center; justify-content:center; }
+.av-pill span { font-family:var(--font-dm); font-size:11px; font-weight:800; color:#000; }
 </style>
 </head>
 <body>
 
-<h1>💳 VAI Wallet — Gold Standard Screens</h1>
-<p class="page-subtitle">Updated layout for Badinho mobile team — Build reference</p>
+<div class="page-title">VAI — Wallet</div>
+<div class="page-sub">Screen 1: Balance + Transactions &nbsp;·&nbsp; Screen 2: Affiliate Earnings &nbsp;·&nbsp; Screen 3: Cashout / Payout</div>
 
-<!-- SCREEN 1: HOME / WALLET TAB -->
-<div class="screen-wrapper">
-  <div class="screen-label">Screen 1: Home / Wallet Tab</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span style="font-size: 15px; font-weight: 600;">9:41</span>
-      <span>📶 📡 🔋</span>
-    </div>
-    <div class="screen-content">
-      <!-- Balance Card at TOP -->
-      <div class="card balance">
-        <div class="balance-label">💳 Wallet Balance</div>
-        <div class="balance-amount">$2,450.00</div>
-        <div class="btn-group">
-          <button class="btn btn-primary">Send</button>
-          <button class="btn btn-secondary">Cashout</button>
+<div class="phones-row">
+
+  <!-- SCREEN 1: Wallet Home -->
+  <div class="phone-wrap">
+    <div class="phone-label">W1 — Wallet Home</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wv1)"/><defs><radialGradient id="wv1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
         </div>
       </div>
-
-      <div style="font-size: 12px; color: #57534E; font-weight: 600; margin: 20px 0 12px 0; text-transform: uppercase;">Latest Transactions</div>
-
-      <div class="tx-row">
-        <div class="tx-left">
-          <div class="tx-name">✓ John Doe</div>
-          <div class="tx-time">Yesterday</div>
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg">3 new affiliate signups — <strong style="color:var(--gray-primary);">$47.85</strong> pending</span>
+        <div class="strip-chip">View</div>
+      </div>
+      <div class="scroll-body" style="height:564px;">
+        <!-- Balance card -->
+        <div class="balance-card">
+          <div class="balance-label">Available Balance</div>
+          <div class="balance-amount">$2,450.00</div>
+          <div class="balance-actions">
+            <button class="bal-btn bal-btn-primary">Send</button>
+            <button class="bal-btn bal-btn-secondary">Cashout</button>
+          </div>
+          <div class="balance-sub">
+            <div class="balance-sub-item"><div class="balance-sub-lbl">Pending</div><div class="balance-sub-val">$47.85</div></div>
+            <div class="balance-sub-item"><div class="balance-sub-lbl">This month</div><div class="balance-sub-val">$312.40</div></div>
+            <div class="balance-sub-item"><div class="balance-sub-lbl">Referrals</div><div class="balance-sub-val">3 active</div></div>
+          </div>
         </div>
-        <div class="tx-amount plus">+$500</div>
-      </div>
 
-      <div class="tx-row">
-        <div class="tx-left">
-          <div class="tx-name">⏳ Sarah Smith<span class="badge badge-pending">PENDING</span></div>
-          <div class="tx-time">2 days ago · Expires in 5 days</div>
+        <!-- Filters -->
+        <div class="section-hdr" style="margin-top:4px;">
+          <div class="section-lbl">Transactions</div>
+          <div class="section-link">See all</div>
         </div>
-        <div class="tx-amount minus">-$250</div>
-      </div>
-
-      <div class="tx-row">
-        <div class="tx-left">
-          <div class="tx-name">✓ Team Fee</div>
-          <div class="tx-time">4 days ago</div>
+        <div class="filter-row">
+          <div class="fchip active">All</div>
+          <div class="fchip">Due</div>
+          <div class="fchip">Received</div>
+          <div class="fchip">Pending</div>
+          <div class="fchip">Paid out</div>
         </div>
-        <div class="tx-amount minus">-$100</div>
-      </div>
 
-      <div style="margin-top: 16px;">
-        <button class="btn btn-secondary" style="width: 100%;">View All Transactions</button>
-      </div>
-
-      <div class="filter-bar" style="margin-top: 20px;">
-        <div class="filter-tab active">Due</div>
-        <div class="filter-tab">Paid</div>
-        <div class="filter-tab">Awaiting</div>
-        <div class="filter-tab">Received</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SCREEN 2: SEND FLOW - ENTRY POINT -->
-<div class="screen-wrapper">
-  <div class="screen-label">Screen 2: Send Money Entry</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span style="font-size: 15px; font-weight: 600;">9:41</span>
-      <span>📶 📡 🔋</span>
-    </div>
-    <div class="screen-content">
-      <!-- Quick Access Avatars -->
-      <div style="margin-bottom: 16px;">
-        <div style="font-size: 12px; color: #57534E; font-weight: 600; margin-bottom: 8px; text-transform: uppercase;">Quick Access</div>
-        <div class="avatar-bar">
-          <div class="avatar">J</div>
-          <div class="avatar">S</div>
-          <div class="avatar">C</div>
-          <div class="avatar">+</div>
-        </div>
-      </div>
-
-      <div style="margin-bottom: 16px;">
-        <div style="font-size: 12px; color: #57534E; font-weight: 600; margin-bottom: 8px;">or Search</div>
-        <input type="text" placeholder="Name, phone, email..." style="background: #151210; border: 1px solid #2A2623; border-radius: 8px; padding: 12px; width: 100%; color: #FAFAF9; font-size: 14px;">
-      </div>
-
-      <!-- Numeric Keypad -->
-      <div class="keypad">
-        <div style="font-size: 12px; color: #57534E; font-weight: 600; margin-bottom: 12px; text-transform: uppercase;">Amount</div>
-        <div class="keypad-display">$0.00</div>
-        <div class="keypad-grid">
-          <div class="keypad-btn">7</div>
-          <div class="keypad-btn">8</div>
-          <div class="keypad-btn">9</div>
-          <div class="keypad-btn">4</div>
-          <div class="keypad-btn">5</div>
-          <div class="keypad-btn">6</div>
-          <div class="keypad-btn">1</div>
-          <div class="keypad-btn">2</div>
-          <div class="keypad-btn">3</div>
-          <div class="keypad-btn">0</div>
-          <div class="keypad-btn">.</div>
-          <div class="keypad-btn">⌫</div>
+        <!-- Transactions -->
+        <div class="tx-list">
+          <div class="tx-row">
+            <div class="tx-avatar" style="background:linear-gradient(135deg,var(--vai-green),#0D9E6A);">JD</div>
+            <div class="tx-info">
+              <div class="tx-name">John Doe <span class="tx-badge tb-green">AFFILIATE</span></div>
+              <div class="tx-meta">Yesterday · Level 1 commission</div>
+            </div>
+            <div class="tx-amount positive">+$500</div>
+          </div>
+          <div class="tx-row">
+            <div class="tx-avatar" style="background:linear-gradient(135deg,#5577DD,#3355bb);">SS</div>
+            <div class="tx-info">
+              <div class="tx-name">Sarah Smith <span class="tx-badge tb-pending">PENDING</span></div>
+              <div class="tx-meta">2 days ago · Expires in 5 days</div>
+            </div>
+            <div class="tx-amount pending">$250</div>
+          </div>
+          <div class="tx-row">
+            <div class="tx-avatar" style="background:linear-gradient(135deg,var(--vai-orange),#c47210);">TF</div>
+            <div class="tx-info">
+              <div class="tx-name">Team Fee</div>
+              <div class="tx-meta">4 days ago · VAI FC North dues</div>
+            </div>
+            <div class="tx-amount negative">-$100</div>
+          </div>
+          <div class="tx-row">
+            <div class="tx-avatar" style="background:linear-gradient(135deg,var(--vai-green),#0D9E6A);">MR</div>
+            <div class="tx-info">
+              <div class="tx-name">Mentor Booking <span class="tx-badge tb-green">EARNED</span></div>
+              <div class="tx-meta">1 week ago · Session payout</div>
+            </div>
+            <div class="tx-amount positive">+$85</div>
+          </div>
+          <div class="tx-row">
+            <div class="tx-avatar" style="background:var(--surface-1);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </div>
+            <div class="tx-info">
+              <div class="tx-name">Payout to Bank</div>
+              <div class="tx-meta">Last week · Chase ••••4821</div>
+            </div>
+            <div class="tx-amount negative">-$1,200</div>
+          </div>
         </div>
       </div>
-
-      <div style="margin-top: 12px;">
-        <button class="btn btn-primary">Continue</button>
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- SCREEN 3: CONFIRM + REVIEW -->
-<div class="screen-wrapper">
-  <div class="screen-label">Screen 3: Confirm Payment</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span style="font-size: 15px; font-weight: 600;">9:41</span>
-      <span>📶 📡 🔋</span>
-    </div>
-    <div class="screen-content">
-      <div class="card">
-        <div style="font-size: 12px; color: #57534E; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Send</div>
-        <div style="font-size: 28px; color: #F7941E; font-weight: 700; margin-bottom: 20px;">$250.00</div>
-
-        <div style="font-size: 12px; color: #57534E; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">To</div>
-        <div style="font-size: 16px; color: #FAFAF9; font-weight: 700; margin-bottom: 20px;">John Doe (@johndoe)</div>
-
-        <div style="font-size: 12px; color: #57534E; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">Note</div>
-        <div style="font-size: 14px; color: #A8A29E; margin-bottom: 20px; font-style: italic;">Weekly coaching fee</div>
-
-        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding: 12px 0; border-top: 1px solid #2A2623;">
-          <span style="color: #57534E;">From Balance</span>
-          <span style="color: #FAFAF9; font-weight: 600;">$2,450</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-          <span style="color: #57534E;">Fee</span>
-          <span style="color: #FAFAF9; font-weight: 600;">$0</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; border-top: 1px solid #2A2623; padding-top: 12px;">
-          <span style="color: #FAFAF9; font-weight: 700;">Total</span>
-          <span style="color: #F7941E; font-weight: 700; font-size: 18px;">$250.00</span>
+  <!-- SCREEN 2: Affiliate Earnings -->
+  <div class="phone-wrap">
+    <div class="phone-label">W2 — Affiliate Earnings</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wv2)"/><defs><radialGradient id="wv2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
         </div>
       </div>
-
-      <div style="margin-top: 20px;">
-        <div style="text-align: center; margin-bottom: 16px;">
-          <div style="font-size: 12px; color: #57534E; margin-bottom: 8px;">🔐 Biometric Required</div>
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg">Your link got <strong style="color:var(--gray-primary);">3 new signups</strong> this week — share again to hit Level 2</span>
+      </div>
+      <div class="scroll-body" style="height:564px;">
+        <!-- Earnings summary -->
+        <div class="earn-card">
+          <div style="font-family:var(--font-oswald);font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-disabled);margin-bottom:10px;">Affiliate Earnings</div>
+          <div class="earn-row">
+            <div class="earn-item">
+              <div class="earn-lbl">All Time</div>
+              <div class="earn-val">$1,240</div>
+              <div class="earn-sub">since joined</div>
+            </div>
+            <div class="earn-item">
+              <div class="earn-lbl">This Month</div>
+              <div class="earn-val">$312</div>
+              <div class="earn-sub">Apr 2026</div>
+            </div>
+            <div class="earn-item">
+              <div class="earn-lbl">Pending</div>
+              <div class="earn-val" style="color:var(--yellow);">$47</div>
+              <div class="earn-sub">awaiting</div>
+            </div>
+          </div>
         </div>
-        <button class="btn btn-primary">Confirm with Face ID</button>
-        <button class="btn btn-secondary" style="margin-top: 12px;">Use PIN</button>
+
+        <!-- Affiliate link -->
+        <div class="section-hdr" style="margin-top:4px;"><div class="section-lbl">Your Link</div></div>
+        <div class="link-card">
+          <div class="link-url">vai.app/share/JSMITH</div>
+          <div class="link-copy">Copy</div>
+        </div>
+        <div style="padding:6px 16px;font-family:var(--font-dm);font-size:11px;color:var(--gray-secondary);">Share this link. You earn recurring commission on every plan they pay.</div>
+
+        <!-- Commission tiers -->
+        <div class="section-hdr"><div class="section-lbl">Commission Tiers</div></div>
+        <div class="tier-row">
+          <div class="tier-level">Level 1</div>
+          <div class="tier-bar-wrap"><div class="tier-bar" style="width:100%;background:var(--vai-orange);"></div></div>
+          <div class="tier-pct">25%</div>
+          <div class="tier-sub">direct refs</div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-level">Level 2</div>
+          <div class="tier-bar-wrap"><div class="tier-bar" style="width:40%;background:rgba(247,148,30,0.5);"></div></div>
+          <div class="tier-pct">10%</div>
+          <div class="tier-sub">their refs</div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-level">Level 3</div>
+          <div class="tier-bar-wrap"><div class="tier-bar" style="width:20%;background:rgba(247,148,30,0.25);"></div></div>
+          <div class="tier-pct">5%</div>
+          <div class="tier-sub">L3</div>
+        </div>
+
+        <!-- Active referrals -->
+        <div class="section-hdr"><div class="section-lbl">Active Referrals</div><div class="section-link">See all</div></div>
+        <div class="ref-row">
+          <div class="ref-avatar" style="background:linear-gradient(135deg,var(--vai-green),#0D9E6A);">JD</div>
+          <div class="ref-info"><div class="ref-name">John Doe</div><div class="ref-meta">VAI+ · Joined 3 months ago</div></div>
+          <div class="ref-earn">+$125/mo</div>
+        </div>
+        <div class="ref-row">
+          <div class="ref-avatar" style="background:linear-gradient(135deg,#5577DD,#3355bb);">SS</div>
+          <div class="ref-info"><div class="ref-name">Sarah Smith</div><div class="ref-meta">Basic · Joined last week</div></div>
+          <div class="ref-earn" style="color:var(--yellow);">Pending</div>
+        </div>
+        <div class="ref-row">
+          <div class="ref-avatar" style="background:linear-gradient(135deg,var(--vai-orange),#c47210);">TK</div>
+          <div class="ref-info"><div class="ref-name">Tyler King</div><div class="ref-meta">VAI+ · Joined 1 month ago</div></div>
+          <div class="ref-earn">+$47/mo</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- SCREEN 4: LEDGER TAB -->
-<div class="screen-wrapper">
-  <div class="screen-label">Screen 4: Ledger — Awaiting</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span style="font-size: 15px; font-weight: 600;">9:41</span>
-      <span>📶 📡 🔋</span>
-    </div>
-    <div class="screen-content">
-      <div class="filter-bar">
-        <div class="filter-tab">Due</div>
-        <div class="filter-tab">Paid</div>
-        <div class="filter-tab active">Awaiting</div>
-        <div class="filter-tab">Received</div>
+  <!-- SCREEN 3: Cashout / Payout -->
+  <div class="phone-wrap">
+    <div class="phone-label">W3 — Cashout / Payout</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wv3)"/><defs><radialGradient id="wv3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
       </div>
+      <div class="scroll-body" style="height:640px;padding-top:4px;">
+        <!-- Page header -->
+        <div style="padding:14px 18px 6px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--vai-orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          <span style="font-family:var(--font-oswald);font-size:16px;font-weight:600;color:var(--gray-primary);">Cashout</span>
+        </div>
 
-      <!-- Pending Item 1 -->
-      <div class="pending-item">
-        <div class="pending-header">
+        <!-- Linked bank -->
+        <div class="section-hdr" style="margin-top:4px;"><div class="section-lbl">Payout to</div><div class="section-link">Change</div></div>
+        <div class="bank-card">
+          <div class="bank-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
           <div>
-            <div class="tx-name">⏳ Sarah Smith</div>
-            <div class="tx-time">Pending Acceptance</div>
+            <div class="bank-name">Chase Bank</div>
+            <div class="bank-acct">Checking ••••4821</div>
           </div>
-          <div class="tx-amount minus">-$250</div>
+          <div class="bank-status">Verified</div>
         </div>
-        <div style="font-size: 11px; color: #F7941E; margin: 8px 0;">
-          <span class="timer">⏰ Expires in 5 days</span>
+
+        <!-- Amount -->
+        <div class="section-hdr" style="margin-top:4px;"><div class="section-lbl">Amount</div><div class="section-link" style="color:var(--gray-secondary);">Available: $2,450</div></div>
+        <div class="amount-field">
+          <div class="amount-currency">$</div>
+          <div class="amount-input">500.00</div>
+          <div class="amount-max">MAX</div>
         </div>
-        <div class="pending-actions">
-          <button class="mini-btn">Resend</button>
-          <button class="mini-btn">Cancel</button>
+
+        <!-- Payout breakdown -->
+        <div class="section-hdr" style="margin-top:4px;"><div class="section-lbl">Summary</div></div>
+        <div class="payout-detail">
+          <div class="pd-row"><div class="pd-label">Cashout amount</div><div class="pd-value">$500.00</div></div>
+          <div class="pd-row"><div class="pd-label">VAI fee (1.5%)</div><div class="pd-value">-$7.50</div></div>
+          <div class="pd-divider"></div>
+          <div class="pd-row"><div class="pd-label" style="font-weight:600;color:var(--gray-primary);">You receive</div><div class="pd-total">$492.50</div></div>
+          <div class="pd-row"><div class="pd-label">Arrival</div><div class="pd-value">1–2 business days</div></div>
+        </div>
+
+        <!-- AVANTI insight -->
+        <div style="margin:10px 16px 0;background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.2);border-radius:var(--r-md);padding:10px 14px;">
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;"><div class="a-dot" style="width:5px;height:5px;"></div><span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;color:var(--vai-green);">AVANTI</span></div>
+          <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-body);line-height:1.5;">Your $47.85 affiliate pending clears in 3 days — you may want to include it in a larger payout then.</div>
+        </div>
+
+        <button class="cta-btn" style="margin-top:12px;">Confirm Payout — $492.50</button>
+        <button class="cta-btn cta-outline" style="display:block;width:calc(100% - 32px);margin:8px 16px 0;text-align:center;border-radius:var(--r-md);">Cancel</button>
+
+        <!-- Payout history -->
+        <div class="section-hdr" style="margin-top:14px;"><div class="section-lbl">Payout History</div></div>
+        <div class="tx-list">
+          <div class="tx-row">
+            <div class="tx-avatar" style="background:var(--surface-1);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--vai-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="tx-info"><div class="tx-name">Chase ••••4821</div><div class="tx-meta">Apr 10 · 2 days to clear</div></div>
+            <div class="tx-amount" style="color:var(--vai-green);">-$1,200</div>
+          </div>
+          <div class="tx-row">
+            <div class="tx-avatar" style="background:var(--surface-1);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--vai-green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="tx-info"><div class="tx-name">Chase ••••4821</div><div class="tx-meta">Mar 28 · Completed</div></div>
+            <div class="tx-amount" style="color:var(--vai-green);">-$850</div>
+          </div>
         </div>
       </div>
-
-      <!-- Pending Item 2 -->
-      <div class="pending-item">
-        <div class="pending-header">
-          <div>
-            <div class="tx-name">⏳ Coach Payment</div>
-            <div class="tx-time">Pending Payment</div>
-          </div>
-          <div class="tx-amount minus">-$100</div>
-        </div>
-        <div style="font-size: 11px; color: #F7941E; margin: 8px 0;">
-          <span class="timer">⏰ Requested 1 week ago</span>
-        </div>
-        <div class="pending-actions">
-          <button class="mini-btn primary">Pay Now</button>
-          <button class="mini-btn">Ignore</button>
-        </div>
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- SCREEN 5: RECEIVING ACCOUNTS -->
-<div class="screen-wrapper">
-  <div class="screen-label">Screen 5: Receiving Accounts</div>
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span style="font-size: 15px; font-weight: 600;">9:41</span>
-      <span>📶 📡 🔋</span>
-    </div>
-    <div class="screen-content">
-      <div style="font-size: 14px; color: #FAFAF9; font-weight: 600; margin-bottom: 16px;">Where others can send you money:</div>
+</div><!-- /phones-row -->
 
-      <div class="receiving-account">
-        <div class="account-info">
-          <div class="account-name">✓ PayPal Account</div>
-          <div class="account-handle">ben@vai.app</div>
-        </div>
-        <div class="account-actions">
-          <span>Edit</span>
-          <span>Remove</span>
-        </div>
-      </div>
-
-      <div class="receiving-account">
-        <div class="account-info">
-          <div class="account-name">✓ Venmo Account</div>
-          <div class="account-handle">@bensheltey</div>
-        </div>
-        <div class="account-actions">
-          <span>Edit</span>
-          <span>Remove</span>
-        </div>
-      </div>
-
-      <div class="receiving-account">
-        <div class="account-info">
-          <div class="account-name">⏳ Stripe Connect Express</div>
-          <div class="account-handle">Pending Onboarding</div>
-        </div>
-        <button class="mini-btn" style="padding: 4px 8px;">Setup</button>
-      </div>
-
-      <div style="margin-top: 16px;">
-        <button class="btn btn-secondary" style="width: 100%;">+ Add New Account</button>
-      </div>
-
-      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #2A2623;">
-        <div style="font-size: 12px; color: #57534E; font-weight: 600; margin-bottom: 12px;">Coming Soon</div>
-        <div class="receiving-account" style="opacity: 0.6;">
-          <div class="account-info">
-            <div class="account-name">Bank Transfer (ACH)</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<div style="text-align:center;margin-top:8px;font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);letter-spacing:0.08em;">VAI Wallet · W1 Balance + Transactions · W2 Affiliate Earnings · W3 Cashout / Payout · PR3</div>
 
 </body>
 </html>
