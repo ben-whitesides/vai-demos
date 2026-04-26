@@ -39,10 +39,13 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 .layout { display: flex; flex: 1; }
 .sidebar {
   width: 220px; background: var(--card); border-right: 1px solid var(--border);
-  padding: 20px 12px; display: flex; flex-direction: column; gap: 2px;
+  padding: 0; display: flex; flex-direction: column; gap: 0;
   position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto;
   flex-shrink: 0;
 }
+.sidebar-logo { padding: 14px 16px 14px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+.sidebar-logo img { height: 20px; display: block; }
+.sidebar-inner { padding: 0 10px; display: flex; flex-direction: column; gap: 2px; }
 .sidebar-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--textMuted); padding: 8px 8px 4px; margin-top: 8px; }
 .sidebar-item {
   padding: 8px 10px; border-radius: 8px; font-size: 13px; font-weight: 500;
@@ -52,6 +55,21 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 .sidebar-item:hover { background: var(--bgElev); color: var(--text); }
 .sidebar-item.active { background: var(--orangeBg); color: var(--orange); border: 1px solid var(--orangeBorder); }
 .sidebar-item.disabled { opacity: 0.4; cursor: not-allowed; }
+.si-icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.si-icon svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+/* Topbar icons */
+.tb-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
+.tb-icon svg { width: 18px; height: 18px; stroke: #6B605A; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.tb-notif { position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; background: #FF6B6B; border: 1.5px solid var(--card); }
+.tb-avanti { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 3px 10px; background: #051A10; border: 1px solid #0D4A28; color: #34D399; display: flex; align-items: center; gap: 5px; }
+.tb-avanti-dot { width: 6px; height: 6px; border-radius: 50%; background: #34D399; }
+.tb-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #000; cursor: pointer; }
+/* AVANTI strip */
+.avanti-strip { background: #051A10; border-bottom: 1px solid #0D4A28; padding: 9px 20px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.av-dot { width: 6px; height: 6px; border-radius: 50%; background: #34D399; flex-shrink: 0; }
+.av-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #34D399; font-family: monospace; }
+.av-text { font-size: 13px; color: #C8BFB8; flex: 1; }
+.av-action { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 999px; border: 1px solid rgba(251,191,36,0.3); background: rgba(251,191,36,0.1); color: #FBBF24; cursor: pointer; white-space: nowrap; }
 
 /* Main content */
 .main { flex: 1; padding: 28px; max-width: 1100px; display: flex; flex-direction: column; gap: 20px; }
@@ -217,11 +235,16 @@ td.name:hover { color: var(--orange); }
 
 <!-- Top bar -->
 <div class="topbar">
-  <div class="logo">
-    <img src="gameday-logo.png" alt="GAMEDAY" style="height:22px;display:block;"/>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <span style="font-size:13px;color:var(--textMuted);">VAI FC North</span>
+    <span style="color:var(--border);">›</span>
+    <span style="font-size:13px;font-weight:600;color:var(--textStrong);" id="topbar-ctx">Tournaments</span>
   </div>
-  <div class="topbar-right">
-    <div class="topbar-club">VAI FC North</div>
+  <div class="topbar-right" style="gap:10px;">
+    <div class="tb-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+    <div class="tb-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="tb-notif"></div></div>
+    <div class="tb-avanti"><div class="tb-avanti-dot"></div>AVANTI ON</div>
+    <div class="tb-avatar" title="Coach tier">C</div>
     <div>Admin</div>
   </div>
 </div>
@@ -229,35 +252,48 @@ td.name:hover { color: var(--orange); }
 <div class="layout">
   <!-- Sidebar -->
   <div class="sidebar">
-    <div class="sidebar-label">Club OS</div>
-    <div class="sidebar-item" id="nav-athletes" onclick="nav('athletes')">🏃 Athletes</div>
-    <div class="sidebar-item" id="nav-greenline" onclick="nav('greenline')">🟢 Green Line</div>
-    <div class="sidebar-item" id="nav-schedule" onclick="nav('schedule')">📅 Schedule</div>
-    <div class="sidebar-item" id="nav-roster" onclick="nav('roster')">📋 Roster</div>
-    <div class="sidebar-item" id="nav-comms" onclick="nav('comms')">💬 Comms</div>
-    <div class="sidebar-item" id="nav-exceptions" onclick="nav('exceptions')">⚠️ Exceptions</div>
+    <div class="sidebar-logo"><img src="gameday-logo.png" alt="GAMEDAY"/></div>
+    <div class="sidebar-inner">
+      <div class="sidebar-label">Club OS</div>
+      <div class="sidebar-item" id="nav-athletes" onclick="nav('athletes')"><div class="si-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>Athletes</div>
+      <div class="sidebar-item" id="nav-greenline" onclick="nav('greenline')"><div class="si-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div>PLAY Status</div>
+      <div class="sidebar-item" id="nav-schedule" onclick="nav('schedule')"><div class="si-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>Schedule</div>
+      <div class="sidebar-item" id="nav-roster" onclick="nav('roster')"><div class="si-icon"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>Roster</div>
+      <div class="sidebar-item" id="nav-comms" onclick="nav('comms')"><div class="si-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>Comms</div>
+      <div class="sidebar-item" id="nav-exceptions" onclick="nav('exceptions')"><div class="si-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>Exceptions</div>
 
-    <div class="sidebar-label">Live Ops</div>
-    <div class="sidebar-item active" id="nav-tournaments" onclick="nav('tournaments')">🏆 Tournaments</div>
-    <div class="sidebar-item" id="nav-standings" onclick="nav('standings')">📊 Standings</div>
-    <div class="sidebar-item" id="nav-leagues" onclick="nav('leagues')">🏅 Leagues</div>
+      <div class="sidebar-label">Live Ops</div>
+      <div class="sidebar-item active" id="nav-tournaments" onclick="nav('tournaments')"><div class="si-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>Tournaments</div>
+      <div class="sidebar-item" id="nav-standings" onclick="nav('standings')"><div class="si-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>Standings</div>
+      <div class="sidebar-item" id="nav-leagues" onclick="nav('leagues')"><div class="si-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>Leagues</div>
 
-    <div class="sidebar-label">Mentor</div>
-    <div class="sidebar-item disabled">📅 My Sessions</div>
+      <div class="sidebar-label">My Mentor</div>
+      <div class="sidebar-item disabled"><div class="si-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>My Sessions</div>
 
-    <div class="sidebar-label">Coming Soon</div>
-    <div class="sidebar-item disabled">💰 Fundraising</div>
-    <div class="sidebar-item disabled">💳 Payments</div>
+      <div class="sidebar-label">Coming Soon</div>
+      <div class="sidebar-item disabled"><div class="si-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>Fundraising</div>
+      <div class="sidebar-item disabled"><div class="si-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>Payments</div>
+    </div>
   </div>
 
   <!-- Main -->
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+  <!-- AVANTI Intelligence Strip -->
+  <div class="avanti-strip">
+    <div class="av-dot"></div>
+    <span class="av-lbl">AVANTI</span>
+    <span class="av-text"><strong style="color:#F5F0EB;">Spring Invitational 2026</strong> bracket has a bye conflict — 3 teams unmatched before Sunday. Review bracket seeding.</span>
+    <div class="av-action">Review →</div>
+  </div>
+
   <div class="main">
 
-    <!-- GREEN LINE -->
+    <!-- PLAY STATUS -->
     <div class="view" id="view-greenline">
       <div class="page-header">
         <div>
-          <div class="page-title">Green Line</div>
+          <div class="page-title">PLAY Status</div>
           <div class="page-sub">Compliance heatmap — all athletes, real-time eligibility state for VAI FC North.</div>
         </div>
         <div style="display:flex;gap:8px;">
@@ -337,7 +373,7 @@ td.name:hover { color: var(--orange); }
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Name</th><th>DOB</th><th>Sport</th><th>Passport</th><th>Green Line</th><th>Grants</th></tr></thead>
+          <thead><tr><th>Name</th><th>DOB</th><th>Sport</th><th>Passport</th><th>PLAY Status</th><th>Grants</th></tr></thead>
           <tbody>
             <tr><td class="name">Mia Chen</td><td>2011-09-17</td><td>Soccer</td><td><span class="pill pill-blue">ACTIVE</span></td><td><span class="pill pill-red">RED</span></td><td>governance · medical</td></tr>
             <tr><td class="name">Avery Patel</td><td>2010-03-22</td><td>Soccer</td><td><span class="pill pill-blue">ACTIVE</span></td><td><span class="pill pill-green">GREEN</span></td><td>governance</td></tr>
@@ -399,7 +435,7 @@ td.name:hover { color: var(--orange); }
       <div class="page-header">
         <div>
           <div class="page-title">Roster</div>
-          <div class="page-sub">Team rosters with live Green Line status per athlete.</div>
+          <div class="page-sub">Team rosters with live PLAY Status status per athlete.</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <select class="season-sel"><option>2011 Girls Blue</option><option>2012 Boys Black</option></select>
@@ -407,7 +443,7 @@ td.name:hover { color: var(--orange); }
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>#</th><th>Athlete</th><th>Position</th><th>Green Line</th><th>Blocking gate</th></tr></thead>
+          <thead><tr><th>#</th><th>Athlete</th><th>Position</th><th>PLAY Status</th><th>Blocking gate</th></tr></thead>
           <tbody>
             <tr>
               <td>1</td><td class="name">Mia Chen</td><td>Goalkeeper</td>
@@ -453,7 +489,7 @@ td.name:hover { color: var(--orange); }
             <div class="card-title" style="font-size:14px;">Payment reminder — Mia Chen</div>
             <span class="pill pill-orange">DRAFT</span>
           </div>
-          <div class="card-sub" style="margin-bottom:12px;">"Hi, this is a reminder that Mia's installment payment is overdue. Resolve before Saturday's match to restore Green Line eligibility."</div>
+          <div class="card-sub" style="margin-bottom:12px;">"Hi, this is a reminder that Mia's installment payment is overdue. Resolve before Saturday's match to restore PLAY Status eligibility."</div>
           <div style="display:flex;gap:8px;">
             <button class="btn btn-green" style="font-size:12px;">Send</button>
             <button class="btn btn-neutral" style="font-size:12px;">Edit</button>
@@ -824,6 +860,7 @@ td.name:hover { color: var(--orange); }
     </div>
 
   </div><!-- end main -->
+  </div><!-- end main-wrapper -->
 </div><!-- end layout -->
 
 <script>
