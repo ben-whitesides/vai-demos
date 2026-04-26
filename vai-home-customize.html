@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Home Grid Customization</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --vai-orange:#f7941e; --vai-green:#34d399; --vai-gold:#f3d7b5;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --surface-2:#222228; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --red:#FF6B6B; --red-bg:#1A0808; --red-border:#4A1A1A;
+  --yellow:#FBBF24; --yellow-bg:#1A1000; --yellow-border:#4A3000;
+  --blue:#5577DD; --blue-bg:#0A1020; --blue-border:#1A2A50;
+  --font-oswald:'Oswald',Impact,Arial Black,sans-serif;
+  --font-dm:'DM Sans',Arial,Helvetica,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-full:9999px;
+}
+body { background:#0a0a0c; font-family:var(--font-dm); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:32px 16px 60px; color:var(--gray-primary); -webkit-font-smoothing:antialiased; }
+.page-title { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:4px; text-align:center; }
+.page-sub { font-size:11px; color:var(--gray-disabled); margin-bottom:32px; text-align:center; }
+.section-hdr { width:100%; max-width:1200px; font-family:var(--font-oswald); font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray-disabled); padding:0 0 10px; border-bottom:1px solid var(--border); margin-bottom:20px; }
+.flow-row { display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap; justify-content:center; margin-bottom:56px; }
+.flow-label { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gray-disabled); text-align:center; margin-bottom:8px; }
+.flow-arrow { display:flex; align-items:center; padding-top:70px; color:var(--gray-subtle); font-size:18px; }
+
+/* Phone */
+.phone { width:375px; background:var(--void-black); border-radius:44px; border:1.5px solid var(--gray-subtle); box-shadow:0 0 0 1px #0c0c10,0 32px 80px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden; position:relative; flex-shrink:0; }
+.phone.sm { width:280px; border-radius:36px; }
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 22px 8px; background:var(--void-black); font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
+.phone.sm .status-bar { padding:10px 16px 6px; font-size:10px; }
+
+/* Locked header */
+.app-header { background:var(--void-black); padding:10px 18px 12px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.phone.sm .app-header { padding:8px 14px 10px; }
+.vai-wordmark { font-family:var(--font-oswald); font-size:18px; font-weight:700; letter-spacing:0.05em; color:var(--gray-primary); }
+.phone.sm .vai-wordmark { font-size:14px; }
+.tier-bubble { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; font-family:var(--font-dm); font-size:12px; font-weight:900; color:#000; line-height:1; flex-shrink:0; }
+.phone.sm .tier-bubble { width:16px; height:16px; font-size:9px; }
+.tier-badge-pill { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:2px 8px; border-radius:var(--r-full); border:1px solid; }
+.phone.sm .tier-badge-pill { font-size:8px; padding:1px 6px; }
+.tb-orange { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--vai-orange); }
+.hdr-icons { display:flex; gap:12px; align-items:center; margin-left:auto; }
+.phone.sm .hdr-icons { gap:8px; }
+.hdr-icon { width:20px; height:20px; display:flex; align-items:center; justify-content:center; }
+.phone.sm .hdr-icon { width:14px; height:14px; }
+.hdr-icon svg { width:18px; height:18px; stroke:var(--gray-secondary); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.phone.sm .hdr-icon svg { width:12px; height:12px; }
+
+/* AVANTI strip */
+.avanti-strip { background:var(--void-black); border-bottom:1px solid var(--border); padding:10px 18px; display:flex; flex-direction:column; gap:6px; }
+.strip-row { display:flex; align-items:center; gap:5px; }
+.strip-lbl { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--vai-green); }
+.a-dot { width:6px; height:6px; border-radius:50%; background:var(--vai-green); animation:glow 2s ease-in-out infinite; }
+@keyframes glow { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
+.strip-msg { font-family:var(--font-dm); font-size:13px; color:var(--gray-body); line-height:1.5; }
+
+/* Scroll area */
+.scroll-body { background:var(--void-black); overflow-y:auto; scrollbar-width:none; }
+.scroll-body::-webkit-scrollbar { display:none; }
+
+/* Edit mode banner */
+.edit-banner { background:rgba(247,148,30,0.06); border-bottom:1px solid rgba(247,148,30,0.25); padding:8px 18px; display:flex; align-items:center; justify-content:space-between; }
+.edit-banner-text { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); }
+.done-btn { font-family:var(--font-oswald); font-size:12px; font-weight:700; color:var(--vai-orange); cursor:pointer; letter-spacing:0.06em; }
+
+/* Grid section */
+.grid-section { padding:12px 18px; }
+.phone.sm .grid-section { padding:8px 12px; }
+.grid-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.grid-lbl { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); }
+.cust-link { font-family:var(--font-dm); font-size:11px; color:var(--vai-orange); cursor:pointer; display:flex; align-items:center; gap:3px; }
+.cust-link svg { width:12px; height:12px; stroke:var(--vai-orange); stroke-width:1.5; stroke-linecap:round; fill:none; }
+
+/* Android-style horizontal page grid */
+.grid-pages-wrap { overflow-x:auto; scrollbar-width:none; display:flex; gap:0; }
+.grid-pages-wrap::-webkit-scrollbar { display:none; }
+.grid-page { display:grid; grid-template-columns:1fr 1fr; gap:10px; flex-shrink:0; width:100%; }
+.page-dots { display:flex; gap:5px; justify-content:center; margin-top:8px; }
+.page-dot { width:6px; height:6px; border-radius:50%; background:var(--gray-subtle); }
+.page-dot.active { background:var(--vai-orange); width:16px; border-radius:3px; }
+
+/* Tile */
+.tile { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px; display:flex; flex-direction:column; gap:6px; cursor:pointer; transition:all 0.15s; position:relative; min-height:90px; }
+.phone.sm .tile { padding:10px; min-height:70px; border-radius:10px; }
+.tile:hover { border-color:var(--gray-subtle); }
+.tile.editing { border-color:rgba(247,148,30,0.4); animation:wobble 0.3s ease-in-out infinite alternate; }
+.tile.editing-active { border-color:var(--vai-orange); background:rgba(247,148,30,0.05); }
+@keyframes wobble { 0%{transform:rotate(-0.5deg)} 100%{transform:rotate(0.5deg)} }
+.tile-icon { width:30px; height:30px; background:rgba(255,255,255,0.04); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; }
+.phone.sm .tile-icon { width:22px; height:22px; border-radius:5px; }
+.tile-icon svg { width:16px; height:16px; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.phone.sm .tile-icon svg { width:11px; height:11px; }
+.oi svg { stroke:var(--vai-orange); }
+.gi svg { stroke:var(--vai-green); }
+.bi svg { stroke:var(--blue); }
+.xi svg { stroke:var(--gray-secondary); }
+.tile-name { font-family:var(--font-oswald); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.phone.sm .tile-name { font-size:10px; }
+.tile-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); }
+.phone.sm .tile-sub { font-size:8px; }
+
+/* Tile badge */
+.tile-badge { position:absolute; top:6px; right:6px; font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.04em; border-radius:var(--r-sm); padding:2px 5px; border:1px solid; }
+.b-red { background:rgba(248,113,113,0.1); border-color:rgba(248,113,113,0.3); color:#f87171; }
+.b-green { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.b-orange { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--vai-orange); }
+
+/* Drag handle */
+.drag-handle { position:absolute; top:6px; right:6px; width:18px; height:18px; background:rgba(247,148,30,0.15); border:1px solid rgba(247,148,30,0.3); border-radius:4px; display:flex; align-items:center; justify-content:center; cursor:grab; }
+.drag-handle svg { width:10px; height:10px; stroke:var(--vai-orange); stroke-width:2; fill:none; }
+
+/* Options dot */
+.tile-options { position:absolute; bottom:6px; right:6px; width:20px; height:20px; border-radius:50%; background:var(--elevated); border:1px solid var(--gray-subtle); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.tile-options svg { width:10px; height:10px; stroke:var(--gray-secondary); stroke-width:2; fill:none; }
+
+/* Wide tile */
+.tile-wide { background:var(--card-dark); border:1px solid rgba(247,148,30,0.3); border-radius:var(--r-lg); padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; position:relative; margin-bottom:10px; }
+.phone.sm .tile-wide { padding:10px 12px; border-radius:10px; margin-bottom:8px; }
+.tw-icon { width:36px; height:36px; background:rgba(247,148,30,0.08); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.phone.sm .tw-icon { width:24px; height:24px; border-radius:5px; }
+.tw-icon svg { width:18px; height:18px; stroke:var(--vai-orange); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.phone.sm .tw-icon svg { width:12px; height:12px; }
+.tw-body { flex:1; }
+.tw-name { font-family:var(--font-oswald); font-size:14px; font-weight:600; color:var(--gray-primary); }
+.phone.sm .tw-name { font-size:10px; }
+.tw-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); }
+.phone.sm .tw-sub { font-size:8px; }
+.live-pill { display:inline-flex; align-items:center; gap:4px; margin-top:4px; background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); border-radius:var(--r-full); padding:2px 7px; font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.06em; color:var(--vai-orange); }
+.live-dot { width:4px; height:4px; border-radius:50%; background:var(--vai-orange); animation:glow 1.2s ease-in-out infinite; }
+
+/* Bottom nav */
+.bottom-nav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:8px 4px 20px; flex-shrink:0; }
+.phone.sm .bottom-nav { padding:5px 4px 12px; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer; padding:4px 0; }
+.ni-icon { width:24px; height:24px; display:flex; align-items:center; justify-content:center; }
+.phone.sm .ni-icon { width:16px; height:16px; }
+.ni-icon svg { width:22px; height:22px; stroke:var(--gray-disabled); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.phone.sm .ni-icon svg { width:14px; height:14px; }
+.ni-lbl { font-family:var(--font-dm); font-size:10px; font-weight:500; color:var(--gray-disabled); }
+.phone.sm .ni-lbl { font-size:7px; }
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+.av-pill { background:var(--vai-green); border-radius:20px; padding:5px 10px; display:flex; align-items:center; justify-content:center; }
+.phone.sm .av-pill { padding:3px 7px; }
+.av-pill span { font-family:var(--font-dm); font-size:11px; font-weight:800; color:#000; letter-spacing:0.03em; }
+.phone.sm .av-pill span { font-size:7px; }
+
+/* ─── BOTTOM SHEET ─── */
+.phone-relative { position:relative; overflow:hidden; }
+.sheet-overlay { position:absolute; bottom:0; left:0; right:0; top:0; background:rgba(0,0,0,0.55); z-index:10; }
+.bottom-sheet { position:absolute; bottom:0; left:0; right:0; background:var(--elevated); border-top:1px solid var(--gray-subtle); border-radius:20px 20px 0 0; z-index:20; display:flex; flex-direction:column; }
+.sheet-handle { width:36px; height:4px; background:var(--gray-subtle); border-radius:2px; margin:10px auto 0; flex-shrink:0; }
+.sheet-header { padding:12px 18px 10px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); flex-shrink:0; }
+.sheet-title { font-family:var(--font-oswald); font-size:15px; font-weight:600; color:var(--gray-primary); }
+.sheet-close { font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--vai-orange); cursor:pointer; }
+.sheet-body { padding:8px 0 20px; display:flex; flex-direction:column; }
+
+/* Card options sheet */
+.sheet-card-preview { margin:10px 16px; background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-md); padding:12px 14px; display:flex; align-items:center; gap:10px; }
+.sheet-option { display:flex; align-items:center; gap:14px; padding:13px 18px; cursor:pointer; transition:background 0.12s; }
+.sheet-option:hover { background:var(--surface-1); }
+.sheet-option-icon { width:32px; height:32px; background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.sheet-option-icon svg { width:16px; height:16px; stroke:var(--gray-secondary); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.sheet-option.danger .sheet-option-icon svg { stroke:var(--red); }
+.sheet-option-label { font-family:var(--font-dm); font-size:14px; font-weight:500; color:var(--gray-primary); }
+.sheet-option-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); }
+.sheet-option.danger .sheet-option-label { color:var(--red); }
+.sheet-divider { height:1px; background:var(--border); margin:4px 0; }
+
+/* Customize home sheet */
+.cat-chips { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:12px 16px 8px; }
+.cat-chips::-webkit-scrollbar { display:none; }
+.cat-chip { display:flex; align-items:center; gap:5px; background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-full); padding:5px 12px; font-family:var(--font-dm); font-size:11px; font-weight:500; color:var(--gray-secondary); white-space:nowrap; flex-shrink:0; cursor:pointer; }
+.cat-chip.active { background:rgba(247,148,30,0.1); border-color:var(--vai-orange); color:var(--vai-orange); }
+.available-tiles { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:6px 16px 12px; }
+.avail-tile { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-md); padding:10px 12px; display:flex; align-items:center; gap:10px; cursor:pointer; }
+.avail-tile-icon { width:28px; height:28px; background:rgba(255,255,255,0.04); border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.avail-tile-icon svg { width:14px; height:14px; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.avail-tile-name { font-family:var(--font-dm); font-size:11px; font-weight:600; color:var(--gray-primary); }
+.avail-tile-cat { font-family:var(--font-mono); font-size:9px; color:var(--gray-disabled); margin-top:1px; }
+.add-tile-btn { margin-left:auto; width:22px; height:22px; border-radius:50%; background:var(--vai-orange); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.add-tile-btn svg { width:12px; height:12px; stroke:#000; stroke-width:2.5; fill:none; }
+
+/* Resize sheet */
+.resize-options { display:flex; flex-direction:column; gap:8px; padding:12px 16px; }
+.resize-opt { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-md); padding:12px 14px; display:flex; align-items:center; gap:14px; cursor:pointer; }
+.resize-opt.selected { border-color:var(--vai-orange); background:rgba(247,148,30,0.05); }
+.resize-preview { display:grid; gap:3px; flex-shrink:0; }
+.rp-1x1 { grid-template-columns:1fr 1fr; }
+.rp-2x1 { grid-template-columns:1fr 1fr; }
+.rp-2x2 { grid-template-columns:1fr 1fr; }
+.r-box { width:14px; height:14px; border-radius:2px; background:var(--gray-subtle); }
+.r-box.filled { background:var(--vai-orange); }
+.r-box.wide { width:32px; }
+.r-box.big { width:14px; height:30px; }
+.resize-info { flex:1; }
+.resize-name { font-family:var(--font-dm); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.resize-desc { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); margin-top:2px; }
+.resize-radio { width:18px; height:18px; border-radius:50%; border:2px solid var(--gray-subtle); flex-shrink:0; }
+.resize-radio.on { border-color:var(--vai-orange); background:var(--vai-orange); position:relative; }
+.resize-radio.on::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:6px; height:6px; border-radius:50%; background:#000; }
+
+/* Role defaults row */
+.roles-row { display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; justify-content:center; margin-bottom:48px; }
+.role-phone-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.role-label-top { font-family:var(--font-oswald); font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--gray-disabled); }
+.role-desc { font-family:var(--font-dm); font-size:10px; color:var(--gray-secondary); text-align:center; max-width:200px; margin-top:4px; }
+</style>
+</head>
+<body>
+
+<div class="page-title">VAI — Home Grid Customization</div>
+<div class="page-sub">Edit mode · Card options · Customize sheet · Role-aware smart defaults</div>
+
+<!-- ═══ SECTION 1: EDIT MODE + CARD OPTIONS ═══ -->
+<div class="section-hdr" style="margin-top:0;">Grid Interaction — CG1 + CG2 + CG3</div>
+
+<div class="flow-row">
+
+  <!-- CG1: Normal Home -->
+  <div>
+    <div class="flow-label">CG1 — Normal Home</div>
+    <div class="phone phone-relative">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#cg1)"/><defs><radialGradient id="cg1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="avanti-strip">
+        <div class="strip-row"><div class="a-dot" style="width:5px;height:5px;"></div><span class="strip-lbl">AVANTI</span></div>
+        <div class="strip-msg"><strong style="color:var(--gray-primary)">3 athletes</strong> not GREEN for Saturday — send reminder?</div>
+      </div>
+      <div class="scroll-body" style="height:534px;">
+        <div class="grid-section">
+          <div class="grid-hdr">
+            <div class="grid-lbl">YOUR VAI</div>
+            <div class="cust-link"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Customize</div>
+          </div>
+          <!-- Page 1 of tiles (scrolls right) -->
+          <div class="tile-wide">
+            <div class="tw-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
+            <div class="tw-body"><div class="tw-name">VAI FC North</div><div class="tw-sub">Spring Invitational · 12 min left</div><div class="live-pill"><div class="live-dot"></div>LIVE</div></div>
+            <div class="tile-options"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></div>
+          </div>
+          <div class="grid-page">
+            <div class="tile oi"><div class="tile-badge b-red">3</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="tile-name">Roster</div><div class="tile-sub">16 athletes</div><div class="tile-options"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></div>
+            <div class="tile"><div class="tile-badge b-green">SAT</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Schedule</div><div class="tile-sub">2 events</div><div class="tile-options"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></div>
+            <div class="tile"><div class="tile-badge b-orange">5</div><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="tile-name">Chat</div><div class="tile-sub">5 unread</div><div class="tile-options"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></div>
+            <div class="tile"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="tile-name">Wallet</div><div class="tile-sub">$247 · 3 refs</div><div class="tile-options"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></div></div>
+          </div>
+          <div class="page-dots"><div class="page-dot active"></div><div class="page-dot"></div><div class="page-dot"></div></div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">→<br><span style="font-size:11px;color:var(--gray-disabled);font-family:var(--font-dm);">long press</span></div>
+
+  <!-- CG2: Edit Mode -->
+  <div>
+    <div class="flow-label">CG2 — Edit Mode (Long Press)</div>
+    <div class="phone phone-relative">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#cg2)"/><defs><radialGradient id="cg2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="edit-banner">
+        <div class="edit-banner-text">⠿ Drag to move · ··· for options</div>
+        <div class="done-btn">DONE</div>
+      </div>
+      <div class="scroll-body" style="height:556px;">
+        <div class="grid-section">
+          <div class="grid-hdr">
+            <div class="grid-lbl">YOUR VAI</div>
+            <div class="cust-link" style="color:var(--vai-orange);">+ Add Tile</div>
+          </div>
+          <div class="tile-wide editing">
+            <div class="tw-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
+            <div class="tw-body"><div class="tw-name">VAI FC North</div><div class="tw-sub">Spring Invitational · Live</div></div>
+            <div class="drag-handle"><svg viewBox="0 0 24 24"><line x1="9" y1="5" x2="9" y2="19"/><line x1="15" y1="5" x2="15" y2="19"/></svg></div>
+          </div>
+          <div class="grid-page">
+            <div class="tile editing editing-active">
+              <div class="tile-badge b-red">3</div>
+              <div class="tile-icon oi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+              <div class="tile-name">Roster</div>
+              <div class="tile-sub">16 athletes</div>
+              <div class="drag-handle"><svg viewBox="0 0 24 24"><line x1="9" y1="5" x2="9" y2="19"/><line x1="15" y1="5" x2="15" y2="19"/></svg></div>
+            </div>
+            <div class="tile editing">
+              <div class="tile-badge b-green">SAT</div>
+              <div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <div class="tile-name">Schedule</div>
+              <div class="tile-sub">2 events</div>
+              <div class="drag-handle"><svg viewBox="0 0 24 24"><line x1="9" y1="5" x2="9" y2="19"/><line x1="15" y1="5" x2="15" y2="19"/></svg></div>
+            </div>
+            <div class="tile editing">
+              <div class="tile-badge b-orange">5</div>
+              <div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+              <div class="tile-name">Chat</div>
+              <div class="tile-sub">5 unread</div>
+              <div class="drag-handle"><svg viewBox="0 0 24 24"><line x1="9" y1="5" x2="9" y2="19"/><line x1="15" y1="5" x2="15" y2="19"/></svg></div>
+            </div>
+            <div class="tile editing">
+              <div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <div class="tile-name">Wallet</div>
+              <div class="tile-sub">$247 · 3 refs</div>
+              <div class="drag-handle"><svg viewBox="0 0 24 24"><line x1="9" y1="5" x2="9" y2="19"/><line x1="15" y1="5" x2="15" y2="19"/></svg></div>
+            </div>
+          </div>
+          <div class="page-dots"><div class="page-dot active"></div><div class="page-dot"></div><div class="page-dot"></div></div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">→<br><span style="font-size:11px;color:var(--gray-disabled);font-family:var(--font-dm);">tap ···</span></div>
+
+  <!-- CG3: Card Options Bottom Sheet -->
+  <div>
+    <div class="flow-label">CG3 — Card Options Sheet (···)</div>
+    <div class="phone phone-relative" style="overflow:visible;">
+      <div style="position:relative;overflow:hidden;border-radius:44px;border:1.5px solid var(--gray-subtle);box-shadow:0 0 0 1px #0c0c10,0 32px 80px rgba(0,0,0,0.95);">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#cg3)"/><defs><radialGradient id="cg3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <!-- Dimmed grid behind -->
+      <div style="height:200px;background:var(--void-black);padding:16px 18px;opacity:0.35;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="tile" style="min-height:80px;"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="tile-name">Roster</div></div>
+          <div class="tile" style="min-height:80px;border-color:rgba(247,148,30,0.5);background:rgba(247,148,30,0.08);"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Schedule</div></div>
+        </div>
+      </div>
+      <div class="sheet-overlay"></div>
+      <div class="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <div>
+            <div class="sheet-title">Schedule</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;">CARD OPTIONS</div>
+          </div>
+          <div class="sheet-close">Done</div>
+        </div>
+        <!-- Card preview -->
+        <div class="sheet-card-preview">
+          <div class="tile-icon oi" style="width:28px;height:28px;"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div><div style="font-family:var(--font-oswald);font-size:13px;font-weight:600;color:var(--gray-primary);">Schedule</div><div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-secondary);">2 events this week</div></div>
+          <div style="margin-left:auto;" class="tile-badge b-green">SAT</div>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-option">
+            <div class="sheet-option-icon"><svg viewBox="0 0 24 24"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></div>
+            <div><div class="sheet-option-label">Move Card</div><div class="sheet-option-sub">Drag to new position</div></div>
+          </div>
+          <div class="sheet-option">
+            <div class="sheet-option-icon"><svg viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></div>
+            <div><div class="sheet-option-label">Resize Card</div><div class="sheet-option-sub">Standard · Wide · Large</div></div>
+          </div>
+          <div class="sheet-option">
+            <div class="sheet-option-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+            <div><div class="sheet-option-label">Replace Card</div><div class="sheet-option-sub">Swap with another feature</div></div>
+          </div>
+          <div class="sheet-option">
+            <div class="sheet-option-icon"><svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></div>
+            <div><div class="sheet-option-label">Hide Card</div><div class="sheet-option-sub">Remove from your home</div></div>
+          </div>
+          <div class="sheet-divider"></div>
+          <div class="sheet-option danger">
+            <div class="sheet-option-icon"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.85"/></svg></div>
+            <div><div class="sheet-option-label">Reset Home Layout</div><div class="sheet-option-sub">Restore role default grid</div></div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">→<br><span style="font-size:11px;color:var(--gray-disabled);font-family:var(--font-dm);">Customize</span></div>
+
+  <!-- CG4: Full Customize Sheet -->
+  <div>
+    <div class="flow-label">CG4 — Customize Home Sheet</div>
+    <div class="phone phone-relative">
+      <div style="position:relative;overflow:hidden;border-radius:44px;border:1.5px solid var(--gray-subtle);box-shadow:0 0 0 1px #0c0c10,0 32px 80px rgba(0,0,0,0.95);">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#cg4)"/><defs><radialGradient id="cg4" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <!-- Dimmed grid behind -->
+      <div style="height:120px;background:var(--void-black);padding:12px 18px;opacity:0.25;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div style="background:var(--card-dark);border:1px solid var(--border);border-radius:10px;height:80px;"></div><div style="background:var(--card-dark);border:1px solid var(--border);border-radius:10px;height:80px;"></div></div>
+      </div>
+      <div class="sheet-overlay"></div>
+      <div class="bottom-sheet" style="height:530px;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <div class="sheet-title">Customize Home</div>
+          <div class="sheet-close">Save</div>
+        </div>
+        <div class="cat-chips">
+          <div class="cat-chip active">All</div>
+          <div class="cat-chip">Coaching</div>
+          <div class="cat-chip">Team</div>
+          <div class="cat-chip">Game Day</div>
+          <div class="cat-chip">Payments</div>
+          <div class="cat-chip">Recruiting</div>
+          <div class="cat-chip">Performance</div>
+        </div>
+        <div style="padding:0 16px 6px;font-family:var(--font-oswald);font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-disabled);">Add to Home Grid</div>
+        <div class="available-tiles">
+          <div class="avail-tile">
+            <div class="avail-tile-icon oi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div><div class="avail-tile-name">PLAY Status</div><div class="avail-tile-cat">COMPLIANCE</div></div>
+            <div class="add-tile-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          </div>
+          <div class="avail-tile">
+            <div class="avail-tile-icon gi"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div><div class="avail-tile-name">Performance</div><div class="avail-tile-cat">TRAINING</div></div>
+            <div class="add-tile-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          </div>
+          <div class="avail-tile">
+            <div class="avail-tile-icon oi"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></div>
+            <div><div class="avail-tile-name">Compliance</div><div class="avail-tile-cat">TEAM</div></div>
+            <div class="add-tile-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          </div>
+          <div class="avail-tile">
+            <div class="avail-tile-icon bi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div><div class="avail-tile-name">Groups</div><div class="avail-tile-cat">COMMUNICATION</div></div>
+            <div class="add-tile-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          </div>
+          <div class="avail-tile">
+            <div class="avail-tile-icon oi"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <div><div class="avail-tile-name">Earnings</div><div class="avail-tile-cat">PAYMENTS</div></div>
+            <div class="add-tile-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          </div>
+          <div class="avail-tile">
+            <div class="avail-tile-icon gi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div><div class="avail-tile-name">Recruiting</div><div class="avail-tile-cat">RECRUITING</div></div>
+            <div class="add-tile-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          </div>
+        </div>
+        <div style="padding:8px 16px 0;"><button style="width:100%;padding:12px;background:transparent;border:1px solid var(--gray-subtle);border-radius:var(--r-md);font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);cursor:pointer;">Reset to Role Default (Mentor)</button></div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /flow row -->
+
+<!-- ═══ SECTION 2: RESIZE OPTIONS ═══ -->
+<div class="section-hdr">Resize Card — CG5</div>
+
+<div class="flow-row" style="margin-bottom:40px;">
+  <div>
+    <div class="flow-label">CG5 — Resize Bottom Sheet</div>
+    <div class="phone">
+      <div style="position:relative;overflow:hidden;border-radius:44px;border:1.5px solid var(--gray-subtle);box-shadow:0 0 0 1px #0c0c10,0 32px 80px rgba(0,0,0,0.95);">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#cg5)"/><defs><radialGradient id="cg5" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div style="height:120px;background:var(--void-black);opacity:0.3;padding:12px 18px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div style="background:var(--card-dark);border:1px solid var(--border);border-radius:10px;"></div><div style="background:var(--card-dark);border:1px solid rgba(247,148,30,0.4);border-radius:10px;"></div></div></div>
+      <div class="sheet-overlay"></div>
+      <div class="bottom-sheet" style="padding-bottom:20px;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <div><div class="sheet-title">Resize Card</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);letter-spacing:0.06em;margin-top:2px;">SCHEDULE · CURRENT: STANDARD</div></div>
+          <div class="sheet-close">Apply</div>
+        </div>
+        <div class="resize-options">
+          <div class="resize-opt selected">
+            <div class="resize-preview rp-1x1"><div class="r-box filled"></div><div class="r-box"></div><div class="r-box"></div><div class="r-box"></div></div>
+            <div class="resize-info"><div class="resize-name">Standard — 1×1</div><div class="resize-desc">Default tile size. Fits 4 per row.</div></div>
+            <div class="resize-radio on"></div>
+          </div>
+          <div class="resize-opt">
+            <div style="display:grid;grid-template-columns:1fr;gap:3px;">
+              <div style="display:flex;gap:3px;"><div class="r-box wide" style="background:var(--gray-subtle);width:32px;"></div><div class="r-box" style="width:14px;background:var(--gray-subtle);"></div></div>
+              <div style="display:flex;gap:3px;"><div class="r-box" style="background:var(--gray-subtle);"></div><div class="r-box" style="background:var(--gray-subtle);"></div></div>
+            </div>
+            <div class="resize-info"><div class="resize-name">Wide — 2×1</div><div class="resize-desc">Full-width row. Priority feature.</div></div>
+            <div class="resize-radio"></div>
+          </div>
+          <div class="resize-opt">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;"><div style="grid-column:span 2;background:rgba(247,148,30,0.2);border:1px solid rgba(247,148,30,0.3);border-radius:3px;height:32px;"></div><div class="r-box"></div><div class="r-box"></div></div>
+            <div class="resize-info"><div class="resize-name">Large — 2×2</div><div class="resize-desc">Hero tile. One per section max.</div></div>
+            <div class="resize-radio"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: ROLE SMART DEFAULTS ═══ -->
+<div class="section-hdr">Role-Aware Smart Defaults — Start Smart, Customize Freely</div>
+
+<div class="roles-row">
+
+  <!-- Coach Default -->
+  <div class="role-phone-wrap">
+    <div class="role-label-top" style="color:var(--vai-orange);">Coach Default</div>
+    <div class="phone sm">
+      <div class="status-bar"><span>9:41</span><span style="font-size:10px;">••• WiFi</span></div>
+      <div class="app-header">
+        <svg width="10" height="13" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#F7941E"/></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-badge-pill tb-orange" style="font-size:8px;padding:1px 6px;">Coach</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="scroll-body" style="height:420px;">
+        <div class="grid-section">
+          <div class="grid-hdr"><div class="grid-lbl">COACHING TOOLS</div></div>
+          <div class="tile-wide" style="margin-bottom:8px;">
+            <div class="tw-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>
+            <div class="tw-body"><div class="tw-name">VAI FC North</div><div class="tw-sub">16 athletes · Game Day</div><div class="live-pill"><div class="live-dot"></div>LIVE</div></div>
+          </div>
+          <div class="grid-page">
+            <div class="tile oi" style="min-height:70px;"><div class="tile-badge b-red" style="font-size:8px;">3</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="tile-name">Roster</div><div class="tile-sub">16 · 3 blocked</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-icon gi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div><div class="tile-name">PLAY Status</div><div class="tile-sub">13 ✓ · 3 ✗</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge" style="font-size:8px;background:var(--surface-1);border-color:var(--border);color:var(--gray-secondary);">SAT</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Schedule</div><div class="tile-sub">Home 10am</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge b-orange" style="font-size:8px;">3</div><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="tile-name">Chat</div><div class="tile-sub">Team chat</div></div>
+          </div>
+          <div class="page-dots" style="margin-top:6px;"><div class="page-dot active"></div><div class="page-dot"></div></div>
+          <div style="margin-top:8px;padding:6px 0;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:8px;color:var(--gray-disabled);text-align:center;letter-spacing:0.06em;text-transform:uppercase;">Default: Roster · PLAY · Schedule · Chat · Wallet · Standings</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="14" height="14" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+    <div class="role-desc">Team-first. Roster + PLAY Status front and center. Game Day hero tile locked top.</div>
+  </div>
+
+  <!-- Athlete Default -->
+  <div class="role-phone-wrap">
+    <div class="role-label-top" style="color:var(--vai-green);">Athlete Default</div>
+    <div class="phone sm">
+      <div class="status-bar"><span>9:41</span><span style="font-size:10px;">••• WiFi</span></div>
+      <div class="app-header">
+        <svg width="10" height="13" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#F7941E"/></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-green);width:16px;height:16px;font-size:9px;">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="scroll-body" style="height:420px;">
+        <div class="grid-section">
+          <div class="grid-hdr"><div class="grid-lbl">YOUR VAI</div></div>
+          <div class="grid-page">
+            <div class="tile" style="min-height:70px;"><div class="tile-icon gi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div><div class="tile-name">PLAY Status</div><div class="tile-sub" style="color:var(--vai-green);">GREEN · Clear</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge" style="font-size:8px;background:var(--surface-1);border-color:var(--border);color:var(--gray-secondary);">SAT</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Schedule</div><div class="tile-sub">Practice Sat</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge b-orange" style="font-size:8px;">2</div><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="tile-name">Chat</div><div class="tile-sub">2 unread</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="tile-name">Wallet</div><div class="tile-sub">$47 · 1 ref</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge b-green" style="font-size:8px;">EARN</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="tile-name">Share</div><div class="tile-sub">Refer &amp; earn</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge b-green" style="font-size:8px;">VAI+</div><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="tile-name">Connect</div><div class="tile-sub">3 active</div></div>
+          </div>
+          <div class="page-dots" style="margin-top:6px;"><div class="page-dot active"></div><div class="page-dot"></div></div>
+          <div style="margin-top:8px;padding:6px 0;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:8px;color:var(--gray-disabled);text-align:center;letter-spacing:0.06em;text-transform:uppercase;">Default: PLAY · Schedule · Chat · Wallet · Share · Connect</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="14" height="14" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+    <div class="role-desc">Personal-first. PLAY Status + schedule top. Share &amp; earn tile visible. Club tiles appear if joined.</div>
+  </div>
+
+  <!-- Mentor Default -->
+  <div class="role-phone-wrap">
+    <div class="role-label-top" style="color:var(--vai-orange);">Mentor Default</div>
+    <div class="phone sm">
+      <div class="status-bar"><span>9:41</span><span style="font-size:10px;">••• WiFi</span></div>
+      <div class="app-header">
+        <svg width="10" height="13" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#F7941E"/></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);width:16px;height:16px;font-size:9px;">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="scroll-body" style="height:420px;">
+        <div class="grid-section">
+          <div class="grid-hdr"><div class="grid-lbl">MENTOR TOOLS</div></div>
+          <div class="grid-page">
+            <div class="tile" style="min-height:70px;"><div class="tile-badge b-orange" style="font-size:8px;">2 NEW</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Calendar</div><div class="tile-sub">2 new requests</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="tile-name">Earnings</div><div class="tile-sub">$2,380 / mo</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge b-orange" style="font-size:8px;">5</div><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="tile-name">Chat</div><div class="tile-sub">5 unread</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge b-green" style="font-size:8px;">EARN</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="tile-name">Share</div><div class="tile-sub">Refer &amp; earn</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-icon gi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div><div class="tile-name">PLAY Status</div><div class="tile-sub" style="color:var(--vai-green);">GREEN</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="tile-name">Wallet</div><div class="tile-sub">$680 pending</div></div>
+          </div>
+          <div class="page-dots" style="margin-top:6px;"><div class="page-dot active"></div><div class="page-dot"></div></div>
+          <div style="margin-top:8px;padding:6px 0;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:8px;color:var(--gray-disabled);text-align:center;letter-spacing:0.06em;text-transform:uppercase;">Default: Calendar · Earnings · Chat · Share · PLAY · Wallet</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="14" height="14" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+    <div class="role-desc">Revenue-first. Calendar bookings + Earnings front page. PLAY status secondary.</div>
+  </div>
+
+  <!-- Parent Default -->
+  <div class="role-phone-wrap">
+    <div class="role-label-top" style="color:var(--gray-secondary);">Parent / Guardian</div>
+    <div class="phone sm">
+      <div class="status-bar"><span>9:41</span><span style="font-size:10px;">••• WiFi</span></div>
+      <div class="app-header">
+        <svg width="10" height="13" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#F7941E"/></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-badge-pill tb-orange" style="font-size:8px;padding:1px 6px;">Free</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="scroll-body" style="height:420px;">
+        <div class="grid-section">
+          <div class="grid-hdr"><div class="grid-lbl">MY ATHLETES</div></div>
+          <div class="grid-page">
+            <div class="tile" style="min-height:70px;"><div class="tile-icon gi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div><div class="tile-name">PLAY Status</div><div class="tile-sub" style="color:var(--vai-green);">Mia · GREEN</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Schedule</div><div class="tile-sub">Mia — Sat 10am</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="tile-name">Payments</div><div class="tile-sub">1 pending</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge b-orange" style="font-size:8px;">1</div><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="tile-name">Messages</div><div class="tile-sub">Coach update</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-icon xi"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="tile-name">Waivers</div><div class="tile-sub">2 of 3 signed</div></div>
+            <div class="tile" style="min-height:70px;"><div class="tile-badge b-green" style="font-size:8px;">EARN</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></div><div class="tile-name">Share</div><div class="tile-sub">Refer &amp; earn</div></div>
+          </div>
+          <div class="page-dots" style="margin-top:6px;"><div class="page-dot active"></div><div class="page-dot"></div></div>
+          <div style="margin-top:8px;padding:6px 0;border-top:1px solid var(--border);font-family:var(--font-mono);font-size:8px;color:var(--gray-disabled);text-align:center;letter-spacing:0.06em;text-transform:uppercase;">Default: PLAY · Schedule · Payments · Messages · Waivers · Share</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="14" height="14" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+    <div class="role-desc">Guardian-first. Child's PLAY status + payments + waivers. No coaching tools.</div>
+  </div>
+
+</div><!-- /roles-row -->
+
+<div style="text-align:center;padding:24px 0 0;font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);letter-spacing:0.08em;">VAI — HOME GRID CUSTOMIZATION · Role-aware smart defaults · Save per role/team</div>
+
+</body>
+</html>
