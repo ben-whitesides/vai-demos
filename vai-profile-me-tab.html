@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Me Tab: Athlete Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060608;
+  --body: #0C0A09;
+  --card: #111114;
+  --elevated: #1a1a20;
+  --surface: #1e1e26;
+  --border: #222228;
+  --orange: #F7941E;
+  --green: #34D399;
+  --red: #FF6B6B;
+  --yellow: #FBBF24;
+  --team: #2563EB;
+  --team-dark: #1D4ED8;
+  --team-bg: #0A1628;
+  --team-border: #1E3A8A;
+  --text-strong: #F5F0EB;
+  --text-body: #C8C8D0;
+  --text-muted: #8888A0;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text-strong);
+  padding: 48px 40px;
+  min-height: 100vh;
+}
+.page-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.page-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin-bottom: 8px;
+}
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+}
+.team-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--team-bg);
+  border: 1px solid var(--team-border);
+  color: var(--team);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+}
+.team-swatch { width: 12px; height: 12px; background: var(--team); border-radius: 50%; }
+
+/* Phone layout */
+.phone-row { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 48px; }
+.phone {
+  width: 300px;
+  background: var(--body);
+  border-radius: 40px;
+  overflow: hidden;
+  border: 1.5px solid #252530;
+  box-shadow: 0 0 0 6px #080809, 0 24px 64px rgba(0,0,0,0.9);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+.phone-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+/* Status bar */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+/* VAI Header */
+.vai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 16px 10px;
+}
+.vai-logo { display: flex; align-items: center; gap: 5px; }
+.vai-wingmark { width: 28px; height: 19px; }
+.vai-wordmark {
+  font-family: 'Oswald', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--orange);
+}
+.tier-badge {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  color: #000;
+  margin-left: 4px;
+}
+.tier-plus { background: var(--green); }
+.tier-m { background: var(--orange); }
+.header-icons { display: flex; gap: 12px; align-items: center; }
+.h-icon { color: var(--text-muted); }
+.h-bell { position: relative; }
+.h-bell::after { content:''; width:5px; height:5px; background:var(--red); border-radius:50%; position:absolute; top:-1px; right:-1px; }
+
+/* Bottom nav */
+.bottom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 8px 6px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--body);
+}
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.nav-label { font-size:9px; color:var(--text-muted); }
+.nav-label.active { color: var(--orange); }
+.nav-avanti {
+  background: var(--green);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #000;
+  box-shadow: 0 0 14px rgba(52,211,153,0.35);
+}
+
+/* AVANTI Strip */
+.avanti-strip {
+  background: rgba(52,211,153,0.05);
+  border-bottom: 1px solid rgba(52,211,153,0.12);
+  padding: 8px 14px;
+}
+.a-row { display:flex; align-items:center; gap:5px; margin-bottom:3px; }
+.a-dot { width:6px; height:6px; background:var(--green); border-radius:50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.a-label { font-family:'Oswald',sans-serif; font-size:10px; font-weight:600; color:var(--green); letter-spacing:0.08em; }
+.a-context { font-size:10px; color:var(--text-muted); }
+.a-text { font-size:11px; color:var(--text-body); line-height:1.4; }
+.a-chip {
+  display:inline-flex; align-items:center;
+  background:var(--orange); color:#000;
+  font-family:'DM Sans',sans-serif; font-size:10px; font-weight:600;
+  padding:3px 9px; border-radius:999px; margin-top:5px;
+}
+
+/* Profile tabs */
+.profile-tabs {
+  display:flex; border-bottom:1px solid var(--border);
+}
+.p-tab {
+  flex:1; text-align:center; padding:9px 4px;
+  font-family:'DM Sans',sans-serif; font-size:10px; font-weight:500;
+  color:var(--text-muted); border-bottom:2px solid transparent;
+}
+.p-tab.active { color:var(--team); border-bottom-color:var(--team); }
+
+/* Hero */
+.profile-hero {
+  position:relative; height:140px;
+  background: linear-gradient(160deg, #0f1a2e 0%, #080810 100%);
+  overflow:hidden;
+}
+.hero-glow {
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 25% 50%, rgba(37,99,235,0.3) 0%, transparent 65%);
+}
+.hero-content { position:relative; padding:18px 16px 14px; }
+.athlete-name {
+  font-family:'Oswald',sans-serif; font-size:24px; font-weight:700;
+  color:var(--text-strong); text-transform:uppercase; line-height:1.0;
+}
+.athlete-class {
+  font-family:'JetBrains Mono',monospace; font-size:10px;
+  color:var(--team); letter-spacing:0.08em; margin-top:2px;
+}
+.sport-pills { display:flex; gap:5px; margin-top:10px; flex-wrap:wrap; }
+.sport-pill {
+  background:rgba(37,99,235,0.18);
+  border:1px solid rgba(37,99,235,0.35);
+  color:var(--team); font-size:10px; font-weight:600;
+  padding:2px 8px; border-radius:999px;
+}
+
+/* Completion bar */
+.completion-section {
+  padding:10px 14px; background:var(--card);
+  border-bottom:1px solid var(--border);
+}
+.completion-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; }
+.completion-label { font-size:10px; color:var(--text-muted); }
+.completion-pct { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; color:var(--team); }
+.completion-track { height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
+.completion-fill { height:100%; background:var(--team); border-radius:2px; }
+
+/* Section headers */
+.sec-header {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 14px 5px;
+}
+.sec-name {
+  font-family:'Oswald',sans-serif; font-size:11px; font-weight:600;
+  color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;
+}
+.sec-action { color:var(--text-muted); font-size:11px; }
+
+/* Sport card */
+.sport-card {
+  margin:0 12px 8px;
+  background:var(--card); border-radius:10px;
+  border:1px solid var(--border); padding:11px;
+}
+.sc-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.sc-sport {
+  font-family:'Oswald',sans-serif; font-size:13px; font-weight:700;
+  color:var(--team); text-transform:uppercase; letter-spacing:0.05em;
+}
+.sc-icons { display:flex; gap:8px; color:var(--text-muted); font-size:12px; }
+.sc-body { display:flex; align-items:baseline; gap:10px; }
+.sc-position {
+  font-family:'Oswald',sans-serif; font-size:20px; font-weight:700;
+  color:var(--text-strong);
+}
+.sc-pos-label { font-size:10px; color:var(--text-muted); }
+.sc-jersey { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-muted); }
+.sc-team { font-size:10px; color:var(--text-muted); margin-top:3px; }
+
+/* Bio rows */
+.bio-row {
+  display:flex; align-items:center;
+  padding:9px 14px; border-bottom:1px solid var(--border); gap:10px;
+}
+.bio-icon { width:24px; color:var(--text-muted); text-align:center; font-size:13px; }
+.bio-label { font-size:11px; color:var(--text-muted); flex:1; }
+.bio-value { font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:600; color:var(--text-strong); }
+.bio-unit { font-size:10px; color:var(--text-muted); margin-left:2px; }
+.bio-add {
+  font-size:10px; color:var(--orange); font-weight:600;
+  border:1px solid rgba(247,148,30,0.3); padding:3px 8px; border-radius:6px;
+}
+.eye { color:var(--text-muted); font-size:11px; margin-left:8px; }
+.eye-off { color:var(--border); font-size:11px; margin-left:8px; }
+
+/* Ability category */
+.ability-cat {
+  padding:9px 14px 3px;
+  font-family:'Oswald',sans-serif; font-size:10px; font-weight:600;
+  color:var(--team); text-transform:uppercase; letter-spacing:0.1em;
+  border-top:1px solid var(--border);
+}
+.ability-card {
+  display:flex; align-items:center;
+  padding:9px 14px; border-bottom:1px solid var(--border); gap:10px;
+}
+.ab-info { flex:1; }
+.ab-name {
+  font-family:'Oswald',sans-serif; font-size:11px; font-weight:600;
+  color:var(--text-strong); text-transform:uppercase; letter-spacing:0.04em;
+}
+.ab-date { font-size:9px; color:var(--text-muted); margin-top:1px; }
+.ab-val-col { display:flex; align-items:baseline; gap:2px; }
+.ab-val { font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:var(--text-strong); }
+.ab-unit { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-muted); }
+.ab-trend-up { color:var(--green); font-size:9px; margin-left:4px; }
+.ab-trend-down { color:var(--red); font-size:9px; margin-left:4px; }
+/* Mini sparkline SVG */
+.sparkline { width:36px; height:18px; margin-left:8px; }
+.ab-actions { display:flex; gap:8px; color:var(--text-muted); font-size:11px; margin-left:4px; }
+
+/* Ability detail */
+.ab-detail-hero {
+  padding:14px; background:var(--card);
+  border-bottom:1px solid var(--border);
+}
+.ab-detail-sport {
+  font-family:'JetBrains Mono',monospace; font-size:9px;
+  color:var(--team); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;
+}
+.ab-detail-name {
+  font-family:'Oswald',sans-serif; font-size:12px; font-weight:600;
+  color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px;
+}
+.ab-detail-value-row { display:flex; align-items:baseline; gap:6px; }
+.ab-detail-val {
+  font-family:'JetBrains Mono',monospace; font-size:44px; font-weight:700;
+  color:var(--text-strong); line-height:1.0;
+}
+.ab-detail-unit {
+  font-family:'Oswald',sans-serif; font-size:18px; font-weight:600;
+  color:var(--team);
+}
+.ab-detail-date { font-size:10px; color:var(--text-muted); margin-top:4px; }
+.ab-trend-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.25);
+  color:var(--green); font-family:'JetBrains Mono',monospace; font-size:10px;
+  padding:3px 8px; border-radius:999px; margin-top:6px;
+}
+
+/* Graph */
+.graph-area { padding:12px 14px; }
+.graph-toggle {
+  display:flex; background:var(--card); border-radius:999px;
+  padding:2px; margin-bottom:10px; width:fit-content;
+}
+.g-btn {
+  font-family:'DM Sans',sans-serif; font-size:10px; font-weight:600;
+  padding:4px 12px; border-radius:999px; color:var(--text-muted);
+}
+.g-btn.active { background:var(--team); color:#fff; }
+.graph-box {
+  height:88px; background:var(--card); border-radius:10px;
+  border:1px solid var(--border); position:relative; overflow:hidden;
+  display:flex; align-items:flex-end; padding:8px;
+}
+
+/* Graph SVG */
+.graph-svg { width:100%; height:70px; }
+
+.graph-stats { display:flex; gap:16px; margin-top:10px; }
+.graph-stat-col {}
+.graph-stat-label { font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; }
+.graph-stat-val { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; color:var(--text-strong); }
+
+/* AVANTI coaching card */
+.avanti-card {
+  margin:10px 14px;
+  background:rgba(52,211,153,0.07);
+  border:1px solid rgba(52,211,153,0.2);
+  border-radius:10px; padding:10px;
+}
+.avanti-card-header { display:flex; align-items:center; gap:5px; margin-bottom:5px; }
+.avanti-card-label { font-family:'Oswald',sans-serif; font-size:10px; font-weight:600; color:var(--green); letter-spacing:0.08em; }
+.avanti-card-text { font-size:11px; color:var(--text-body); line-height:1.4; }
+
+/* Add PR button */
+.add-pr-btn {
+  margin:10px 14px 0;
+  background:var(--orange); color:#000;
+  font-family:'Oswald',sans-serif; font-size:12px; font-weight:700;
+  padding:9px; border-radius:8px; text-align:center;
+  text-transform:uppercase; letter-spacing:0.04em;
+}
+
+/* PR history */
+.pr-row {
+  display:flex; align-items:center;
+  padding:8px 14px; border-bottom:1px solid var(--border); gap:10px;
+}
+.pr-date { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-muted); width:60px; }
+.pr-val { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; color:var(--text-strong); flex:1; }
+.pr-delta { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--green); }
+.pr-delta-neg { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--red); }
+
+/* Stats */
+.sport-tabs {
+  display:flex; padding:10px 14px 0;
+  border-bottom:1px solid var(--border); gap:0; overflow-x:auto;
+  scrollbar-width:none;
+}
+.s-tab {
+  font-family:'Oswald',sans-serif; font-size:10px; font-weight:600;
+  color:var(--text-muted); padding:6px 10px;
+  border-bottom:2px solid transparent; white-space:nowrap;
+  text-transform:uppercase; letter-spacing:0.05em;
+}
+.s-tab.active { color:var(--team); border-bottom-color:var(--team); }
+.time-filters { display:flex; gap:5px; padding:8px 14px; }
+.t-chip {
+  font-size:10px; font-weight:600; padding:4px 9px;
+  border-radius:999px; border:1px solid var(--border); color:var(--text-muted);
+}
+.t-chip.active { background:var(--team); border-color:var(--team); color:#fff; }
+
+/* OVR badge - FIFA/Madden */
+.ovr-section {
+  padding:10px 14px; background:var(--card);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:14px;
+}
+.ovr-badge {
+  background: linear-gradient(135deg, var(--team) 0%, #1E40AF 100%);
+  border-radius:10px; padding:10px 14px;
+  display:flex; flex-direction:column; align-items:center;
+  min-width:58px;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.4);
+}
+.ovr-label { font-family:'JetBrains Mono',monospace; font-size:8px; font-weight:600; color:rgba(255,255,255,0.7); letter-spacing:0.1em; }
+.ovr-val { font-family:'Oswald',sans-serif; font-size:30px; font-weight:700; color:#fff; line-height:1.0; }
+.ovr-pos { font-family:'Oswald',sans-serif; font-size:9px; font-weight:600; color:rgba(255,255,255,0.8); }
+.attr-bars { flex:1; display:flex; flex-direction:column; gap:5px; }
+.attr-row { display:flex; align-items:center; gap:6px; }
+.attr-key { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:600; color:var(--text-muted); width:26px; text-transform:uppercase; }
+.attr-track { flex:1; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.attr-fill { height:100%; border-radius:2px; }
+.attr-fill-hi { background: linear-gradient(90deg, var(--team), #60A5FA); }
+.attr-fill-med { background: linear-gradient(90deg, var(--orange), #FCD34D); }
+.attr-fill-lo { background: linear-gradient(90deg, var(--red), #FCA5A5); }
+.attr-num { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; color:var(--text-strong); width:18px; text-align:right; }
+
+/* Stat grid */
+.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:8px 14px; }
+.stat-card {
+  background:var(--card); border-radius:10px;
+  border:1px solid var(--border); padding:9px;
+}
+.stat-card-lbl {
+  font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:500;
+  color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:3px;
+}
+.stat-card-val { font-family:'Oswald',sans-serif; font-size:22px; font-weight:700; color:var(--text-strong); line-height:1.0; }
+.stat-card-trend { display:flex; align-items:center; gap:3px; margin-top:3px; }
+.trend-g { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--green); }
+.trend-r { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--red); }
+
+/* Approval card */
+.approval-card {
+  margin:0 12px 8px;
+  background:rgba(251,191,36,0.07);
+  border:1px solid rgba(251,191,36,0.25);
+  border-radius:10px; padding:11px;
+}
+.approval-hdr { display:flex; align-items:center; gap:5px; margin-bottom:6px; }
+.approval-dot { width:6px; height:6px; background:var(--yellow); border-radius:50%; }
+.approval-title { font-family:'Oswald',sans-serif; font-size:11px; font-weight:600; color:var(--yellow); text-transform:uppercase; letter-spacing:0.05em; }
+.approval-desc { font-size:11px; color:var(--text-body); line-height:1.4; margin-bottom:8px; }
+.approval-stats { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:8px; }
+.appr-stat {
+  background:var(--elevated); border-radius:5px; padding:3px 7px;
+  font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-body);
+}
+.approval-btns { display:flex; gap:6px; }
+.btn-approve {
+  flex:1; background:var(--green); color:#000;
+  font-family:'Oswald',sans-serif; font-size:11px; font-weight:700;
+  padding:7px; border-radius:7px; text-align:center;
+  text-transform:uppercase; letter-spacing:0.04em;
+}
+.btn-edit-sm {
+  background:var(--elevated); color:var(--text-muted);
+  font-size:10px; font-weight:500; padding:7px 10px;
+  border-radius:7px; text-align:center;
+}
+
+/* Game log */
+.game-row {
+  display:flex; align-items:center;
+  padding:9px 14px; border-bottom:1px solid var(--border); gap:8px;
+}
+.game-date-col { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-muted); width:32px; }
+.game-opp { flex:1; font-size:10px; color:var(--text-body); }
+.game-result-w { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:var(--green); }
+.game-result-l { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:var(--red); }
+.game-stats-col { display:flex; gap:10px; }
+.game-stat-item { text-align:center; }
+.gs-val { font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; color:var(--text-strong); }
+.gs-lbl { font-size:8px; color:var(--text-muted); display:block; letter-spacing:0.05em; }
+
+/* Scroll */
+.scroll-content { height:460px; overflow-y:auto; scrollbar-width:none; }
+.scroll-content::-webkit-scrollbar { display:none; }
+</style>
+</head>
+<body>
+
+<div class="page-label">VAI — Me Tab</div>
+<div class="page-title">Athlete Profile — Gold Standard</div>
+<div class="page-subtitle">6-screen reference: Profile Hero · Bio/Biometrics · Ability List · Ability Detail · Stats Overview · Game Log + Approval</div>
+<div class="team-note">
+  <div class="team-swatch"></div>
+  Team color = Royal Blue #2563EB (user-selected from palette — replaces throughout profile)
+</div>
+
+<!-- ROW 1: Hero · Bio · Ability List -->
+<div class="phone-row">
+
+  <!-- P1: Profile Hero + Bio tab -->
+  <div>
+    <div class="phone-label">H1 — Profile Hero + Bio</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="color:var(--text-muted)">··· ▲ WiFi</span></div>
+      <div class="vai-header">
+        <div class="vai-logo">
+          <svg class="vai-wingmark" viewBox="0 0 40 26" fill="none">
+            <path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#F7941E"/>
+          </svg>
+          <span class="vai-wordmark">VAI</span>
+          <div class="tier-badge tier-plus">+</div>
+        </div>
+        <div class="header-icons">
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div class="h-bell">
+            <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+      </div>
+
+      <!-- AVANTI Strip -->
+      <div class="avanti-strip">
+        <div class="a-row">
+          <div class="a-dot"></div>
+          <span class="a-label">AVANTI</span>
+        </div>
+        <div class="a-text">Profile 68% complete — add Wingspan + School to boost recruiter visibility.</div>
+        <div class="a-chip">Complete Profile →</div>
+      </div>
+
+      <!-- Profile tabs -->
+      <div class="profile-tabs">
+        <div class="p-tab">Highlights</div>
+        <div class="p-tab">Ability</div>
+        <div class="p-tab">Stats</div>
+        <div class="p-tab active">Bio</div>
+      </div>
+
+      <div class="scroll-content">
+        <!-- Hero -->
+        <div class="profile-hero">
+          <div class="hero-glow"></div>
+          <div class="hero-content">
+            <div class="athlete-name">Ben<br>Whitesides</div>
+            <div class="athlete-class">CLASS OF '26</div>
+            <div class="sport-pills">
+              <div class="sport-pill">Football</div>
+              <div class="sport-pill">Basketball</div>
+              <div class="sport-pill">Lacrosse</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Completion bar -->
+        <div class="completion-section">
+          <div class="completion-row">
+            <span class="completion-label">Profile Visibility Score</span>
+            <span class="completion-pct">68%</span>
+          </div>
+          <div class="completion-track">
+            <div class="completion-fill" style="width:68%"></div>
+          </div>
+        </div>
+
+        <!-- Sport cards -->
+        <div class="sec-header">
+          <span class="sec-name">Sports & Position</span>
+          <span class="sec-action">+ Add Sport</span>
+        </div>
+
+        <div class="sport-card">
+          <div class="sc-header">
+            <span class="sc-sport">Football</span>
+            <div class="sc-icons">👁 ✏️</div>
+          </div>
+          <div class="sc-body">
+            <span class="sc-position">QB</span>
+            <span class="sc-pos-label">Quarterback</span>
+            <span class="sc-jersey">#12</span>
+          </div>
+          <div class="sc-team">VAI FC North · Stars: ★★★★</div>
+        </div>
+
+        <div class="sport-card">
+          <div class="sc-header">
+            <span class="sc-sport">Basketball</span>
+            <div class="sc-icons">👁 ✏️</div>
+          </div>
+          <div class="sc-body">
+            <span class="sc-position">PG</span>
+            <span class="sc-pos-label">Point Guard</span>
+            <span class="sc-jersey">#1</span>
+          </div>
+          <div class="sc-team">Builder Club · Stars: ★★★</div>
+        </div>
+
+        <!-- Biometrics -->
+        <div class="sec-header">
+          <span class="sec-name">Biometrics</span>
+          <span class="sec-action">✏️</span>
+        </div>
+
+        <div class="bio-row">
+          <div class="bio-icon">↕</div>
+          <span class="bio-label">Height</span>
+          <span class="bio-value">5'11"</span>
+          <span class="eye">👁</span>
+        </div>
+        <div class="bio-row">
+          <div class="bio-icon">⚖</div>
+          <span class="bio-label">Weight</span>
+          <span class="bio-value">185<span class="bio-unit"> lbs</span></span>
+          <span class="eye">👁</span>
+        </div>
+        <div class="bio-row">
+          <div class="bio-icon">↔</div>
+          <span class="bio-label">Wingspan</span>
+          <span class="bio-add">+ Add</span>
+          <span class="eye-off">👁</span>
+        </div>
+        <div class="bio-row">
+          <div class="bio-icon">👟</div>
+          <span class="bio-label">Shoe Size</span>
+          <span class="bio-value">10.5<span class="bio-unit"> US</span></span>
+          <span class="eye">👁</span>
+        </div>
+        <div class="bio-row">
+          <div class="bio-icon">✋</div>
+          <span class="bio-label">Hand Size</span>
+          <span class="bio-add">+ Add</span>
+          <span class="eye-off">👁</span>
+        </div>
+
+        <!-- Education -->
+        <div class="sec-header">
+          <span class="sec-name">Education</span>
+          <span class="sec-action">✏️</span>
+        </div>
+
+        <div class="bio-row">
+          <div class="bio-icon">📚</div>
+          <span class="bio-label">GPA</span>
+          <span class="bio-value">4.0</span>
+          <span class="eye">👁</span>
+        </div>
+        <div class="bio-row">
+          <div class="bio-icon">🎓</div>
+          <span class="bio-label">Graduation</span>
+          <span class="bio-value">2026</span>
+          <span class="eye-off">👁</span>
+        </div>
+        <div class="bio-row">
+          <div class="bio-icon">📝</div>
+          <span class="bio-label">ACT</span>
+          <span class="bio-value">36</span>
+          <span class="eye">👁</span>
+        </div>
+        <div class="bio-row">
+          <div class="bio-icon">📝</div>
+          <span class="bio-label">SAT</span>
+          <span class="bio-value">1580</span>
+          <span class="eye">👁</span>
+        </div>
+        <div class="bio-row">
+          <div class="bio-icon">🏫</div>
+          <span class="bio-label">School</span>
+          <span class="bio-add">+ Add</span>
+        </div>
+
+        <div style="height:20px"></div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg><span class="nav-label">Home</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 40 26" fill="none"><path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#8888A0"/></svg><span class="nav-label">Feed</span></div>
+        <div class="nav-avanti">AVANTI</div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-label active">Me</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P2: Ability List -->
+  <div>
+    <div class="phone-label">H4 — Ability List (Speed · Power · Agility)</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="color:var(--text-muted)">··· ▲ WiFi</span></div>
+      <div class="vai-header">
+        <div class="vai-logo">
+          <svg class="vai-wingmark" viewBox="0 0 40 26" fill="none"><path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#F7941E"/></svg>
+          <span class="vai-wordmark">VAI</span>
+          <div class="tier-badge tier-plus">+</div>
+        </div>
+        <div class="header-icons">
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div class="h-bell"><svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+      </div>
+
+      <div class="avanti-strip">
+        <div class="a-row"><div class="a-dot"></div><span class="a-label">AVANTI</span></div>
+        <div class="a-text">Pro Agility improved 0.08s since Feb — log your next test to track progress.</div>
+      </div>
+
+      <div class="profile-tabs">
+        <div class="p-tab">Highlights</div>
+        <div class="p-tab active">Ability</div>
+        <div class="p-tab">Stats</div>
+        <div class="p-tab">Bio</div>
+      </div>
+
+      <div class="scroll-content">
+        <!-- SPEED -->
+        <div class="ability-cat" style="border-top:none">SPEED</div>
+
+        <div class="ability-card">
+          <div class="ab-info">
+            <div class="ab-name">40YD DASH</div>
+            <div class="ab-date">Updated Sep 13, 2024</div>
+          </div>
+          <svg class="sparkline" viewBox="0 0 36 18">
+            <polyline points="2,14 12,10 22,12 34,6" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="34" cy="6" r="2" fill="#2563EB"/>
+          </svg>
+          <div>
+            <div class="ab-val-col"><span class="ab-val">5.08</span><span class="ab-unit">sec</span><span class="ab-trend-up">↑</span></div>
+          </div>
+          <div class="ab-actions">✏️ ＋</div>
+        </div>
+
+        <div class="ability-card">
+          <div class="ab-info">
+            <div class="ab-name">3 CONE</div>
+            <div class="ab-date">Updated Mar 23, 2024</div>
+          </div>
+          <svg class="sparkline" viewBox="0 0 36 18">
+            <polyline points="2,12 12,14 22,10 34,8" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="34" cy="8" r="2" fill="#2563EB"/>
+          </svg>
+          <div>
+            <div class="ab-val-col"><span class="ab-val">6.92</span><span class="ab-unit">sec</span><span class="ab-trend-up">↑</span></div>
+          </div>
+          <div class="ab-actions">🎥 ✏️ ＋</div>
+        </div>
+
+        <!-- POWER -->
+        <div class="ability-cat">POWER</div>
+
+        <div class="ability-card">
+          <div class="ab-info">
+            <div class="ab-name">VERTICAL JUMP</div>
+            <div class="ab-date">Updated Jan 15, 2025</div>
+          </div>
+          <svg class="sparkline" viewBox="0 0 36 18">
+            <polyline points="2,14 12,10 22,8 34,5" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="34" cy="5" r="2" fill="#2563EB"/>
+          </svg>
+          <div>
+            <div class="ab-val-col"><span class="ab-val">32</span><span class="ab-unit">in</span><span class="ab-trend-up">↑</span></div>
+          </div>
+          <div class="ab-actions">✏️ ＋</div>
+        </div>
+
+        <div class="ability-card">
+          <div class="ab-info">
+            <div class="ab-name">BENCH PRESS</div>
+            <div class="ab-date">Not tested</div>
+          </div>
+          <div style="flex:1"></div>
+          <div style="font-size:10px;color:var(--orange);font-weight:600;border:1px solid rgba(247,148,30,0.3);padding:3px 8px;border-radius:6px;">+ Add Result</div>
+        </div>
+
+        <!-- AGILITY -->
+        <div class="ability-cat">AGILITY</div>
+
+        <div class="ability-card">
+          <div class="ab-info">
+            <div class="ab-name">PRO AGILITY</div>
+            <div class="ab-date">Updated Feb 22, 2026</div>
+          </div>
+          <svg class="sparkline" viewBox="0 0 36 18">
+            <polyline points="2,16 12,13 22,11 34,9" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="34" cy="9" r="2" fill="#2563EB"/>
+          </svg>
+          <div>
+            <div class="ab-val-col"><span class="ab-val">4.88</span><span class="ab-unit">sec</span><span class="ab-trend-up">↑</span></div>
+          </div>
+          <div class="ab-actions">✏️ ＋</div>
+        </div>
+
+        <!-- SPORT-SPECIFIC -->
+        <div class="ability-cat">FOOTBALL</div>
+
+        <div class="ability-card">
+          <div class="ab-info">
+            <div class="ab-name">THROW VELOCITY</div>
+            <div class="ab-date">Updated Dec 10, 2024</div>
+          </div>
+          <svg class="sparkline" viewBox="0 0 36 18">
+            <polyline points="2,14 12,12 22,9 34,7" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="34" cy="7" r="2" fill="#2563EB"/>
+          </svg>
+          <div>
+            <div class="ab-val-col"><span class="ab-val">58</span><span class="ab-unit">mph</span><span class="ab-trend-up">↑</span></div>
+          </div>
+          <div class="ab-actions">✏️ ＋</div>
+        </div>
+
+        <div class="ability-card">
+          <div class="ab-info">
+            <div class="ab-name">THROW DISTANCE</div>
+            <div class="ab-date">Updated Dec 10, 2024</div>
+          </div>
+          <svg class="sparkline" viewBox="0 0 36 18">
+            <polyline points="2,15 12,13 22,10 34,8" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="34" cy="8" r="2" fill="#2563EB"/>
+          </svg>
+          <div>
+            <div class="ab-val-col"><span class="ab-val">55</span><span class="ab-unit">yds</span><span class="ab-trend-up">↑</span></div>
+          </div>
+          <div class="ab-actions">✏️ ＋</div>
+        </div>
+
+        <div style="height:20px"></div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg><span class="nav-label">Home</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 40 26" fill="none"><path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#8888A0"/></svg><span class="nav-label">Feed</span></div>
+        <div class="nav-avanti">AVANTI</div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-label active">Me</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P3: Stats Overview - FIFA/Madden OVR -->
+  <div>
+    <div class="phone-label">H6 — Stats Overview (Football · FIFA/Madden OVR)</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="color:var(--text-muted)">··· ▲ WiFi</span></div>
+      <div class="vai-header">
+        <div class="vai-logo">
+          <svg class="vai-wingmark" viewBox="0 0 40 26" fill="none"><path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#F7941E"/></svg>
+          <span class="vai-wordmark">VAI</span>
+          <div class="tier-badge tier-plus">+</div>
+        </div>
+        <div class="header-icons">
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div class="h-bell"><svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+      </div>
+
+      <div class="avanti-strip">
+        <div class="a-row"><div class="a-dot"></div><span class="a-label">AVANTI</span></div>
+        <div class="a-text">Completion rate +8% this season — top 20% for your position nationally.</div>
+      </div>
+
+      <div class="profile-tabs">
+        <div class="p-tab">Highlights</div>
+        <div class="p-tab">Ability</div>
+        <div class="p-tab active">Stats</div>
+        <div class="p-tab">Bio</div>
+      </div>
+
+      <div class="scroll-content">
+        <!-- Sport tabs -->
+        <div class="sport-tabs">
+          <div class="s-tab active">Football</div>
+          <div class="s-tab">Basketball</div>
+          <div class="s-tab">Baseball</div>
+          <div class="s-tab">Soccer</div>
+          <div class="s-tab">Lacrosse</div>
+        </div>
+
+        <!-- Time filters -->
+        <div class="time-filters">
+          <div class="t-chip">Career</div>
+          <div class="t-chip active">Season</div>
+          <div class="t-chip">Game</div>
+        </div>
+
+        <!-- OVR Badge - FIFA/Madden style -->
+        <div class="ovr-section">
+          <div class="ovr-badge">
+            <span class="ovr-label">OVR</span>
+            <span class="ovr-val">84</span>
+            <span class="ovr-pos">QB</span>
+          </div>
+          <div class="attr-bars">
+            <div class="attr-row">
+              <span class="attr-key">SPD</span>
+              <div class="attr-track"><div class="attr-fill attr-fill-hi" style="width:78%"></div></div>
+              <span class="attr-num">78</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">ACC</span>
+              <div class="attr-track"><div class="attr-fill attr-fill-hi" style="width:85%"></div></div>
+              <span class="attr-num">85</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">ARM</span>
+              <div class="attr-track"><div class="attr-fill attr-fill-med" style="width:82%"></div></div>
+              <span class="attr-num">82</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">AWR</span>
+              <div class="attr-track"><div class="attr-fill attr-fill-hi" style="width:88%"></div></div>
+              <span class="attr-num">88</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-key">AGI</span>
+              <div class="attr-track"><div class="attr-fill attr-fill-med" style="width:74%"></div></div>
+              <span class="attr-num">74</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending approval banner -->
+        <div style="padding:8px 12px 0">
+          <div class="approval-card">
+            <div class="approval-hdr">
+              <div class="approval-dot"></div>
+              <span class="approval-title">Stats Pending Approval</span>
+            </div>
+            <div class="approval-desc">Spring Invitational stats submitted by Coach Diaz — review before posting to profile.</div>
+            <div class="approval-stats">
+              <div class="appr-stat">COMP 18/28</div>
+              <div class="appr-stat">YDS 247</div>
+              <div class="appr-stat">TD 3</div>
+              <div class="appr-stat">INT 0</div>
+            </div>
+            <div class="approval-btns">
+              <div class="btn-approve">Approve & Post</div>
+              <div class="btn-edit-sm">Edit</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat grid -->
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-card-lbl">Completions</div>
+            <div class="stat-card-val">68%</div>
+            <div class="stat-card-trend"><span class="trend-g">↑ +8%</span><span style="font-size:9px;color:var(--text-muted);margin-left:2px">vs last yr</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-lbl">Pass Yards</div>
+            <div class="stat-card-val">2,847</div>
+            <div class="stat-card-trend"><span class="trend-g">↑ +420</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-lbl">Touchdowns</div>
+            <div class="stat-card-val">24</div>
+            <div class="stat-card-trend"><span class="trend-g">↑ +6</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-lbl">Interceptions</div>
+            <div class="stat-card-val">4</div>
+            <div class="stat-card-trend"><span class="trend-g">↓ −2</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-lbl">Rush Yards</div>
+            <div class="stat-card-val">312</div>
+            <div class="stat-card-trend"><span class="trend-r">↓ −88</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-lbl">QB Rating</div>
+            <div class="stat-card-val">118.4</div>
+            <div class="stat-card-trend"><span class="trend-g">↑ +12.1</span></div>
+          </div>
+        </div>
+
+        <div style="height:20px"></div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg><span class="nav-label">Home</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 40 26" fill="none"><path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#8888A0"/></svg><span class="nav-label">Feed</span></div>
+        <div class="nav-avanti">AVANTI</div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-label active">Me</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROW 2: Ability Detail · Game Log -->
+<div class="phone-row">
+
+  <!-- P4: Ability Detail -->
+  <div>
+    <div class="phone-label">H5 — Ability Detail + Progress Graph</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="color:var(--text-muted)">··· ▲ WiFi</span></div>
+      <div class="vai-header">
+        <div class="vai-logo">
+          <svg class="vai-wingmark" viewBox="0 0 40 26" fill="none"><path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#F7941E"/></svg>
+          <span class="vai-wordmark">VAI</span>
+          <div class="tier-badge tier-plus">+</div>
+        </div>
+        <div class="header-icons">
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div class="h-bell"><svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+      </div>
+
+      <div class="scroll-content">
+        <!-- Ability hero -->
+        <div class="ab-detail-hero">
+          <div class="ab-detail-sport">Football · Power</div>
+          <div class="ab-detail-name">Throw Velocity</div>
+          <div class="ab-detail-value-row">
+            <span class="ab-detail-val">58</span>
+            <span class="ab-detail-unit">MPH</span>
+          </div>
+          <div class="ab-detail-date">Last updated: Dec 10, 2024</div>
+          <div class="ab-trend-badge">↑ +6 MPH over 12 months</div>
+        </div>
+
+        <!-- Graph -->
+        <div class="graph-area">
+          <div class="graph-toggle">
+            <div class="g-btn active">12 MOS</div>
+            <div class="g-btn">3 YEAR</div>
+          </div>
+
+          <div class="graph-box">
+            <svg class="graph-svg" viewBox="0 0 260 80" preserveAspectRatio="none">
+              <!-- Grid lines -->
+              <line x1="0" y1="20" x2="260" y2="20" stroke="#1e1e26" stroke-width="1"/>
+              <line x1="0" y1="40" x2="260" y2="40" stroke="#1e1e26" stroke-width="1"/>
+              <line x1="0" y1="60" x2="260" y2="60" stroke="#1e1e26" stroke-width="1"/>
+              <!-- Area fill -->
+              <defs>
+                <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2563EB" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M10,65 L55,58 L100,50 L145,44 L190,36 L235,24 L235,80 L10,80 Z" fill="url(#lineGrad)"/>
+              <!-- Line -->
+              <polyline points="10,65 55,58 100,50 145,44 190,36 235,24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Data points -->
+              <circle cx="10" cy="65" r="3" fill="#1D4ED8" stroke="#60A5FA" stroke-width="1.5"/>
+              <circle cx="55" cy="58" r="3" fill="#1D4ED8" stroke="#60A5FA" stroke-width="1.5"/>
+              <circle cx="100" cy="50" r="3" fill="#1D4ED8" stroke="#60A5FA" stroke-width="1.5"/>
+              <circle cx="145" cy="44" r="3" fill="#1D4ED8" stroke="#60A5FA" stroke-width="1.5"/>
+              <circle cx="190" cy="36" r="3" fill="#1D4ED8" stroke="#60A5FA" stroke-width="1.5"/>
+              <circle cx="235" cy="24" r="4" fill="#2563EB" stroke="#93C5FD" stroke-width="2"/>
+              <!-- Y labels -->
+              <text x="4" y="68" fill="#8888A0" font-size="7" font-family="JetBrains Mono">52</text>
+              <text x="4" y="48" fill="#8888A0" font-size="7" font-family="JetBrains Mono">55</text>
+              <text x="4" y="28" fill="#8888A0" font-size="7" font-family="JetBrains Mono">57</text>
+            </svg>
+          </div>
+
+          <div class="graph-stats">
+            <div class="graph-stat-col">
+              <div class="graph-stat-label">Starting</div>
+              <div class="graph-stat-val" style="color:var(--text-muted)">52 MPH</div>
+            </div>
+            <div class="graph-stat-col">
+              <div class="graph-stat-label">Current</div>
+              <div class="graph-stat-val">58 MPH</div>
+            </div>
+            <div class="graph-stat-col">
+              <div class="graph-stat-label">Increase</div>
+              <div class="graph-stat-val" style="color:var(--green)">+6 MPH</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AVANTI coaching card -->
+        <div class="avanti-card">
+          <div class="avanti-card-header">
+            <div class="a-dot"></div>
+            <span class="avanti-card-label">AVANTI COACHING</span>
+          </div>
+          <div class="avanti-card-text">58 MPH is above average for your age group. Elite QBs average 60–65 MPH. Aim for 62 MPH by next combine — add shoulder/rotational strength work.</div>
+        </div>
+
+        <!-- Add PR -->
+        <div class="add-pr-btn">+ Add New Result</div>
+
+        <!-- PR history -->
+        <div class="sec-header" style="margin-top:12px">
+          <span class="sec-name">Result History</span>
+        </div>
+
+        <div class="pr-row">
+          <span class="pr-date">Dec 10, 2024</span>
+          <span class="pr-val">58 MPH</span>
+          <span class="pr-delta">+3 MPH</span>
+        </div>
+        <div class="pr-row">
+          <span class="pr-date">Aug 15, 2024</span>
+          <span class="pr-val">55 MPH</span>
+          <span class="pr-delta">+2 MPH</span>
+        </div>
+        <div class="pr-row">
+          <span class="pr-date">Mar 20, 2024</span>
+          <span class="pr-val">53 MPH</span>
+          <span class="pr-delta">+1 MPH</span>
+        </div>
+        <div class="pr-row">
+          <span class="pr-date">Sep 12, 2023</span>
+          <span class="pr-val">52 MPH</span>
+          <span style="font-size:10px;color:var(--text-muted)">Starting PR</span>
+        </div>
+
+        <div style="height:20px"></div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg><span class="nav-label">Home</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 40 26" fill="none"><path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#8888A0"/></svg><span class="nav-label">Feed</span></div>
+        <div class="nav-avanti">AVANTI</div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-label active">Me</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P5: Game Log + Approval -->
+  <div>
+    <div class="phone-label">H7 — Game Log + Stat Approval Flow</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="color:var(--text-muted)">··· ▲ WiFi</span></div>
+      <div class="vai-header">
+        <div class="vai-logo">
+          <svg class="vai-wingmark" viewBox="0 0 40 26" fill="none"><path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#F7941E"/></svg>
+          <span class="vai-wordmark">VAI</span>
+          <div class="tier-badge tier-plus">+</div>
+        </div>
+        <div class="header-icons">
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <div class="h-bell"><svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <svg class="h-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+      </div>
+
+      <div class="avanti-strip">
+        <div class="a-row"><div class="a-dot"></div><span class="a-label">AVANTI</span></div>
+        <div class="a-text">2 games have stats pending your approval — approve to update your season averages.</div>
+        <div class="a-chip">Review Now →</div>
+      </div>
+
+      <div class="profile-tabs">
+        <div class="p-tab">Highlights</div>
+        <div class="p-tab">Ability</div>
+        <div class="p-tab active">Stats</div>
+        <div class="p-tab">Bio</div>
+      </div>
+
+      <div class="scroll-content">
+        <div class="sport-tabs">
+          <div class="s-tab active">Football</div>
+          <div class="s-tab">Basketball</div>
+          <div class="s-tab">Baseball</div>
+          <div class="s-tab">Soccer</div>
+        </div>
+        <div class="time-filters">
+          <div class="t-chip">Career</div>
+          <div class="t-chip">Season</div>
+          <div class="t-chip active">Game</div>
+        </div>
+
+        <!-- Pending approval cards -->
+        <div style="padding:8px 12px 4px">
+          <div class="approval-card">
+            <div class="approval-hdr">
+              <div class="approval-dot"></div>
+              <span class="approval-title">Pending Approval · Spring Invitational</span>
+            </div>
+            <div class="approval-desc">Submitted by Coach Diaz · Apr 24, 2026 · vs City Select</div>
+            <div class="approval-stats">
+              <div class="appr-stat">18/28 COMP</div>
+              <div class="appr-stat">247 YDS</div>
+              <div class="appr-stat">3 TD</div>
+              <div class="appr-stat">0 INT</div>
+            </div>
+            <div class="approval-btns">
+              <div class="btn-approve">Approve & Post</div>
+              <div class="btn-edit-sm">Edit</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game log header -->
+        <div class="sec-header">
+          <span class="sec-name">Game Log · 2025–26 Season</span>
+          <span class="sec-action" style="font-size:9px;color:var(--text-muted)">12 games</span>
+        </div>
+
+        <!-- Column headers -->
+        <div style="display:flex;align-items:center;padding:4px 14px;gap:8px;border-bottom:1px solid var(--border)">
+          <span style="width:32px;font-size:9px;color:var(--text-muted)">DATE</span>
+          <span style="flex:1;font-size:9px;color:var(--text-muted)">OPPONENT</span>
+          <span style="font-size:9px;color:var(--text-muted);width:22px;text-align:center">W/L</span>
+          <span style="font-size:9px;color:var(--text-muted);width:32px;text-align:center">CMP%</span>
+          <span style="font-size:9px;color:var(--text-muted);width:28px;text-align:center">YDS</span>
+          <span style="font-size:9px;color:var(--text-muted);width:22px;text-align:center">TD</span>
+        </div>
+
+        <div class="game-row">
+          <span class="game-date-col">Apr 24</span>
+          <span class="game-opp">vs City Select</span>
+          <span class="game-result-w" style="width:22px;text-align:center">W</span>
+          <div class="game-stats-col">
+            <div class="game-stat-item"><span class="gs-val">64%</span></div>
+            <div class="game-stat-item"><span class="gs-val" style="font-size:11px">247</span></div>
+            <div class="game-stat-item"><span class="gs-val">3</span></div>
+          </div>
+        </div>
+        <div class="game-row">
+          <span class="game-date-col">Apr 17</span>
+          <span class="game-opp">vs FC Riverside</span>
+          <span class="game-result-w" style="width:22px;text-align:center">W</span>
+          <div class="game-stats-col">
+            <div class="game-stat-item"><span class="gs-val">71%</span></div>
+            <div class="game-stat-item"><span class="gs-val" style="font-size:11px">312</span></div>
+            <div class="game-stat-item"><span class="gs-val">2</span></div>
+          </div>
+        </div>
+        <div class="game-row">
+          <span class="game-date-col">Apr 10</span>
+          <span class="game-opp">vs Boys Black</span>
+          <span class="game-result-l" style="width:22px;text-align:center">L</span>
+          <div class="game-stats-col">
+            <div class="game-stat-item"><span class="gs-val">58%</span></div>
+            <div class="game-stat-item"><span class="gs-val" style="font-size:11px">198</span></div>
+            <div class="game-stat-item"><span class="gs-val">1</span></div>
+          </div>
+        </div>
+        <div class="game-row">
+          <span class="game-date-col">Mar 28</span>
+          <span class="game-opp">vs Valley United</span>
+          <span class="game-result-w" style="width:22px;text-align:center">W</span>
+          <div class="game-stats-col">
+            <div class="game-stat-item"><span class="gs-val">68%</span></div>
+            <div class="game-stat-item"><span class="gs-val" style="font-size:11px">276</span></div>
+            <div class="game-stat-item"><span class="gs-val">4</span></div>
+          </div>
+        </div>
+        <div class="game-row">
+          <span class="game-date-col">Mar 14</span>
+          <span class="game-opp">vs Salt Lake Storm</span>
+          <span class="game-result-w" style="width:22px;text-align:center">W</span>
+          <div class="game-stats-col">
+            <div class="game-stat-item"><span class="gs-val">75%</span></div>
+            <div class="game-stat-item"><span class="gs-val" style="font-size:11px">334</span></div>
+            <div class="game-stat-item"><span class="gs-val">3</span></div>
+          </div>
+        </div>
+        <div class="game-row">
+          <span class="game-date-col">Feb 28</span>
+          <span class="game-opp">vs Envy Black</span>
+          <span class="game-result-l" style="width:22px;text-align:center">L</span>
+          <div class="game-stats-col">
+            <div class="game-stat-item"><span class="gs-val">52%</span></div>
+            <div class="game-stat-item"><span class="gs-val" style="font-size:11px">162</span></div>
+            <div class="game-stat-item"><span class="gs-val">1</span></div>
+          </div>
+        </div>
+
+        <div style="height:20px"></div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg><span class="nav-label">Home</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 40 26" fill="none"><path d="M0 0L12 26L20 10L28 26L40 0H32L20 22L8 0H0Z" fill="#8888A0"/></svg><span class="nav-label">Feed</span></div>
+        <div class="nav-avanti">AVANTI</div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span class="nav-label">Wallet</span></div>
+        <div class="nav-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-label active">Me</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
