@@ -220,8 +220,29 @@ body { background:#111; font-family:var(--font-dm); min-height:100vh; display:fl
 .browser-dot.g { background:#28C840; }
 .browser-url { flex:1; background:#1A1A1A; border-radius:6px; padding:5px 12px; font-size:12px; color:#555; max-width:420px; margin:0 auto; font-family:var(--font-mono); }
 .gd-app { display:flex; min-height:640px; }
-.gd-sidebar { width:220px; background:#171412; border-right:1px solid #2A2520; display:flex; flex-direction:column; padding:12px 0; flex-shrink:0; }
-.gd-sidebar-logo { padding:10px 16px 16px; font-family:var(--font-oswald); font-size:15px; font-weight:700; letter-spacing:0.08em; color:var(--vai-orange); border-bottom:1px solid #2A2520; margin-bottom:8px; }
+.gd-sidebar { width:220px; background:#171412; border-right:1px solid #2A2520; display:flex; flex-direction:column; padding:0; flex-shrink:0; }
+.gd-sidebar-logo { padding:14px 16px 14px; border-bottom:1px solid #2A2520; margin-bottom:8px; display:flex; align-items:center; }
+.gd-sidebar-logo img { height:22px; display:block; filter:none; }
+/* Alert strip below topbar */
+.gd-alert-strip { background:#0D0B0A; border-bottom:1px solid #2A2520; display:flex; flex-direction:column; flex-shrink:0; }
+.gd-alert-item { display:flex; align-items:center; gap:10px; padding:9px 20px; border-bottom:1px solid #1A1714; }
+.gd-alert-item:last-child { border-bottom:none; }
+.gd-alert-tag { font-family:var(--font-mono); font-size:9px; font-weight:700; letter-spacing:0.06em; padding:2px 7px; border-radius:999px; border:1px solid; flex-shrink:0; min-width:52px; text-align:center; }
+.gd-at-yellow { background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.3); color:var(--yellow); }
+.gd-at-green { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.gd-at-red { background:rgba(255,107,107,0.1); border-color:rgba(255,107,107,0.3); color:var(--red); }
+.gd-alert-text { font-family:var(--font-dm); font-size:12px; color:#C8BFB8; flex:1; line-height:1.4; }
+.gd-alert-text strong { color:#F5F0EB; }
+.gd-alert-action { font-family:var(--font-mono); font-size:10px; font-weight:700; padding:3px 10px; border-radius:999px; border:1px solid; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+/* AVANTI floating bubble */
+.gd-content-wrap { position:relative; flex:1; overflow:hidden; display:flex; flex-direction:column; }
+.gd-avanti-bubble { position:absolute; bottom:24px; right:24px; width:48px; height:48px; border-radius:50%; background:var(--vai-green); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 0 0 1px rgba(52,211,153,0.3),0 0 24px rgba(52,211,153,0.35),0 4px 16px rgba(0,0,0,0.5); z-index:10; }
+.gd-avanti-bubble svg { width:20px; height:20px; stroke:#000; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.gd-bubble-badge { position:absolute; top:-4px; right:-4px; width:18px; height:18px; border-radius:50%; background:var(--yellow); border:2px solid #0D0B0A; font-family:var(--font-mono); font-size:9px; font-weight:700; color:#000; display:flex; align-items:center; justify-content:center; }
+/* Topbar search/bell icons */
+.gd-topbar-icon { width:32px; height:32px; display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer; }
+.gd-topbar-icon svg { width:18px; height:18px; stroke:#6B605A; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.gd-topbar-notif { position:absolute; top:4px; right:4px; width:7px; height:7px; border-radius:50%; background:var(--red); border:1.5px solid #171412; }
 .gd-sec-lbl { padding:8px 12px 2px; font-family:var(--font-mono); font-size:9px; font-weight:700; color:#6B605A; letter-spacing:0.1em; text-transform:uppercase; }
 .gd-nav-item { display:flex; align-items:center; gap:10px; padding:8px 14px; font-family:var(--font-dm); font-size:13px; color:#6B605A; cursor:pointer; transition:all 0.12s; border-radius:6px; margin:1px 6px; }
 .gd-nav-item:hover { background:#1E1B18; color:#C8BFB8; }
@@ -945,9 +966,11 @@ body { background:#111; font-family:var(--font-dm); min-height:100vh; display:fl
   </div>
   <div class="gd-app">
 
-    <!-- Sidebar -->
+    <!-- Sidebar — Mentor Role -->
     <div class="gd-sidebar">
-      <div class="gd-sidebar-logo">GAMEDAY</div>
+      <div class="gd-sidebar-logo">
+        <img src="gameday-logo.png" alt="GAMEDAY"/>
+      </div>
       <div class="gd-sec-lbl">Club OS</div>
       <div class="gd-nav-item">
         <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
@@ -961,41 +984,74 @@ body { background:#111; font-family:var(--font-dm); min-height:100vh; display:fl
         <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
         Schedule
       </div>
-      <div class="gd-nav-item active">
-        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        Mentor
-        <div class="gd-badge">3</div>
-      </div>
       <div class="gd-nav-item">
         <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
         Compliance
       </div>
+      <div class="gd-sec-lbl" style="margin-top:8px;">My Mentor</div>
+      <div class="gd-nav-item active">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        My Sessions
+        <div class="gd-badge">3</div>
+      </div>
       <div class="gd-nav-item">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        Earnings
+      </div>
+      <div class="gd-nav-item">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        New Session
+      </div>
+      <div class="gd-nav-item">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+        Connect
+        <div class="gd-badge">3</div>
+      </div>
+      <div class="gd-sec-lbl" style="margin-top:8px;opacity:0.5;">Finances</div>
+      <div class="gd-nav-item" style="opacity:0.4;pointer-events:none;">
         <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
         Finances
+        <span style="margin-left:auto;font-family:var(--font-mono);font-size:9px;color:#4A3800;background:#1E1000;border:1px solid #4A3200;border-radius:999px;padding:1px 6px;">Setup</span>
       </div>
     </div>
 
     <!-- Main content -->
     <div class="gd-main">
+      <!-- Topbar: context + search + bell + AVANTI + role avatar -->
       <div class="gd-topbar">
-        <div class="gd-topbar-title">MENTOR</div>
-        <div class="gd-topbar-sep"></div>
-        <div class="gd-topbar-ctx">Marcus Riley · VAI FC North</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-family:var(--font-dm);font-size:13px;color:#6B605A;">VAI FC North</span>
+          <span style="color:#2A2520;">›</span>
+          <span style="font-family:var(--font-dm);font-size:13px;font-weight:600;color:#F5F0EB;">My Sessions</span>
+        </div>
         <div class="gd-topbar-right">
+          <div class="gd-topbar-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="gd-topbar-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="gd-topbar-notif"></div></div>
           <div class="gd-avanti-pill"><div class="gd-avanti-dot"></div>AVANTI ON</div>
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--vai-orange),#c47210);display:flex;align-items:center;justify-content:center;font-family:var(--font-oswald);font-size:13px;font-weight:700;color:#000;">MR</div>
+          <div title="Mentor tier" style="width:32px;height:32px;border-radius:50%;background:var(--vai-orange);display:flex;align-items:center;justify-content:center;font-family:var(--font-oswald);font-size:14px;font-weight:700;color:#000;cursor:pointer;">M</div>
         </div>
       </div>
 
-      <!-- AVANTI strip -->
-      <div style="background:rgba(52,211,153,0.04);border-bottom:1px solid rgba(52,211,153,0.15);padding:10px 20px;display:flex;align-items:center;gap:10px;">
-        <div style="width:6px;height:6px;border-radius:50%;background:var(--vai-green);animation:glow 2s ease-in-out infinite;"></div>
-        <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:0.1em;color:var(--vai-green);">AVANTI</span>
-        <span style="font-family:var(--font-dm);font-size:13px;color:#C8BFB8;">2 new booking requests this week — Saturday 10am has 2 overlapping requests. Review and accept one.</span>
-        <div style="margin-left:auto;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:999px;padding:4px 12px;font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--yellow);cursor:pointer;">Review →</div>
+      <!-- AVANTI Intelligence Alert Strip -->
+      <div class="gd-alert-strip">
+        <div class="gd-alert-item">
+          <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--vai-green);display:flex;align-items:center;gap:5px;flex-shrink:0;"><span style="width:6px;height:6px;border-radius:50%;background:var(--vai-green);animation:glow 2s ease-in-out infinite;display:inline-block;"></span>AVANTI</span>
+          <span class="gd-alert-text">3 items need your attention — 2 booking conflicts + 1 revenue alert</span>
+          <div style="font-family:var(--font-mono);font-size:10px;color:#6B605A;">Dismiss all</div>
+        </div>
+        <div class="gd-alert-item">
+          <span class="gd-alert-tag gd-at-yellow">YELLOW</span>
+          <span class="gd-alert-text"><strong>Saturday 10am</strong> has 2 overlapping booking requests — Jalen Monroe &amp; Sofia Liu. Only one can be confirmed.</span>
+          <div class="gd-alert-action gd-at-yellow">Review →</div>
+        </div>
+        <div class="gd-alert-item">
+          <span class="gd-alert-tag gd-at-green">GREEN</span>
+          <span class="gd-alert-text">Earnings this month are up <strong>22%</strong> vs April — $1,840 MTD. On pace for your best month.</span>
+          <span style="font-family:var(--font-dm);font-size:11px;color:#6B605A;flex-shrink:0;">No action needed</span>
+        </div>
       </div>
 
+      <div class="gd-content-wrap">
       <div class="gd-content">
 
         <!-- Earnings stat row -->
@@ -1120,6 +1176,14 @@ body { background:#111; font-family:var(--font-dm); min-height:100vh; display:fl
         </div>
 
       </div><!-- /gd-content -->
+
+      <!-- AVANTI floating interaction bubble -->
+      <div class="gd-avanti-bubble" title="Open AVANTI panel">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2"/><path d="M12 6v4l3 3"/><circle cx="19" cy="5" r="3" fill="var(--vai-green)" stroke="none"/></svg>
+        <div class="gd-bubble-badge">3</div>
+      </div>
+
+      </div><!-- /gd-content-wrap -->
     </div><!-- /gd-main -->
   </div><!-- /gd-app -->
 </div><!-- /browser -->
