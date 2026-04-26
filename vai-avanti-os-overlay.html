@@ -3,428 +3,410 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAI — AVANTI OS Overlay (Badinho Spec)</title>
+<title>VAI — AVANTI Tile Context Panel (B1 Detail)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #0C0A09; --card: #1A1614; --bgElev: #231E1B;
-  --textStrong: #F5F0EB; --text: #D4CBC4; --textMuted: #8B7E74;
-  --border: #2E2824;
-  --orange: #F7941E; --orangeBg: #2A1E0A; --orangeBorder: #5C4A15;
-  --green: #34D399; --greenBg: #0A2A1E; --greenBorder: #1A5C3A;
-  --red: #FF6B6B; --redBg: #3A0F0F; --redBorder: #5C2A2A;
-  --yellow: #FBBF24; --yellowBg: #2A1E00; --yellowBorder: #5C4400;
-  --avanti: #34D399; --avantiBg: #051A10; --avantiBorder: #0D4A28;
-  --r: 16px; --pill: 999px;
+  --vai-orange:#f7941e; --vai-green:#34d399;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --red:#FF6B6B; --yellow:#FBBF24;
+  --font-oswald:'Oswald',Impact,Arial Black,sans-serif;
+  --font-dm:'DM Sans',Arial,Helvetica,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-md:8px; --r-lg:12px; --r-full:9999px;
 }
-body { background: #060504; font-family: -apple-system,'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:24px 16px 48px; color:var(--textStrong); }
-h1 { font-size:13px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--textMuted); margin-bottom:4px; text-align:center; }
-.subtitle { font-size:11px; color:var(--textMuted); margin-bottom:20px; text-align:center; max-width:480px; line-height:1.5; }
-.scenario-nav { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-bottom:20px; max-width:520px; }
-.nav-btn { background:var(--card); border:1px solid var(--border); color:var(--textMuted); font-size:11px; font-weight:600; letter-spacing:0.06em; padding:6px 12px; border-radius:var(--pill); cursor:pointer; transition:all 0.15s; }
-.nav-btn:hover { border-color:var(--orange); color:var(--orange); }
-.nav-btn.active { background:var(--orangeBg); border-color:var(--orangeBorder); color:var(--orange); }
+body { background:#111; font-family:var(--font-dm); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:32px 16px 60px; color:var(--gray-primary); -webkit-font-smoothing:antialiased; }
+.page-title { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:4px; text-align:center; }
+.page-sub { font-size:11px; color:var(--gray-disabled); margin-bottom:8px; text-align:center; max-width:600px; }
+.pattern-note { font-family:var(--font-mono); font-size:10px; color:var(--vai-green); text-align:center; margin-bottom:28px; letter-spacing:0.04em; }
+.flow-row { display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; justify-content:center; margin-bottom:48px; }
+.flow-label { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gray-disabled); text-align:center; margin-bottom:8px; }
+.flow-arrow { display:flex; align-items:center; padding-top:120px; color:var(--gray-subtle); font-size:18px; }
 
 /* Phone */
-.phone { background:#181512; border-radius:44px; border:1.5px solid #3A3330; box-shadow:0 0 0 1px #1A1614,0 32px 80px rgba(0,0,0,0.9),inset 0 1px 0 rgba(255,255,255,0.05); overflow:hidden; width:375px; position:relative; }
-.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 20px 8px; background:var(--bg); font-size:12px; font-weight:600; }
-.home-indicator { background:var(--bg); padding:8px 0 12px; display:flex; justify-content:center; }
-.home-bar { width:120px; height:5px; background:var(--border); border-radius:3px; }
-
-/* Home grid (background) */
-.home-bg { background:var(--bg); padding:16px; display:flex; flex-direction:column; gap:12px; }
-.app-header { display:flex; align-items:center; justify-content:space-between; padding:4px 0 8px; }
-.vai-logo { font-size:18px; font-weight:900; letter-spacing:0.1em; color:var(--orange); }
-.avanti-indicator { display:flex; align-items:center; gap:5px; font-size:10px; font-weight:700; color:var(--avanti); letter-spacing:0.08em; }
-.avanti-dot-pulse { width:6px; height:6px; border-radius:50%; background:var(--avanti); animation:pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
-.avatar-sm { width:28px; height:28px; border-radius:50%; background:var(--bgElev); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:var(--orange); }
+.phone { width:375px; background:var(--void-black); border-radius:44px; border:1.5px solid var(--gray-subtle); box-shadow:0 0 0 1px #0c0c10,0 32px 80px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden; position:relative; flex-shrink:0; }
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 22px 8px; background:var(--void-black); font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
+.app-header { background:var(--void-black); padding:10px 18px 12px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.vai-wordmark { font-family:var(--font-oswald); font-size:18px; font-weight:700; letter-spacing:0.05em; color:var(--gray-primary); }
+.tier-bubble { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; font-family:var(--font-dm); font-size:12px; font-weight:900; color:#000; flex-shrink:0; }
+.hdr-icons { display:flex; gap:12px; align-items:center; margin-left:auto; }
+.hdr-icon { width:20px; height:20px; display:flex; align-items:center; justify-content:center; }
+.hdr-icon svg { width:18px; height:18px; stroke:var(--gray-secondary); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.a-dot { width:6px; height:6px; border-radius:50%; background:var(--vai-green); animation:glow 2s ease-in-out infinite; flex-shrink:0; }
+@keyframes glow { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
 
 /* AVANTI strip */
-.avanti-strip { background:linear-gradient(135deg,#1E1000,#251500); border:1px solid var(--yellowBorder); border-radius:10px; padding:10px 12px; display:flex; align-items:center; gap:8px; }
-.strip-label { font-size:10px; font-weight:800; letter-spacing:0.1em; color:var(--yellow); text-transform:uppercase; flex-shrink:0; }
-.strip-msg { font-size:12px; color:var(--text); flex:1; line-height:1.4; }
-.strip-cta { font-size:11px; font-weight:700; color:var(--yellow); flex-shrink:0; cursor:pointer; }
+.avanti-strip { background:var(--void-black); border-bottom:1px solid var(--border); padding:9px 18px; display:flex; align-items:center; gap:5px; }
+.strip-lbl { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--vai-green); }
+.strip-msg { font-family:var(--font-dm); font-size:12px; color:var(--gray-body); flex:1; }
 
-/* Tile grid */
-.section-label { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--textMuted); }
-.tile-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.tile { background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:14px; display:flex; flex-direction:column; gap:6px; cursor:pointer; transition:all 0.15s; position:relative; overflow:hidden; }
-.tile:hover { border-color:var(--orange); }
-.tile:active { transform:scale(0.97); }
-.tile.live { border-color:var(--orangeBorder); }
-.tile-icon { font-size:20px; }
-.tile-name { font-size:13px; font-weight:700; color:var(--textStrong); }
-.tile-summary { font-size:11px; color:var(--textMuted); line-height:1.4; }
-.tile-badge { position:absolute; top:8px; right:8px; font-size:9px; font-weight:800; border-radius:var(--pill); padding:2px 7px; border:1px solid; letter-spacing:0.04em; }
-.tile-badge.alert { background:var(--redBg); border-color:var(--redBorder); color:var(--red); }
-.tile-badge.action { background:var(--orangeBg); border-color:var(--orangeBorder); color:var(--orange); }
-.tile-badge.live-badge { background:var(--orangeBg); border-color:var(--orangeBorder); color:var(--orange); }
-.tile-badge.locked { background:var(--bgElev); border-color:var(--border); color:var(--textMuted); }
-.play-dot { display:inline-block; width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-.play-dot.green { background:var(--green); }
-.play-dot.yellow { background:var(--yellow); }
-.play-dot.red { background:var(--red); }
+/* Grid behind */
+.grid-behind { padding:12px 18px 16px; background:var(--void-black); opacity:0.28; }
+.section-lbl { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:8px; }
+.tile-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.tile { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:12px; min-height:80px; position:relative; }
+.tile.highlighted { border-color:rgba(247,148,30,0.5); background:rgba(247,148,30,0.05); }
+.tile.red-glow { border-color:rgba(255,107,107,0.5); background:rgba(255,107,107,0.05); }
+.tile.yellow-glow { border-color:rgba(251,191,36,0.5); background:rgba(251,191,36,0.04); }
+.tile-icon { width:28px; height:28px; background:rgba(255,255,255,0.04); border-radius:6px; display:flex; align-items:center; justify-content:center; margin-bottom:6px; }
+.tile-icon svg { width:14px; height:14px; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.oi svg { stroke:var(--vai-orange); }
+.gi svg { stroke:var(--vai-green); }
+.ri svg { stroke:var(--red); }
+.yi svg { stroke:var(--yellow); }
+.tile-name { font-family:var(--font-oswald); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.tile-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); margin-top:2px; }
+.tile-badge { position:absolute; top:6px; right:6px; font-family:var(--font-mono); font-size:9px; font-weight:500; padding:2px 5px; border-radius:2px; border:1px solid; }
+.b-red { background:rgba(255,107,107,0.1); border-color:rgba(255,107,107,0.3); color:var(--red); }
+.b-yellow { background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.3); color:var(--yellow); }
+.b-avanti { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
 
-/* Half-screen AVANTI Overlay */
-.overlay-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.6); z-index:10; display:none; }
-.overlay-backdrop.visible { display:block; }
-.overlay-sheet { position:absolute; bottom:0; left:0; right:0; z-index:11; background:var(--card); border-radius:20px 20px 0 0; border:1px solid var(--border); border-bottom:none; transition:transform 0.3s cubic-bezier(0.32,0.72,0,1); display:none; max-height:72%; }
-.overlay-sheet.visible { display:flex; flex-direction:column; }
-.overlay-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:10px auto 0; flex-shrink:0; }
-.overlay-header { padding:14px 16px 10px; border-bottom:1px solid var(--border); flex-shrink:0; }
-.overlay-feature { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--textMuted); margin-bottom:4px; }
-.overlay-title { font-size:17px; font-weight:800; color:var(--textStrong); }
-.overlay-body { padding:14px 16px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; flex:1; scrollbar-width:none; }
-.overlay-body::-webkit-scrollbar { display:none; }
-.overlay-close { position:absolute; top:14px; right:14px; width:26px; height:26px; border-radius:50%; background:var(--bgElev); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; color:var(--textMuted); }
+/* Dark overlay */
+.dim-cover { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:10; }
 
-/* Risk indicator */
-.risk-row { display:flex; align-items:center; gap:6px; }
-.risk-dot { width:8px; height:8px; border-radius:50%; }
-.risk-dot.green { background:var(--green); }
-.risk-dot.yellow { background:var(--yellow); }
-.risk-dot.red { background:var(--red); }
-.risk-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; }
-.risk-label.green { color:var(--green); }
-.risk-label.yellow { color:var(--yellow); }
-.risk-label.red { color:var(--red); }
+/* Context panel */
+.ctx-panel { position:absolute; bottom:0; left:0; right:0; background:var(--elevated); border-top:1px solid rgba(255,255,255,0.08); border-radius:20px 20px 0 0; z-index:20; display:flex; flex-direction:column; box-shadow:0 -8px 40px rgba(0,0,0,0.7); }
+.panel-handle { width:36px; height:4px; background:var(--gray-subtle); border-radius:2px; margin:10px auto 0; flex-shrink:0; }
+.panel-header { padding:10px 16px 10px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); flex-shrink:0; }
+.panel-tile-label { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-disabled); }
+.panel-tile-name { font-family:var(--font-oswald); font-size:15px; font-weight:700; color:var(--gray-primary); margin-top:1px; }
+.panel-close { width:24px; height:24px; border-radius:50%; background:var(--surface-1); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.panel-close svg { width:12px; height:12px; stroke:var(--gray-secondary); stroke-width:2; fill:none; }
+.panel-body { padding:12px 16px 14px; display:flex; flex-direction:column; gap:10px; }
 
-/* Summary card */
-.summary-card { background:var(--bgElev); border-radius:10px; padding:12px; font-size:13px; color:var(--text); line-height:1.6; }
+/* Status bar in panel */
+.panel-status { display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:var(--r-md); }
+.panel-status.green { background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.2); }
+.panel-status.yellow { background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.2); }
+.panel-status.red { background:rgba(255,107,107,0.08); border:1px solid rgba(255,107,107,0.2); }
+.status-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.status-dot.green { background:var(--vai-green); }
+.status-dot.yellow { background:var(--yellow); }
+.status-dot.red { background:var(--red); }
+.status-label { font-family:var(--font-mono); font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; }
+.status-label.green { color:var(--vai-green); }
+.status-label.yellow { color:var(--yellow); }
+.status-label.red { color:var(--red); }
+
+/* Panel insight text */
+.panel-insight { font-family:var(--font-dm); font-size:13px; color:var(--gray-body); line-height:1.6; }
+.panel-insight strong { color:var(--gray-primary); }
 
 /* Quick prompts */
-.quick-prompts { display:flex; flex-wrap:wrap; gap:6px; }
-.prompt-chip { background:var(--bgElev); border:1px solid var(--border); border-radius:var(--pill); padding:6px 12px; font-size:12px; color:var(--textMuted); cursor:pointer; transition:all 0.15s; }
-.prompt-chip:hover { border-color:var(--orange); color:var(--orange); }
+.prompt-chips { display:flex; gap:6px; flex-wrap:wrap; }
+.prompt-chip { background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-full); padding:5px 12px; font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); cursor:pointer; white-space:nowrap; }
+.prompt-chip:hover { border-color:var(--gray-subtle); color:var(--gray-primary); }
 
-/* Action card (Yellow) */
-.action-card { background:var(--yellowBg); border:1px solid var(--yellowBorder); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:10px; }
-.action-card-title { font-size:13px; font-weight:700; color:var(--yellow); }
-.action-preview { background:rgba(0,0,0,0.3); border-radius:8px; padding:10px; font-size:12px; color:var(--text); line-height:1.5; }
-.action-preview strong { color:var(--textStrong); }
-.action-btns { display:flex; gap:8px; }
-.action-btn { flex:1; padding:10px; border-radius:var(--pill); border:1px solid; font-size:13px; font-weight:700; cursor:pointer; text-align:center; transition:all 0.15s; }
-.action-btn.confirm { background:var(--yellow); border-color:var(--yellow); color:#000; }
-.action-btn.dismiss { background:transparent; border-color:var(--border); color:var(--textMuted); }
+/* Action row */
+.panel-action { background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-md); padding:10px 14px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+.panel-action-label { font-family:var(--font-dm); font-size:13px; font-weight:500; color:var(--gray-primary); }
+.panel-action svg { width:14px; height:14px; stroke:var(--gray-secondary); stroke-width:1.5; fill:none; }
 
-/* Blocked card (Red) */
-.blocked-card { background:var(--redBg); border:1px solid var(--redBorder); border-radius:10px; padding:14px; display:flex; gap:10px; }
-.blocked-icon { font-size:18px; flex-shrink:0; }
-.blocked-title { font-size:13px; font-weight:700; color:var(--red); margin-bottom:4px; }
-.blocked-msg { font-size:12px; color:var(--text); line-height:1.5; }
-.blocked-alt { margin-top:8px; font-size:12px; color:var(--orange); cursor:pointer; font-weight:600; }
+/* CTA */
+.panel-cta { padding:9px 16px; border-radius:var(--r-md); border:none; font-family:var(--font-dm); font-size:13px; font-weight:700; cursor:pointer; text-align:center; }
+.cta-orange { background:var(--vai-orange); color:#000; width:100%; }
+.cta-red { background:var(--red); color:#fff; width:100%; }
 
-/* Success card */
-.success-card { background:var(--greenBg); border:1px solid var(--greenBorder); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px; }
-.success-title { font-size:13px; font-weight:700; color:var(--green); }
-.success-msg { font-size:12px; color:var(--text); line-height:1.5; }
+/* Ask input */
+.panel-ask { display:flex; align-items:center; gap:8px; padding:8px 16px 12px; border-top:1px solid var(--border); background:var(--elevated); flex-shrink:0; }
+.panel-ask-input { flex:1; background:var(--surface-1); border:1px solid var(--border); border-radius:var(--r-full); padding:7px 14px; font-family:var(--font-dm); font-size:12px; color:var(--gray-disabled); }
+.panel-ask-btn { width:30px; height:30px; border-radius:50%; background:var(--vai-orange); display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; }
+.panel-ask-btn svg { width:14px; height:14px; stroke:#000; stroke-width:2; fill:none; }
 
-/* Navigate button */
-.nav-to-feature { display:flex; align-items:center; justify-content:space-between; background:var(--bgElev); border:1px solid var(--border); border-radius:10px; padding:12px 14px; font-size:13px; color:var(--text); cursor:pointer; }
-.nav-arrow { color:var(--textMuted); }
+/* Bottom nav */
+.bottom-nav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:8px 4px 20px; position:absolute; bottom:0; left:0; right:0; z-index:5; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:4px 0; }
+.ni-icon { width:24px; height:24px; display:flex; align-items:center; justify-content:center; }
+.ni-icon svg { width:22px; height:22px; stroke:var(--gray-disabled); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ni-lbl { font-family:var(--font-dm); font-size:10px; font-weight:500; color:var(--gray-disabled); }
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+.av-pill { background:var(--vai-green); border-radius:20px; padding:7px 12px; display:flex; align-items:center; justify-content:center; }
+.av-pill span { font-family:var(--font-dm); font-size:11px; font-weight:800; color:#000; }
 
-/* AVANTI input */
-.avanti-input-row { display:flex; gap:8px; align-items:center; padding:12px 16px; border-top:1px solid var(--border); background:var(--card); flex-shrink:0; }
-.avanti-input { flex:1; background:var(--bgElev); border:1px solid var(--border); border-radius:var(--pill); padding:8px 14px; font-size:13px; color:var(--textStrong); font-family:inherit; }
-.avanti-send { width:34px; height:34px; border-radius:50%; background:var(--orange); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; color:#fff; flex-shrink:0; }
-
-/* Locked tile overlay */
-.upgrade-sheet { position:absolute; bottom:0; left:0; right:0; z-index:11; background:var(--card); border-radius:20px 20px 0 0; border:1px solid var(--border); border-bottom:none; padding:20px 16px 24px; display:none; flex-direction:column; gap:14px; text-align:center; }
-.upgrade-sheet.visible { display:flex; }
-.upgrade-icon { font-size:28px; }
-.upgrade-title { font-size:17px; font-weight:800; color:var(--textStrong); }
-.upgrade-msg { font-size:13px; color:var(--textMuted); line-height:1.5; }
-.upgrade-cta { background:var(--orange); color:#000; font-size:15px; font-weight:800; border-radius:var(--pill); padding:14px; cursor:pointer; }
-.upgrade-dismiss { font-size:13px; color:var(--textMuted); cursor:pointer; }
-
-/* Scenario views */
-.scenario { display:none; }
-.scenario.active { display:block; }
+/* Section header for the page */
+.section-hdr { width:100%; max-width:1200px; font-family:var(--font-oswald); font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray-disabled); padding:0 0 10px; border-bottom:1px solid var(--border); margin-bottom:20px; margin-top:12px; }
 </style>
 </head>
 <body>
 
-<h1>VAI — AVANTI OS Overlay</h1>
-<div class="subtitle">Badinho visual spec · Tile tap → AVANTI overlay → Green/Yellow/Red states · Same pattern across all screens</div>
+<div class="page-title">VAI — AVANTI Tile Context Panel</div>
+<div class="page-sub">When a tile has an AVANTI insight, tapping it opens a focused context panel — scoped to just that feature. This is Mode 3 of AVANTI on mobile.</div>
+<div class="pattern-note">Mode 1: Strip (passive push) &nbsp;·&nbsp; Mode 2: Nav tab (full hub) &nbsp;·&nbsp; Mode 3: Tile tap → focused context (this screen)</div>
 
-<div class="scenario-nav">
-  <button class="nav-btn active" onclick="setScenario('green',this)">Green — Summary</button>
-  <button class="nav-btn" onclick="setScenario('yellow',this)">Yellow — Confirm Action</button>
-  <button class="nav-btn" onclick="setScenario('red',this)">Red — Blocked</button>
-  <button class="nav-btn" onclick="setScenario('success',this)">Success State</button>
-  <button class="nav-btn" onclick="setScenario('locked',this)">Locked Tile Upgrade</button>
-  <button class="nav-btn" onclick="setScenario('strip',this)">AVANTI Strip</button>
-</div>
+<!-- Row 1: How it works -->
+<div class="section-hdr">How It Works — Tile Tap Triggers Context Panel</div>
 
-<div class="phone" id="phone">
-  <div class="status-bar"><span>9:41</span><span>●●●</span><span>⬛ 87%</span></div>
+<div class="flow-row">
 
-  <!-- Home grid (always behind overlay) -->
-  <div class="home-bg" id="home-grid">
-    <div class="app-header">
-      <div class="vai-logo">VAI</div>
-      <div class="avanti-indicator"><div class="avanti-dot-pulse"></div>AVANTI ONLINE</div>
-      <div class="avatar-sm">BW</div>
-    </div>
-
-    <!-- AVANTI Strip (scenario=strip shows it) -->
-    <div class="avanti-strip" id="avanti-strip" style="display:none;">
-      <span class="strip-label">✦ AVANTI</span>
-      <span class="strip-msg">Mia's payment is RED for Saturday — 1 action ready.</span>
-      <span class="strip-cta" onclick="setScenario('yellow',document.querySelectorAll('.nav-btn')[1])">Fix →</span>
-    </div>
-
-    <div class="section-label">MOST USED</div>
-    <div class="tile-grid-2">
-      <div class="tile" onclick="openOverlay('green')">
-        <div class="tile-badge live-badge">● LIVE</div>
-        <div class="tile-icon">📅</div>
-        <div class="tile-name">Schedule</div>
-        <div class="tile-summary">2 events this week</div>
-      </div>
-      <div class="tile" onclick="openOverlay('yellow')">
-        <div class="tile-badge alert">1 BLOCKED</div>
-        <div class="tile-icon">🟢</div>
-        <div style="display:flex;align-items:center;gap:5px;"><div class="play-dot red"></div><div class="tile-name">PLAY Status</div></div>
-        <div class="tile-summary">1 RED · Saturday</div>
-      </div>
-      <div class="tile" onclick="openOverlay('green')">
-        <div class="tile-icon">📋</div>
-        <div class="tile-name">Roster</div>
-        <div class="tile-summary" style="display:flex;align-items:center;gap:4px;"><div class="play-dot green"></div>16 athletes · clear</div>
-      </div>
-      <div class="tile" onclick="openOverlay('locked')" id="locked-tile">
-        <div class="tile-badge locked">🔒 VAI+</div>
-        <div class="tile-icon">💰</div>
-        <div class="tile-name">Wallet</div>
-        <div class="tile-summary" style="color:var(--textMuted);">Upgrade to unlock</div>
-      </div>
-    </div>
-
-    <div class="section-label" style="margin-top:4px;">ALL FEATURES</div>
-    <div class="tile-grid-2">
-      <div class="tile" onclick="openOverlay('green')">
-        <div class="tile-icon">🏆</div>
-        <div class="tile-name">Tournaments</div>
-        <div class="tile-summary">Spring Invitational</div>
-      </div>
-      <div class="tile" onclick="openOverlay('green')">
-        <div class="tile-icon">📊</div>
-        <div class="tile-name">Standings</div>
-        <div class="tile-summary">#1 · Spring 2026</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── OVERLAY: Green (summary) ── -->
-  <div class="overlay-backdrop" id="backdrop-green" onclick="closeOverlay('green')"></div>
-  <div class="overlay-sheet" id="sheet-green">
-    <div class="overlay-handle"></div>
-    <div class="overlay-header">
-      <div class="overlay-close" onclick="closeOverlay('green')">✕</div>
-      <div class="overlay-feature">Schedule</div>
-      <div class="overlay-title">This Week</div>
-    </div>
-    <div class="overlay-body">
-      <div class="risk-row"><div class="risk-dot green"></div><span class="risk-label green">All Clear</span></div>
-      <div class="summary-card">2 events this week. Saturday home game vs Salt Lake Storm at 10:00 AM. No PLAY blockers for any scheduled athlete. All waivers current.</div>
-      <div class="quick-prompts">
-        <div class="prompt-chip">What's the lineup Saturday?</div>
-        <div class="prompt-chip">Any PLAY issues for this game?</div>
-        <div class="prompt-chip">Show next 2 weeks</div>
-      </div>
-      <div class="nav-to-feature" onclick="closeOverlay('green')">
-        <span>Open Schedule</span><span class="nav-arrow">›</span>
-      </div>
-    </div>
-    <div class="avanti-input-row">
-      <input class="avanti-input" placeholder="Ask AVANTI…" />
-      <button class="avanti-send">↑</button>
-    </div>
-  </div>
-
-  <!-- ── OVERLAY: Yellow (action confirm) ── -->
-  <div class="overlay-backdrop" id="backdrop-yellow" onclick="closeOverlay('yellow')"></div>
-  <div class="overlay-sheet" id="sheet-yellow">
-    <div class="overlay-handle"></div>
-    <div class="overlay-header">
-      <div class="overlay-close" onclick="closeOverlay('yellow')">✕</div>
-      <div class="overlay-feature">PLAY Status</div>
-      <div class="overlay-title">Mia Rodriguez</div>
-    </div>
-    <div class="overlay-body">
-      <div class="risk-row"><div class="risk-dot red"></div><span class="risk-label red">RED · Action Required</span></div>
-      <div class="summary-card">Mia's payment for the Saturday game is overdue. She's currently RED and cannot play. AVANTI has prepared a reminder for her guardian.</div>
-      <div class="action-card">
-        <div class="action-card-title">✦ AVANTI — Ready to Send</div>
-        <div class="action-preview">
-          <strong>To:</strong> Alex Rodriguez (guardian)<br>
-          <strong>Message:</strong> "Hi Alex, Mia's registration fee for Saturday's game is overdue. Please complete payment to restore PLAY Status before kickoff. Tap here to pay."<br>
-          <strong>Recipients:</strong> 1 · <strong>Risk:</strong> Yellow
-        </div>
-        <div class="action-btns">
-          <div class="action-btn confirm" onclick="showSuccess()">Send It</div>
-          <div class="action-btn dismiss" onclick="closeOverlay('yellow')">Later</div>
+  <!-- Step 1: Home grid with AVANTI-flagged tile -->
+  <div>
+    <div class="flow-label">1 — Home Grid · Tile has AVANTI flag</div>
+    <div class="phone" style="height:640px;">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#hg1)"/><defs><radialGradient id="hg1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
         </div>
       </div>
-      <div class="quick-prompts">
-        <div class="prompt-chip">Why is Mia RED?</div>
-        <div class="prompt-chip">How long until she's cleared?</div>
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg">Mia is RED · tap Roster for details</span>
       </div>
-      <div class="nav-to-feature" onclick="closeOverlay('yellow')">
-        <span>Open PLAY Status</span><span class="nav-arrow">›</span>
+      <div style="padding:12px 18px 16px;background:var(--void-black);">
+        <div class="section-lbl">YOUR VAI</div>
+        <div class="tile-grid">
+          <div class="tile">
+            <div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div class="tile-name">Schedule</div>
+            <div class="tile-sub">Sat 10am</div>
+            <div class="tile-badge b-avanti">AVANTI</div>
+          </div>
+          <div class="tile red-glow">
+            <div class="tile-badge b-red">1 BLOCKED</div>
+            <div class="tile-icon ri"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+            <div class="tile-name">Roster</div>
+            <div class="tile-sub">16 athletes</div>
+          </div>
+          <div class="tile yellow-glow">
+            <div class="tile-badge b-yellow">DUES</div>
+            <div class="tile-icon yi"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+            <div class="tile-name">Wallet</div>
+            <div class="tile-sub">$247 · 3 pending</div>
+          </div>
+          <div class="tile">
+            <div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div class="tile-name">Chat</div>
+            <div class="tile-sub">5 unread</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);text-align:center;letter-spacing:0.06em;">Tiles with AVANTI badge or colored glow have active insights — tap to see</div>
       </div>
-    </div>
-    <div class="avanti-input-row">
-      <input class="avanti-input" placeholder="Ask AVANTI…" />
-      <button class="avanti-send">↑</button>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
     </div>
   </div>
 
-  <!-- ── OVERLAY: Red (blocked) ── -->
-  <div class="overlay-backdrop" id="backdrop-red" onclick="closeOverlay('red')"></div>
-  <div class="overlay-sheet" id="sheet-red">
-    <div class="overlay-handle"></div>
-    <div class="overlay-header">
-      <div class="overlay-close" onclick="closeOverlay('red')">✕</div>
-      <div class="overlay-feature">PLAY Status</div>
-      <div class="overlay-title">Waiver Override</div>
-    </div>
-    <div class="overlay-body">
-      <div class="risk-row"><div class="risk-dot red"></div><span class="risk-label red">Blocked — Cannot Do This</span></div>
-      <div class="blocked-card">
-        <div class="blocked-icon">🚫</div>
-        <div>
-          <div class="blocked-title">AVANTI cannot mark this waiver as signed</div>
-          <div class="blocked-msg">Marking a waiver signed without an actual signature would be a compliance violation. This action is never executable — even with Director access.</div>
-          <div class="blocked-alt" onclick="closeOverlay('red')">→ Safe alternative: Send waiver link to guardian</div>
+  <div class="flow-arrow">→<br><span style="font-size:11px;color:var(--gray-disabled);font-family:var(--font-dm);">tap tile</span></div>
+
+  <!-- Step 2: Schedule tile → GREEN context -->
+  <div>
+    <div class="flow-label">2a — Schedule Tap · GREEN (All clear)</div>
+    <div class="phone" style="height:640px;">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#hg2)"/><defs><radialGradient id="hg2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
         </div>
       </div>
-      <div class="quick-prompts">
-        <div class="prompt-chip">Send waiver to guardian</div>
-        <div class="prompt-chip">Why does this require a signature?</div>
+      <div class="grid-behind" style="padding:12px 18px;">
+        <div class="section-lbl">YOUR VAI</div>
+        <div class="tile-grid">
+          <div class="tile highlighted"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Schedule</div><div class="tile-sub">Sat 10am</div></div>
+          <div class="tile"><div class="tile-icon ri"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="tile-name">Roster</div><div class="tile-sub">16 athletes</div></div>
+          <div class="tile"><div class="tile-icon yi"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="tile-name">Wallet</div></div>
+          <div class="tile"><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="tile-name">Chat</div></div>
+        </div>
       </div>
-    </div>
-    <div class="avanti-input-row">
-      <input class="avanti-input" placeholder="Ask AVANTI…" />
-      <button class="avanti-send">↑</button>
+      <div class="dim-cover"></div>
+      <div class="ctx-panel" style="height:360px;">
+        <div class="panel-handle"></div>
+        <div class="panel-header">
+          <div>
+            <div class="panel-tile-label">Schedule</div>
+            <div class="panel-tile-name">This Week</div>
+          </div>
+          <div class="panel-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+        </div>
+        <div class="panel-body">
+          <div class="panel-status green">
+            <div class="status-dot green"></div>
+            <div class="status-label green">All Clear</div>
+          </div>
+          <div class="panel-insight">2 events this week. <strong>Saturday home game vs Salt Lake Storm at 10:00 AM.</strong> No PLAY blockers for any scheduled athlete. All waivers current.</div>
+          <div class="prompt-chips">
+            <div class="prompt-chip">What's the lineup Saturday?</div>
+            <div class="prompt-chip">Any PLAY issues?</div>
+            <div class="prompt-chip">Show next 2 weeks</div>
+          </div>
+          <div class="panel-action">
+            <div class="panel-action-label">Open Schedule</div>
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="panel-ask">
+          <div class="panel-ask-input">Ask AVANTI about schedule...</div>
+          <div class="panel-ask-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
     </div>
   </div>
 
-  <!-- ── OVERLAY: Success ── -->
-  <div class="overlay-backdrop" id="backdrop-success" onclick="closeOverlay('success')"></div>
-  <div class="overlay-sheet" id="sheet-success">
-    <div class="overlay-handle"></div>
-    <div class="overlay-header">
-      <div class="overlay-close" onclick="closeOverlay('success')">✕</div>
-      <div class="overlay-feature">PLAY Status · Action Complete</div>
-      <div class="overlay-title">Reminder Sent</div>
-    </div>
-    <div class="overlay-body">
-      <div class="risk-row"><div class="risk-dot green"></div><span class="risk-label green">Done</span></div>
-      <div class="success-card">
-        <div class="success-title">✓ Payment reminder sent to Alex Rodriguez</div>
-        <div class="success-msg">AVANTI will update Mia's PLAY Status automatically when payment is confirmed. You'll see a notification when she's cleared.</div>
+  <div class="flow-arrow">↔<br><span style="font-size:11px;color:var(--gray-disabled);font-family:var(--font-dm);">different tile</span></div>
+
+  <!-- Step 2b: Roster tap → RED context -->
+  <div>
+    <div class="flow-label">2b — Roster Tap · RED (Athlete blocked)</div>
+    <div class="phone" style="height:640px;">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#hg3)"/><defs><radialGradient id="hg3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
       </div>
-      <div class="nav-to-feature" onclick="closeOverlay('success')">
-        <span>View Action History</span><span class="nav-arrow">›</span>
+      <div class="grid-behind" style="padding:12px 18px;">
+        <div class="section-lbl">YOUR VAI</div>
+        <div class="tile-grid">
+          <div class="tile"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Schedule</div><div class="tile-sub">Sat 10am</div></div>
+          <div class="tile highlighted" style="border-color:rgba(255,107,107,0.5);background:rgba(255,107,107,0.08);"><div class="tile-badge b-red">1 BLOCKED</div><div class="tile-icon ri"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="tile-name">Roster</div></div>
+          <div class="tile"><div class="tile-icon yi"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="tile-name">Wallet</div></div>
+          <div class="tile"><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="tile-name">Chat</div></div>
+        </div>
+      </div>
+      <div class="dim-cover"></div>
+      <div class="ctx-panel" style="height:390px;">
+        <div class="panel-handle"></div>
+        <div class="panel-header">
+          <div>
+            <div class="panel-tile-label">Roster</div>
+            <div class="panel-tile-name">16 Athletes</div>
+          </div>
+          <div class="panel-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+        </div>
+        <div class="panel-body">
+          <div class="panel-status red">
+            <div class="status-dot red"></div>
+            <div class="status-label red">Action Required</div>
+          </div>
+          <div class="panel-insight"><strong>Mia Rodriguez</strong> is PLAY blocked — payment 4 days overdue. She cannot play Saturday. <strong>13 athletes</strong> are GREEN. 2 pending.</div>
+          <div class="prompt-chips">
+            <div class="prompt-chip">Who else is pending?</div>
+            <div class="prompt-chip">Draft reminder for Mia</div>
+          </div>
+          <button class="panel-cta cta-red">Notify Parent — Mia Rodriguez</button>
+          <div class="panel-action">
+            <div class="panel-action-label">Open Roster</div>
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="panel-ask">
+          <div class="panel-ask-input">Ask AVANTI about roster...</div>
+          <div class="panel-ask-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
       </div>
     </div>
   </div>
 
-  <!-- ── Locked Tile Upgrade Sheet ── -->
-  <div class="overlay-backdrop" id="backdrop-locked" onclick="closeOverlay('locked')"></div>
-  <div class="upgrade-sheet" id="sheet-locked">
-    <div class="upgrade-icon">💰</div>
-    <div class="upgrade-title">Unlock Wallet</div>
-    <div class="upgrade-msg">Send money to athletes, receive mentor earnings, and let AVANTI manage payment reminders. VAI+ plan includes Wallet.</div>
-    <div class="upgrade-cta">Upgrade to VAI+ — $9.95/mo</div>
-    <div class="upgrade-dismiss" onclick="closeOverlay('locked')">Maybe later</div>
+  <div class="flow-arrow">↔<br><span style="font-size:11px;color:var(--gray-disabled);font-family:var(--font-dm);">different tile</span></div>
+
+  <!-- Step 2c: Wallet tap → YELLOW context -->
+  <div>
+    <div class="flow-label">2c — Wallet Tap · YELLOW (Dues pending)</div>
+    <div class="phone" style="height:640px;">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#hg4)"/><defs><radialGradient id="hg4" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="grid-behind" style="padding:12px 18px;">
+        <div class="section-lbl">YOUR VAI</div>
+        <div class="tile-grid">
+          <div class="tile"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Schedule</div></div>
+          <div class="tile"><div class="tile-icon ri"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="tile-name">Roster</div></div>
+          <div class="tile highlighted" style="border-color:rgba(251,191,36,0.5);background:rgba(251,191,36,0.06);"><div class="tile-badge b-yellow">DUES</div><div class="tile-icon yi"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="tile-name">Wallet</div></div>
+          <div class="tile"><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="tile-name">Chat</div></div>
+        </div>
+      </div>
+      <div class="dim-cover"></div>
+      <div class="ctx-panel" style="height:390px;">
+        <div class="panel-handle"></div>
+        <div class="panel-header">
+          <div>
+            <div class="panel-tile-label">Wallet</div>
+            <div class="panel-tile-name">$247 Available</div>
+          </div>
+          <div class="panel-close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+        </div>
+        <div class="panel-body">
+          <div class="panel-status yellow">
+            <div class="status-dot yellow"></div>
+            <div class="status-label yellow">Confirm Needed</div>
+          </div>
+          <div class="panel-insight"><strong>3 families</strong> have outstanding dues — $720 total. Saturday game in 2 days. I've drafted a reminder. Ready to send?</div>
+          <div class="prompt-chips">
+            <div class="prompt-chip">Who owes what?</div>
+            <div class="prompt-chip">When are they overdue?</div>
+          </div>
+          <button class="panel-cta cta-orange">Send Dues Reminder — 3 families</button>
+          <div class="panel-action">
+            <div class="panel-action-label">Open Wallet</div>
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="panel-ask">
+          <div class="panel-ask-input">Ask AVANTI about finances...</div>
+          <div class="panel-ask-btn"><svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
   </div>
 
-  <div class="home-indicator"><div class="home-bar"></div></div>
 </div>
 
-<!-- Code reference panel -->
-<div style="margin-top:28px;background:#171412;border:1px solid #2A2520;border-radius:12px;padding:20px;max-width:480px;width:100%;">
-  <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6B605A;margin-bottom:12px;">Badinho — How to Wire Each State</div>
-  <pre style="font-size:11px;color:#C8BFB8;line-height:1.7;white-space:pre-wrap;font-family:'JetBrains Mono',monospace;">// 1. Tile tap → lazy-load overlay context
-const ctx = await avantiActionsApi.getTileContext(tileId);
+<div style="text-align:center;font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);letter-spacing:0.08em;max-width:700px;">AVANTI Tile Context Panel · Tiles with insights show a colored glow or AVANTI badge · Tap to get scoped intel + quick prompts + one-tap actions · Ask anything in the input · Read-only until you confirm</div>
 
-// 2. Show overlay
-// ctx.riskLevel = 'green' | 'yellow' | 'red'
-
-// GREEN → render ctx.summary + ctx.quickPrompts
-// No confirm needed. No action card.
-
-// YELLOW → render ctx.preparedAction card
-// Show preview, wait for user tap:
-await avantiActionsApi.confirm(ctx.preparedAction.actionRunId, {
-  confirmed: true
-});
-await avantiActionsApi.execute(ctx.preparedAction.actionRunId);
-// → show Success state
-
-// RED → render blocked explanation
-// ctx.preparedAction.status === 'blocked'
-// Show safe alternative from ctx.preparedAction.summary
-// Never call confirm or execute.
-
-// LOCKED TILE → show upgrade sheet
-// tile.isUnlocked === false
-// Do not call getTileContext for locked tiles.</pre>
-</div>
-
-<script>
-function setScenario(id, btn) {
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-
-  // Reset
-  closeAllOverlays();
-  document.getElementById('avanti-strip').style.display = 'none';
-
-  if (id === 'green') openOverlay('green');
-  else if (id === 'yellow') openOverlay('yellow');
-  else if (id === 'red') openOverlay('red');
-  else if (id === 'success') openOverlay('success');
-  else if (id === 'locked') openOverlay('locked');
-  else if (id === 'strip') {
-    document.getElementById('avanti-strip').style.display = 'flex';
-  }
-}
-
-function openOverlay(id) {
-  document.getElementById('backdrop-' + id).classList.add('visible');
-  document.getElementById('sheet-' + id).classList.add('visible');
-}
-
-function closeOverlay(id) {
-  document.getElementById('backdrop-' + id).classList.remove('visible');
-  document.getElementById('sheet-' + id).classList.remove('visible');
-  if (document.getElementById('upgrade-sheet') === null) {
-    const el = document.getElementById('sheet-' + id);
-    if (el) el.classList.remove('visible');
-  }
-}
-
-function closeAllOverlays() {
-  ['green','yellow','red','success','locked'].forEach(id => {
-    const bd = document.getElementById('backdrop-' + id);
-    const sh = document.getElementById('sheet-' + id);
-    if (bd) bd.classList.remove('visible');
-    if (sh) sh.classList.remove('visible');
-  });
-}
-
-function showSuccess() {
-  closeOverlay('yellow');
-  setTimeout(() => openOverlay('success'), 200);
-}
-
-// Default: show green on load
-openOverlay('green');
-</script>
 </body>
 </html>
