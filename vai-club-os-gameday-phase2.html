@@ -37,7 +37,19 @@ body { background: var(--bg); font-family: -apple-system,'Inter',sans-serif; min
 .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 8px 14px; font-size: 13px; color: var(--textMuted); cursor: pointer; transition: all 0.12s; border-radius: 6px; margin: 1px 6px; }
 .sidebar-item:hover { background: var(--elev); color: var(--text); }
 .sidebar-item.active { background: var(--orangeBg); color: var(--orange); border: 1px solid var(--orangeBorder); }
-.sidebar-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+.sidebar-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sidebar-icon svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.topbar-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
+.topbar-icon svg { width: 18px; height: 18px; stroke: #6B605A; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.topbar-notif { position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; background: #FF6B6B; border: 1.5px solid var(--card); }
+.topbar-avanti { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 3px 10px; background: #051A10; border: 1px solid #0D4A28; color: #34D399; display: flex; align-items: center; gap: 5px; }
+.topbar-avanti-dot { width: 6px; height: 6px; border-radius: 50%; background: #34D399; }
+.avanti-strip { background: #051A10; border-bottom: 1px solid #0D4A28; padding: 10px 20px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.avanti-strip-dot { width: 6px; height: 6px; border-radius: 50%; background: #34D399; flex-shrink: 0; }
+.avanti-strip-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #34D399; font-family: 'Courier New', monospace; }
+.avanti-strip-text { font-size: 13px; color: #C8BFB8; flex: 1; }
+.avanti-strip-action { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 999px; border: 1px solid; cursor: pointer; }
+.avanti-yellow { background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.3); color: #FBBF24; }
 .sidebar-badge { margin-left: auto; font-size: 10px; font-weight: 700; background: var(--orange); color: #000; border-radius: var(--pill); padding: 1px 6px; }
 
 /* Main */
@@ -148,12 +160,16 @@ tr:hover td { background: var(--elev); }
 
 <!-- Top bar -->
 <div class="topbar">
-  <img src="gameday-logo.png" alt="GAMEDAY" style="height:20px;display:block;"/>
-  <div class="topbar-sep"></div>
-  <div class="topbar-context">GameDay · Provo Sports Club</div>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <span style="font-size:13px;color:var(--textMuted);">Provo Sports Club</span>
+    <span style="color:var(--border);">›</span>
+    <span style="font-size:13px;font-weight:600;color:var(--textStrong);">My Sessions</span>
+  </div>
   <div class="topbar-right">
-    <div style="font-size:12px;color:var(--textMuted);">Marcus Johnson</div>
-    <div class="topbar-avatar" title="Mentor tier">M</div>
+    <div class="topbar-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+    <div class="topbar-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="topbar-notif"></div></div>
+    <div class="topbar-avanti"><div class="topbar-avanti-dot"></div>AVANTI ON</div>
+    <div class="topbar-avatar" title="Mentor tier" style="background:#f7941e;color:#000;border:none;font-weight:800;">M</div>
   </div>
 </div>
 
@@ -165,18 +181,40 @@ tr:hover td { background: var(--elev); }
       <img src="gameday-logo.png" alt="GAMEDAY" style="height:20px;display:block;"/>
     </div>
     <div class="sidebar-section">Club OS</div>
-    <div class="sidebar-item" onclick="setSidebar(this,'athletes')"><span class="sidebar-icon">👥</span>Athletes</div>
-    <div class="sidebar-item" onclick="setSidebar(this,'tournaments')"><span class="sidebar-icon">🏆</span>Tournaments</div>
-    <div class="sidebar-item" onclick="setSidebar(this,'standings')"><span class="sidebar-icon">📊</span>Standings</div>
-    <div class="sidebar-item" onclick="setSidebar(this,'schedule')"><span class="sidebar-icon">📅</span>Schedule</div>
-    <div class="sidebar-section" style="margin-top:8px;">Mentor</div>
-    <div class="sidebar-item active" onclick="setSidebar(this,'sessions')"><span class="sidebar-icon">🎯</span>My Sessions <span class="sidebar-badge">3</span></div>
-    <div class="sidebar-item" onclick="setSidebar(this,'earnings')"><span class="sidebar-icon">💰</span>Earnings</div>
-    <div class="sidebar-item" onclick="setSidebar(this,'new-session')"><span class="sidebar-icon">＋</span>New Session</div>
+    <div class="sidebar-item" onclick="setSidebar(this,'athletes')">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>Athletes
+    </div>
+    <div class="sidebar-item" onclick="setSidebar(this,'tournaments')">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div>Tournaments
+    </div>
+    <div class="sidebar-item" onclick="setSidebar(this,'standings')">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>Standings
+    </div>
+    <div class="sidebar-item" onclick="setSidebar(this,'schedule')">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>Schedule
+    </div>
+    <div class="sidebar-section" style="margin-top:8px;">My Mentor</div>
+    <div class="sidebar-item active" onclick="setSidebar(this,'sessions')">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>My Sessions <span class="sidebar-badge">3</span>
+    </div>
+    <div class="sidebar-item" onclick="setSidebar(this,'earnings')">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>Earnings
+    </div>
+    <div class="sidebar-item" onclick="setSidebar(this,'new-session')">
+      <div class="sidebar-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>New Session
+    </div>
   </div>
 
   <!-- Main content -->
   <div class="main">
+
+    <!-- AVANTI Intelligence Strip -->
+    <div class="avanti-strip">
+      <div class="avanti-strip-dot"></div>
+      <span class="avanti-strip-lbl">AVANTI</span>
+      <span class="avanti-strip-text"><strong style="color:#F5F0EB;">Speed Combine Prep (May 1)</strong> is full with 2 waitlisted — open a second slot to capture demand?</span>
+      <div class="avanti-strip-action avanti-yellow">Open Slot →</div>
+    </div>
 
     <!-- Sessions View (default) -->
     <div id="view-sessions" class="view active">
