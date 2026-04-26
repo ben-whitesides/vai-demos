@@ -3,775 +3,361 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAI Club OS — Mobile Phase 1 (M1–M11)</title>
+<title>VAI — Club OS Mobile Phase 1 (C1–C3)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --vai-orange:#f7941e; --vai-green:#34d399;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --red:#FF6B6B; --yellow:#FBBF24; --blue:#5577DD;
+  --font-oswald:'Oswald',Impact,Arial Black,sans-serif;
+  --font-dm:'DM Sans',Arial,Helvetica,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-full:9999px;
+}
+body { background:var(--void-black); font-family:var(--font-dm); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:32px 16px 60px; color:var(--gray-primary); -webkit-font-smoothing:antialiased; }
+.page-title { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:4px; text-align:center; }
+.page-sub { font-size:11px; color:var(--gray-disabled); margin-bottom:32px; text-align:center; }
+.phones-row { display:flex; gap:24px; align-items:flex-start; justify-content:center; flex-wrap:nowrap; }
+.phone-wrap { display:flex; flex-direction:column; align-items:center; gap:10px; }
+.phone-label { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gray-disabled); text-align:center; }
 
-  :root {
-    --bg: #0C0A09;
-    --card: #1A1614;
-    --bgElevated: #231E1B;
-    --textStrong: #F5F0EB;
-    --text: #D4CBC4;
-    --textMuted: #8B7E74;
-    --border: #2E2824;
-    --orange: #F7941E;
-    --orangeBg: #2A1E0A;
-    --orangeBorder: #5C4A15;
-    --green: #34D399;
-    --greenBg: #0A2A1E;
-    --greenBorder: #1A5C3A;
-    --red: #FF6B6B;
-    --redBg: #3A0F0F;
-    --redBorder: #5C2A2A;
-    --yellow: #FBBF24;
-    --yellowBg: #2A1E0A;
-    --accentBlue: #5577DD;
-    --pill: 999px;
-  }
+/* Phone */
+.phone { width:375px; background:var(--void-black); border-radius:44px; border:1.5px solid var(--gray-subtle); box-shadow:0 0 0 1px #0c0c10,0 32px 80px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden; position:relative; flex-shrink:0; }
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 22px 8px; background:var(--void-black); font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
+.app-header { background:var(--void-black); padding:10px 18px 12px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.vai-wordmark { font-family:var(--font-oswald); font-size:18px; font-weight:700; letter-spacing:0.05em; color:var(--gray-primary); }
+.tier-bubble { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; font-family:var(--font-dm); font-size:12px; font-weight:900; color:#000; flex-shrink:0; }
+.hdr-icons { display:flex; gap:12px; align-items:center; margin-left:auto; }
+.hdr-icon { width:20px; height:20px; display:flex; align-items:center; justify-content:center; }
+.hdr-icon svg { width:18px; height:18px; stroke:var(--gray-secondary); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.a-dot { width:6px; height:6px; border-radius:50%; background:var(--vai-green); animation:glow 2s ease-in-out infinite; flex-shrink:0; }
+@keyframes glow { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
 
-  body {
-    background: #060504;
-    font-family: -apple-system, 'SF Pro Display', 'Inter', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px 16px 48px;
-    color: var(--textStrong);
-  }
+/* Sub-header (context row below main header) */
+.ctx-row { background:var(--void-black); padding:8px 18px 10px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); }
+.back-link { font-family:var(--font-dm); font-size:12px; color:var(--vai-orange); display:flex; align-items:center; gap:4px; flex-shrink:0; }
+.back-link svg { width:14px; height:14px; stroke:var(--vai-orange); stroke-width:2; stroke-linecap:round; fill:none; }
+.ctx-title { font-family:var(--font-oswald); font-size:17px; font-weight:700; color:var(--gray-primary); }
 
-  h1 {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--textMuted);
-    margin-bottom: 6px;
-    text-align: center;
-  }
-  .subtitle { font-size: 11px; color: var(--textMuted); margin-bottom: 28px; text-align: center; letter-spacing: 0.05em; }
+/* AVANTI strip */
+.avanti-strip { background:rgba(52,211,153,0.04); border-bottom:1px solid rgba(52,211,153,0.12); padding:9px 18px; display:flex; align-items:center; gap:6px; }
+.strip-lbl { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--vai-green); }
+.strip-msg { font-family:var(--font-dm); font-size:12px; color:var(--gray-body); flex:1; }
+.strip-chip { padding:4px 10px; border-radius:var(--r-full); background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); font-family:var(--font-dm); font-size:11px; font-weight:600; color:var(--vai-orange); cursor:pointer; white-space:nowrap; flex-shrink:0; }
 
-  /* Nav pills */
-  .screen-nav {
-    display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
-    margin-bottom: 28px; max-width: 560px;
-  }
-  .nav-btn {
-    background: var(--card); border: 1px solid var(--border);
-    color: var(--textMuted); font-size: 11px; font-weight: 600;
-    letter-spacing: 0.06em; padding: 6px 12px; border-radius: var(--pill);
-    cursor: pointer; transition: all 0.15s;
-  }
-  .nav-btn:hover { border-color: var(--orange); color: var(--orange); }
-  .nav-btn.active { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
+.scroll-body { background:var(--void-black); overflow-y:auto; scrollbar-width:none; }
+.scroll-body::-webkit-scrollbar { display:none; }
 
-  /* Phone frame */
-  .phone-wrap { position: relative; width: 375px; }
-  .phone-frame {
-    background: #181512;
-    border-radius: 44px;
-    border: 1.5px solid #3A3330;
-    box-shadow: 0 0 0 1px #1A1614, 0 32px 80px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05);
-    overflow: hidden;
-    position: relative;
-  }
-  .status-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 20px 8px;
-    background: var(--bg);
-    font-size: 12px; font-weight: 600; color: var(--textStrong);
-  }
-  .status-bar-icons { display: flex; gap: 5px; align-items: center; font-size: 11px; }
-  .nav-header {
-    background: var(--bg); padding: 10px 16px 12px;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .nav-header-title { font-size: 16px; font-weight: 700; color: var(--textStrong); flex: 1; }
-  .back-btn { font-size: 13px; color: var(--orange); cursor: pointer; }
-  .screen-body {
-    background: var(--bg);
-    height: 720px;
-    overflow-y: auto;
-    padding: 16px;
-    display: flex; flex-direction: column; gap: 12px;
-    scrollbar-width: none;
-  }
-  .screen-body::-webkit-scrollbar { display: none; }
-  .home-indicator {
-    background: var(--bg); padding: 8px 0 12px;
-    display: flex; justify-content: center;
-  }
-  .home-bar { width: 120px; height: 5px; background: var(--border); border-radius: 3px; }
+/* Section label */
+.sec-lbl { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); padding:12px 18px 6px; }
 
-  /* --- Components --- */
-  .section-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px;
-  }
-  .card-title { font-size: 18px; font-weight: 700; color: var(--textStrong); }
-  .card-subtitle { font-size: 13px; color: var(--textMuted); line-height: 1.5; }
-  .label-sm { font-size: 11px; color: var(--textMuted); letter-spacing: 0.04em; }
-  .text-base { font-size: 14px; color: var(--text); }
-  .text-strong { font-size: 14px; color: var(--textStrong); font-weight: 600; }
+/* Club OS tile grid */
+.tile-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 18px 10px; }
+.tile { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px; display:flex; flex-direction:column; gap:6px; cursor:pointer; transition:border-color 0.15s; position:relative; min-height:90px; }
+.tile:hover { border-color:var(--gray-subtle); }
+.tile-icon { width:30px; height:30px; background:rgba(255,255,255,0.04); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; }
+.tile-icon svg { width:16px; height:16px; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.oi svg { stroke:var(--vai-orange); }
+.gi svg { stroke:var(--vai-green); }
+.ri svg { stroke:var(--red); }
+.bi svg { stroke:var(--blue); }
+.xi svg { stroke:var(--gray-secondary); }
+.tile-name { font-family:var(--font-oswald); font-size:14px; font-weight:600; color:var(--gray-primary); }
+.tile-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); }
+.tile-badge { position:absolute; top:7px; right:7px; font-family:var(--font-mono); font-size:9px; font-weight:500; padding:2px 6px; border-radius:var(--r-sm); border:1px solid; }
+.b-red { background:rgba(255,107,107,0.1); border-color:rgba(255,107,107,0.3); color:var(--red); }
+.b-green { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.b-orange { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--vai-orange); }
+.b-date { background:var(--surface-1); border-color:var(--border); color:var(--gray-secondary); }
 
-  /* Green Line */
-  .green-line-card {
-    border-radius: 16px; padding: 14px 16px;
-    display: flex; flex-direction: column; gap: 8px;
-    border: 1px solid;
-  }
-  .green-line-card.GREEN { background: var(--greenBg); border-color: var(--greenBorder); }
-  .green-line-card.YELLOW { background: var(--yellowBg); border-color: #5C4A00; }
-  .green-line-card.RED { background: var(--redBg); border-color: var(--redBorder); }
+/* Roster */
+.filter-row { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:8px 16px 6px; }
+.filter-row::-webkit-scrollbar { display:none; }
+.fchip { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-full); padding:5px 12px; font-family:var(--font-dm); font-size:11px; font-weight:500; color:var(--gray-secondary); white-space:nowrap; flex-shrink:0; cursor:pointer; }
+.fchip.active { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--vai-orange); }
+.roster-row { display:flex; align-items:center; gap:10px; padding:10px 18px; border-bottom:1px solid var(--border); }
+.roster-row:last-child { border-bottom:none; }
+.r-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-oswald); font-size:13px; font-weight:700; color:#000; flex-shrink:0; }
+.r-info { flex:1; min-width:0; }
+.r-name { font-family:var(--font-dm); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.r-meta { font-family:var(--font-dm); font-size:10px; color:var(--gray-secondary); margin-top:1px; }
+.play-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.play-dot.green { background:var(--vai-green); box-shadow:0 0 6px rgba(52,211,153,0.5); }
+.play-dot.red { background:var(--red); box-shadow:0 0 6px rgba(255,107,107,0.5); }
+.play-dot.yellow { background:var(--yellow); box-shadow:0 0 6px rgba(251,191,36,0.5); }
+.tier-pill { font-family:var(--font-mono); font-size:8px; font-weight:500; padding:2px 5px; border-radius:var(--r-sm); border:1px solid; }
+.tp-green { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.tp-orange { background:rgba(247,148,30,0.1); border-color:rgba(247,148,30,0.3); color:var(--vai-orange); }
 
-  .gl-header { display: flex; justify-content: space-between; align-items: center; }
-  .gl-club { font-size: 15px; font-weight: 700; }
-  .green-line-card.GREEN .gl-club { color: var(--green); }
-  .green-line-card.YELLOW .gl-club { color: var(--yellow); }
-  .green-line-card.RED .gl-club { color: var(--red); }
+/* FAB */
+.fab { position:absolute; bottom:80px; right:18px; width:44px; height:44px; border-radius:50%; background:var(--vai-orange); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(247,148,30,0.4); cursor:pointer; }
+.fab svg { width:20px; height:20px; stroke:#000; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
 
-  .gl-badge {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
-    padding: 3px 8px; border-radius: var(--pill); border: 1px solid;
-  }
-  .gl-badge.GREEN { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
-  .gl-badge.YELLOW { background: var(--yellowBg); border-color: #5C4A00; color: var(--yellow); }
-  .gl-badge.RED { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
+/* Compliance */
+.compliance-section { padding:10px 18px 0; }
+.compliance-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.compliance-title { font-family:var(--font-oswald); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.progress-bar-wrap { height:5px; background:var(--surface-1); border-radius:999px; overflow:hidden; margin-bottom:8px; }
+.progress-bar { height:100%; border-radius:999px; }
+.compliance-row { display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px solid var(--border); }
+.compliance-row:last-child { border-bottom:none; }
+.c-status { width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.c-status svg { width:10px; height:10px; }
+.c-name { font-family:var(--font-dm); font-size:12px; color:var(--gray-primary); flex:1; }
+.c-date { font-family:var(--font-mono); font-size:9px; color:var(--gray-secondary); }
 
-  .gl-reason { font-size: 12px; color: var(--textMuted); }
-  .gl-athlete { font-size: 12px; color: var(--textMuted); }
-  .gl-next { font-size: 11px; color: var(--textMuted); margin-top: 2px; }
-
-  /* Chips */
-  .chip {
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 8px 16px; border-radius: var(--pill); border: 1px solid;
-    font-size: 13px; font-weight: 700; cursor: pointer;
-    align-self: flex-start;
-  }
-  .chip.green { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
-  .chip.orange { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
-  .chip.red { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
-  .chip.neutral { background: var(--bgElevated); border-color: var(--border); color: var(--text); }
-  .chip.blue { background: #1A2240; border-color: #2A3A70; color: var(--accentBlue); }
-  .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
-
-  /* Grant row */
-  .grant-row {
-    border: 1px solid var(--border); border-radius: 12px;
-    padding: 12px; display: flex; flex-direction: column; gap: 4px;
-  }
-  .grant-name { font-size: 14px; font-weight: 600; color: var(--textStrong); }
-  .grant-scopes { font-size: 12px; color: var(--textMuted); }
-  .grant-expiry { font-size: 11px; color: var(--textMuted); }
-
-  /* Timeline event */
-  .timeline-row {
-    border: 1px solid var(--border); border-radius: 12px;
-    padding: 12px; display: flex; flex-direction: column; gap: 4px;
-  }
-  .timeline-summary { font-size: 13px; color: var(--text); }
-  .timeline-time { font-size: 11px; color: var(--textMuted); }
-
-  /* Passport header */
-  .passport-header {
-    display: flex; align-items: center; gap: 14px;
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 16px;
-  }
-  .passport-avatar {
-    width: 52px; height: 52px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--orange), #C4720F);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; font-weight: 700; color: #fff;
-    flex-shrink: 0;
-  }
-  .passport-name { font-size: 18px; font-weight: 700; color: var(--textStrong); }
-  .passport-meta { font-size: 12px; color: var(--textMuted); }
-  .passport-badge {
-    margin-left: auto; font-size: 10px; font-weight: 700;
-    letter-spacing: 0.12em; padding: 4px 10px;
-    border-radius: var(--pill); background: var(--greenBg);
-    border: 1px solid var(--greenBorder); color: var(--green);
-  }
-
-  /* Roster row */
-  .roster-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 0; border-bottom: 1px solid var(--border);
-  }
-  .roster-row:last-child { border-bottom: none; }
-  .roster-name { font-size: 14px; color: var(--textStrong); }
-  .roster-detail { font-size: 11px; color: var(--textMuted); }
-  .dot {
-    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
-  }
-  .dot-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
-  .dot-yellow { background: var(--yellow); }
-  .dot-red { background: var(--red); }
-
-  /* AVANTI message */
-  .msg { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; }
-  .msg.user { align-items: flex-end; }
-  .msg.avanti { align-items: flex-start; }
-  .bubble {
-    max-width: 80%; padding: 10px 14px; border-radius: 18px;
-    font-size: 13px; line-height: 1.5;
-  }
-  .bubble.user { background: var(--orange); color: #fff; border-radius: 18px 18px 4px 18px; }
-  .bubble.avanti { background: var(--card); border: 1px solid var(--border); color: var(--text); border-radius: 18px 18px 18px 4px; }
-  .msg-time { font-size: 10px; color: var(--textMuted); margin: 0 4px; }
-
-  /* Action items (AVANTI actions) */
-  .action-item {
-    border: 1px solid var(--border); border-radius: 12px;
-    padding: 10px 14px; font-size: 13px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .action-item.warning { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
-  .action-item.secondary { background: var(--bgElevated); border-color: var(--border); color: var(--text); }
-
-  /* Exception row */
-  .exception-row {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 14px;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .exc-header { display: flex; align-items: center; justify-content: space-between; }
-  .exc-title { font-size: 14px; font-weight: 600; color: var(--textStrong); }
-  .exc-body { font-size: 12px; color: var(--textMuted); line-height: 1.5; }
-  .severity-badge {
-    font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
-    padding: 3px 8px; border-radius: var(--pill); border: 1px solid;
-  }
-  .severity-high { background: var(--redBg); border-color: var(--redBorder); color: var(--red); }
-  .severity-medium { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
-  .severity-low { background: var(--bgElevated); border-color: var(--border); color: var(--textMuted); }
-
-  /* Schedule */
-  .schedule-event {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 14px;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .schedule-event.live { border-color: var(--orangeBorder); }
-  .evt-kind {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
-    color: var(--textMuted);
-  }
-  .evt-teams { font-size: 15px; font-weight: 700; color: var(--textStrong); }
-  .evt-meta { font-size: 12px; color: var(--textMuted); }
-  .live-pill {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: var(--orangeBg); border: 1px solid var(--orangeBorder);
-    border-radius: var(--pill); padding: 3px 10px;
-    font-size: 12px; font-weight: 700; color: var(--orange);
-    align-self: flex-start;
-  }
-  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
-
-  /* Compliance */
-  .compliance-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 18px;
-    display: flex; flex-direction: column; gap: 12px;
-  }
-  .policy-body {
-    font-size: 13px; color: var(--text); line-height: 1.6;
-    background: var(--bgElevated); border-radius: 10px; padding: 12px;
-    border: 1px solid var(--border);
-  }
-
-  /* Week nav */
-  .week-nav { display: flex; align-items: center; justify-content: space-between; }
-  .week-label { font-size: 15px; font-weight: 700; color: var(--textStrong); }
-
-  /* Empty / loading */
-  .empty-state {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 32px 20px; text-align: center;
-    display: flex; flex-direction: column; gap: 8px; align-items: center;
-  }
-  .empty-title { font-size: 18px; font-weight: 700; color: var(--textStrong); }
-  .empty-body { font-size: 13px; color: var(--textMuted); line-height: 1.5; }
-
-  /* Section row title */
-  .row-header { display: flex; justify-content: space-between; align-items: center; }
-  .row-link { font-size: 13px; color: var(--green); }
-
-  /* Access log */
-  .access-row {
-    border: 1px solid var(--border); border-radius: 12px;
-    padding: 12px; display: flex; flex-direction: column; gap: 4px;
-  }
-  .access-actor { font-size: 14px; font-weight: 600; color: var(--textStrong); }
-  .access-scope { font-size: 12px; color: var(--orange); }
-  .access-time { font-size: 11px; color: var(--textMuted); }
-
-  /* Upload area */
-  .upload-zone {
-    border: 2px dashed var(--border); border-radius: 14px;
-    padding: 32px 20px; text-align: center;
-    display: flex; flex-direction: column; gap: 8px; align-items: center;
-  }
-  .upload-icon { font-size: 32px; }
-  .upload-label { font-size: 14px; color: var(--textMuted); }
-
-  /* Form inputs */
-  .form-input {
-    background: var(--bgElevated); border: 1px solid var(--border);
-    border-radius: 10px; padding: 10px 12px;
-    font-size: 14px; color: var(--text); width: 100%;
-  }
-  .form-label { font-size: 12px; color: var(--textMuted); margin-bottom: 4px; }
-  .form-group { display: flex; flex-direction: column; gap: 4px; }
-  .form-section { display: flex; flex-direction: column; gap: 12px; }
-
-  /* Screen container (hidden by default) */
-  .screen { display: none; }
-  .screen.active { display: contents; }
-
-  /* Banner */
-  .banner {
-    border-radius: 10px; padding: 8px 12px;
-    font-size: 13px; border: 1px solid;
-  }
-  .banner.warning { background: var(--orangeBg); border-color: var(--orangeBorder); color: var(--orange); }
-  .banner.success { background: var(--greenBg); border-color: var(--greenBorder); color: var(--green); }
-  .banner.neutral { background: var(--bgElevated); border-color: var(--border); color: var(--textMuted); }
-
-  /* Escalation detail */
-  .esc-detail-row { display: flex; flex-direction: column; gap: 3px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .esc-detail-row:last-child { border-bottom: none; }
-  .esc-key { font-size: 11px; color: var(--textMuted); letter-spacing: 0.04em; text-transform: uppercase; }
-  .esc-val { font-size: 13px; color: var(--text); }
-
-  /* Section divider */
-  .divider { height: 1px; background: var(--border); margin: 2px 0; }
+/* Bottom nav */
+.bottom-nav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:8px 4px 20px; flex-shrink:0; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:4px 0; }
+.ni-icon { width:24px; height:24px; display:flex; align-items:center; justify-content:center; }
+.ni-icon svg { width:22px; height:22px; stroke:var(--gray-disabled); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ni-lbl { font-family:var(--font-dm); font-size:10px; font-weight:500; color:var(--gray-disabled); }
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+.av-pill { background:var(--vai-green); border-radius:20px; padding:7px 12px; display:flex; align-items:center; justify-content:center; }
+.av-pill span { font-family:var(--font-dm); font-size:11px; font-weight:800; color:#000; }
 </style>
 </head>
 <body>
 
-<h1>VAI Club OS — Mobile</h1>
-<p class="subtitle">Phase 1 · M1–M11 · Interactive prototype · Mock data</p>
+<div class="page-title">VAI — Club OS Mobile</div>
+<div class="page-sub">C1 Sub-Grid Entry · C2 Roster · C3 Compliance — Phase 1 screens</div>
 
-<div class="screen-nav">
-  <button class="nav-btn active" onclick="showScreen('passport')">M1 Passport</button>
-  <button class="nav-btn" onclick="showScreen('grant-detail')">M2 Grant</button>
-  <button class="nav-btn" onclick="showScreen('add-club')">M3 Add Club</button>
-  <button class="nav-btn" onclick="showScreen('access-log')">M4 Access Log</button>
-  <button class="nav-btn" onclick="showScreen('compliance-sign')">M5 Sign Waiver</button>
-  <button class="nav-btn" onclick="showScreen('compliance-upload')">M6 Medical Upload</button>
-  <button class="nav-btn" onclick="showScreen('avanti')">M7 AVANTI</button>
-  <button class="nav-btn" onclick="showScreen('escalation')">M8 Escalation</button>
-  <button class="nav-btn" onclick="showScreen('roster')">M9 Roster</button>
-  <button class="nav-btn" onclick="showScreen('exceptions')">M10 Exceptions</button>
-  <button class="nav-btn" onclick="showScreen('schedule')">M11 Schedule</button>
+<div class="phones-row">
+
+  <!-- C1: Club OS Sub-Grid (drilled in from Home → Club tile) -->
+  <div class="phone-wrap">
+    <div class="phone-label">C1 — Club OS Sub-Grid</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#c1g)"/><defs><radialGradient id="c1g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <!-- Club context row -->
+      <div class="ctx-row">
+        <div class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Home</div>
+        <div class="ctx-title">VAI FC North</div>
+      </div>
+      <!-- AVANTI strip scoped to club -->
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg"><strong style="color:var(--gray-primary);">1 athlete RED</strong> — Mia blocked for Saturday</span>
+        <div class="strip-chip">Review</div>
+      </div>
+      <div class="scroll-body" style="height:530px;">
+        <div class="sec-lbl">CLUB FEATURES</div>
+        <div class="tile-grid">
+          <div class="tile"><div class="tile-badge b-red">1 BLOCKED</div><div class="tile-icon ri"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="tile-name">Roster</div><div class="tile-sub">16 athletes</div></div>
+          <div class="tile"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div><div class="tile-name">Compliance</div><div class="tile-sub">13/16 signed</div></div>
+          <div class="tile"><div class="tile-badge b-date">SAT</div><div class="tile-icon oi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tile-name">Schedule</div><div class="tile-sub">Home 10am</div></div>
+          <div class="tile"><div class="tile-icon bi"><svg viewBox="0 0 24 24"><path d="M6 9H4a2 2 0 0 1-2-2V5h4"/><path d="M18 9h2a2 2 0 0 0 2-2V5h-4"/><path d="M8 21h8M12 17v4"/><path d="M4 5h16v5a8 8 0 0 1-16 0Z"/></svg></div><div class="tile-name">GAMEDAY</div><div class="tile-sub">Web portal</div></div>
+          <div class="tile"><div class="tile-badge b-orange">5</div><div class="tile-icon gi"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="tile-name">Chat</div><div class="tile-sub">5 unread</div></div>
+          <div class="tile"><div class="tile-icon oi"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="tile-name">Standings</div><div class="tile-sub">#1 · 19pts</div></div>
+        </div>
+        <!-- Page dots -->
+        <div style="display:flex;gap:5px;justify-content:center;margin-top:8px;">
+          <div style="width:16px;height:6px;border-radius:3px;background:var(--vai-orange);"></div>
+          <div style="width:6px;height:6px;border-radius:50%;background:var(--gray-subtle);"></div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C2: Roster -->
+  <div class="phone-wrap">
+    <div class="phone-label">C2 — Roster</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#c2g)"/><defs><radialGradient id="c2g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="ctx-row">
+        <div class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> VAI FC North</div>
+        <div class="ctx-title">Roster</div>
+      </div>
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg"><strong style="color:var(--red);">2 athletes RED</strong> — send reminders?</span>
+        <div class="strip-chip">Remind all</div>
+      </div>
+      <div class="scroll-body" style="height:558px;position:relative;">
+        <div class="filter-row">
+          <div class="fchip active">All (16)</div>
+          <div class="fchip">Active</div>
+          <div class="fchip">Inactive</div>
+          <div class="fchip">By Team</div>
+        </div>
+        <div class="roster-row">
+          <div class="r-avatar" style="background:linear-gradient(135deg,var(--red),#cc3030);">MC</div>
+          <div class="r-info"><div class="r-name">Mia Chen <span style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);">#7</span></div><div class="r-meta">U15 · Soccer</div></div>
+          <div class="tier-pill tp-orange">VAI+</div>
+          <div class="play-dot red" style="margin-left:6px;"></div>
+        </div>
+        <div class="roster-row">
+          <div class="r-avatar" style="background:linear-gradient(135deg,var(--vai-green),#0D9E6A);">JL</div>
+          <div class="r-info"><div class="r-name">Jake Liu <span style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);">#4</span></div><div class="r-meta">U15 · Soccer</div></div>
+          <div class="tier-pill tp-green">Basic</div>
+          <div class="play-dot green" style="margin-left:6px;"></div>
+        </div>
+        <div class="roster-row">
+          <div class="r-avatar" style="background:linear-gradient(135deg,#5577DD,#3355bb);">SR</div>
+          <div class="r-info"><div class="r-name">Sofia Reyes <span style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);">#11</span></div><div class="r-meta">U15 · Soccer</div></div>
+          <div class="tier-pill tp-green">Basic</div>
+          <div class="play-dot green" style="margin-left:6px;"></div>
+        </div>
+        <div class="roster-row">
+          <div class="r-avatar" style="background:linear-gradient(135deg,var(--yellow),#c4a800);">DP</div>
+          <div class="r-info"><div class="r-name">Darius Powell <span style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);">#3</span></div><div class="r-meta">U15 · Soccer</div></div>
+          <div class="tier-pill tp-orange">VAI+</div>
+          <div class="play-dot yellow" style="margin-left:6px;"></div>
+        </div>
+        <div class="roster-row">
+          <div class="r-avatar" style="background:linear-gradient(135deg,var(--vai-orange),#c47210);">AK</div>
+          <div class="r-info"><div class="r-name">Avery Kim <span style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);">#9</span></div><div class="r-meta">U15 · Soccer</div></div>
+          <div class="tier-pill tp-green">Basic</div>
+          <div class="play-dot green" style="margin-left:6px;"></div>
+        </div>
+        <div class="roster-row">
+          <div class="r-avatar" style="background:linear-gradient(135deg,var(--red),#cc3030);">TM</div>
+          <div class="r-info"><div class="r-name">Tyler Moore <span style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);">#14</span></div><div class="r-meta">U15 · Soccer</div></div>
+          <div class="tier-pill tp-green">Basic</div>
+          <div class="play-dot red" style="margin-left:6px;"></div>
+        </div>
+        <div class="roster-row" style="opacity:0.5;">
+          <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-disabled);text-align:center;width:100%;padding:6px 0;">10 more athletes ↓</div>
+        </div>
+        <!-- FAB -->
+        <div class="fab" style="position:absolute;bottom:12px;right:18px;">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C3: Compliance -->
+  <div class="phone-wrap">
+    <div class="phone-label">C3 — Compliance</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#c3g)"/><defs><radialGradient id="c3g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">M</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="ctx-row">
+        <div class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> VAI FC North</div>
+        <div class="ctx-title">Compliance</div>
+      </div>
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg"><strong style="color:var(--yellow);">2 waivers overdue</strong> — Saturday game in 2 days</span>
+        <div class="strip-chip">Remind</div>
+      </div>
+      <div class="scroll-body" style="height:558px;">
+        <!-- Liability -->
+        <div class="compliance-section">
+          <div class="compliance-header">
+            <div class="compliance-title">Liability Waiver</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);">14/16</div>
+          </div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:87.5%;background:var(--vai-green);"></div></div>
+          <div class="compliance-row">
+            <div class="c-status" style="background:rgba(52,211,153,0.1);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--vai-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="c-name">Mia Chen</div><div class="c-date">Apr 12</div>
+          </div>
+          <div class="compliance-row">
+            <div class="c-status" style="background:rgba(255,107,107,0.1);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+            <div class="c-name">Tyler Moore</div><div class="c-date" style="color:var(--red);">OVERDUE</div>
+          </div>
+          <div class="compliance-row">
+            <div class="c-status" style="background:rgba(251,191,36,0.1);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div class="c-name">Darius Powell</div><div class="c-date" style="color:var(--yellow);">Pending</div>
+          </div>
+        </div>
+
+        <!-- Media Release -->
+        <div class="compliance-section" style="margin-top:12px;">
+          <div class="compliance-header">
+            <div class="compliance-title">Media Release</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);">16/16</div>
+          </div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%;background:var(--vai-green);"></div></div>
+          <div style="font-family:var(--font-dm);font-size:11px;color:var(--vai-green);padding:4px 0;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--vai-green)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> All 16 signed</div>
+        </div>
+
+        <!-- Medical -->
+        <div class="compliance-section" style="margin-top:12px;">
+          <div class="compliance-header">
+            <div class="compliance-title">Medical Clearance</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);">13/16</div>
+          </div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:81.25%;background:var(--yellow);"></div></div>
+          <div class="compliance-row">
+            <div class="c-status" style="background:rgba(255,107,107,0.1);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+            <div class="c-name">Sofia Reyes</div><div class="c-date" style="color:var(--red);">OVERDUE</div>
+          </div>
+          <div class="compliance-row">
+            <div class="c-status" style="background:rgba(251,191,36,0.1);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div class="c-name">Jake Liu</div><div class="c-date" style="color:var(--yellow);">Pending</div>
+          </div>
+          <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-secondary);padding:4px 0;">+ 1 more pending</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<div class="phone-wrap">
-  <div class="phone-frame">
-    <div class="status-bar">
-      <span>9:41</span>
-      <div class="status-bar-icons">
-        <span>●●●</span><span>WiFi</span><span>■■■</span>
-      </div>
-    </div>
+<div style="text-align:center;margin-top:12px;font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);letter-spacing:0.08em;">VAI Club OS Mobile · C1 Sub-Grid Entry · C2 Roster with PLAY dots · C3 Compliance with progress bars</div>
 
-    <div class="nav-header" id="nav-header">
-      <span class="nav-header-title" id="nav-title">My Passport</span>
-    </div>
-
-    <div class="screen-body" id="screen-body">
-
-      <!-- M1: PASSPORT HOME -->
-      <div class="screen active" id="screen-passport">
-        <div class="passport-header">
-          <div class="passport-avatar">M</div>
-          <div>
-            <div class="passport-name">Mia Chen</div>
-            <div class="passport-meta">Soccer · U15 · DOB 2011-09-17</div>
-            <div class="passport-meta">Passport created Aug 14, 2025</div>
-          </div>
-          <div class="passport-badge">PASSPORT</div>
-        </div>
-
-        <div class="green-line-card RED">
-          <div class="gl-header">
-            <span class="gl-club">VAI FC North</span>
-            <span class="gl-badge RED">RED</span>
-          </div>
-          <div class="gl-reason">⚠️ Payment gate: Installment 2 overdue by 4 days</div>
-          <div class="gl-athlete">Mia Chen · Policy v12</div>
-          <div class="gl-next">Next event: Sat 9:00 AM · Apr 26</div>
-          <div class="chip-row">
-            <div class="chip orange">Resolve payment →</div>
-            <div class="chip neutral">Ask AVANTI</div>
-          </div>
-        </div>
-
-        <div class="section-card">
-          <div class="row-header">
-            <div class="card-title">Active grants</div>
-            <span class="row-link" onclick="showScreen('add-club')">+ Add club</span>
-          </div>
-          <div class="grant-row" onclick="showScreen('grant-detail')">
-            <div class="grant-name">VAI FC North</div>
-            <div class="grant-scopes">governance · medical_sharing</div>
-            <div class="grant-expiry">Expires Aug 14, 2026</div>
-          </div>
-          <div class="chip green" onclick="showScreen('add-club')">Add club access</div>
-        </div>
-
-        <div class="section-card">
-          <div class="row-header">
-            <div class="card-title">Timeline</div>
-            <span class="row-link" onclick="showScreen('access-log')">Access log</span>
-          </div>
-          <div class="timeline-row">
-            <div class="timeline-summary">Payment gate moved to RED after missed installment.</div>
-            <div class="timeline-time">Apr 22, 2026 · 1:10 PM</div>
-          </div>
-          <div class="timeline-row">
-            <div class="timeline-summary">Governance + medical sharing grant created for VAI FC North.</div>
-            <div class="timeline-time">Aug 14, 2025 · 6:14 PM</div>
-          </div>
-          <div class="chip orange" onclick="showScreen('avanti')">Ask AVANTI</div>
-        </div>
-      </div>
-
-      <!-- M2: GRANT DETAIL -->
-      <div class="screen" id="screen-grant-detail">
-        <div class="section-card">
-          <div class="card-title">VAI FC North</div>
-          <div class="card-subtitle">Active grant — full compliance access</div>
-          <div class="divider"></div>
-          <div class="label-sm">SCOPES</div>
-          <div class="chip-row">
-            <div class="chip neutral">governance</div>
-            <div class="chip neutral">medical_sharing</div>
-          </div>
-          <div class="label-sm">GRANTED</div>
-          <div class="text-base">Aug 14, 2025 at 6:14 PM</div>
-          <div class="label-sm">EXPIRES</div>
-          <div class="text-base">Aug 14, 2026</div>
-          <div class="label-sm">STATUS</div>
-          <div class="chip green">Active</div>
-        </div>
-
-        <div class="section-card">
-          <div class="card-title">Club contact</div>
-          <div class="text-base">VAI FC North — Athletic Compliance</div>
-          <div class="card-subtitle">This club has read access to your athlete passport within the granted scope and time window.</div>
-        </div>
-
-        <div class="chip red">Revoke access</div>
-      </div>
-
-      <!-- M3: ADD CLUB -->
-      <div class="screen" id="screen-add-club">
-        <div class="section-card">
-          <div class="card-title">Add club access</div>
-          <div class="card-subtitle">Search for your club. They'll get scoped read access to your verified athlete state.</div>
-          <div class="form-section">
-            <div class="form-group">
-              <div class="form-label">Club name</div>
-              <div class="form-input" style="color:var(--textMuted)">Search clubs…</div>
-            </div>
-            <div class="form-group">
-              <div class="form-label">Access scopes</div>
-              <div class="chip-row">
-                <div class="chip green">governance</div>
-                <div class="chip neutral">medical_sharing</div>
-                <div class="chip neutral">recruiting</div>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="form-label">Expires (optional)</div>
-              <div class="form-input" style="color:var(--textMuted)">No expiry</div>
-            </div>
-          </div>
-        </div>
-        <div class="chip-row">
-          <div class="chip green">Grant access</div>
-          <div class="chip neutral">Cancel</div>
-        </div>
-      </div>
-
-      <!-- M4: ACCESS LOG -->
-      <div class="screen" id="screen-access-log">
-        <div class="section-card">
-          <div class="card-title">Access log</div>
-          <div class="card-subtitle">Every time a club reads your data, it's logged here permanently.</div>
-        </div>
-        <div class="access-row">
-          <div class="access-actor">Coach Dana Lewis</div>
-          <div class="access-scope">governance</div>
-          <div class="text-base" style="font-size:12px;color:var(--text)">Roster check before match</div>
-          <div class="access-time">Apr 22, 2026 · 8:15 AM · VAI FC North</div>
-        </div>
-        <div class="access-row">
-          <div class="access-actor">Club Admin</div>
-          <div class="access-scope">medical_sharing</div>
-          <div class="text-base" style="font-size:12px;color:var(--text)">Pre-season clearance check</div>
-          <div class="access-time">Apr 18, 2026 · 3:42 PM · VAI FC North</div>
-        </div>
-        <div class="access-row">
-          <div class="access-actor">Automated — Green Line</div>
-          <div class="access-scope">governance</div>
-          <div class="text-base" style="font-size:12px;color:var(--text)">Compliance recompute</div>
-          <div class="access-time">Apr 22, 2026 · 2:42 PM · System</div>
-        </div>
-      </div>
-
-      <!-- M5: COMPLIANCE SIGN -->
-      <div class="screen" id="screen-compliance-sign">
-        <div class="compliance-card">
-          <div class="card-title">Season Participation Waiver</div>
-          <div class="card-subtitle">VAI FC North · Required to participate</div>
-          <div class="policy-body">
-            I confirm participation consent, assume ordinary sporting risk, and agree that this acknowledgement is recorded as a durable compliance event inside the VAI Passport.<br><br>
-            This waiver applies to all club events, practices, and tournaments for the current season. It is stored in the athlete's immutable compliance ledger and cannot be deleted.
-          </div>
-          <div class="label-sm">ATHLETE</div>
-          <div class="text-strong">Mia Chen</div>
-          <div class="label-sm">SIGNED BY</div>
-          <div class="text-base">Parent / Guardian</div>
-        </div>
-        <div class="chip-row">
-          <div class="chip green">I agree — sign waiver</div>
-          <div class="chip neutral">Cancel</div>
-        </div>
-        <div class="card-subtitle" style="text-align:center;font-size:11px;">
-          Your signature is recorded with timestamp, device, and IP hash. It cannot be undone.
-        </div>
-      </div>
-
-      <!-- M6: MEDICAL UPLOAD -->
-      <div class="screen" id="screen-compliance-upload">
-        <div class="compliance-card">
-          <div class="card-title">Medical Clearance</div>
-          <div class="card-subtitle">VAI FC North requires a physician clearance form before Mia can participate.</div>
-          <div class="policy-body">
-            Upload the current physician form and supporting medical proof. Once validated, the medical gate clears automatically.
-          </div>
-        </div>
-        <div class="section-card">
-          <div class="upload-zone">
-            <div class="upload-icon">📄</div>
-            <div class="upload-label">Tap to select a PDF or image</div>
-            <div class="chip orange">Choose file</div>
-          </div>
-        </div>
-        <div class="banner neutral">Medical clearance is reviewed by the club admin. Green Line updates automatically once approved.</div>
-      </div>
-
-      <!-- M7: AVANTI THREAD -->
-      <div class="screen" id="screen-avanti">
-        <div class="msg user">
-          <div class="bubble user">Why is Mia blocked for Saturday?</div>
-          <div class="msg-time">1:05 PM</div>
-        </div>
-        <div class="msg avanti">
-          <div class="bubble avanti">Payment is still overdue. If you clear it today, Green Line should recompute before kickoff.</div>
-          <div class="msg-time">1:05 PM · AVANTI</div>
-        </div>
-        <div class="msg user">
-          <div class="bubble user">Can she still train tomorrow?</div>
-          <div class="msg-time">1:07 PM</div>
-        </div>
-        <div class="msg avanti">
-          <div class="bubble avanti">Practice access depends on the club's policy. VAI FC North's policy blocks all participation while payment gate is RED. Resolve the payment first.</div>
-          <div class="msg-time">1:07 PM · AVANTI</div>
-        </div>
-
-        <div class="section-card">
-          <div class="label-sm">SUGGESTED ACTIONS</div>
-          <div class="action-item warning">→ Resolve payment gate</div>
-          <div class="action-item secondary">→ Open escalation for coach review</div>
-        </div>
-
-        <div class="section-card">
-          <div class="form-group">
-            <div class="form-input" style="color:var(--textMuted)">Ask AVANTI…</div>
-          </div>
-          <div class="chip orange" style="align-self:flex-end;">Send</div>
-        </div>
-      </div>
-
-      <!-- M8: ESCALATION DETAIL -->
-      <div class="screen" id="screen-escalation">
-        <div class="section-card">
-          <div class="exc-header">
-            <div class="card-title">Same-day override request</div>
-            <div class="severity-badge severity-high">HIGH</div>
-          </div>
-          <div class="card-subtitle">Coach requested same-day override while payment remains open. Medical is cleared and waiver is valid for 9 more days.</div>
-        </div>
-
-        <div class="section-card">
-          <div class="esc-detail-row">
-            <div class="esc-key">STATUS</div>
-            <div class="esc-val">Open — awaiting admin decision</div>
-          </div>
-          <div class="esc-detail-row">
-            <div class="esc-key">REASON</div>
-            <div class="esc-val">human_judgment_required</div>
-          </div>
-          <div class="esc-detail-row">
-            <div class="esc-key">CREATED</div>
-            <div class="esc-val">Apr 22, 2026 · 1:10 PM</div>
-          </div>
-          <div class="esc-detail-row">
-            <div class="esc-key">RELATED EVENTS</div>
-            <div class="esc-val">#4411 · #4418 · #4421</div>
-          </div>
-        </div>
-
-        <div class="chip-row">
-          <div class="chip orange">Escalate to admin</div>
-          <div class="chip neutral">Dismiss</div>
-        </div>
-      </div>
-
-      <!-- M9: ROSTER -->
-      <div class="screen" id="screen-roster">
-        <div class="section-card">
-          <div class="card-title">2011 Girls Blue</div>
-          <div class="card-subtitle">U15 · VAI FC North</div>
-        </div>
-
-        <div class="section-card">
-          <div class="card-title">Roster — 2 athletes</div>
-          <div class="roster-row">
-            <div>
-              <div class="roster-name">Mia Chen</div>
-              <div class="roster-detail">Goalkeeper · #1</div>
-            </div>
-            <div class="dot dot-red" title="RED"></div>
-          </div>
-          <div class="roster-row">
-            <div>
-              <div class="roster-name">Avery Patel</div>
-              <div class="roster-detail">Defender · #4</div>
-            </div>
-            <div class="dot dot-green" title="GREEN"></div>
-          </div>
-        </div>
-
-        <div class="banner warning">1 athlete requires attention before Saturday's match.</div>
-
-        <div class="chip orange" onclick="showScreen('avanti')">Ask AVANTI about blockers</div>
-      </div>
-
-      <!-- M10: EXCEPTIONS -->
-      <div class="screen" id="screen-exceptions">
-        <div class="exception-row">
-          <div class="exc-header">
-            <div class="exc-title">Mia Chen — Payment gate RED</div>
-            <div class="severity-badge severity-high">HIGH</div>
-          </div>
-          <div class="exc-body">Coach requested same-day participation override. Payment is overdue by 4 days. AVANTI flagged for human review.</div>
-          <div class="chip-row">
-            <div class="chip orange" onclick="showScreen('escalation')">View escalation</div>
-            <div class="chip neutral" onclick="showScreen('avanti')">Ask AVANTI</div>
-          </div>
-        </div>
-
-        <div class="exception-row">
-          <div class="exc-header">
-            <div class="exc-title">Avery Patel — Medical due in 7 days</div>
-            <div class="severity-badge severity-medium">MEDIUM</div>
-          </div>
-          <div class="exc-body">Medical clearance expires Apr 30. Renew before expiry to keep Green Line status.</div>
-          <div class="chip-row">
-            <div class="chip neutral">Send reminder</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- M11: SCHEDULE -->
-      <div class="screen" id="screen-schedule">
-        <div class="section-card">
-          <div class="week-nav">
-            <div class="chip neutral">← Prev</div>
-            <div class="week-label">Week of Apr 24</div>
-            <div class="chip neutral">Next →</div>
-          </div>
-        </div>
-
-        <div class="schedule-event live">
-          <div class="evt-kind">GAME · TOURNAMENT MATCH</div>
-          <div class="evt-teams">2011 Girls Blue vs City Select</div>
-          <div class="live-pill"><div class="live-dot"></div>2 – 1 (LIVE)</div>
-          <div class="evt-meta">Field 2 · Sat Apr 26 · 9:00 AM</div>
-          <div class="evt-meta">Ref: Alex</div>
-        </div>
-
-        <div class="schedule-event">
-          <div class="evt-kind">PRACTICE</div>
-          <div class="evt-teams">2011 Girls Blue</div>
-          <div class="evt-meta">Field 1 · Thu Apr 24 · 5:30 PM</div>
-          <div class="evt-meta">Finishing patterns</div>
-        </div>
-      </div>
-
-    </div><!-- end screen-body -->
-
-    <div class="home-indicator">
-      <div class="home-bar"></div>
-    </div>
-  </div><!-- end phone-frame -->
-</div><!-- end phone-wrap -->
-
-<script>
-const screens = {
-  'passport':            { title: 'My Passport' },
-  'grant-detail':        { title: 'VAI FC North', back: true },
-  'add-club':            { title: 'Add Club', back: true },
-  'access-log':          { title: 'Access Log', back: true },
-  'compliance-sign':     { title: 'Sign Waiver', back: true },
-  'compliance-upload':   { title: 'Upload Medical', back: true },
-  'avanti':              { title: 'AVANTI', back: true },
-  'escalation':          { title: 'Escalation', back: true },
-  'roster':              { title: 'Team Roster', back: true },
-  'exceptions':          { title: 'Exceptions' },
-  'schedule':            { title: 'Schedule' },
-};
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-  const el = document.getElementById('screen-' + id);
-  if (el) el.classList.add('active');
-
-  const cfg = screens[id] || { title: id };
-  document.getElementById('nav-title').textContent = cfg.title;
-
-  const header = document.getElementById('nav-header');
-  let backBtn = header.querySelector('.back-btn');
-  if (cfg.back) {
-    if (!backBtn) {
-      backBtn = document.createElement('span');
-      backBtn.className = 'back-btn';
-      backBtn.textContent = '← Back';
-      backBtn.onclick = () => showScreen('passport');
-      header.insertBefore(backBtn, header.firstChild);
-    }
-    backBtn.style.display = 'block';
-  } else {
-    if (backBtn) backBtn.style.display = 'none';
-  }
-
-  const navKey = Object.keys(screens).indexOf(id);
-  const btns = document.querySelectorAll('.nav-btn');
-  if (btns[navKey]) btns[navKey].classList.add('active');
-
-  document.getElementById('screen-body').scrollTop = 0;
-}
-</script>
 </body>
 </html>
