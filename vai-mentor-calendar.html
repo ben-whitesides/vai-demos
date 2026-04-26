@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Mentor Calendar (Booking + Availability)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --vai-orange:#f7941e; --vai-green:#34d399; --vai-gold:#f3d7b5;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --surface-2:#222228; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --red:#FF6B6B; --red-bg:#1A0808; --red-border:#4A1A1A;
+  --yellow:#FBBF24; --yellow-bg:#1A1000; --yellow-border:#4A3000;
+  --blue:#5577DD; --blue-bg:#0A1020; --blue-border:#1A2A50;
+  --font-oswald:'Oswald',Impact,Arial Black,sans-serif;
+  --font-dm:'DM Sans',Arial,Helvetica,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-full:9999px;
+}
+body { background:#111; font-family:var(--font-dm); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:32px 16px 60px; color:var(--gray-primary); -webkit-font-smoothing:antialiased; }
+.page-title { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:4px; text-align:center; }
+.page-sub { font-size:11px; color:var(--gray-disabled); margin-bottom:28px; text-align:center; }
+
+/* Tab nav */
+.tab-nav { display:flex; gap:6px; justify-content:center; margin-bottom:24px; flex-wrap:wrap; }
+.tab-btn { background:var(--card-dark); border:1px solid var(--border); color:var(--gray-secondary); font-family:var(--font-dm); font-size:11px; font-weight:500; padding:5px 14px; border-radius:var(--r-full); cursor:pointer; transition:all 0.15s; }
+.tab-btn.active { background:rgba(247,148,30,0.1); border-color:var(--vai-orange); color:var(--vai-orange); }
+
+/* Flow row */
+.flow-row { display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap; justify-content:center; margin-bottom:56px; }
+.flow-label { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gray-disabled); text-align:center; margin-bottom:10px; }
+.flow-arrow { display:flex; align-items:center; padding-top:80px; color:var(--gray-subtle); font-size:20px; }
+
+/* Section header */
+.section-hdr { width:100%; max-width:1120px; font-family:var(--font-oswald); font-size:13px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray-disabled); padding:0 0 12px; border-bottom:1px solid var(--border); margin-bottom:24px; }
+
+/* Phone */
+.phone { width:375px; background:var(--void-black); border-radius:44px; border:1.5px solid var(--gray-subtle); box-shadow:0 0 0 1px #0c0c10,0 32px 80px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden; position:relative; flex-shrink:0; }
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 22px 8px; background:var(--void-black); font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
+.app-header { background:var(--void-black); padding:10px 18px 12px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.vai-wordmark { font-family:var(--font-oswald); font-size:18px; font-weight:700; letter-spacing:0.05em; color:var(--gray-primary); }
+.avanti-ind { margin-left:auto; display:flex; align-items:center; gap:5px; font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.06em; color:var(--vai-green); }
+.a-dot { width:6px; height:6px; border-radius:50%; background:var(--vai-green); animation:glow 2s ease-in-out infinite; }
+@keyframes glow { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 4px rgba(52,211,153,0)} }
+.hdr-icons { display:flex; gap:12px; align-items:center; }
+.hdr-icon { width:20px; height:20px; display:flex; align-items:center; justify-content:center; }
+.hdr-icon svg { width:18px; height:18px; stroke:var(--gray-secondary); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+
+/* Sub-header / back nav */
+.sub-header { background:var(--void-black); padding:10px 18px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); }
+.back-btn { display:flex; align-items:center; gap:5px; font-family:var(--font-dm); font-size:13px; font-weight:500; color:var(--vai-orange); }
+.back-btn svg { width:16px; height:16px; stroke:var(--vai-orange); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.sub-title { font-family:var(--font-oswald); font-size:15px; font-weight:600; color:var(--gray-primary); }
+
+/* Scroll body */
+.scroll-body { background:var(--void-black); overflow-y:auto; scrollbar-width:none; }
+.scroll-body::-webkit-scrollbar { display:none; }
+
+/* Bottom nav */
+.bottom-nav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:8px 4px 20px; flex-shrink:0; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer; padding:4px 0; }
+.ni-icon { width:24px; height:24px; display:flex; align-items:center; justify-content:center; }
+.ni-icon svg { width:22px; height:22px; stroke:var(--gray-disabled); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ni-lbl { font-family:var(--font-dm); font-size:10px; font-weight:500; color:var(--gray-disabled); }
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+.av-pill { background:var(--vai-green); border-radius:20px; padding:7px 15px; display:flex; align-items:center; justify-content:center; }
+.av-pill span { font-family:var(--font-dm); font-size:12px; font-weight:800; color:#000; letter-spacing:0.03em; }
+
+/* AVANTI Strip */
+.avanti-strip { background:var(--void-black); border-bottom:1px solid var(--border); padding:10px 18px; display:flex; flex-direction:column; gap:8px; }
+.strip-row { display:flex; align-items:center; gap:5px; }
+.strip-lbl { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--vai-green); }
+.strip-msg { font-family:var(--font-dm); font-size:13px; color:var(--gray-body); line-height:1.5; }
+
+/* Mentor card (browse list) */
+.mentor-card { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px 16px; display:flex; align-items:center; gap:12px; margin:0 16px 10px; cursor:pointer; transition:border-color 0.15s; }
+.mentor-card:hover { border-color:var(--gray-subtle); }
+.mentor-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-oswald); font-size:16px; font-weight:700; color:#000; flex-shrink:0; }
+.mentor-info { flex:1; min-width:0; }
+.mentor-name { font-family:var(--font-oswald); font-size:15px; font-weight:600; color:var(--gray-primary); margin-bottom:2px; }
+.mentor-sport { font-family:var(--font-dm); font-size:12px; color:var(--gray-secondary); margin-bottom:4px; }
+.mentor-meta { display:flex; gap:8px; align-items:center; }
+.rating { font-family:var(--font-mono); font-size:10px; color:var(--vai-gold); }
+.slot-badge { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.04em; border-radius:var(--r-sm); padding:2px 6px; border:1px solid; }
+.slot-open { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.slot-few { background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.3); color:var(--yellow); }
+.slot-full { background:rgba(255,255,255,0.04); border-color:var(--border); color:var(--gray-disabled); }
+.mentor-price { font-family:var(--font-oswald); font-size:15px; font-weight:600; color:var(--vai-orange); white-space:nowrap; }
+
+/* Filter chips */
+.filter-row { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:10px 16px 8px; }
+.filter-row::-webkit-scrollbar { display:none; }
+.fchip { display:flex; align-items:center; gap:4px; background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-full); padding:5px 12px; font-family:var(--font-dm); font-size:11px; font-weight:500; color:var(--gray-secondary); white-space:nowrap; flex-shrink:0; cursor:pointer; }
+.fchip.active { background:rgba(247,148,30,0.1); border-color:var(--vai-orange); color:var(--vai-orange); }
+
+/* Calendar */
+.cal-wrap { padding:14px 16px; }
+.cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.cal-month { font-family:var(--font-oswald); font-size:15px; font-weight:600; color:var(--gray-primary); }
+.cal-nav { display:flex; gap:4px; }
+.cal-nav-btn { width:28px; height:28px; background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.cal-nav-btn svg { width:14px; height:14px; stroke:var(--gray-secondary); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.cal-dow { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--gray-disabled); text-align:center; padding:4px 0; }
+.cal-day { aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:var(--r-md); font-family:var(--font-dm); font-size:12px; font-weight:500; cursor:pointer; position:relative; color:var(--gray-secondary); }
+.cal-day.has-slots { color:var(--gray-primary); }
+.cal-day.has-slots::after { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:var(--vai-green); }
+.cal-day.few-slots::after { background:var(--yellow); }
+.cal-day.selected { background:var(--vai-orange); color:#000; font-weight:700; }
+.cal-day.selected::after { display:none; }
+.cal-day.today { border:1px solid var(--gray-subtle); }
+.cal-day.past { opacity:0.3; cursor:default; }
+.cal-day:hover:not(.past):not(.selected) { background:var(--surface-1); }
+
+/* Time slots */
+.slot-list { padding:0 16px 16px; display:flex; flex-direction:column; gap:8px; }
+.slot-section-lbl { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gray-disabled); margin:8px 0 4px; }
+.time-slot { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-md); padding:12px 14px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.15s; }
+.time-slot:hover { border-color:var(--vai-orange); }
+.time-slot.selected { border-color:var(--vai-orange); background:rgba(247,148,30,0.06); }
+.time-slot.full { opacity:0.4; cursor:not-allowed; }
+.slot-time { font-family:var(--font-mono); font-size:13px; font-weight:500; color:var(--gray-primary); min-width:70px; }
+.slot-dur { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); }
+.slot-avail { margin-left:auto; }
+.slot-radio { width:18px; height:18px; border-radius:50%; border:2px solid var(--gray-subtle); flex-shrink:0; }
+.slot-radio.checked { border-color:var(--vai-orange); background:var(--vai-orange); position:relative; }
+.slot-radio.checked::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:6px; height:6px; border-radius:50%; background:#000; }
+
+/* Confirm + pay */
+.confirm-section { padding:16px; display:flex; flex-direction:column; gap:12px; }
+.confirm-card { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px 16px; }
+.confirm-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.confirm-row:last-child { margin-bottom:0; }
+.confirm-label { font-family:var(--font-dm); font-size:12px; color:var(--gray-secondary); }
+.confirm-value { font-family:var(--font-dm); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.confirm-lbl-top { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:10px; }
+.divider-line { height:1px; background:var(--border); margin:10px 0; }
+.price-total { font-family:var(--font-oswald); font-size:20px; font-weight:700; color:var(--vai-orange); }
+
+/* Countdown */
+.countdown-banner { background:rgba(247,148,30,0.06); border:1px solid rgba(247,148,30,0.3); border-radius:var(--r-md); padding:10px 14px; display:flex; align-items:center; gap:10px; }
+.countdown-clock { font-family:var(--font-mono); font-size:16px; font-weight:700; color:var(--vai-orange); min-width:50px; }
+.countdown-text { font-family:var(--font-dm); font-size:12px; color:var(--gray-secondary); }
+
+/* Stripe card input mock */
+.stripe-field { background:var(--surface-1); border:1px solid var(--gray-subtle); border-radius:var(--r-md); padding:11px 14px; font-family:var(--font-mono); font-size:13px; color:var(--gray-secondary); display:flex; align-items:center; gap:8px; }
+.stripe-field svg { width:16px; height:16px; stroke:var(--gray-secondary); stroke-width:1.5; fill:none; }
+.stripe-logo { font-family:var(--font-mono); font-size:10px; font-weight:700; color:var(--blue); letter-spacing:0.06em; margin-left:auto; }
+.field-row { display:flex; gap:8px; }
+.field-row .stripe-field { flex:1; }
+
+/* CTA button */
+.cta-btn { width:100%; padding:14px; border-radius:var(--r-lg); border:none; font-family:var(--font-oswald); font-size:16px; font-weight:700; letter-spacing:0.06em; cursor:pointer; text-align:center; }
+.cta-orange { background:var(--vai-orange); color:#000; }
+.cta-green { background:var(--vai-green); color:#000; }
+.cta-outline { background:transparent; border:1px solid var(--gray-subtle); color:var(--gray-secondary); font-family:var(--font-dm); font-size:13px; font-weight:500; padding:11px; border-radius:var(--r-md); }
+
+/* Success */
+.success-body { display:flex; flex-direction:column; align-items:center; padding:32px 24px; gap:16px; }
+.success-icon { width:64px; height:64px; border-radius:50%; background:rgba(52,211,153,0.12); border:2px solid rgba(52,211,153,0.4); display:flex; align-items:center; justify-content:center; }
+.success-icon svg { width:32px; height:32px; stroke:var(--vai-green); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.success-title { font-family:var(--font-oswald); font-size:22px; font-weight:700; color:var(--gray-primary); text-align:center; }
+.success-sub { font-family:var(--font-dm); font-size:13px; color:var(--gray-secondary); text-align:center; line-height:1.6; }
+.success-detail { width:100%; background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
+
+/* Availability grid */
+.avail-day { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); margin:0 16px 10px; overflow:hidden; }
+.avail-day-header { padding:10px 14px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
+.avail-day-name { font-family:var(--font-oswald); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.toggle { width:36px; height:20px; background:var(--surface-1); border-radius:var(--r-full); border:1px solid var(--gray-subtle); position:relative; cursor:pointer; }
+.toggle.on { background:var(--vai-green); border-color:var(--vai-green); }
+.toggle::after { content:''; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%; background:#fff; transition:transform 0.2s; }
+.toggle.on::after { transform:translateX(16px); background:#000; }
+.avail-slots { padding:8px 14px 10px; display:flex; gap:6px; flex-wrap:wrap; }
+.avail-slot-chip { font-family:var(--font-mono); font-size:10px; padding:3px 8px; border-radius:var(--r-sm); border:1px solid var(--border); color:var(--gray-secondary); background:var(--surface-1); }
+.avail-slot-chip.on { border-color:rgba(52,211,153,0.4); color:var(--vai-green); background:rgba(52,211,153,0.06); }
+.add-slot { font-family:var(--font-dm); font-size:11px; color:var(--vai-orange); cursor:pointer; display:flex; align-items:center; gap:4px; }
+.add-slot svg { width:12px; height:12px; stroke:var(--vai-orange); stroke-width:2; fill:none; }
+
+/* Booking request card */
+.req-card { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px 16px; margin:0 16px 10px; }
+.req-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.req-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--font-oswald); font-size:13px; font-weight:700; color:#000; flex-shrink:0; }
+.req-name { font-family:var(--font-oswald); font-size:14px; font-weight:600; color:var(--gray-primary); }
+.req-time { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); }
+.req-status { margin-left:auto; }
+.status-pill { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.04em; border-radius:var(--r-full); padding:3px 8px; border:1px solid; }
+.sp-pending { background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.3); color:var(--yellow); }
+.sp-confirmed { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.sp-cancelled { background:rgba(255,107,107,0.1); border-color:rgba(255,107,107,0.3); color:var(--red); }
+.req-actions { display:flex; gap:8px; }
+.req-btn { flex:1; padding:8px; border-radius:var(--r-md); border:1px solid; font-family:var(--font-dm); font-size:12px; font-weight:600; cursor:pointer; text-align:center; }
+.rb-accept { background:var(--vai-green); border-color:var(--vai-green); color:#000; }
+.rb-decline { background:transparent; border-color:var(--gray-subtle); color:var(--gray-secondary); }
+
+/* Earnings */
+.earn-card { margin:12px 16px 0; background:var(--card-dark); border:1px solid rgba(247,148,30,0.3); border-radius:var(--r-lg); padding:14px 16px; }
+.earn-row { display:flex; gap:0; }
+.earn-item { flex:1; display:flex; flex-direction:column; gap:2px; }
+.earn-item + .earn-item { border-left:1px solid var(--border); padding-left:12px; }
+.earn-lbl { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--gray-disabled); }
+.earn-val { font-family:var(--font-oswald); font-size:18px; font-weight:700; color:var(--vai-orange); }
+.earn-sub { font-family:var(--font-dm); font-size:10px; color:var(--gray-secondary); }
+
+/* ─── GAMEDAY WEB ─── */
+.section-divider { width:100%; max-width:1120px; height:1px; background:var(--border); margin:16px 0 36px; }
+.browser { width:1100px; max-width:100%; background:#0D0B0A; border-radius:12px; border:1px solid #332E29; box-shadow:0 32px 80px rgba(0,0,0,0.85); overflow:hidden; }
+.browser-bar { background:#111; padding:10px 14px; display:flex; align-items:center; gap:10px; border-bottom:1px solid #2A2520; }
+.browser-dots { display:flex; gap:6px; }
+.browser-dot { width:12px; height:12px; border-radius:50%; }
+.browser-dot.r { background:#FF5F57; }
+.browser-dot.y { background:#FEBC2E; }
+.browser-dot.g { background:#28C840; }
+.browser-url { flex:1; background:#1A1A1A; border-radius:6px; padding:5px 12px; font-size:12px; color:#555; max-width:420px; margin:0 auto; font-family:var(--font-mono); }
+.gd-app { display:flex; min-height:640px; }
+.gd-sidebar { width:220px; background:#171412; border-right:1px solid #2A2520; display:flex; flex-direction:column; padding:12px 0; flex-shrink:0; }
+.gd-sidebar-logo { padding:10px 16px 16px; font-family:var(--font-oswald); font-size:15px; font-weight:700; letter-spacing:0.08em; color:var(--vai-orange); border-bottom:1px solid #2A2520; margin-bottom:8px; }
+.gd-sec-lbl { padding:8px 12px 2px; font-family:var(--font-mono); font-size:9px; font-weight:700; color:#6B605A; letter-spacing:0.1em; text-transform:uppercase; }
+.gd-nav-item { display:flex; align-items:center; gap:10px; padding:8px 14px; font-family:var(--font-dm); font-size:13px; color:#6B605A; cursor:pointer; transition:all 0.12s; border-radius:6px; margin:1px 6px; }
+.gd-nav-item:hover { background:#1E1B18; color:#C8BFB8; }
+.gd-nav-item.active { background:#1E1000; color:var(--vai-orange); border:1px solid #4A3200; }
+.gd-nav-icon { width:20px; height:20px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.gd-nav-icon svg { width:16px; height:16px; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.gd-badge { margin-left:auto; font-size:10px; font-weight:700; background:var(--vai-orange); color:#000; border-radius:var(--r-full); padding:1px 6px; }
+.gd-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+.gd-topbar { height:52px; background:#171412; border-bottom:1px solid #2A2520; display:flex; align-items:center; padding:0 20px; gap:14px; flex-shrink:0; }
+.gd-topbar-title { font-family:var(--font-oswald); font-size:17px; font-weight:700; letter-spacing:0.06em; color:#F5F0EB; }
+.gd-topbar-sep { width:1px; height:22px; background:#2A2520; }
+.gd-topbar-ctx { font-family:var(--font-dm); font-size:13px; color:#6B605A; }
+.gd-topbar-right { margin-left:auto; display:flex; align-items:center; gap:12px; }
+.gd-avanti-pill { display:inline-flex; align-items:center; gap:6px; background:var(--vai-green); border-radius:14px; padding:4px 12px; font-family:var(--font-mono); font-size:11px; font-weight:800; color:#000; letter-spacing:0.04em; }
+.gd-avanti-dot { width:6px; height:6px; border-radius:50%; background:#000; opacity:0.6; animation:glow 2s ease-in-out infinite; }
+.gd-content { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:20px; background:#0D0B0A; }
+
+/* GAMEDAY cards */
+.gd-stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.gd-stat-card { background:#171412; border:1px solid #2A2520; border-radius:10px; padding:14px 16px; }
+.gd-stat-label { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:#6B605A; margin-bottom:6px; }
+.gd-stat-val { font-family:var(--font-oswald); font-size:26px; font-weight:700; color:#F5F0EB; }
+.gd-stat-sub { font-family:var(--font-dm); font-size:11px; color:#6B605A; margin-top:2px; }
+.gd-stat-card.orange { border-color:#4A3200; }
+.gd-stat-card.orange .gd-stat-val { color:var(--vai-orange); }
+
+.gd-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.gd-card { background:#171412; border:1px solid #2A2520; border-radius:10px; overflow:hidden; }
+.gd-card-header { padding:12px 16px; border-bottom:1px solid #2A2520; display:flex; align-items:center; justify-content:space-between; }
+.gd-card-title { font-family:var(--font-oswald); font-size:14px; font-weight:600; letter-spacing:0.06em; color:#F5F0EB; }
+.gd-card-action { font-family:var(--font-dm); font-size:12px; color:var(--vai-orange); cursor:pointer; }
+.gd-table { width:100%; border-collapse:collapse; }
+.gd-table th { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:#6B605A; padding:8px 12px; text-align:left; border-bottom:1px solid #2A2520; }
+.gd-table td { font-family:var(--font-dm); font-size:12px; color:#C8BFB8; padding:9px 12px; border-bottom:1px solid #1A1714; vertical-align:middle; }
+.gd-table tr:last-child td { border-bottom:none; }
+.td-name { font-weight:600; color:#F5F0EB; }
+.gd-pill { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.04em; border-radius:999px; padding:2px 8px; border:1px solid; }
+.gd-pill.green { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:var(--vai-green); }
+.gd-pill.yellow { background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.3); color:var(--yellow); }
+.gd-pill.red { background:rgba(255,107,107,0.1); border-color:rgba(255,107,107,0.3); color:var(--red); }
+.gd-pill.gray { background:rgba(255,255,255,0.04); border-color:#2A2520; color:#6B605A; }
+
+/* Avail settings GAMEDAY */
+.avail-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; padding:14px 16px; }
+.avail-col { display:flex; flex-direction:column; gap:4px; align-items:center; }
+.avail-col-day { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:#6B605A; margin-bottom:4px; }
+.avail-slot-box { width:100%; padding:5px 4px; border-radius:4px; border:1px solid #2A2520; font-family:var(--font-mono); font-size:9px; color:#6B605A; text-align:center; background:#1E1B18; cursor:pointer; }
+.avail-slot-box.active { border-color:rgba(52,211,153,0.4); color:var(--vai-green); background:rgba(52,211,153,0.06); }
+.avail-slot-box.add { border-style:dashed; border-color:#2A2520; color:#2A2520; }
+
+/* cal-int cards */
+.cal-int-row { display:flex; gap:10px; padding:14px 16px; }
+.cal-int-card { flex:1; background:#1E1B18; border:1px solid #2A2520; border-radius:8px; padding:10px 12px; display:flex; align-items:center; gap:10px; }
+.cal-int-icon { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.cal-int-name { font-family:var(--font-dm); font-size:12px; font-weight:600; color:#F5F0EB; }
+.cal-int-status { font-family:var(--font-mono); font-size:9px; color:#6B605A; margin-top:1px; }
+.cal-int-toggle { margin-left:auto; }
+.cal-int-on { width:32px; height:18px; background:var(--vai-green); border-radius:999px; position:relative; }
+.cal-int-on::after { content:''; position:absolute; right:2px; top:2px; width:14px; height:14px; border-radius:50%; background:#000; }
+.cal-int-off { width:32px; height:18px; background:#2A2520; border-radius:999px; position:relative; }
+.cal-int-off::after { content:''; position:absolute; left:2px; top:2px; width:14px; height:14px; border-radius:50%; background:#6B605A; }
+</style>
+</head>
+<body>
+
+<div class="page-title">VAI — Mentor Calendar</div>
+<div class="page-sub">Booking flow (athlete) · Availability management (mentor) · GAMEDAY D4 dashboard</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active">Athlete: Book a Session</button>
+  <button class="tab-btn">Mentor: Manage Calendar</button>
+  <button class="tab-btn">GAMEDAY: D4 Dashboard</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     ATHLETE BOOKING FLOW
+═══════════════════════════════════════════════ -->
+<div class="section-hdr">Athlete Booking Flow — M1 → M5</div>
+
+<div class="flow-row">
+
+  <!-- M1: Browse mentors -->
+  <div>
+    <div class="flow-label">M1 — Browse Mentors</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg1)"/><defs><radialGradient id="vg1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1px solid var(--void-black);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="avanti-strip">
+        <div class="strip-row"><div class="a-dot" style="width:5px;height:5px;"></div><span class="strip-lbl">AVANTI</span></div>
+        <div class="strip-msg"><strong style="color:var(--gray-primary)">Marcus Riley</strong> is available Sat 10am — matches your training schedule.</div>
+      </div>
+      <div class="scroll-body" style="height:560px;">
+        <!-- Back nav -->
+        <div class="sub-header">
+          <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Home</div>
+          <div class="sub-title" style="font-size:14px;">Book a Mentor</div>
+        </div>
+        <div class="filter-row">
+          <div class="fchip active">All</div>
+          <div class="fchip">Soccer</div>
+          <div class="fchip">Basketball</div>
+          <div class="fchip">Football</div>
+          <div class="fchip">Speed &amp; Agility</div>
+        </div>
+        <div style="padding:4px 16px 6px;font-family:var(--font-mono);font-size:9px;letter-spacing:0.08em;color:var(--gray-disabled);text-transform:uppercase;">12 Mentors Available</div>
+
+        <div class="mentor-card" style="border-color:rgba(247,148,30,0.35);">
+          <div class="mentor-avatar" style="background:linear-gradient(135deg,var(--vai-orange),#c47210);">MR</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Marcus Riley</div>
+            <div class="mentor-sport">Soccer · Attacking Midfielder</div>
+            <div class="mentor-meta">
+              <span class="rating">★ 4.9</span>
+              <span class="slot-badge slot-open">4 OPEN</span>
+            </div>
+          </div>
+          <div class="mentor-price">$85<span style="font-size:11px;color:var(--gray-secondary);font-family:var(--font-dm);">/hr</span></div>
+        </div>
+
+        <div class="mentor-card">
+          <div class="mentor-avatar" style="background:linear-gradient(135deg,#5577DD,#3355bb);">TJ</div>
+          <div class="mentor-info">
+            <div class="mentor-name">T.J. Washington</div>
+            <div class="mentor-sport">Basketball · Guard Development</div>
+            <div class="mentor-meta">
+              <span class="rating">★ 4.8</span>
+              <span class="slot-badge slot-few">2 LEFT</span>
+            </div>
+          </div>
+          <div class="mentor-price">$110<span style="font-size:11px;color:var(--gray-secondary);font-family:var(--font-dm);">/hr</span></div>
+        </div>
+
+        <div class="mentor-card" style="opacity:0.55;">
+          <div class="mentor-avatar" style="background:linear-gradient(135deg,var(--gray-secondary),#555568);">AK</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Amara Kofi</div>
+            <div class="mentor-sport">Speed &amp; Agility · All Sports</div>
+            <div class="mentor-meta">
+              <span class="rating">★ 4.7</span>
+              <span class="slot-badge slot-full">FULL</span>
+            </div>
+          </div>
+          <div class="mentor-price" style="color:var(--gray-secondary);">$95<span style="font-size:11px;font-family:var(--font-dm);">/hr</span></div>
+        </div>
+
+        <div class="mentor-card">
+          <div class="mentor-avatar" style="background:linear-gradient(135deg,#34D399,#0D9E6A);">LP</div>
+          <div class="mentor-info">
+            <div class="mentor-name">Lisa Park</div>
+            <div class="mentor-sport">Football · Route Running</div>
+            <div class="mentor-meta">
+              <span class="rating">★ 5.0</span>
+              <span class="slot-badge slot-open">6 OPEN</span>
+            </div>
+          </div>
+          <div class="mentor-price">$75<span style="font-size:11px;color:var(--gray-secondary);font-family:var(--font-dm);">/hr</span></div>
+        </div>
+
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">→</div>
+
+  <!-- M2: Calendar picker -->
+  <div>
+    <div class="flow-label">M2 — Pick a Date</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg2)"/><defs><radialGradient id="vg2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+      </div>
+      <div class="scroll-body" style="height:640px;">
+        <div class="sub-header">
+          <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Mentors</div>
+          <div class="sub-title" style="font-size:14px;">Marcus Riley</div>
+        </div>
+        <!-- Mentor mini-profile -->
+        <div style="padding:14px 16px 0;display:flex;align-items:center;gap:12px;">
+          <div class="mentor-avatar" style="width:48px;height:48px;font-size:17px;background:linear-gradient(135deg,var(--vai-orange),#c47210);">MR</div>
+          <div>
+            <div style="font-family:var(--font-oswald);font-size:16px;font-weight:600;color:var(--gray-primary);">Marcus Riley</div>
+            <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);">Soccer · Attacking Midfielder</div>
+            <div style="display:flex;gap:8px;margin-top:4px;align-items:center;"><span style="font-family:var(--font-mono);font-size:10px;color:var(--vai-gold);">★ 4.9 · 148 sessions</span></div>
+          </div>
+          <div style="margin-left:auto;text-align:right;">
+            <div style="font-family:var(--font-oswald);font-size:20px;font-weight:700;color:var(--vai-orange);">$85</div>
+            <div style="font-family:var(--font-dm);font-size:10px;color:var(--gray-secondary);">per hour</div>
+          </div>
+        </div>
+
+        <div class="cal-wrap" style="margin-top:12px;">
+          <div style="display:flex;gap:8px;margin-bottom:10px;">
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);display:flex;align-items:center;gap:4px;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--vai-green);"></span> Open</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);display:flex;align-items:center;gap:4px;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--yellow);"></span> Few left</div>
+          </div>
+          <div class="cal-header">
+            <div class="cal-month">May 2026</div>
+            <div class="cal-nav">
+              <div class="cal-nav-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+              <div class="cal-nav-btn"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </div>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-dow">S</div><div class="cal-dow">M</div><div class="cal-dow">T</div><div class="cal-dow">W</div><div class="cal-dow">T</div><div class="cal-dow">F</div><div class="cal-dow">S</div>
+            <!-- Week 1 -->
+            <div class="cal-day past">27</div><div class="cal-day past">28</div><div class="cal-day past">29</div><div class="cal-day past">30</div><div class="cal-day today has-slots">1</div><div class="cal-day has-slots few-slots">2</div><div class="cal-day has-slots">3</div>
+            <!-- Week 2 -->
+            <div class="cal-day has-slots">4</div><div class="cal-day has-slots">5</div><div class="cal-day">6</div><div class="cal-day has-slots">7</div><div class="cal-day has-slots">8</div><div class="cal-day has-slots few-slots">9</div><div class="cal-day selected">10</div>
+            <!-- Week 3 -->
+            <div class="cal-day has-slots">11</div><div class="cal-day has-slots">12</div><div class="cal-day">13</div><div class="cal-day has-slots">14</div><div class="cal-day has-slots">15</div><div class="cal-day has-slots">16</div><div class="cal-day has-slots">17</div>
+            <!-- Week 4 -->
+            <div class="cal-day has-slots">18</div><div class="cal-day has-slots">19</div><div class="cal-day">20</div><div class="cal-day has-slots">21</div><div class="cal-day has-slots few-slots">22</div><div class="cal-day has-slots">23</div><div class="cal-day has-slots">24</div>
+            <!-- Week 5 -->
+            <div class="cal-day has-slots">25</div><div class="cal-day has-slots">26</div><div class="cal-day">27</div><div class="cal-day has-slots">28</div><div class="cal-day has-slots">29</div><div class="cal-day has-slots">30</div><div class="cal-day has-slots">31</div>
+          </div>
+        </div>
+        <div style="padding:0 16px;margin-top:4px;">
+          <div style="font-family:var(--font-oswald);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--vai-orange);margin-bottom:8px;">Saturday, May 10</div>
+          <button class="cta-btn cta-orange">See Available Times →</button>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">→</div>
+
+  <!-- M3: Time slot picker -->
+  <div>
+    <div class="flow-label">M3 — Pick a Time</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg3)"/><defs><radialGradient id="vg3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+      </div>
+      <div class="scroll-body" style="height:640px;">
+        <div class="sub-header">
+          <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> May 10</div>
+          <div class="sub-title" style="font-size:14px;">Select Time</div>
+        </div>
+        <div style="padding:10px 16px 4px;font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);">Marcus Riley · Sat May 10, 2026</div>
+
+        <div class="slot-list">
+          <div class="slot-section-lbl">Morning</div>
+          <div class="time-slot">
+            <div class="slot-time">7:00 AM</div>
+            <div style="flex:1;"><div class="slot-dur">60 min</div></div>
+            <div class="slot-avail"><span class="slot-badge slot-open">OPEN</span></div>
+            <div class="slot-radio"></div>
+          </div>
+          <div class="time-slot">
+            <div class="slot-time">8:00 AM</div>
+            <div style="flex:1;"><div class="slot-dur">60 min</div></div>
+            <div class="slot-avail"><span class="slot-badge slot-open">OPEN</span></div>
+            <div class="slot-radio"></div>
+          </div>
+          <div class="time-slot selected">
+            <div class="slot-time" style="color:var(--vai-orange);">10:00 AM</div>
+            <div style="flex:1;"><div class="slot-dur">60 min</div></div>
+            <div class="slot-avail"><span class="slot-badge slot-few">2 LEFT</span></div>
+            <div class="slot-radio checked"></div>
+          </div>
+
+          <div class="slot-section-lbl" style="margin-top:12px;">Afternoon</div>
+          <div class="time-slot">
+            <div class="slot-time">1:00 PM</div>
+            <div style="flex:1;"><div class="slot-dur">60 min</div></div>
+            <div class="slot-avail"><span class="slot-badge slot-open">OPEN</span></div>
+            <div class="slot-radio"></div>
+          </div>
+          <div class="time-slot">
+            <div class="slot-time">2:30 PM</div>
+            <div style="flex:1;"><div class="slot-dur">90 min</div></div>
+            <div class="slot-avail"><span class="slot-badge slot-open">OPEN</span></div>
+            <div class="slot-radio"></div>
+          </div>
+          <div class="time-slot full">
+            <div class="slot-time">4:00 PM</div>
+            <div style="flex:1;"><div class="slot-dur">60 min</div></div>
+            <div class="slot-avail"><span class="slot-badge slot-full">FULL</span></div>
+            <div class="slot-radio"></div>
+          </div>
+        </div>
+        <div style="padding:8px 16px 16px;">
+          <button class="cta-btn cta-orange">Continue → Confirm &amp; Pay</button>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">→</div>
+
+  <!-- M4: Confirm + Pay -->
+  <div>
+    <div class="flow-label">M4 — Confirm &amp; Pay</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg4)"/><defs><radialGradient id="vg4" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+      </div>
+      <div class="scroll-body" style="height:640px;">
+        <div class="sub-header">
+          <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Time</div>
+          <div class="sub-title" style="font-size:14px;">Confirm &amp; Pay</div>
+        </div>
+
+        <div class="confirm-section">
+          <!-- Countdown -->
+          <div class="countdown-banner">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--vai-orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div>
+              <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2px;">Slot held for</div>
+              <div class="countdown-clock">4:58</div>
+            </div>
+            <div class="countdown-text">Complete your booking before the slot is released.</div>
+          </div>
+
+          <!-- Session summary -->
+          <div class="confirm-card">
+            <div class="confirm-lbl-top">Session Details</div>
+            <div class="confirm-row">
+              <div class="confirm-label">Mentor</div>
+              <div class="confirm-value">Marcus Riley</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-label">Date</div>
+              <div class="confirm-value">Sat, May 10, 2026</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-label">Time</div>
+              <div class="confirm-value">10:00 AM – 11:00 AM</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-label">Type</div>
+              <div class="confirm-value">1-on-1 Training</div>
+            </div>
+            <div class="divider-line"></div>
+            <div class="confirm-row">
+              <div class="confirm-label">Session (1 hr)</div>
+              <div class="confirm-value">$85.00</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-label">VAI fee</div>
+              <div class="confirm-value">$4.25</div>
+            </div>
+            <div class="divider-line"></div>
+            <div class="confirm-row">
+              <div class="confirm-label" style="font-weight:700;color:var(--gray-primary);">Total</div>
+              <div class="price-total">$89.25</div>
+            </div>
+          </div>
+
+          <!-- Stripe payment -->
+          <div class="confirm-card">
+            <div class="confirm-lbl-top">Payment</div>
+            <div class="stripe-field" style="margin-bottom:8px;">
+              <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              <span>•••• •••• •••• 4242</span>
+              <div class="stripe-logo">stripe</div>
+            </div>
+            <div class="field-row">
+              <div class="stripe-field">05 / 28</div>
+              <div class="stripe-field">•••</div>
+            </div>
+          </div>
+
+          <button class="cta-btn cta-orange">Confirm Booking — $89.25</button>
+          <button class="cta-btn cta-outline">Cancel</button>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">→</div>
+
+  <!-- M5: Confirmed -->
+  <div>
+    <div class="flow-label">M5 — Booking Confirmed</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg5)"/><defs><radialGradient id="vg5" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+      </div>
+      <div class="scroll-body" style="height:640px;">
+        <div class="success-body">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="success-title">You're Booked!</div>
+          <div class="success-sub">Your session with Marcus Riley is confirmed.<br>Check your email for details.</div>
+
+          <div class="success-detail">
+            <div style="font-family:var(--font-oswald);font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-disabled);margin-bottom:8px;">Session Confirmed</div>
+            <div style="display:flex;justify-content:space-between;"><span style="font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);">Mentor</span><span style="font-family:var(--font-dm);font-size:12px;font-weight:600;color:var(--gray-primary);">Marcus Riley</span></div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;"><span style="font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);">Date</span><span style="font-family:var(--font-dm);font-size:12px;font-weight:600;color:var(--gray-primary);">Sat, May 10</span></div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;"><span style="font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);">Time</span><span style="font-family:var(--font-dm);font-size:12px;font-weight:600;color:var(--gray-primary);">10:00 – 11:00 AM</span></div>
+            <div style="height:1px;background:var(--border);margin:10px 0;"></div>
+            <div style="display:flex;justify-content:space-between;"><span style="font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);">Paid</span><span style="font-family:var(--font-oswald);font-size:15px;font-weight:700;color:var(--vai-orange);">$89.25</span></div>
+          </div>
+
+          <button class="cta-btn cta-outline" style="width:100%;">+ Add to Calendar</button>
+          <button class="cta-btn" style="width:100%;background:transparent;border:none;color:var(--gray-secondary);font-family:var(--font-dm);font-size:13px;padding:8px;cursor:pointer;">Share via iOS ↑</button>
+
+          <!-- AVANTI nudge -->
+          <div style="width:100%;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.25);border-radius:var(--r-md);padding:12px 14px;">
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;"><div class="a-dot" style="width:5px;height:5px;"></div><span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;color:var(--vai-green);">AVANTI</span></div>
+            <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-body);line-height:1.5;">I'll remind you 24hrs before and help you prep a training brief for Marcus.</div>
+          </div>
+
+          <button class="cta-btn cta-orange" style="width:100%;">Back to Home</button>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /flow-row -->
+
+<!-- ═══════════════════════════════════════════════
+     MENTOR MANAGEMENT
+═══════════════════════════════════════════════ -->
+<div class="section-hdr" style="margin-top:20px;">Mentor: Manage Calendar — M6 + M7</div>
+
+<div class="flow-row">
+
+  <!-- M6: Set availability -->
+  <div>
+    <div class="flow-label">M6 — Set Availability</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg6)"/><defs><radialGradient id="vg6" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+      </div>
+      <div class="scroll-body" style="height:640px;">
+        <div class="sub-header">
+          <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Calendar</div>
+          <div class="sub-title" style="font-size:14px;">My Availability</div>
+        </div>
+
+        <div class="earn-card">
+          <div style="font-family:var(--font-oswald);font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-disabled);margin-bottom:10px;">This Week</div>
+          <div class="earn-row">
+            <div class="earn-item">
+              <div class="earn-lbl">Open Slots</div>
+              <div class="earn-val" style="color:var(--vai-green);font-size:22px;">14</div>
+            </div>
+            <div class="earn-item">
+              <div class="earn-lbl">Booked</div>
+              <div class="earn-val" style="font-size:22px;">6</div>
+            </div>
+            <div class="earn-item">
+              <div class="earn-lbl">Earnings</div>
+              <div class="earn-val" style="font-size:22px;">$510</div>
+              <div class="earn-sub">this week</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 16px 4px;font-family:var(--font-oswald);font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--gray-disabled);">Weekly Schedule</div>
+
+        <div class="avail-day">
+          <div class="avail-day-header">
+            <div class="avail-day-name">Monday</div>
+            <div class="toggle on"></div>
+          </div>
+          <div class="avail-slots">
+            <div class="avail-slot-chip on">7:00 AM</div>
+            <div class="avail-slot-chip on">8:00 AM</div>
+            <div class="avail-slot-chip on">10:00 AM</div>
+            <div class="avail-slot-chip">4:00 PM</div>
+            <div class="add-slot"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add</div>
+          </div>
+        </div>
+
+        <div class="avail-day">
+          <div class="avail-day-header">
+            <div class="avail-day-name">Tuesday</div>
+            <div class="toggle"></div>
+          </div>
+          <div style="padding:8px 14px 10px;font-family:var(--font-dm);font-size:11px;color:var(--gray-disabled);">Not available — toggle to enable</div>
+        </div>
+
+        <div class="avail-day">
+          <div class="avail-day-header">
+            <div class="avail-day-name">Wednesday</div>
+            <div class="toggle on"></div>
+          </div>
+          <div class="avail-slots">
+            <div class="avail-slot-chip on">9:00 AM</div>
+            <div class="avail-slot-chip on">11:00 AM</div>
+            <div class="avail-slot-chip on">1:00 PM</div>
+            <div class="add-slot"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add</div>
+          </div>
+        </div>
+
+        <div class="avail-day">
+          <div class="avail-day-header">
+            <div class="avail-day-name">Saturday</div>
+            <div class="toggle on"></div>
+          </div>
+          <div class="avail-slots">
+            <div class="avail-slot-chip on">7:00 AM</div>
+            <div class="avail-slot-chip on">8:00 AM</div>
+            <div class="avail-slot-chip on">10:00 AM</div>
+            <div class="avail-slot-chip on">1:00 PM</div>
+            <div class="avail-slot-chip on">2:30 PM</div>
+            <div class="add-slot"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add</div>
+          </div>
+        </div>
+
+        <div style="padding:14px 16px;">
+          <button class="cta-btn cta-orange">Save Availability</button>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow" style="padding-top:120px;">↔</div>
+
+  <!-- M7: Booking requests -->
+  <div>
+    <div class="flow-label">M7 — Booking Requests</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#vg7)"/><defs><radialGradient id="vg7" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="avanti-ind"><div class="a-dot"></div>AVANTI</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div style="position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--vai-orange);border:1px solid var(--void-black);"></div></div>
+        </div>
+      </div>
+      <div class="avanti-strip">
+        <div class="strip-row"><div class="a-dot" style="width:5px;height:5px;"></div><span class="strip-lbl">AVANTI</span></div>
+        <div class="strip-msg"><strong style="color:var(--gray-primary)">2 new requests</strong> from Jalen &amp; Sofia — this Saturday at 10am.</div>
+      </div>
+      <div class="scroll-body" style="height:576px;">
+        <div class="sub-header">
+          <div class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Calendar</div>
+          <div class="sub-title" style="font-size:14px;">Requests</div>
+          <div style="margin-left:auto;background:var(--vai-orange);border-radius:var(--r-full);padding:2px 8px;font-family:var(--font-mono);font-size:10px;font-weight:700;color:#000;">3 NEW</div>
+        </div>
+
+        <div style="padding:10px 16px 4px;font-family:var(--font-oswald);font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-disabled);">Pending Action</div>
+
+        <div class="req-card">
+          <div class="req-top">
+            <div class="req-avatar" style="background:linear-gradient(135deg,#5577DD,#3355bb);">JM</div>
+            <div>
+              <div class="req-name">Jalen Monroe</div>
+              <div class="req-time">Sat May 10 · 10:00 AM · 60 min</div>
+            </div>
+            <div class="req-status"><div class="status-pill sp-pending">PENDING</div></div>
+          </div>
+          <div class="req-actions">
+            <div class="req-btn rb-accept">Accept</div>
+            <div class="req-btn rb-decline">Decline</div>
+          </div>
+        </div>
+
+        <div class="req-card">
+          <div class="req-top">
+            <div class="req-avatar" style="background:linear-gradient(135deg,#FF6B6B,#cc3030);">SL</div>
+            <div>
+              <div class="req-name">Sofia Liu</div>
+              <div class="req-time">Sat May 10 · 10:00 AM · 60 min</div>
+            </div>
+            <div class="req-status"><div class="status-pill sp-pending">PENDING</div></div>
+          </div>
+          <div class="req-actions">
+            <div class="req-btn rb-accept">Accept</div>
+            <div class="req-btn rb-decline">Decline</div>
+          </div>
+        </div>
+
+        <div style="padding:10px 16px 4px;font-family:var(--font-oswald);font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray-disabled);margin-top:6px;">Upcoming</div>
+
+        <div class="req-card" style="opacity:0.7;">
+          <div class="req-top">
+            <div class="req-avatar" style="background:linear-gradient(135deg,var(--vai-green),#0D9E6A);">DP</div>
+            <div>
+              <div class="req-name">Darius Powell</div>
+              <div class="req-time">Wed May 7 · 9:00 AM · 60 min</div>
+            </div>
+            <div class="req-status"><div class="status-pill sp-confirmed">CONFIRMED</div></div>
+          </div>
+        </div>
+
+        <div class="req-card" style="opacity:0.7;">
+          <div class="req-top">
+            <div class="req-avatar" style="background:linear-gradient(135deg,var(--vai-gold),#c4a870);">AJ</div>
+            <div>
+              <div class="req-name">Alex Jenkins</div>
+              <div class="req-time">Mon May 5 · 7:00 AM · 60 min</div>
+            </div>
+            <div class="req-status"><div class="status-pill sp-confirmed">CONFIRMED</div></div>
+          </div>
+        </div>
+
+        <div class="req-card" style="opacity:0.55;">
+          <div class="req-top">
+            <div class="req-avatar" style="background:var(--elevated);color:var(--gray-disabled);font-family:var(--font-oswald);font-size:13px;font-weight:600;">TK</div>
+            <div>
+              <div class="req-name">Tyler King</div>
+              <div class="req-time">Sun May 4 · 1:00 PM · 60 min</div>
+            </div>
+            <div class="req-status"><div class="status-pill sp-cancelled">CANCELLED</div></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /mentor flow row -->
+
+<!-- ═══════════════════════════════════════════════
+     GAMEDAY D4 — MENTOR DASHBOARD
+═══════════════════════════════════════════════ -->
+<div class="section-divider"></div>
+<div class="section-hdr">GAMEDAY Web — D4 Mentor Dashboard</div>
+
+<div class="browser">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+    <div class="browser-url">gameday.vai.app/mentor/dashboard</div>
+  </div>
+  <div class="gd-app">
+
+    <!-- Sidebar -->
+    <div class="gd-sidebar">
+      <div class="gd-sidebar-logo">GAMEDAY</div>
+      <div class="gd-sec-lbl">Club OS</div>
+      <div class="gd-nav-item">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+        Overview
+      </div>
+      <div class="gd-nav-item">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        Roster
+      </div>
+      <div class="gd-nav-item">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        Schedule
+      </div>
+      <div class="gd-nav-item active">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        Mentor
+        <div class="gd-badge">3</div>
+      </div>
+      <div class="gd-nav-item">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+        Compliance
+      </div>
+      <div class="gd-nav-item">
+        <div class="gd-nav-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        Finances
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="gd-main">
+      <div class="gd-topbar">
+        <div class="gd-topbar-title">MENTOR</div>
+        <div class="gd-topbar-sep"></div>
+        <div class="gd-topbar-ctx">Marcus Riley · VAI FC North</div>
+        <div class="gd-topbar-right">
+          <div class="gd-avanti-pill"><div class="gd-avanti-dot"></div>AVANTI ON</div>
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--vai-orange),#c47210);display:flex;align-items:center;justify-content:center;font-family:var(--font-oswald);font-size:13px;font-weight:700;color:#000;">MR</div>
+        </div>
+      </div>
+
+      <!-- AVANTI strip -->
+      <div style="background:rgba(52,211,153,0.04);border-bottom:1px solid rgba(52,211,153,0.15);padding:10px 20px;display:flex;align-items:center;gap:10px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--vai-green);animation:glow 2s ease-in-out infinite;"></div>
+        <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:0.1em;color:var(--vai-green);">AVANTI</span>
+        <span style="font-family:var(--font-dm);font-size:13px;color:#C8BFB8;">2 new booking requests this week — Saturday 10am has 2 overlapping requests. Review and accept one.</span>
+        <div style="margin-left:auto;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:999px;padding:4px 12px;font-family:var(--font-mono);font-size:10px;font-weight:700;color:var(--yellow);cursor:pointer;">Review →</div>
+      </div>
+
+      <div class="gd-content">
+
+        <!-- Earnings stat row -->
+        <div class="gd-stat-row">
+          <div class="gd-stat-card orange">
+            <div class="gd-stat-label">This Month</div>
+            <div class="gd-stat-val">$2,380</div>
+            <div class="gd-stat-sub">28 sessions completed</div>
+          </div>
+          <div class="gd-stat-card orange">
+            <div class="gd-stat-label">This Year</div>
+            <div class="gd-stat-val">$14,620</div>
+            <div class="gd-stat-sub">through Apr 2026</div>
+          </div>
+          <div class="gd-stat-card">
+            <div class="gd-stat-label">Pending Payout</div>
+            <div class="gd-stat-val" style="color:var(--vai-green);">$680</div>
+            <div class="gd-stat-sub">processes May 8</div>
+          </div>
+          <div class="gd-stat-card">
+            <div class="gd-stat-label">Rating</div>
+            <div class="gd-stat-val" style="color:var(--vai-gold);">4.9</div>
+            <div class="gd-stat-sub">148 sessions · 96% repeat</div>
+          </div>
+        </div>
+
+        <!-- Booking requests + Calendar integration -->
+        <div class="gd-row">
+          <!-- Booking requests table -->
+          <div class="gd-card">
+            <div class="gd-card-header">
+              <div class="gd-card-title">Booking Requests</div>
+              <div class="gd-card-action">View all</div>
+            </div>
+            <table class="gd-table">
+              <thead>
+                <tr>
+                  <th>Athlete</th>
+                  <th>Date / Time</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="td-name">Jalen Monroe</td>
+                  <td>Sat May 10 · 10am</td>
+                  <td>1-on-1</td>
+                  <td><span class="gd-pill yellow">PENDING</span></td>
+                  <td style="display:flex;gap:6px;"><div style="padding:4px 10px;background:var(--vai-green);border-radius:4px;font-family:var(--font-dm);font-size:11px;font-weight:600;color:#000;cursor:pointer;">Accept</div><div style="padding:4px 10px;background:#1E1B18;border:1px solid #2A2520;border-radius:4px;font-family:var(--font-dm);font-size:11px;color:#6B605A;cursor:pointer;">Decline</div></td>
+                </tr>
+                <tr>
+                  <td class="td-name">Sofia Liu</td>
+                  <td>Sat May 10 · 10am</td>
+                  <td>1-on-1</td>
+                  <td><span class="gd-pill yellow">PENDING</span></td>
+                  <td style="display:flex;gap:6px;"><div style="padding:4px 10px;background:var(--vai-green);border-radius:4px;font-family:var(--font-dm);font-size:11px;font-weight:600;color:#000;cursor:pointer;">Accept</div><div style="padding:4px 10px;background:#1E1B18;border:1px solid #2A2520;border-radius:4px;font-family:var(--font-dm);font-size:11px;color:#6B605A;cursor:pointer;">Decline</div></td>
+                </tr>
+                <tr>
+                  <td class="td-name">Darius Powell</td>
+                  <td>Wed May 7 · 9am</td>
+                  <td>1-on-1</td>
+                  <td><span class="gd-pill green">CONFIRMED</span></td>
+                  <td><span style="font-family:var(--font-dm);font-size:11px;color:#6B605A;">Session in 2 days</span></td>
+                </tr>
+                <tr>
+                  <td class="td-name">Alex Jenkins</td>
+                  <td>Mon May 5 · 7am</td>
+                  <td>1-on-1</td>
+                  <td><span class="gd-pill green">CONFIRMED</span></td>
+                  <td><span style="font-family:var(--font-dm);font-size:11px;color:#6B605A;">Tomorrow</span></td>
+                </tr>
+                <tr>
+                  <td class="td-name">Tyler King</td>
+                  <td>Sun May 4 · 1pm</td>
+                  <td>Group</td>
+                  <td><span class="gd-pill red">CANCELLED</span></td>
+                  <td><span style="font-family:var(--font-dm);font-size:11px;color:#6B605A;">Refunded</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Availability + calendar integration -->
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="gd-card">
+              <div class="gd-card-header">
+                <div class="gd-card-title">Weekly Availability</div>
+                <div class="gd-card-action">Edit slots</div>
+              </div>
+              <div class="avail-grid">
+                <div class="avail-col"><div class="avail-col-day">MON</div><div class="avail-slot-box active">7AM</div><div class="avail-slot-box active">8AM</div><div class="avail-slot-box active">10AM</div><div class="avail-slot-box add">+</div></div>
+                <div class="avail-col"><div class="avail-col-day">TUE</div><div class="avail-slot-box" style="opacity:0.3;">OFF</div></div>
+                <div class="avail-col"><div class="avail-col-day">WED</div><div class="avail-slot-box active">9AM</div><div class="avail-slot-box active">11AM</div><div class="avail-slot-box active">1PM</div><div class="avail-slot-box add">+</div></div>
+                <div class="avail-col"><div class="avail-col-day">THU</div><div class="avail-slot-box" style="opacity:0.3;">OFF</div></div>
+                <div class="avail-col"><div class="avail-col-day">FRI</div><div class="avail-slot-box active">7AM</div><div class="avail-slot-box active">8AM</div><div class="avail-slot-box add">+</div></div>
+                <div class="avail-col"><div class="avail-col-day">SAT</div><div class="avail-slot-box active">7AM</div><div class="avail-slot-box active">8AM</div><div class="avail-slot-box active">10AM</div><div class="avail-slot-box active">1PM</div><div class="avail-slot-box active">2:30</div></div>
+                <div class="avail-col"><div class="avail-col-day">SUN</div><div class="avail-slot-box" style="opacity:0.3;">OFF</div></div>
+              </div>
+            </div>
+
+            <div class="gd-card">
+              <div class="gd-card-header">
+                <div class="gd-card-title">Calendar Integration</div>
+                <div class="gd-card-action">Manage</div>
+              </div>
+              <div class="cal-int-row">
+                <div class="cal-int-card">
+                  <div class="cal-int-icon" style="background:#0A1A30;">📅</div>
+                  <div><div class="cal-int-name">Google Calendar</div><div class="cal-int-status">Synced · 2 min ago</div></div>
+                  <div class="cal-int-toggle"><div class="cal-int-on"></div></div>
+                </div>
+                <div class="cal-int-card">
+                  <div class="cal-int-icon" style="background:#1A0A0A;">🍎</div>
+                  <div><div class="cal-int-name">Apple Calendar</div><div class="cal-int-status">Not connected</div></div>
+                  <div class="cal-int-toggle"><div class="cal-int-off"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /gd-content -->
+    </div><!-- /gd-main -->
+  </div><!-- /gd-app -->
+</div><!-- /browser -->
+
+<div style="text-align:center;padding:32px 0 0;font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);letter-spacing:0.08em;">VAI — MENTOR CALENDAR · PR6 · All screens locked</div>
+
+</body>
+</html>
