@@ -1,0 +1,2563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI Club OS — Phase 1 Locked Concepts (Mockups)</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #080808;
+  color: #e8e8e8;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  padding: 48px 24px 80px;
+}
+
+/* ── HEADER ── */
+.doc-header { text-align: center; margin-bottom: 72px; max-width: 900px; margin-left: auto; margin-right: auto; }
+.doc-header .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #4CAF7D; margin-bottom: 14px; }
+.doc-header h1 { font-size: 44px; font-weight: 800; color: #fff; line-height: 1.08; margin-bottom: 20px; letter-spacing: -0.02em; }
+.doc-header h1 span { color: #4CAF7D; }
+.doc-header .sub { color: #888; font-size: 17px; line-height: 1.5; margin-bottom: 8px; }
+.doc-header .meta { color: #444; font-size: 13px; letter-spacing: 0.05em; }
+
+/* ── SECTION ── */
+.section { max-width: 1200px; margin: 0 auto 96px; }
+.section-header { text-align: center; margin-bottom: 40px; }
+.section-header .layer-tag { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 0.15em; color: #4CAF7D; margin-bottom: 10px; padding: 4px 14px; background: #0f2a18; border: 1px solid #1a5a2a; border-radius: 20px; text-transform: uppercase; }
+.section-header h2 { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 10px; letter-spacing: -0.02em; }
+.section-header .tag-line { font-size: 15px; color: #888; max-width: 700px; margin: 0 auto; line-height: 1.5; }
+
+/* ── LAYER STACK HERO ── */
+.layer-stack { display: flex; flex-direction: column; gap: 10px; max-width: 720px; margin: 0 auto; }
+.layer {
+  background: linear-gradient(90deg, #0f1a14 0%, #0a0a0a 100%);
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.layer::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #4CAF7D; }
+.layer .num { font-size: 36px; font-weight: 800; color: #333; font-variant-numeric: tabular-nums; width: 48px; flex-shrink: 0; }
+.layer .body { flex: 1; }
+.layer .name { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.layer .role { font-size: 13px; color: #888; line-height: 1.4; }
+.layer .surface { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #4CAF7D; padding: 6px 12px; background: #0f2a18; border-radius: 6px; text-transform: uppercase; white-space: nowrap; }
+.layer.l4 .surface { color: #f0a500; background: #2a1e0a; }
+
+/* ── PHONE FRAMES ── */
+.phone-rail {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 24px 8px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  justify-content: flex-start;
+}
+.phone-rail::-webkit-scrollbar { display: none; }
+.phone-rail.centered { justify-content: center; flex-wrap: wrap; }
+
+.phone {
+  width: 220px;
+  background: #0a0a0a;
+  border-radius: 28px;
+  border: 1.5px solid #2a2a2a;
+  overflow: hidden;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+.phone.green { border-color: #2a5c3e; box-shadow: 0 0 0 2px rgba(76,175,125,0.15), 0 8px 32px rgba(0,0,0,0.6); }
+.phone.orange { border-color: #5c4a15; box-shadow: 0 0 0 2px rgba(240,165,0,0.15), 0 8px 32px rgba(0,0,0,0.6); }
+.phone.red { border-color: #5c2a2a; box-shadow: 0 0 0 2px rgba(255,107,107,0.15), 0 8px 32px rgba(0,0,0,0.6); }
+
+.phone-notch { height: 18px; background: #000; display: flex; align-items: center; justify-content: center; }
+.phone-notch::after { content: ''; width: 60px; height: 4px; background: #1a1a1a; border-radius: 4px; }
+
+.phone-screen { background: #0f0f10; min-height: 380px; padding: 14px; display: flex; flex-direction: column; }
+
+.phone-label {
+  text-align: center;
+  font-size: 11px;
+  color: #666;
+  margin-top: 14px;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.phone-label .actor { display: block; color: #4CAF7D; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 4px; }
+.phone-label.orange .actor { color: #f0a500; }
+
+/* ── STATUS CARDS (inside phone screens) ── */
+.status-card {
+  background: #141415;
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid #222;
+  margin-bottom: 10px;
+}
+.status-card .athlete-name { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+.status-card .athlete-sub { font-size: 10px; color: #666; letter-spacing: 0.05em; }
+.status-card .green-line-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #1f1f20;
+}
+.status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.status-dot.green { background: #4CAF7D; box-shadow: 0 0 8px rgba(76,175,125,0.5); }
+.status-dot.orange { background: #f0a500; box-shadow: 0 0 8px rgba(240,165,0,0.5); }
+.status-dot.red { background: #ff6b6b; box-shadow: 0 0 8px rgba(255,107,107,0.5); }
+.status-text { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; }
+.status-text.green { color: #4CAF7D; }
+.status-text.orange { color: #f0a500; }
+.status-text.red { color: #ff6b6b; }
+
+.status-reason { font-size: 10px; color: #888; margin-top: 6px; line-height: 1.4; }
+
+.status-card .cta {
+  margin-top: 10px;
+  background: #f0a500;
+  color: #000;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+.status-card .cta.green { background: #4CAF7D; }
+.status-card .cta.red { background: #ff6b6b; color: #fff; }
+
+/* ── GRAPH VISUAL ── */
+.graph-wrap { position: relative; max-width: 680px; margin: 32px auto; padding: 40px 0; min-height: 520px; }
+.graph-node {
+  position: absolute;
+  background: #0f0f10;
+  border: 1.5px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 10px 14px;
+  text-align: center;
+  min-width: 120px;
+}
+.graph-node .label { font-size: 9px; color: #4CAF7D; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
+.graph-node .value { font-size: 12px; color: #fff; font-weight: 600; }
+.graph-node .sub { font-size: 10px; color: #666; margin-top: 2px; }
+.graph-node.root {
+  background: linear-gradient(135deg, #0f2a18 0%, #0a0a0a 100%);
+  border-color: #4CAF7D;
+  box-shadow: 0 0 24px rgba(76,175,125,0.25);
+  min-width: 180px;
+  padding: 18px 20px;
+  z-index: 10;
+}
+.graph-node.root .label { color: #4CAF7D; font-size: 10px; }
+.graph-node.root .value { font-size: 16px; }
+.graph-node.root .sub { font-size: 11px; color: #888; margin-top: 4px; }
+
+/* Graph SVG lines */
+.graph-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
+/* Graph node positions */
+.graph-node.n-root { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.graph-node.n-waivers { top: 0; left: 8%; }
+.graph-node.n-medical { top: 0; right: 8%; }
+.graph-node.n-payments { top: 38%; left: 0; }
+.graph-node.n-eligibility { top: 38%; right: 0; }
+.graph-node.n-grants-club1 { bottom: 0; left: 5%; }
+.graph-node.n-grants-club2 { bottom: 0; left: 50%; transform: translateX(-50%); }
+.graph-node.n-grants-scout { bottom: 0; right: 5%; }
+
+/* ── FLOW ARROW ── */
+.flow-explainer {
+  margin-top: 32px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 24px 28px;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 14px;
+  text-align: center;
+}
+.flow-explainer .result { font-size: 18px; color: #fff; font-weight: 700; margin-bottom: 8px; }
+.flow-explainer .result span { color: #4CAF7D; }
+.flow-explainer .detail { font-size: 13px; color: #888; line-height: 1.5; }
+
+/* ── GAMEDAY DESKTOP MOCKUP ── */
+.desktop-frame {
+  max-width: 1040px;
+  margin: 0 auto;
+  background: #0a0a0a;
+  border-radius: 16px;
+  border: 1.5px solid #2a2a2a;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.8);
+}
+.desktop-chrome {
+  background: #141415;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 8px;
+  border-bottom: 1px solid #222;
+}
+.chrome-dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
+.chrome-dot:nth-child(1) { background: #ff5f57; }
+.chrome-dot:nth-child(2) { background: #febc2e; }
+.chrome-dot:nth-child(3) { background: #28c840; }
+.chrome-url { flex: 1; text-align: center; font-size: 11px; color: #666; font-family: 'SF Mono', Monaco, monospace; }
+
+.desktop-body { padding: 28px 32px; background: #0a0a0a; min-height: 560px; }
+
+.gameday-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #1a1a1a;
+}
+.gameday-title { font-size: 22px; font-weight: 800; color: #fff; }
+.gameday-title span { color: #4CAF7D; }
+.gameday-badges { display: flex; gap: 10px; }
+.gameday-badge {
+  background: #0f2a18;
+  color: #4CAF7D;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.gameday-badge.warn { background: #2a1e0a; color: #f0a500; }
+.gameday-badge.alert { background: #3a0f0f; color: #ff6b6b; }
+
+.gameday-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 28px;
+}
+
+.queue-section .queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.queue-section .queue-title { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.05em; }
+.queue-section .queue-count { font-size: 11px; color: #f0a500; font-weight: 700; }
+
+.exception-card {
+  background: #141415;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+.exception-card .ex-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.exception-card .ex-meta { font-size: 10px; color: #666; margin-bottom: 10px; letter-spacing: 0.03em; }
+.exception-card .ex-avanti {
+  background: #0a0a0a;
+  border-left: 2px solid #4CAF7D;
+  padding: 10px 12px;
+  font-size: 11px;
+  color: #aaa;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  border-radius: 0 6px 6px 0;
+}
+.exception-card .ex-avanti strong { color: #4CAF7D; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+.exception-card .ex-actions { display: flex; gap: 8px; }
+.ex-btn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #2a2a2a;
+}
+.ex-btn.primary { background: #4CAF7D; color: #000; border-color: #4CAF7D; }
+.ex-btn.secondary { background: transparent; color: #aaa; }
+
+.empty-state {
+  background: #0a1a0f;
+  border: 1px dashed #1a5a2a;
+  border-radius: 10px;
+  padding: 32px 20px;
+  text-align: center;
+}
+.empty-state .check { font-size: 32px; color: #4CAF7D; margin-bottom: 10px; }
+.empty-state .msg { font-size: 13px; color: #4CAF7D; font-weight: 600; margin-bottom: 4px; }
+.empty-state .sub { font-size: 11px; color: #555; }
+
+.green-line-overview {
+  background: #141415;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 18px;
+}
+.green-line-overview h4 { font-size: 12px; color: #888; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; font-weight: 700; }
+.metric-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: #1a1a1a;
+}
+.metric-bar .bar-green { background: #4CAF7D; }
+.metric-bar .bar-orange { background: #f0a500; }
+.metric-bar .bar-red { background: #ff6b6b; }
+
+.metric-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 12px; border-bottom: 1px solid #1a1a1a; }
+.metric-row:last-child { border-bottom: none; }
+.metric-row .m-label { display: flex; align-items: center; gap: 8px; color: #aaa; }
+.metric-row .m-value { color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ── AVANTI CONVERSATION MOCKUP ── */
+.chat-ui { padding: 4px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.chat-bubble { padding: 10px 12px; border-radius: 14px; font-size: 11px; line-height: 1.5; max-width: 85%; }
+.chat-bubble.user { background: #2a2a2a; color: #eee; align-self: flex-end; border-bottom-right-radius: 4px; }
+.chat-bubble.avanti { background: #0f2a18; color: #e0f5e9; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid #1a5a2a; }
+.chat-bubble.avanti .actor { font-size: 9px; color: #4CAF7D; font-weight: 800; letter-spacing: 0.15em; margin-bottom: 4px; }
+.chat-bubble.action {
+  background: #f0a500;
+  color: #000;
+  align-self: stretch;
+  text-align: center;
+  font-weight: 700;
+  max-width: 100%;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+/* ── PUSH NOTIFICATION MOCKUP ── */
+.push-notif {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin: 20px 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.push-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.push-icon { width: 20px; height: 20px; border-radius: 5px; background: #4CAF7D; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #000; }
+.push-app { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.1em; }
+.push-time { margin-left: auto; font-size: 10px; color: rgba(255,255,255,0.5); }
+.push-title { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+.push-body { font-size: 11px; color: rgba(255,255,255,0.7); line-height: 1.4; }
+
+/* ── WAIVER FLOW ── */
+.waiver-header { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #222; }
+.waiver-body { font-size: 10px; color: #888; line-height: 1.5; margin-bottom: 14px; flex: 1; }
+.waiver-body strong { color: #ccc; }
+.sign-area {
+  background: #0a0a0a;
+  border: 2px dashed #2a2a2a;
+  border-radius: 10px;
+  padding: 20px 12px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.sign-area.signed { background: #0f2a18; border-color: #4CAF7D; border-style: solid; }
+.sign-area .sig-label { font-size: 9px; color: #666; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+.sign-area .sig-value { font-size: 16px; font-family: 'Brush Script MT', cursive; color: #fff; }
+.sign-area.signed .sig-value { color: #4CAF7D; }
+
+.biometric-btn {
+  background: linear-gradient(135deg, #f0a500 0%, #cc8a00 100%);
+  color: #000;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+/* ── ROSTER VIEW (Coach) ── */
+.roster-header { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+.roster-header .count { font-size: 10px; color: #666; font-weight: 500; }
+.roster-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  border-bottom: 1px solid #1a1a1a;
+}
+.roster-row:last-child { border-bottom: none; }
+.roster-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #4a4a4a, #1a1a1a); flex-shrink: 0; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #888; }
+.roster-avatar.green { border-color: #4CAF7D; }
+.roster-avatar.orange { border-color: #f0a500; }
+.roster-avatar.red { border-color: #ff6b6b; }
+.roster-name { flex: 1; }
+.roster-name .n-name { font-size: 11px; color: #fff; font-weight: 600; }
+.roster-name .n-pos { font-size: 9px; color: #666; letter-spacing: 0.05em; }
+.roster-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── PASSPORT VIEW ── */
+.passport-hero {
+  background: linear-gradient(135deg, #0f2a18 0%, #0a1a0f 100%);
+  border: 1px solid #1a5a2a;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.passport-hero .p-label { font-size: 9px; color: #4CAF7D; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+.passport-hero .p-name { font-size: 14px; color: #fff; font-weight: 800; margin-bottom: 3px; }
+.passport-hero .p-meta { font-size: 10px; color: #888; }
+.passport-hero .p-green-line { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #1a5a2a; }
+.passport-hero .p-green-line .txt { font-size: 11px; color: #4CAF7D; font-weight: 700; letter-spacing: 0.03em; }
+
+.passport-section { margin-bottom: 8px; }
+.passport-section .sec-title { font-size: 9px; color: #666; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; }
+.grant-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  background: #141415;
+  border-radius: 8px;
+  border: 1px solid #1f1f20;
+  margin-bottom: 4px;
+}
+.grant-row .g-info .g-name { font-size: 11px; color: #fff; font-weight: 600; }
+.grant-row .g-info .g-scope { font-size: 9px; color: #666; margin-top: 1px; }
+.grant-row .g-expiry { font-size: 9px; color: #888; font-family: 'SF Mono', monospace; }
+.grant-row.expiring { border-color: #5c4a15; background: #1a1408; }
+.grant-row.expiring .g-expiry { color: #f0a500; }
+
+/* ── STEP INDICATOR ── */
+.step-num {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f0f10;
+  border: 2px solid #4CAF7D;
+  color: #4CAF7D;
+  font-size: 12px;
+  font-weight: 800;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.phone-wrap { position: relative; padding-top: 16px; }
+
+/* ── FINAL NOTE ── */
+.build-note {
+  max-width: 960px;
+  margin: 80px auto 0;
+  padding: 36px 40px;
+  background: linear-gradient(135deg, #0f2a18 0%, #0a0a0a 100%);
+  border: 1px solid #1a5a2a;
+  border-radius: 18px;
+}
+.build-note h3 { font-size: 22px; color: #fff; margin-bottom: 18px; font-weight: 800; }
+.build-note h3 span { color: #4CAF7D; }
+.build-note .columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.build-col h4 { font-size: 11px; color: #4CAF7D; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; font-weight: 700; }
+.build-col ul { list-style: none; padding: 0; }
+.build-col li { font-size: 12px; color: #aaa; padding: 6px 0; border-bottom: 1px solid #1a1a1a; line-height: 1.5; }
+.build-col li:last-child { border-bottom: none; }
+.build-col li strong { color: #fff; font-weight: 600; }
+
+/* ── GAMEDAY NAV ── */
+.gameday-nav {
+  display: flex;
+  gap: 2px;
+  background: #141415;
+  border-bottom: 1px solid #222;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 14px;
+}
+.gameday-nav::-webkit-scrollbar { display: none; }
+.gameday-tab {
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #666;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+.gameday-tab.active { color: #4CAF7D; border-bottom-color: #4CAF7D; }
+.gameday-tab:hover { color: #aaa; }
+.gameday-tab .count { font-size: 9px; background: #2a2a2a; color: #aaa; padding: 2px 6px; border-radius: 10px; margin-left: 6px; font-weight: 700; }
+.gameday-tab.active .count { background: #0f2a18; color: #4CAF7D; }
+
+/* ── COLLABORATOR AVATARS (multiplayer) ── */
+.collab-stack { display: flex; align-items: center; gap: 0; }
+.collab-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  margin-left: -8px;
+}
+.collab-avatar:first-child { margin-left: 0; }
+.collab-avatar.a1 { background: linear-gradient(135deg, #4CAF7D, #2a8c5d); }
+.collab-avatar.a2 { background: linear-gradient(135deg, #f0a500, #c08500); }
+.collab-avatar.a3 { background: linear-gradient(135deg, #8855dd, #5533aa); }
+.collab-avatar.a4 { background: linear-gradient(135deg, #dd5555, #aa3333); }
+.collab-avatar.live { box-shadow: 0 0 0 2px #4CAF7D, 0 0 8px rgba(76,175,125,0.5); }
+
+/* ── BRACKET CANVAS ── */
+.bracket-canvas {
+  background: #050505;
+  border-radius: 12px;
+  padding: 24px 20px;
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.bracket-canvas::-webkit-scrollbar { height: 6px; }
+.bracket-canvas::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+
+.bracket-grid {
+  display: flex;
+  gap: 50px;
+  min-width: 860px;
+  align-items: stretch;
+  padding: 0 8px;
+}
+.bracket-round {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex: 1;
+  position: relative;
+  min-width: 180px;
+}
+.bracket-round-label {
+  position: absolute;
+  top: -24px;
+  left: 0;
+  font-size: 10px;
+  font-weight: 800;
+  color: #4CAF7D;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.bracket-match {
+  background: #141415;
+  border: 1px solid #222;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 12px 0;
+  position: relative;
+  transition: all 0.2s;
+}
+.bracket-match.editing { border-color: #4CAF7D; box-shadow: 0 0 0 2px rgba(76,175,125,0.2); }
+.bracket-match .match-time {
+  font-size: 9px;
+  color: #666;
+  padding: 5px 10px;
+  background: #0a0a0a;
+  border-bottom: 1px solid #1a1a1a;
+  letter-spacing: 0.05em;
+  text-align: center;
+  font-family: 'SF Mono', Monaco, monospace;
+}
+.bracket-team {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-bottom: 1px solid #1a1a1a;
+  position: relative;
+}
+.bracket-team:last-child { border-bottom: none; }
+.bracket-team .seed { font-size: 9px; color: #666; width: 16px; font-family: 'SF Mono', monospace; }
+.bracket-team .tm-name { flex: 1; font-size: 11px; color: #ccc; font-weight: 600; }
+.bracket-team .tm-score { font-size: 12px; color: #888; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 20px; text-align: right; }
+.bracket-team.winner { background: #0a1a0f; }
+.bracket-team.winner .tm-name { color: #4CAF7D; }
+.bracket-team.winner .tm-score { color: #4CAF7D; }
+.bracket-team .gl-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.bracket-live-badge {
+  position: absolute;
+  top: -7px;
+  right: 8px;
+  background: #ff4444;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.12em;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.bracket-cursor {
+  position: absolute;
+  pointer-events: none;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+  background: #f0a500;
+  padding: 3px 7px;
+  border-radius: 4px 4px 4px 0;
+  white-space: nowrap;
+  z-index: 20;
+}
+.bracket-cursor::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 6px 6px 0;
+  border-color: transparent #f0a500 transparent transparent;
+}
+
+/* ── SCOREBOARD ── */
+.scoreboard {
+  background: linear-gradient(135deg, #0a0a0a 0%, #141415 100%);
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.scoreboard-header {
+  background: #050505;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1a1a1a;
+}
+.scoreboard-meta { font-size: 10px; color: #666; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
+.scoreboard-live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #ff4444;
+  letter-spacing: 0.15em;
+}
+.scoreboard-live::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #ff4444; animation: pulse 1.5s infinite; }
+
+.scoreboard-body {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  align-items: center;
+  padding: 24px 20px;
+}
+.team-side { text-align: center; }
+.team-side .team-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+}
+.team-side .team-logo.home { background: linear-gradient(135deg, #4CAF7D, #2a8c5d); }
+.team-side .team-logo.away { background: linear-gradient(135deg, #5555dd, #3333aa); }
+.team-side .team-name { font-size: 12px; color: #ccc; font-weight: 700; }
+.team-side .team-record { font-size: 9px; color: #666; margin-top: 2px; letter-spacing: 0.05em; }
+.team-side .team-score { font-size: 56px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; line-height: 1; margin: 8px 0; }
+.scoreboard-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px;
+}
+.scoreboard-divider .clock { font-size: 24px; font-weight: 800; color: #4CAF7D; font-family: 'SF Mono', Monaco, monospace; }
+.scoreboard-divider .period { font-size: 10px; color: #888; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+
+.scoreboard-events {
+  background: #050505;
+  padding: 14px 20px;
+  border-top: 1px solid #1a1a1a;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.event-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 11px;
+  border-bottom: 1px solid #141415;
+}
+.event-row:last-child { border-bottom: none; }
+.event-time { font-size: 9px; color: #666; font-family: 'SF Mono', monospace; width: 36px; flex-shrink: 0; }
+.event-icon { width: 18px; text-align: center; font-size: 11px; }
+.event-desc { flex: 1; color: #aaa; }
+.event-desc strong { color: #fff; }
+.event-side { font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 700; letter-spacing: 0.05em; }
+.event-side.home { background: #0f2a18; color: #4CAF7D; }
+.event-side.away { background: #0f1a2a; color: #5577dd; }
+
+/* ── STANDINGS ── */
+.standings-wrap { background: #0a0a0a; border-radius: 10px; border: 1px solid #1a1a1a; overflow: hidden; }
+.standings-header, .standings-row {
+  display: grid;
+  grid-template-columns: 32px 1fr 40px 40px 40px 40px 50px 50px;
+  gap: 10px;
+  padding: 10px 16px;
+  align-items: center;
+  font-size: 11px;
+}
+.standings-header {
+  background: #141415;
+  color: #666;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 10px;
+  border-bottom: 1px solid #222;
+}
+.standings-row {
+  border-bottom: 1px solid #141415;
+  color: #ccc;
+}
+.standings-row:last-child { border-bottom: none; }
+.standings-row:hover { background: #141415; }
+.standings-row .pos { color: #666; font-family: 'SF Mono', monospace; font-weight: 700; }
+.standings-row .team { display: flex; align-items: center; gap: 8px; }
+.standings-row .team-mini-logo { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; color: #fff; }
+.standings-row .tm-txt { color: #fff; font-weight: 600; font-size: 12px; }
+.standings-row .num { font-variant-numeric: tabular-nums; text-align: center; }
+.standings-row .pts { font-weight: 800; color: #4CAF7D; text-align: right; font-size: 13px; }
+.standings-row .form { display: flex; gap: 2px; justify-content: flex-end; }
+.form-dot { width: 6px; height: 6px; border-radius: 50%; }
+.form-dot.w { background: #4CAF7D; }
+.form-dot.d { background: #f0a500; }
+.form-dot.l { background: #ff6b6b; }
+.standings-row.leader { background: linear-gradient(90deg, rgba(76,175,125,0.08) 0%, transparent 100%); }
+.standings-row.leader .pos { color: #4CAF7D; }
+
+/* ── SCHEDULE GRID ── */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  gap: 2px;
+  background: #0a0a0a;
+  padding: 2px;
+  border-radius: 10px;
+  border: 1px solid #1a1a1a;
+  font-size: 10px;
+}
+.sg-cell {
+  background: #141415;
+  padding: 8px 6px;
+  min-height: 56px;
+  position: relative;
+}
+.sg-cell.header { background: #050505; color: #4CAF7D; font-weight: 800; text-align: center; text-transform: uppercase; letter-spacing: 0.1em; font-size: 9px; padding: 10px 4px; min-height: auto; }
+.sg-cell.time { background: #050505; color: #666; text-align: center; font-family: 'SF Mono', monospace; display: flex; align-items: center; justify-content: center; }
+
+.sg-event {
+  background: #0f2a18;
+  border-left: 2px solid #4CAF7D;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  color: #4CAF7D;
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+.sg-event.practice { background: #1a1a2a; border-left-color: #5577dd; color: #7799ee; }
+.sg-event.game { background: #0f2a18; border-left-color: #4CAF7D; color: #4CAF7D; }
+.sg-event.conflict { background: #2a1408; border-left-color: #f0a500; color: #f0a500; }
+.sg-event .ev-title { font-weight: 800; display: block; }
+.sg-event .ev-meta { color: rgba(255,255,255,0.5); font-size: 8px; margin-top: 1px; }
+
+/* ── REF MOBILE VIEW ── */
+.ref-score-input {
+  background: #141415;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.ref-team-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+.ref-team-row .rt-name { font-size: 11px; color: #fff; font-weight: 700; flex: 1; }
+.ref-score-box {
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #4CAF7D;
+  font-variant-numeric: tabular-nums;
+  min-width: 50px;
+  text-align: center;
+}
+.ref-score-controls { display: flex; gap: 4px; margin-left: 8px; }
+.ref-btn {
+  width: 26px;
+  height: 26px;
+  background: #2a2a2a;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.ref-btn.plus { background: #4CAF7D; color: #000; }
+
+.ref-action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+.ref-action { padding: 10px; font-size: 10px; font-weight: 700; border-radius: 8px; text-align: center; background: #1a1a1a; color: #ccc; letter-spacing: 0.05em; text-transform: uppercase; }
+
+/* ── COMPARISON ── */
+.comp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.comp-card {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 14px;
+  padding: 28px 26px;
+}
+.comp-card.loser { opacity: 0.75; }
+.comp-card.winner {
+  background: linear-gradient(135deg, #0f2a18 0%, #0a0a0a 100%);
+  border-color: #1a5a2a;
+  box-shadow: 0 0 32px rgba(76,175,125,0.1);
+}
+.comp-card .comp-logo {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+}
+.comp-card.loser .comp-logo { background: #2a1a1a; color: #888; }
+.comp-card.winner .comp-logo { background: #0f2a18; color: #4CAF7D; border: 1px solid #1a5a2a; }
+.comp-card h3 { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 14px; }
+.comp-card.loser h3 { color: #888; }
+.comp-card ul { list-style: none; padding: 0; }
+.comp-card li {
+  font-size: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #1a1a1a;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.5;
+}
+.comp-card li:last-child { border-bottom: none; }
+.comp-card.loser li { color: #777; }
+.comp-card.loser li::before { content: '✕'; color: #ff6b6b; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+.comp-card.winner li { color: #ccc; }
+.comp-card.winner li::before { content: '✓'; color: #4CAF7D; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+
+.comp-vs {
+  text-align: center;
+  margin: 40px auto;
+  font-size: 14px;
+  color: #444;
+  letter-spacing: 0.3em;
+  font-weight: 800;
+  position: relative;
+}
+.comp-vs::before, .comp-vs::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 100px;
+  height: 1px;
+  background: #1a1a1a;
+}
+.comp-vs::before { left: calc(50% - 140px); }
+.comp-vs::after { right: calc(50% - 140px); }
+
+/* ── COMMS / MESSAGE HUB ── */
+.comms-thread {
+  background: #141415;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.comms-thread .ct-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.comms-thread .ct-title { font-size: 12px; color: #fff; font-weight: 700; }
+.comms-thread .ct-meta { font-size: 10px; color: #666; }
+.comms-thread .ct-preview { font-size: 11px; color: #888; line-height: 1.4; }
+.comms-thread .ct-avanti { font-size: 9px; color: #4CAF7D; font-weight: 700; letter-spacing: 0.1em; margin-top: 6px; padding-top: 6px; border-top: 1px solid #1f1f20; text-transform: uppercase; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .gameday-grid { grid-template-columns: 1fr; }
+  .build-note .columns { grid-template-columns: 1fr; }
+  .graph-wrap { min-height: 640px; }
+  .doc-header h1 { font-size: 32px; }
+  .section-header h2 { font-size: 24px; }
+  .layer { padding: 16px 18px; gap: 12px; }
+  .layer .num { font-size: 26px; width: 34px; }
+  .layer .name { font-size: 15px; }
+  .layer .surface { font-size: 9px; padding: 4px 8px; }
+  body { padding: 32px 16px 60px; }
+  .comp-grid { grid-template-columns: 1fr; }
+  .comp-vs::before, .comp-vs::after { display: none; }
+  .scoreboard-body { grid-template-columns: 1fr; gap: 16px; }
+  .team-side .team-score { font-size: 40px; }
+  .standings-header, .standings-row { grid-template-columns: 24px 1fr 30px 30px 30px 40px; gap: 6px; font-size: 10px; padding: 8px 10px; }
+  .standings-header .hide-sm, .standings-row .hide-sm { display: none; }
+  .schedule-grid { grid-template-columns: 60px repeat(3, 1fr); font-size: 9px; }
+  .schedule-grid .sg-hide-sm { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="doc-header">
+  <div class="eyebrow">VAI Club OS — Phase 1 Locked Concepts</div>
+  <h1>Four layers. <span>One protocol.</span><br>Youth sports becomes infrastructure.</h1>
+  <p class="sub">Athlete Graph → Green Line → Self-Executing Compliance → Exception-Only Admin. Remove any layer and the system collapses. Every future pillar plugs in without new architecture.</p>
+  <p class="meta">APR 24, 2026 — OPUS 4.7 SYNTHESIS — READY FOR VAI-PR-BUILD</p>
+</div>
+
+<!-- ── HERO: LAYER STACK ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">The Stack</div>
+    <h2>Concepts are layers, not features</h2>
+    <p class="tag-line">Each layer depends on the one below. Admins interact with the top. The graph is the bottom. Everything between runs itself.</p>
+  </div>
+
+  <div class="layer-stack">
+    <div class="layer l4">
+      <div class="num">04</div>
+      <div class="body">
+        <div class="name">GAMEDAY — Club Ops Command Deck</div>
+        <div class="role">The 1% humans touch. Tournaments, leagues, live scores, brackets, schedules, comms — all plugged into the graph. Exception queue is the landing view.</div>
+      </div>
+      <div class="surface">Human Surface</div>
+    </div>
+    <div class="layer l3">
+      <div class="num">03</div>
+      <div class="body">
+        <div class="name">Self-Executing Compliance (AVANTI)</div>
+        <div class="role">Waivers, nudges, approvals run themselves. Admin did nothing. The waiver executed itself.</div>
+      </div>
+      <div class="surface">Runtime</div>
+    </div>
+    <div class="layer l2">
+      <div class="num">02</div>
+      <div class="body">
+        <div class="name">The Green Line</div>
+        <div class="role">One state machine per athlete-per-club. Computes one truth: GREEN / YELLOW / RED.</div>
+      </div>
+      <div class="surface">Truth Layer</div>
+    </div>
+    <div class="layer l1">
+      <div class="num">01</div>
+      <div class="body">
+        <div class="name">The Athlete Graph (VAI Passport)</div>
+        <div class="role">Athlete is root. Waivers, medical, payments, eligibility attach to athlete and travel with them.</div>
+      </div>
+      <div class="surface">Data Model</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LAYER 1: ATHLETE GRAPH ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">Layer 01 · Data Model</div>
+    <h2>The Athlete Graph</h2>
+    <p class="tag-line">The athlete is the root node — not the club. Everything attaches to the athlete. Clubs get scoped, time-bound access via Grants. Data portability is the data model.</p>
+  </div>
+
+  <div class="graph-wrap">
+    <svg class="graph-svg" viewBox="0 0 680 520" preserveAspectRatio="none">
+      <!-- Lines from root to each node -->
+      <line x1="340" y1="260" x2="120" y2="30" stroke="#4CAF7D" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+      <line x1="340" y1="260" x2="560" y2="30" stroke="#4CAF7D" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+      <line x1="340" y1="260" x2="60" y2="220" stroke="#4CAF7D" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+      <line x1="340" y1="260" x2="620" y2="220" stroke="#4CAF7D" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+      <line x1="340" y1="260" x2="90" y2="480" stroke="#f0a500" stroke-width="1.5" opacity="0.7"/>
+      <line x1="340" y1="260" x2="340" y2="480" stroke="#f0a500" stroke-width="1.5" opacity="0.7"/>
+      <line x1="340" y1="260" x2="590" y2="480" stroke="#f0a500" stroke-width="1.5" opacity="0.7"/>
+    </svg>
+
+    <div class="graph-node n-waivers">
+      <div class="label">Waivers</div>
+      <div class="value">Liability · Medical</div>
+      <div class="sub">v2 signed 08/12</div>
+    </div>
+    <div class="graph-node n-medical">
+      <div class="label">Medical</div>
+      <div class="value">Physical · Allergies</div>
+      <div class="sub">Valid thru 11/2026</div>
+    </div>
+    <div class="graph-node n-payments">
+      <div class="label">Payments</div>
+      <div class="value">$1,240 cleared</div>
+      <div class="sub">Fall season paid</div>
+    </div>
+    <div class="graph-node n-eligibility">
+      <div class="label">Eligibility</div>
+      <div class="value">U14 · Travel</div>
+      <div class="sub">5yr verified history</div>
+    </div>
+
+    <div class="graph-node n-root root">
+      <div class="label">Athlete · Root</div>
+      <div class="value">Sofia Martinez</div>
+      <div class="sub">VAI Passport · U14</div>
+    </div>
+
+    <div class="graph-node n-grants-club1">
+      <div class="label">Grant</div>
+      <div class="value">Denver Rush FC</div>
+      <div class="sub">Scope: Travel · Exp 06/27</div>
+    </div>
+    <div class="graph-node n-grants-club2">
+      <div class="label">Grant</div>
+      <div class="value">Cherry Creek HS</div>
+      <div class="sub">Scope: School · Exp 05/27</div>
+    </div>
+    <div class="graph-node n-grants-scout">
+      <div class="label">Grant</div>
+      <div class="value">Scout Registry</div>
+      <div class="sub">Scope: Visibility · 12mo</div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">Sofia moves clubs. <span>Her graph moves with her.</span></div>
+    <div class="detail">New club requests a grant. Parent approves scope + duration. Previous verified compliance auto-imports. Zero re-waivers. Zero duplicate data entry. The club becomes a consumer of Sofia's identity, not the owner of it.</div>
+  </div>
+</div>
+
+<!-- ── LAYER 2: GREEN LINE ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">Layer 02 · Truth Layer</div>
+    <h2>The Green Line</h2>
+    <p class="tag-line">One computed signal per athlete-per-club. Every downstream system reads the same truth. Roster, schedule, recruiting, insurance — they don't compute status. They query it.</p>
+  </div>
+
+  <div class="phone-rail centered">
+    <div>
+      <div class="phone green">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="passport-hero">
+            <div class="p-label">Status</div>
+            <div class="p-name">Sofia Martinez</div>
+            <div class="p-meta">Denver Rush FC · U14 · Travel</div>
+            <div class="p-green-line">
+              <div class="status-dot green"></div>
+              <div class="txt">CLEARED TO PLAY</div>
+            </div>
+          </div>
+          <div class="status-card">
+            <div class="athlete-sub">ALL GATES GREEN</div>
+            <div class="green-line-indicator" style="border-top:none;margin-top:6px;padding-top:0">
+              <div style="font-size:10px;color:#aaa;line-height:1.5">✓ Waivers signed<br>✓ Payment cleared<br>✓ Medical valid<br>✓ Eligibility verified</div>
+            </div>
+          </div>
+          <div class="status-card" style="margin-top:auto;background:transparent;border:none;padding:8px 0 0 0">
+            <div class="athlete-sub" style="text-align:center;color:#4CAF7D;font-weight:700">Next practice · Tue 5:30 PM</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">
+        <span class="actor">Parent · vai-mobile</span>
+        GREEN — ready to play
+      </div>
+    </div>
+
+    <div>
+      <div class="phone orange">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="passport-hero" style="background:linear-gradient(135deg,#2a1e0a 0%,#1a1208 100%);border-color:#5c4a15">
+            <div class="p-label" style="color:#f0a500">Status</div>
+            <div class="p-name">Marcus Kim</div>
+            <div class="p-meta">Denver Rush FC · U14 · Travel</div>
+            <div class="p-green-line" style="border-top-color:#5c4a15">
+              <div class="status-dot orange"></div>
+              <div class="txt" style="color:#f0a500">ACTION NEEDED · 7 DAYS</div>
+            </div>
+          </div>
+          <div class="status-card" style="border-color:#5c4a15">
+            <div class="athlete-name">Medical form expiring</div>
+            <div class="status-reason">Annual physical expires 05/01. Tap below to upload new form — AVANTI will validate and clear your Green Line automatically.</div>
+            <div class="cta">Upload physical · 1 tap</div>
+          </div>
+          <div class="status-card" style="margin-top:auto;background:transparent;border:none;padding:8px 0 0 0">
+            <div class="athlete-sub" style="text-align:center;color:#f0a500">Still eligible this weekend</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label orange">
+        <span class="actor">Parent · vai-mobile</span>
+        YELLOW — one tap to clear
+      </div>
+    </div>
+
+    <div>
+      <div class="phone red">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="passport-hero" style="background:linear-gradient(135deg,#3a0f0f 0%,#1a0808 100%);border-color:#5c2a2a">
+            <div class="p-label" style="color:#ff6b6b">Status</div>
+            <div class="p-name">Jayla Thompson</div>
+            <div class="p-meta">Denver Rush FC · U14 · Travel</div>
+            <div class="p-green-line" style="border-top-color:#5c2a2a">
+              <div class="status-dot red"></div>
+              <div class="txt" style="color:#ff6b6b">BLOCKED</div>
+            </div>
+          </div>
+          <div class="status-card" style="border-color:#5c2a2a">
+            <div class="athlete-name">Payment overdue</div>
+            <div class="status-reason">Fall season dues $620 unpaid. Roster slot on hold. Payment restores Green Line instantly.</div>
+            <div class="cta red">Resolve payment</div>
+          </div>
+          <div class="status-card" style="margin-top:auto;background:transparent;border:none;padding:8px 0 0 0">
+            <div class="athlete-sub" style="text-align:center;color:#ff6b6b">Not on roster this weekend</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">
+        <span class="actor">Parent · vai-mobile</span>
+        RED — blocked with clear fix
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">Coach sees roster in <span>one signal</span>. Parent sees status in <span>one signal</span>. Insurance audits with <span>one signal</span>.</div>
+    <div class="detail">No separate trackers. No PDF exports. No "let me check with the office." The Green Line is a computed property — downstream systems query, they never calculate. This is what makes VAI a protocol, not software.</div>
+  </div>
+</div>
+
+<!-- ── LAYER 3: SELF-EXECUTING COMPLIANCE ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">Layer 03 · Runtime</div>
+    <h2>Self-Executing Compliance</h2>
+    <p class="tag-line">Watch a waiver execute itself. Admin created the season. AVANTI did the rest. The parent tapped once.</p>
+  </div>
+
+  <div class="phone-rail">
+    <div class="phone-wrap">
+      <div class="step-num">1</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="waiver-header">GAMEDAY · New Season</div>
+          <div class="waiver-body">
+            <strong>Fall 2026</strong><br>
+            Denver Rush FC · U14 Travel<br>
+            Starts 09/01 · 12 weeks
+          </div>
+          <div class="status-card" style="background:#0f2a18;border-color:#1a5a2a;margin-top:auto">
+            <div class="athlete-sub" style="color:#4CAF7D;text-align:center">SEASON CREATED · 0.8s</div>
+            <div style="font-size:9px;color:#888;text-align:center;margin-top:4px">AVANTI dispatching nudges to 24 athletes</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">
+        <span class="actor">Admin · GAMEDAY</span>
+        Created season · one click
+      </div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="step-num">2</div>
+      <div class="phone" style="background:#1a1a1c">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" style="background:linear-gradient(180deg,#4a2a6a 0%,#1a1a3a 100%);padding:40px 8px 14px">
+          <div class="push-notif">
+            <div class="push-header">
+              <div class="push-icon">V</div>
+              <div class="push-app">VAI · AVANTI</div>
+              <div class="push-time">now</div>
+            </div>
+            <div class="push-title">Sofia · Fall season starts 09/01</div>
+            <div class="push-body">Tap to sign 2 waivers + confirm payment. Takes 30 seconds. Her spot is held.</div>
+          </div>
+          <div style="margin-top:auto;padding:0 8px 8px;text-align:center;color:rgba(255,255,255,0.5);font-size:10px">
+            Automatic · No admin action
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">
+        <span class="actor">Parent · Lock Screen</span>
+        AVANTI push · auto-generated
+      </div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="step-num">3</div>
+      <div class="phone orange">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="waiver-header">Liability Waiver · Fall 2026</div>
+          <div class="waiver-body">
+            Denver Rush FC · Sofia Martinez<br><br>
+            <strong>Pre-filled from your VAI Passport.</strong> Previous waivers verified — same language, same scope. One tap to sign.
+          </div>
+          <div class="sign-area">
+            <div class="sig-label">Biometric signature</div>
+            <div class="sig-value" style="color:#666">— Tap Face ID —</div>
+          </div>
+          <div class="biometric-btn">SIGN WITH FACE ID</div>
+        </div>
+      </div>
+      <div class="phone-label orange">
+        <span class="actor">Parent · vai-mobile</span>
+        One tap · biometric sign
+      </div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="step-num">4</div>
+      <div class="phone green">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="waiver-header">Liability Waiver · Fall 2026</div>
+          <div class="waiver-body">
+            <strong style="color:#4CAF7D">✓ Signed 2:47 PM</strong><br>
+            Appended to Sofia's Passport.<br>
+            Immutable event · Audit logged.
+          </div>
+          <div class="sign-area signed">
+            <div class="sig-label" style="color:#4CAF7D">Signed · Verified</div>
+            <div class="sig-value">M. Martinez</div>
+          </div>
+          <div class="status-card" style="background:#0f2a18;border-color:#1a5a2a;margin-top:auto">
+            <div class="athlete-sub" style="color:#4CAF7D;text-align:center">GREEN LINE UPDATED</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">
+        <span class="actor">Parent · vai-mobile</span>
+        Confirmation · state advanced
+      </div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="step-num">5</div>
+      <div class="phone green">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="roster-header">
+            Fall 2026 Roster
+            <span class="count">24 / 24 GREEN</span>
+          </div>
+          <div class="roster-row">
+            <div class="roster-avatar green">SM</div>
+            <div class="roster-name">
+              <div class="n-name">Sofia Martinez</div>
+              <div class="n-pos">Midfield · U14</div>
+            </div>
+            <div class="roster-dot" style="background:#4CAF7D"></div>
+          </div>
+          <div class="roster-row">
+            <div class="roster-avatar green">MK</div>
+            <div class="roster-name">
+              <div class="n-name">Marcus Kim</div>
+              <div class="n-pos">Defense · U14</div>
+            </div>
+            <div class="roster-dot" style="background:#4CAF7D"></div>
+          </div>
+          <div class="roster-row">
+            <div class="roster-avatar green">JT</div>
+            <div class="roster-name">
+              <div class="n-name">Jayla Thompson</div>
+              <div class="n-pos">Forward · U14</div>
+            </div>
+            <div class="roster-dot" style="background:#4CAF7D"></div>
+          </div>
+          <div class="roster-row">
+            <div class="roster-avatar green">AD</div>
+            <div class="roster-name">
+              <div class="n-name">Aidan Davis</div>
+              <div class="n-pos">Keeper · U14</div>
+            </div>
+            <div class="roster-dot" style="background:#4CAF7D"></div>
+          </div>
+          <div style="font-size:10px;color:#4CAF7D;text-align:center;margin-top:auto;padding-top:10px">
+            Ready for kickoff
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">
+        <span class="actor">Coach · vai-mobile</span>
+        Roster auto-advances · no admin ping
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">Admin did nothing. <span>The waiver executed itself.</span></div>
+    <div class="detail">Season created → AVANTI generated waiver + pushed nudges to all 24 parents → parents signed in 30s each → Green Line updated in real-time → roster populated → coach saw cleared athletes. Zero admin touchpoints between step 1 and step 5. Multiply by 24 athletes × 52 weeks × 12 compliance events = 15,000 admin tasks deleted per club per year.</div>
+  </div>
+</div>
+
+<!-- ── LAYER 4: EXCEPTION-ONLY ADMIN ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">Layer 04 · Human Surface</div>
+    <h2>GAMEDAY — Club Ops Command Deck</h2>
+    <p class="tag-line">GAMEDAY is the full club operations platform: tournaments, live scores, brackets, league management, schedules, standings, and communications. All of it plugged into the Athlete Graph + Green Line. Exception queue is the landing view — because near-empty is the success state.</p>
+  </div>
+
+  <div class="desktop-frame">
+    <div class="desktop-chrome">
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-url">gameday.vai.app · Denver Rush FC · Admin</div>
+    </div>
+    <div class="gameday-nav">
+      <div class="gameday-tab active">Exceptions <span class="count">1</span></div>
+      <div class="gameday-tab">Teams <span class="count">12</span></div>
+      <div class="gameday-tab">Games <span class="count">48</span></div>
+      <div class="gameday-tab">Tournaments <span class="count">3</span></div>
+      <div class="gameday-tab">Leagues <span class="count">2</span></div>
+      <div class="gameday-tab">Schedule</div>
+      <div class="gameday-tab">Standings</div>
+      <div class="gameday-tab">Roster</div>
+      <div class="gameday-tab">Comms</div>
+      <div class="gameday-tab">Fundraising</div>
+      <div class="gameday-tab">Policies</div>
+    </div>
+    <div class="desktop-body">
+      <div class="gameday-header">
+        <div class="gameday-title">GAME<span>DAY</span> · Exception Queue</div>
+        <div class="gameday-badges">
+          <div class="gameday-badge">247 GREEN</div>
+          <div class="gameday-badge warn">2 YELLOW</div>
+          <div class="gameday-badge alert">1 RED</div>
+        </div>
+      </div>
+
+      <div class="gameday-grid">
+        <div class="queue-section">
+          <div class="queue-header">
+            <div class="queue-title">ACTIVE EXCEPTIONS</div>
+            <div class="queue-count">1 needs judgment</div>
+          </div>
+
+          <div class="exception-card">
+            <div class="ex-title">Dual-club travel conflict · Sofia Martinez</div>
+            <div class="ex-meta">RAISED BY: AVANTI runtime · 14 min ago · Policy edge case</div>
+            <div class="ex-avanti">
+              <strong>AVANTI pre-analysis</strong>
+              Sofia is rostered on Denver Rush FC (travel) AND Cherry Creek HS (school season) for the weekend of 10/18. Both events require her. AVANTI cannot auto-resolve — this is a judgment call between Director Thompson (Rush) and Coach Ramirez (CCHS). Insurance scope covers both. No eligibility gate blocks either. Recommend: surface to both coaches via multiplayer thread.
+            </div>
+            <div class="ex-actions">
+              <div class="ex-btn primary">Open multiplayer thread</div>
+              <div class="ex-btn secondary">Defer to league ops</div>
+            </div>
+          </div>
+
+          <div class="queue-header" style="margin-top:24px">
+            <div class="queue-title">RESOLVED TODAY (AUTO)</div>
+            <div class="queue-count" style="color:#4CAF7D">47 auto-cleared</div>
+          </div>
+
+          <div class="empty-state">
+            <div class="check">✓</div>
+            <div class="msg">Everything else running clean</div>
+            <div class="sub">47 compliance events, 24 payments, 8 schedule updates processed by AVANTI in the last 24 hours. Zero admin touches.</div>
+          </div>
+        </div>
+
+        <div class="sidebar">
+          <div class="green-line-overview">
+            <h4>Green Line · Club Overview</h4>
+            <div class="metric-bar">
+              <div class="bar-green" style="flex:247"></div>
+              <div class="bar-orange" style="flex:2"></div>
+              <div class="bar-red" style="flex:1"></div>
+            </div>
+            <div class="metric-row">
+              <div class="m-label"><div class="status-dot green"></div>Cleared</div>
+              <div class="m-value">247</div>
+            </div>
+            <div class="metric-row">
+              <div class="m-label"><div class="status-dot orange"></div>Action needed</div>
+              <div class="m-value">2</div>
+            </div>
+            <div class="metric-row">
+              <div class="m-label"><div class="status-dot red"></div>Blocked</div>
+              <div class="m-value">1</div>
+            </div>
+            <div class="metric-row">
+              <div class="m-label" style="color:#4CAF7D">Compliance rate</div>
+              <div class="m-value" style="color:#4CAF7D">98.8%</div>
+            </div>
+          </div>
+
+          <div class="green-line-overview" style="margin-top:16px">
+            <h4>AVANTI · 30-day</h4>
+            <div class="metric-row">
+              <div class="m-label">Intents resolved</div>
+              <div class="m-value">1,284</div>
+            </div>
+            <div class="metric-row">
+              <div class="m-label">Auto-resolved</div>
+              <div class="m-value" style="color:#4CAF7D">99.3%</div>
+            </div>
+            <div class="metric-row">
+              <div class="m-label">Admin hours saved</div>
+              <div class="m-value" style="color:#4CAF7D">142h</div>
+            </div>
+            <div class="metric-row">
+              <div class="m-label">Median exception time</div>
+              <div class="m-value">8 min</div>
+            </div>
+          </div>
+
+          <div class="green-line-overview" style="margin-top:16px">
+            <h4>Pipeline · Next 7 days</h4>
+            <div class="metric-row">
+              <div class="m-label">Medical renewals due</div>
+              <div class="m-value">4</div>
+            </div>
+            <div class="metric-row">
+              <div class="m-label">AVANTI will handle</div>
+              <div class="m-value" style="color:#4CAF7D">4 / 4</div>
+            </div>
+            <div class="metric-row">
+              <div class="m-label">Expected admin load</div>
+              <div class="m-value" style="color:#4CAF7D">0 hrs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">Empty queue. <span>That is the product.</span></div>
+    <div class="detail">Admin logs in, sees one exception, resolves it in 8 minutes, closes laptop. AVANTI cleared 47 things behind the scenes. Competitors' admin dashboards are inbox zero as a goal. GAMEDAY's inbox zero is a baseline — anything else is a system bug.</div>
+  </div>
+</div>
+
+<!-- ── TOURNAMENT BRACKET MANAGER (MULTIPLAYER) ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">GAMEDAY · Tournaments</div>
+    <h2>Tournament Bracket — Multiplayer Canvas</h2>
+    <p class="tag-line">Director, coaches, refs, and league ops edit the same bracket in real time. Every seed move, score entry, and field change is threaded + audit-logged. Every team slot shows live Green Line compliance. Seeding debates die with receipts.</p>
+  </div>
+
+  <div class="desktop-frame">
+    <div class="desktop-chrome">
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-url">gameday.vai.app · Tournaments · Fall Classic 2026</div>
+    </div>
+    <div class="gameday-nav">
+      <div class="gameday-tab">Exceptions <span class="count">1</span></div>
+      <div class="gameday-tab">Teams</div>
+      <div class="gameday-tab">Games</div>
+      <div class="gameday-tab active">Tournaments <span class="count">3</span></div>
+      <div class="gameday-tab">Leagues</div>
+      <div class="gameday-tab">Schedule</div>
+      <div class="gameday-tab">Standings</div>
+      <div class="gameday-tab">Roster</div>
+      <div class="gameday-tab">Comms</div>
+      <div class="gameday-tab">Fundraising</div>
+      <div class="gameday-tab">Policies</div>
+    </div>
+    <div class="desktop-body">
+      <div class="gameday-header" style="padding-bottom:16px">
+        <div>
+          <div class="gameday-title">FALL CLASSIC · <span>U14 Division</span></div>
+          <div style="font-size:11px;color:#666;margin-top:6px;letter-spacing:0.05em">16 teams · Oct 18-19 · Reach 11 Complex, Phoenix AZ</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="font-size:10px;color:#4CAF7D;font-weight:700;letter-spacing:0.1em">EDITING LIVE</div>
+          <div class="collab-stack">
+            <div class="collab-avatar a1 live" title="Director Thompson">DT</div>
+            <div class="collab-avatar a2" title="Coach Ramirez">CR</div>
+            <div class="collab-avatar a3" title="League Ops (Maya)">MR</div>
+            <div class="collab-avatar a4" title="Ref Coordinator">RC</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bracket-canvas">
+        <div class="bracket-grid">
+
+          <div class="bracket-round">
+            <div class="bracket-round-label">Round 1 · Sat AM</div>
+
+            <div class="bracket-match">
+              <div class="match-time">SAT 8:15 AM · FIELD 4</div>
+              <div class="bracket-team winner">
+                <span class="seed">1</span>
+                <span class="gl-dot" style="background:#4CAF7D"></span>
+                <span class="tm-name">Denver Rush FC</span>
+                <span class="tm-score">3</span>
+              </div>
+              <div class="bracket-team">
+                <span class="seed">16</span>
+                <span class="gl-dot" style="background:#4CAF7D"></span>
+                <span class="tm-name">Tucson United</span>
+                <span class="tm-score">0</span>
+              </div>
+            </div>
+
+            <div class="bracket-match">
+              <div class="bracket-live-badge">LIVE</div>
+              <div class="match-time">SAT 10:00 AM · FIELD 4 · 2H 23'</div>
+              <div class="bracket-team winner">
+                <span class="seed">8</span>
+                <span class="gl-dot" style="background:#4CAF7D"></span>
+                <span class="tm-name">Phoenix Pride</span>
+                <span class="tm-score">2</span>
+              </div>
+              <div class="bracket-team">
+                <span class="seed">9</span>
+                <span class="gl-dot" style="background:#4CAF7D"></span>
+                <span class="tm-name">Mesa Titans</span>
+                <span class="tm-score">1</span>
+              </div>
+            </div>
+
+            <div class="bracket-match editing">
+              <div class="bracket-cursor" style="right:-60px;top:8px">Coach Ramirez</div>
+              <div class="match-time">SAT 11:45 AM · FIELD 2</div>
+              <div class="bracket-team">
+                <span class="seed">4</span>
+                <span class="gl-dot" style="background:#4CAF7D"></span>
+                <span class="tm-name">Cherry Creek HS</span>
+                <span class="tm-score">—</span>
+              </div>
+              <div class="bracket-team">
+                <span class="seed">13</span>
+                <span class="gl-dot" style="background:#f0a500" title="1 athlete YELLOW"></span>
+                <span class="tm-name">Albuquerque AFC</span>
+                <span class="tm-score">—</span>
+              </div>
+            </div>
+
+            <div class="bracket-match">
+              <div class="match-time">SAT 1:30 PM · FIELD 2</div>
+              <div class="bracket-team">
+                <span class="seed">5</span>
+                <span class="gl-dot" style="background:#4CAF7D"></span>
+                <span class="tm-name">Boulder Elite</span>
+                <span class="tm-score">—</span>
+              </div>
+              <div class="bracket-team">
+                <span class="seed">12</span>
+                <span class="gl-dot" style="background:#4CAF7D"></span>
+                <span class="tm-name">Vegas Blaze</span>
+                <span class="tm-score">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bracket-round">
+            <div class="bracket-round-label">Quarterfinal · Sat PM</div>
+            <div class="bracket-match">
+              <div class="match-time">SAT 4:00 PM · FIELD 4</div>
+              <div class="bracket-team">
+                <span class="seed">1</span>
+                <span class="gl-dot" style="background:#4CAF7D"></span>
+                <span class="tm-name">Denver Rush FC</span>
+                <span class="tm-score">—</span>
+              </div>
+              <div class="bracket-team">
+                <span class="seed">8</span>
+                <span class="gl-dot" style="background:#4CAF7D"></span>
+                <span class="tm-name">Phoenix Pride</span>
+                <span class="tm-score">—</span>
+              </div>
+            </div>
+            <div class="bracket-match">
+              <div class="match-time">SAT 6:00 PM · FIELD 2</div>
+              <div class="bracket-team">
+                <span class="seed">—</span>
+                <span class="gl-dot" style="background:#333"></span>
+                <span class="tm-name">Winner M3</span>
+                <span class="tm-score">—</span>
+              </div>
+              <div class="bracket-team">
+                <span class="seed">—</span>
+                <span class="gl-dot" style="background:#333"></span>
+                <span class="tm-name">Winner M4</span>
+                <span class="tm-score">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bracket-round">
+            <div class="bracket-round-label">Semifinal · Sun AM</div>
+            <div class="bracket-match">
+              <div class="match-time">SUN 9:00 AM · FIELD 4</div>
+              <div class="bracket-team">
+                <span class="seed">—</span>
+                <span class="gl-dot" style="background:#333"></span>
+                <span class="tm-name">TBD</span>
+                <span class="tm-score">—</span>
+              </div>
+              <div class="bracket-team">
+                <span class="seed">—</span>
+                <span class="gl-dot" style="background:#333"></span>
+                <span class="tm-name">TBD</span>
+                <span class="tm-score">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bracket-round">
+            <div class="bracket-round-label">Final · Sun PM</div>
+            <div class="bracket-match" style="margin-top:auto;margin-bottom:auto;border-color:#5c4a15;background:linear-gradient(135deg,#1a1408 0%,#0a0a0a 100%)">
+              <div class="match-time" style="color:#f0a500">🏆 SUN 3:00 PM · FIELD 4</div>
+              <div class="bracket-team">
+                <span class="seed">—</span>
+                <span class="gl-dot" style="background:#333"></span>
+                <span class="tm-name" style="color:#f0a500">Champion</span>
+                <span class="tm-score">—</span>
+              </div>
+              <div class="bracket-team">
+                <span class="seed">—</span>
+                <span class="gl-dot" style="background:#333"></span>
+                <span class="tm-name" style="color:#888">Finalist</span>
+                <span class="tm-score">—</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 280px;gap:20px;margin-top:24px">
+        <div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;padding:14px 18px">
+          <div style="font-size:10px;color:#666;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:10px">Audit Thread · Last 4 Changes</div>
+          <div style="font-size:11px;color:#aaa;line-height:1.6">
+            <div style="padding:6px 0;border-bottom:1px solid #1a1a1a"><span style="color:#4CAF7D;font-weight:700">Director Thompson</span> · 2m ago · Moved M3 to Field 2 (was Field 4) — Ref coverage conflict</div>
+            <div style="padding:6px 0;border-bottom:1px solid #1a1a1a"><span style="color:#f0a500;font-weight:700">Coach Ramirez</span> · 8m ago · Requested seed re-check on Albuquerque AFC (1 athlete YELLOW — medical expiring)</div>
+            <div style="padding:6px 0;border-bottom:1px solid #1a1a1a"><span style="color:#8855dd;font-weight:700">League Ops</span> · 14m ago · Approved 16-team bracket, locked seeds 1-4</div>
+            <div style="padding:6px 0"><span style="color:#4CAF7D;font-weight:700">AVANTI</span> · auto · All 16 teams eligibility-verified against Green Line</div>
+          </div>
+        </div>
+        <div class="green-line-overview">
+          <h4>Bracket Integrity</h4>
+          <div class="metric-row">
+            <div class="m-label">Teams verified</div>
+            <div class="m-value" style="color:#4CAF7D">16 / 16</div>
+          </div>
+          <div class="metric-row">
+            <div class="m-label">Athletes cleared</div>
+            <div class="m-value" style="color:#4CAF7D">191</div>
+          </div>
+          <div class="metric-row">
+            <div class="m-label">YELLOW flags</div>
+            <div class="m-value" style="color:#f0a500">1</div>
+          </div>
+          <div class="metric-row">
+            <div class="m-label">Field assignments</div>
+            <div class="m-value">15 / 15</div>
+          </div>
+          <div class="metric-row">
+            <div class="m-label">Refs assigned</div>
+            <div class="m-value">15 / 15</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">4 stakeholders. <span>One canvas. Every edit audit-logged.</span></div>
+    <div class="detail">No more "who moved the seed?" text threads. No more "wait, that team isn't eligible." Seeds lock against Green Line. Field changes propagate to ref assignments, parents, and scorekeepers in real time. The bracket is a living document tied to the athlete graph — not a PDF someone emailed 40 minutes ago.</div>
+  </div>
+</div>
+
+<!-- ── LIVE GAME SCORING ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">GAMEDAY · Live Games</div>
+    <h2>Live Game Scoring — Field + Stands + Parent Pocket</h2>
+    <p class="tag-line">Ref scores from the field in 2 taps. Scoreboard broadcasts to parents in the stands and parents watching from home. Every goal, sub, and card attaches to the athlete's Passport automatically — feeding Phase 1B recruiting.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 260px;gap:24px;max-width:1100px;margin:0 auto">
+    <div class="scoreboard">
+      <div class="scoreboard-header">
+        <div class="scoreboard-meta">FALL CLASSIC · R1 · FIELD 4</div>
+        <div class="scoreboard-live">LIVE · 2H 23'</div>
+      </div>
+      <div class="scoreboard-body">
+        <div class="team-side">
+          <div class="team-logo home">PP</div>
+          <div class="team-name">Phoenix Pride</div>
+          <div class="team-record">Seed 8 · 11-3-1</div>
+          <div class="team-score">2</div>
+        </div>
+        <div class="scoreboard-divider">
+          <div class="clock">68:14</div>
+          <div class="period">2nd Half</div>
+        </div>
+        <div class="team-side">
+          <div class="team-logo away">MT</div>
+          <div class="team-name">Mesa Titans</div>
+          <div class="team-record">Seed 9 · 10-4-2</div>
+          <div class="team-score">1</div>
+        </div>
+      </div>
+      <div class="scoreboard-events">
+        <div class="event-row">
+          <span class="event-time">67'</span>
+          <span class="event-icon">⚽</span>
+          <span class="event-desc"><strong>Sofia Martinez</strong> · Goal (assist: M. Chen)</span>
+          <span class="event-side home">PP</span>
+        </div>
+        <div class="event-row">
+          <span class="event-time">54'</span>
+          <span class="event-icon">🟨</span>
+          <span class="event-desc"><strong>J. Rivera</strong> · Yellow card</span>
+          <span class="event-side away">MT</span>
+        </div>
+        <div class="event-row">
+          <span class="event-time">52'</span>
+          <span class="event-icon">⚽</span>
+          <span class="event-desc"><strong>A. Patel</strong> · Goal</span>
+          <span class="event-side away">MT</span>
+        </div>
+        <div class="event-row">
+          <span class="event-time">HT</span>
+          <span class="event-icon">⏱</span>
+          <span class="event-desc">Half time — Phoenix Pride 1, Mesa Titans 0</span>
+          <span class="event-side" style="background:#1a1a1a;color:#888">—</span>
+        </div>
+        <div class="event-row">
+          <span class="event-time">38'</span>
+          <span class="event-icon">⚽</span>
+          <span class="event-desc"><strong>Sofia Martinez</strong> · Goal (PK)</span>
+          <span class="event-side home">PP</span>
+        </div>
+        <div class="event-row">
+          <span class="event-time">22'</span>
+          <span class="event-icon">🟨</span>
+          <span class="event-desc"><strong>D. Nguyen</strong> · Yellow card</span>
+          <span class="event-side home">PP</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="phone green" style="width:100%;max-width:240px;margin:0 auto">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" style="padding:10px">
+          <div style="padding:4px 4px 8px;border-bottom:1px solid #1a1a1a;margin-bottom:10px">
+            <div style="font-size:10px;color:#4CAF7D;font-weight:800;letter-spacing:0.12em">REF VIEW · LIVE</div>
+            <div style="font-size:9px;color:#666;margin-top:2px">PP vs MT · Field 4 · 68'</div>
+          </div>
+
+          <div class="ref-score-input">
+            <div class="ref-team-row">
+              <div class="rt-name">Phoenix Pride</div>
+              <div class="ref-score-box">2</div>
+              <div class="ref-score-controls">
+                <div class="ref-btn">–</div>
+                <div class="ref-btn plus">+</div>
+              </div>
+            </div>
+            <div class="ref-team-row" style="border-top:1px solid #1a1a1a;padding-top:8px;margin-top:4px">
+              <div class="rt-name">Mesa Titans</div>
+              <div class="ref-score-box" style="color:#5577dd">1</div>
+              <div class="ref-score-controls">
+                <div class="ref-btn">–</div>
+                <div class="ref-btn plus">+</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ref-action-btns">
+            <div class="ref-action">⚽ Goal</div>
+            <div class="ref-action">🟨 Yellow</div>
+            <div class="ref-action">🟥 Red</div>
+            <div class="ref-action">⇄ Sub</div>
+          </div>
+
+          <div style="margin-top:auto;padding-top:10px;text-align:center;font-size:9px;color:#4CAF7D">
+            Auto-broadcasting to 47 parents
+          </div>
+        </div>
+      </div>
+      <div class="phone-label" style="margin-top:14px">
+        <span class="actor">Referee · vai-mobile</span>
+        Score in 2 taps · auto-broadcasts
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">Goal scored → <span>47 parents notified in 800ms</span> → Sofia's Passport updated → Scout dashboards refreshed.</div>
+    <div class="detail">ZORTS has scoring. SportsEngine has scoring. None of them attach the goal to the athlete's portable graph. VAI does. That goal Sofia just scored? It's an immutable performance event in her Passport forever — visible to college scouts (Phase 1B) with her Green Line eligibility already proven. Recruiting becomes a byproduct of playing, not a separate product to buy.</div>
+  </div>
+</div>
+
+<!-- ── LEAGUE MANAGEMENT / STANDINGS ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">GAMEDAY · Leagues & Standings</div>
+    <h2>League Management — Standings Compute Themselves</h2>
+    <p class="tag-line">Game events are append-only in the Athlete Graph. Standings, stats, and form are computed properties — never entered by hand. Disputes? Every point traces back to a timestamped game event with ref signature.</p>
+  </div>
+
+  <div class="desktop-frame">
+    <div class="desktop-chrome">
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-url">gameday.vai.app · Leagues · Rocky Mountain Youth Soccer · U14 Premier</div>
+    </div>
+    <div class="gameday-nav">
+      <div class="gameday-tab">Exceptions</div>
+      <div class="gameday-tab">Teams</div>
+      <div class="gameday-tab">Games</div>
+      <div class="gameday-tab">Tournaments</div>
+      <div class="gameday-tab active">Leagues <span class="count">2</span></div>
+      <div class="gameday-tab">Schedule</div>
+      <div class="gameday-tab">Standings</div>
+      <div class="gameday-tab">Roster</div>
+      <div class="gameday-tab">Comms</div>
+      <div class="gameday-tab">Fundraising</div>
+      <div class="gameday-tab">Policies</div>
+    </div>
+    <div class="desktop-body">
+      <div class="gameday-header" style="padding-bottom:16px">
+        <div>
+          <div class="gameday-title">U14 PREMIER · <span>Fall 2026</span></div>
+          <div style="font-size:11px;color:#666;margin-top:6px;letter-spacing:0.05em">Rocky Mountain Youth Soccer · Week 8 of 12 · 10 teams</div>
+        </div>
+        <div class="gameday-badges">
+          <div class="gameday-badge">42 games played</div>
+          <div class="gameday-badge">18 remaining</div>
+        </div>
+      </div>
+
+      <div class="standings-wrap">
+        <div class="standings-header">
+          <div>#</div>
+          <div>Team</div>
+          <div>GP</div>
+          <div>W</div>
+          <div class="hide-sm">D</div>
+          <div class="hide-sm">L</div>
+          <div>Form</div>
+          <div>Pts</div>
+        </div>
+        <div class="standings-row leader">
+          <div class="pos">1</div>
+          <div class="team">
+            <div class="team-mini-logo" style="background:linear-gradient(135deg,#4CAF7D,#2a8c5d)">DR</div>
+            <div class="tm-txt">Denver Rush FC</div>
+          </div>
+          <div class="num">8</div>
+          <div class="num">7</div>
+          <div class="num hide-sm">1</div>
+          <div class="num hide-sm">0</div>
+          <div class="form"><div class="form-dot w"></div><div class="form-dot w"></div><div class="form-dot w"></div><div class="form-dot d"></div><div class="form-dot w"></div></div>
+          <div class="pts">22</div>
+        </div>
+        <div class="standings-row">
+          <div class="pos">2</div>
+          <div class="team">
+            <div class="team-mini-logo" style="background:linear-gradient(135deg,#5555dd,#3333aa)">BE</div>
+            <div class="tm-txt">Boulder Elite</div>
+          </div>
+          <div class="num">8</div>
+          <div class="num">6</div>
+          <div class="num hide-sm">1</div>
+          <div class="num hide-sm">1</div>
+          <div class="form"><div class="form-dot w"></div><div class="form-dot l"></div><div class="form-dot w"></div><div class="form-dot w"></div><div class="form-dot w"></div></div>
+          <div class="pts">19</div>
+        </div>
+        <div class="standings-row">
+          <div class="pos">3</div>
+          <div class="team">
+            <div class="team-mini-logo" style="background:linear-gradient(135deg,#f0a500,#c08500)">CC</div>
+            <div class="tm-txt">Cherry Creek HS</div>
+          </div>
+          <div class="num">8</div>
+          <div class="num">5</div>
+          <div class="num hide-sm">2</div>
+          <div class="num hide-sm">1</div>
+          <div class="form"><div class="form-dot w"></div><div class="form-dot d"></div><div class="form-dot w"></div><div class="form-dot w"></div><div class="form-dot d"></div></div>
+          <div class="pts">17</div>
+        </div>
+        <div class="standings-row">
+          <div class="pos">4</div>
+          <div class="team">
+            <div class="team-mini-logo" style="background:linear-gradient(135deg,#dd5555,#aa3333)">PP</div>
+            <div class="tm-txt">Phoenix Pride</div>
+          </div>
+          <div class="num">8</div>
+          <div class="num">5</div>
+          <div class="num hide-sm">0</div>
+          <div class="num hide-sm">3</div>
+          <div class="form"><div class="form-dot w"></div><div class="form-dot w"></div><div class="form-dot l"></div><div class="form-dot w"></div><div class="form-dot l"></div></div>
+          <div class="pts">15</div>
+        </div>
+        <div class="standings-row">
+          <div class="pos">5</div>
+          <div class="team">
+            <div class="team-mini-logo" style="background:linear-gradient(135deg,#8855dd,#5533aa)">MT</div>
+            <div class="tm-txt">Mesa Titans</div>
+          </div>
+          <div class="num">8</div>
+          <div class="num">4</div>
+          <div class="num hide-sm">2</div>
+          <div class="num hide-sm">2</div>
+          <div class="form"><div class="form-dot d"></div><div class="form-dot w"></div><div class="form-dot w"></div><div class="form-dot l"></div><div class="form-dot w"></div></div>
+          <div class="pts">14</div>
+        </div>
+        <div class="standings-row">
+          <div class="pos">6</div>
+          <div class="team">
+            <div class="team-mini-logo" style="background:linear-gradient(135deg,#55aacc,#3377aa)">VB</div>
+            <div class="tm-txt">Vegas Blaze</div>
+          </div>
+          <div class="num">8</div>
+          <div class="num">3</div>
+          <div class="num hide-sm">2</div>
+          <div class="num hide-sm">3</div>
+          <div class="form"><div class="form-dot l"></div><div class="form-dot w"></div><div class="form-dot d"></div><div class="form-dot w"></div><div class="form-dot l"></div></div>
+          <div class="pts">11</div>
+        </div>
+        <div class="standings-row">
+          <div class="pos">7</div>
+          <div class="team">
+            <div class="team-mini-logo" style="background:linear-gradient(135deg,#aa8833,#775511)">AF</div>
+            <div class="tm-txt">Albuquerque AFC</div>
+          </div>
+          <div class="num">8</div>
+          <div class="num">2</div>
+          <div class="num hide-sm">3</div>
+          <div class="num hide-sm">3</div>
+          <div class="form"><div class="form-dot d"></div><div class="form-dot l"></div><div class="form-dot d"></div><div class="form-dot w"></div><div class="form-dot d"></div></div>
+          <div class="pts">9</div>
+        </div>
+        <div class="standings-row">
+          <div class="pos">8</div>
+          <div class="team">
+            <div class="team-mini-logo" style="background:linear-gradient(135deg,#666,#333)">TU</div>
+            <div class="tm-txt">Tucson United</div>
+          </div>
+          <div class="num">8</div>
+          <div class="num">1</div>
+          <div class="num hide-sm">2</div>
+          <div class="num hide-sm">5</div>
+          <div class="form"><div class="form-dot l"></div><div class="form-dot l"></div><div class="form-dot d"></div><div class="form-dot l"></div><div class="form-dot l"></div></div>
+          <div class="pts">5</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px">
+        <div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;padding:16px 20px">
+          <div style="font-size:10px;color:#4CAF7D;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:12px">Top Scorers · Computed Live</div>
+          <div style="font-size:11px;color:#aaa">
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1a1a1a"><span><strong style="color:#fff">Sofia Martinez</strong> · Denver Rush</span><span style="color:#4CAF7D;font-weight:800">14</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1a1a1a"><span><strong style="color:#fff">Marcus Kim</strong> · Boulder Elite</span><span style="color:#4CAF7D;font-weight:800">11</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1a1a1a"><span><strong style="color:#fff">Jayla Thompson</strong> · Cherry Creek</span><span style="color:#4CAF7D;font-weight:800">9</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0"><span><strong style="color:#fff">Aidan Davis</strong> · Phoenix Pride</span><span style="color:#4CAF7D;font-weight:800">8</span></div>
+          </div>
+        </div>
+        <div style="background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;padding:16px 20px">
+          <div style="font-size:10px;color:#4CAF7D;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:12px">Dispute Audit · Last 30 Days</div>
+          <div style="font-size:11px;color:#aaa;line-height:1.6">
+            <div style="padding:4px 0">✓ <strong style="color:#fff">0 standings disputes</strong> — every point traceable to game event</div>
+            <div style="padding:4px 0">✓ <strong style="color:#fff">0 roster protests</strong> — Green Line verified pre-game</div>
+            <div style="padding:4px 0">✓ <strong style="color:#fff">2 red card reviews</strong> — auto-logged with ref audit trail</div>
+            <div style="padding:4px 0;color:#4CAF7D">Saved ~18 hours of league ops review time</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">Standings are a <span>query</span>, not a spreadsheet.</div>
+    <div class="detail">ZORTS admins enter scores into a form. League ops calculates standings by hand. Disputes require screenshots. VAI's standings materialize from the graph — every row is a live computation over append-only game events. Parent says "that's wrong"? Click the number, see every game, every ref sig, every timestamp. The conversation ends in 15 seconds.</div>
+  </div>
+</div>
+
+<!-- ── SCHEDULE MANAGER ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">GAMEDAY · Schedule</div>
+    <h2>Schedule Manager — Fields, Practices, Games, Conflicts</h2>
+    <p class="tag-line">One grid. Fields × time × teams. AVANTI detects conflicts against the Green Line (eligibility), insurance scope, field availability, and ref assignments. Dynamic re-optimization when weather, registrations, or illness shift the board.</p>
+  </div>
+
+  <div class="desktop-frame">
+    <div class="desktop-chrome">
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-url">gameday.vai.app · Schedule · Week of Oct 13</div>
+    </div>
+    <div class="gameday-nav">
+      <div class="gameday-tab">Exceptions</div>
+      <div class="gameday-tab">Teams</div>
+      <div class="gameday-tab">Games</div>
+      <div class="gameday-tab">Tournaments</div>
+      <div class="gameday-tab">Leagues</div>
+      <div class="gameday-tab active">Schedule</div>
+      <div class="gameday-tab">Standings</div>
+      <div class="gameday-tab">Roster</div>
+      <div class="gameday-tab">Comms</div>
+      <div class="gameday-tab">Fundraising</div>
+      <div class="gameday-tab">Policies</div>
+    </div>
+    <div class="desktop-body">
+      <div class="gameday-header" style="padding-bottom:14px">
+        <div>
+          <div class="gameday-title">WEEK OF <span>OCT 13</span></div>
+          <div style="font-size:11px;color:#666;margin-top:6px;letter-spacing:0.05em">Denver Rush FC · 6 fields · 12 teams · 47 events</div>
+        </div>
+        <div class="gameday-badges">
+          <div class="gameday-badge">47 scheduled</div>
+          <div class="gameday-badge warn">1 conflict</div>
+        </div>
+      </div>
+
+      <div class="schedule-grid">
+        <div class="sg-cell header">Time</div>
+        <div class="sg-cell header">Mon</div>
+        <div class="sg-cell header">Tue</div>
+        <div class="sg-cell header">Wed</div>
+        <div class="sg-cell header sg-hide-sm">Thu</div>
+        <div class="sg-cell header sg-hide-sm">Fri</div>
+        <div class="sg-cell header sg-hide-sm">Sat</div>
+        <div class="sg-cell header sg-hide-sm">Sun</div>
+
+        <div class="sg-cell time">4:00</div>
+        <div class="sg-cell"></div>
+        <div class="sg-cell"><div class="sg-event practice"><span class="ev-title">U12 Practice</span><span class="ev-meta">Field 1 · Coach Lopez</span></div></div>
+        <div class="sg-cell"></div>
+        <div class="sg-cell sg-hide-sm"><div class="sg-event practice"><span class="ev-title">U14 Practice</span><span class="ev-meta">Field 2 · Coach Thompson</span></div></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+
+        <div class="sg-cell time">5:30</div>
+        <div class="sg-cell"><div class="sg-event practice"><span class="ev-title">U14 Practice</span><span class="ev-meta">Field 2 · 24/24 GREEN</span></div></div>
+        <div class="sg-cell"></div>
+        <div class="sg-cell"><div class="sg-event practice"><span class="ev-title">U16 Practice</span><span class="ev-meta">Field 3 · 18/19 GREEN</span></div></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"><div class="sg-event conflict"><span class="ev-title">⚠ Field conflict</span><span class="ev-meta">U14 vs U16 · F2</span></div></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+
+        <div class="sg-cell time">7:00</div>
+        <div class="sg-cell"></div>
+        <div class="sg-cell"><div class="sg-event practice"><span class="ev-title">U18 Practice</span><span class="ev-meta">Field 4 · Coach Kim</span></div></div>
+        <div class="sg-cell"></div>
+        <div class="sg-cell sg-hide-sm"><div class="sg-event practice"><span class="ev-title">U12 Practice</span><span class="ev-meta">Field 1 · 15/15 GREEN</span></div></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+
+        <div class="sg-cell time">9:00</div>
+        <div class="sg-cell sg-hide-sm" style="grid-column:1"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"><div class="sg-event game"><span class="ev-title">🏆 U14 League</span><span class="ev-meta">DR vs BE · F4 · Ref: Davis</span></div></div>
+        <div class="sg-cell sg-hide-sm"></div>
+
+        <div class="sg-cell time">11:00</div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"></div>
+        <div class="sg-cell sg-hide-sm"><div class="sg-event game"><span class="ev-title">🏆 U12 League</span><span class="ev-meta">DR vs TU · F1 · Ref: Rivera</span></div></div>
+        <div class="sg-cell sg-hide-sm"><div class="sg-event game"><span class="ev-title">🏆 U16 League</span><span class="ev-meta">DR vs CC · F4</span></div></div>
+
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:20px">
+        <div class="exception-card" style="margin:0">
+          <div class="ex-title" style="color:#f0a500">⚠ Friday 5:30 PM · Field 2</div>
+          <div class="ex-meta">AVANTI · 6 min ago · Double booking</div>
+          <div class="ex-avanti">
+            <strong>AVANTI analysis</strong>
+            U14 practice moved from Wed (Coach Thompson out). Now overlaps U16 practice on Field 2. Field 6 open Fri 5:30. Coach Thompson + Coach Kim both OK with F6 (checked via comms). <strong>Recommend auto-move to F6.</strong>
+          </div>
+          <div class="ex-actions">
+            <div class="ex-btn primary">Accept</div>
+            <div class="ex-btn secondary">Review</div>
+          </div>
+        </div>
+
+        <div style="background:#0f2a18;border:1px solid #1a5a2a;border-radius:10px;padding:16px 20px">
+          <div style="font-size:10px;color:#4CAF7D;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:10px">Auto-Optimized This Week</div>
+          <div style="font-size:11px;color:#aaa;line-height:1.7">
+            <div>✓ Weather shift → 3 outdoor practices moved to indoor turf</div>
+            <div>✓ 2 ref cancellations → backfilled from available pool</div>
+            <div>✓ 4 team registrations → slotted into correct divisions</div>
+            <div>✓ 1 field maintenance window → practices re-routed</div>
+            <div style="color:#4CAF7D;margin-top:8px;font-weight:700">Zero admin intervention</div>
+          </div>
+        </div>
+
+        <div class="green-line-overview" style="margin:0">
+          <h4>Schedule Integrity</h4>
+          <div class="metric-row">
+            <div class="m-label">Events scheduled</div>
+            <div class="m-value">47</div>
+          </div>
+          <div class="metric-row">
+            <div class="m-label">Conflicts detected</div>
+            <div class="m-value" style="color:#f0a500">1</div>
+          </div>
+          <div class="metric-row">
+            <div class="m-label">Refs assigned</div>
+            <div class="m-value" style="color:#4CAF7D">8 / 8</div>
+          </div>
+          <div class="metric-row">
+            <div class="m-label">Field utilization</div>
+            <div class="m-value">84%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">The schedule re-solves itself. <span>Admin approves 1 move.</span></div>
+    <div class="detail">Competitors publish a schedule once, then deal with every email about every conflict. GAMEDAY's schedule is a live optimization — weather shifts, registrations come in, refs cancel, the grid reflows with AVANTI proposing fixes. The only human decision is "accept" or "review." 30 minutes of admin work becomes 30 seconds.</div>
+  </div>
+</div>
+
+<!-- ── COMMS HUB ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">GAMEDAY · Communications</div>
+    <h2>Communications — Club-wide, AVANTI-drafted, State-aware</h2>
+    <p class="tag-line">Announcements are generated from state changes, not composed in Word docs. Rain cancellation → AVANTI drafts the message, tags affected parents only, includes make-up date options. Admin approves once.</p>
+  </div>
+
+  <div class="desktop-frame">
+    <div class="desktop-chrome">
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-dot"></div>
+      <div class="chrome-url">gameday.vai.app · Communications</div>
+    </div>
+    <div class="desktop-body">
+      <div class="gameday-header" style="padding-bottom:16px">
+        <div class="gameday-title">COMMUNICATIONS · <span>Pending Approval</span></div>
+        <div class="gameday-badges">
+          <div class="gameday-badge">3 drafted</div>
+          <div class="gameday-badge">247 reached today</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div style="font-size:10px;color:#666;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:10px">Awaiting your approval · AVANTI-drafted</div>
+
+          <div class="comms-thread">
+            <div class="ct-header">
+              <div class="ct-title">Rain cancellation · Tuesday practices</div>
+              <div class="ct-meta">24 families</div>
+            </div>
+            <div class="ct-preview">"Tonight's U14 + U16 practices at Regis Park cancelled — weather alert 80% chance storms 5-7 PM. AVANTI re-slotted both practices to Thursday 5:30 PM indoor at Turf South. No action needed; calendars updated. Reply if Thursday conflicts."</div>
+            <div class="ct-avanti">AVANTI · Generated from NWS weather API + field policy</div>
+            <div class="ex-actions" style="margin-top:10px">
+              <div class="ex-btn primary">Approve & send</div>
+              <div class="ex-btn secondary">Edit</div>
+            </div>
+          </div>
+
+          <div class="comms-thread">
+            <div class="ct-header">
+              <div class="ct-title">Medical form reminders · 4 athletes</div>
+              <div class="ct-meta">4 parents</div>
+            </div>
+            <div class="ct-preview">"4 athletes have medical forms expiring in next 14 days. AVANTI already nudged parents via app. This is optional follow-up email for redundancy."</div>
+            <div class="ct-avanti">AVANTI · Green Line YELLOW status</div>
+            <div class="ex-actions" style="margin-top:10px">
+              <div class="ex-btn primary">Approve & send</div>
+              <div class="ex-btn secondary">Skip (AVANTI handles)</div>
+            </div>
+          </div>
+
+          <div class="comms-thread">
+            <div class="ct-header">
+              <div class="ct-title">Tournament results · Fall Classic</div>
+              <div class="ct-meta">247 families</div>
+            </div>
+            <div class="ct-preview">"Denver Rush FC finished 2nd at Fall Classic — huge showing! 8 goals over the weekend. Sofia Martinez named tournament MVP. Stats auto-attached to player Passports. Photos from Hudl import below."</div>
+            <div class="ct-avanti">AVANTI · Generated from game events + MVP vote</div>
+            <div class="ex-actions" style="margin-top:10px">
+              <div class="ex-btn primary">Approve & send</div>
+              <div class="ex-btn secondary">Edit</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:10px;color:#666;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:10px">Auto-sent this week · No admin touch</div>
+
+          <div class="comms-thread" style="opacity:0.7">
+            <div class="ct-header">
+              <div class="ct-title">✓ Payment receipts · Fall dues</div>
+              <div class="ct-meta">Sent 247 · 12m ago</div>
+            </div>
+            <div class="ct-preview">Triggered by Green Line state change · Payment cleared → receipt auto-sent</div>
+          </div>
+
+          <div class="comms-thread" style="opacity:0.7">
+            <div class="ct-header">
+              <div class="ct-title">✓ Practice schedule update</div>
+              <div class="ct-meta">Sent 24 · 2h ago</div>
+            </div>
+            <div class="ct-preview">Triggered by schedule re-optimization · Only affected parents notified</div>
+          </div>
+
+          <div class="comms-thread" style="opacity:0.7">
+            <div class="ct-header">
+              <div class="ct-title">✓ Roster confirmation · Fall Classic</div>
+              <div class="ct-meta">Sent 47 · yesterday</div>
+            </div>
+            <div class="ct-preview">Triggered by roster lock · All parents confirmed travel details</div>
+          </div>
+
+          <div class="comms-thread" style="opacity:0.7">
+            <div class="ct-header">
+              <div class="ct-title">✓ Welcome · 3 new athletes</div>
+              <div class="ct-meta">Sent 6 · 3 days ago</div>
+            </div>
+            <div class="ct-preview">Triggered by Passport grant creation · Parent + athlete onboarding kickoff</div>
+          </div>
+
+          <div style="background:#0f2a18;border:1px solid #1a5a2a;border-radius:10px;padding:16px 20px;margin-top:14px">
+            <div style="font-size:10px;color:#4CAF7D;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;margin-bottom:10px">Comms · 30-Day Summary</div>
+            <div style="font-size:11px;color:#aaa;line-height:1.7">
+              <div>• <strong style="color:#fff">1,842 messages sent</strong></div>
+              <div>• <strong style="color:#4CAF7D">1,797 auto-sent</strong> (97.6%)</div>
+              <div>• <strong style="color:#fff">45 admin-approved</strong> (2.4%)</div>
+              <div>• <strong style="color:#f0a500">6.8h</strong> admin time on comms</div>
+              <div style="color:#4CAF7D;margin-top:8px;font-weight:700">vs ZORTS average: 42h/month</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">97.6% of club comms auto-sent. <span>Admin approves 2.4%.</span></div>
+    <div class="detail">Most club software gives admins a "compose email" button and wishes them luck. GAMEDAY drafts the message FROM the state change, targets ONLY the affected families, and asks the admin one question: approve or edit? The club's communication stops being a part-time job and becomes a reflex of the graph.</div>
+  </div>
+</div>
+
+<!-- ── KILL THE COMPETITION ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">Category Kill-Shot</div>
+    <h2>Why ZORTS, TeamSnap, and SportsEngine can't catch up</h2>
+    <p class="tag-line">They built screens on top of silos. VAI built a protocol underneath. The difference is architectural, not feature-level.</p>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-card loser">
+      <div class="comp-logo">ZORTS / TEAMSNAP / SPORTSENGINE</div>
+      <h3>Admin interfaces on fragmented truth</h3>
+      <ul>
+        <li><strong>Club-centric data model.</strong> Athlete's record lives in the club's database. Leaves club → data stays, history lost.</li>
+        <li><strong>Mutable records.</strong> Waivers, payments, eligibility tracked in editable fields. "Who changed this?" has no answer.</li>
+        <li><strong>Siloed modules.</strong> Waivers in one tab, payments in another, roster in a third. Admin reconciles by hand.</li>
+        <li><strong>Manual scoring.</strong> Admin types scores into a form after the game. Standings computed by spreadsheet.</li>
+        <li><strong>Static schedules.</strong> Publish once, deal with conflict emails for 12 weeks.</li>
+        <li><strong>Email blast comms.</strong> Compose, target all parents, hope the right ones see it.</li>
+        <li><strong>Recruiting is a separate product.</strong> Pay $2k/year to the other vendor. Data doesn't follow the athlete.</li>
+        <li><strong>Admin is the job.</strong> 40+ hours/week of clerk work across multiple tools.</li>
+      </ul>
+    </div>
+
+    <div class="comp-card winner">
+      <div class="comp-logo">VAI CLUB OS</div>
+      <h3>Protocol underneath every surface</h3>
+      <ul>
+        <li><strong>Athlete-centric graph.</strong> Passport is sovereign. Club changes, record travels. 5-year portable history.</li>
+        <li><strong>Append-only events.</strong> Every state change timestamped + signed. Audit trail is automatic, not retrofit.</li>
+        <li><strong>One Green Line.</strong> Waivers + payments + eligibility compute to one signal. Every surface reads the same truth.</li>
+        <li><strong>Live scoring attaches to graph.</strong> Goal scored = immutable performance event in Passport = scout-visible.</li>
+        <li><strong>Schedules re-optimize continuously.</strong> Weather, refs, registrations shift the grid; AVANTI proposes fixes.</li>
+        <li><strong>Comms draft from state changes.</strong> AVANTI tags affected parents only. Admin approves or edits.</li>
+        <li><strong>Recruiting is a byproduct.</strong> Scouts query the graph. Eligibility pre-verified. No separate product to buy.</li>
+        <li><strong>Admin is fire chief.</strong> 6-8 hours/week handling the 1% AVANTI can't resolve.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="comp-vs">VS</div>
+
+  <div style="max-width:880px;margin:0 auto;padding:32px 36px;background:linear-gradient(135deg,#0f2a18 0%,#0a0a0a 100%);border:1px solid #1a5a2a;border-radius:16px">
+    <div style="font-size:11px;letter-spacing:0.2em;color:#4CAF7D;font-weight:800;margin-bottom:14px;text-transform:uppercase">What competitors would have to unbuild</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;font-size:13px;color:#ccc;line-height:1.5">
+      <div>
+        <strong style="color:#fff;display:block;margin-bottom:6px">Data model</strong>
+        Club-centric → athlete-centric. Invalidates existing customer contracts.
+      </div>
+      <div>
+        <strong style="color:#fff;display:block;margin-bottom:6px">Record integrity</strong>
+        Mutable rows → append-only events. Years of historical migration.
+      </div>
+      <div>
+        <strong style="color:#fff;display:block;margin-bottom:6px">Operations</strong>
+        Admin-driven workflows → AVANTI runtime. Requires trusted state underneath.
+      </div>
+      <div>
+        <strong style="color:#fff;display:block;margin-bottom:6px">Governance</strong>
+        Dashboards → audit-logged multiplayer. Changes every customer mental model.
+      </div>
+    </div>
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid #1a5a2a;text-align:center;font-size:15px;color:#4CAF7D;font-weight:700;line-height:1.5">
+      Years + retrust, not quarters + features.<br>
+      <span style="color:#888;font-size:13px;font-weight:500">Meanwhile VAI's trust density compounds with every athlete added.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── AVANTI CONVERSATION (parent view) ── -->
+<div class="section">
+  <div class="section-header">
+    <div class="layer-tag">Cross-Layer · AVANTI</div>
+    <h2>AVANTI in the parent's pocket</h2>
+    <p class="tag-line">The runtime surfaces on vai-mobile as a conversation thread per athlete. AVANTI reads Green Line + Passport in real-time. Answers with authority. Never hedges. Only escalates when state can't resolve.</p>
+  </div>
+
+  <div class="phone-rail centered">
+    <div>
+      <div class="phone green">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" style="background:#0a0a0a;padding:12px">
+          <div style="padding:4px 6px 10px;border-bottom:1px solid #1a1a1a;margin-bottom:10px">
+            <div style="font-size:11px;color:#4CAF7D;font-weight:800;letter-spacing:0.1em">AVANTI · SOFIA</div>
+            <div style="font-size:9px;color:#666;margin-top:2px">Denver Rush FC · U14 Travel</div>
+          </div>
+          <div class="chat-ui">
+            <div class="chat-bubble user">Can Sofia travel to Phoenix tournament this weekend?</div>
+            <div class="chat-bubble avanti">
+              <div class="actor">AVANTI</div>
+              Yes. She's cleared to play. Her Green Line is GREEN.<br><br>
+              ✓ Waivers signed<br>
+              ✓ Payment current<br>
+              ✓ Medical valid thru 11/26<br>
+              ✓ Out-of-state insurance active<br>
+              ✓ Travel roster confirmed
+            </div>
+            <div class="chat-bubble user">What time do we need to be at the field?</div>
+            <div class="chat-bubble avanti">
+              <div class="actor">AVANTI</div>
+              Sat 10/18 · Check-in 7:00 AM at Reach 11 Complex, Field 4. First match 8:15 AM. Director Thompson confirmed the schedule 2 hours ago.
+            </div>
+            <div class="chat-bubble action">View full weekend plan →</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">
+        <span class="actor">Parent · vai-mobile</span>
+        Authority · cited · sourced
+      </div>
+    </div>
+
+    <div>
+      <div class="phone orange">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" style="background:#0a0a0a;padding:12px">
+          <div style="padding:4px 6px 10px;border-bottom:1px solid #1a1a1a;margin-bottom:10px">
+            <div style="font-size:11px;color:#f0a500;font-weight:800;letter-spacing:0.1em">AVANTI · MARCUS</div>
+            <div style="font-size:9px;color:#666;margin-top:2px">Denver Rush FC · U14 Travel</div>
+          </div>
+          <div class="chat-ui">
+            <div class="chat-bubble avanti">
+              <div class="actor">AVANTI · INITIATED</div>
+              Quick heads up — Marcus's annual physical expires 05/01. His Green Line is YELLOW.<br><br>
+              If you upload the new form before then, his status stays clear. If not, he'll be BLOCKED after 04/30 until resolved.
+            </div>
+            <div class="chat-bubble user">Where do I send the form?</div>
+            <div class="chat-bubble avanti">
+              <div class="actor">AVANTI</div>
+              Snap a photo or upload PDF here. I'll validate and update his Passport automatically. Takes about 20 seconds.
+            </div>
+            <div class="chat-bubble action" style="background:#f0a500">Upload physical · 1 tap</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label orange">
+        <span class="actor">Parent · vai-mobile</span>
+        AVANTI-initiated · pre-emptive
+      </div>
+    </div>
+
+    <div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" style="background:#0a0a0a;padding:12px">
+          <div style="padding:4px 6px 10px;border-bottom:1px solid #1a1a1a;margin-bottom:10px">
+            <div style="font-size:11px;color:#888;font-weight:800;letter-spacing:0.1em">AVANTI · SOFIA · ESCALATED</div>
+            <div style="font-size:9px;color:#666;margin-top:2px">Handoff in progress</div>
+          </div>
+          <div class="chat-ui">
+            <div class="chat-bubble user">Sofia has a school game and club game on 10/18. What do we do?</div>
+            <div class="chat-bubble avanti">
+              <div class="actor">AVANTI</div>
+              This is a scheduling conflict across two clubs with equal authority. I can't resolve this alone — it's a judgment call between Director Thompson (Rush) and Coach Ramirez (CCHS).<br><br>
+              I've opened a multiplayer thread with both. You'll see the resolution here once they agree. Typical resolution time: 12 min.
+            </div>
+            <div class="chat-bubble avanti" style="background:#1a1a1a;border-color:#333">
+              <div class="actor" style="color:#888">GAMEDAY · ESCALATED</div>
+              Thread opened · 2 stakeholders notified · Awaiting response
+            </div>
+            <div class="chat-bubble action" style="background:#333;color:#ccc">View thread →</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">
+        <span class="actor">Parent · vai-mobile</span>
+        Genuine exception · escalated transparently
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-explainer">
+    <div class="result">99% of inbound answered with authority. <span>1% escalated with context.</span></div>
+    <div class="detail">AVANTI cites the Green Line. AVANTI cites the Passport. AVANTI cites the schedule. It doesn't guess, apologize, or hedge. When it escalates, it hands humans a problem that actually needs judgment — not a problem humans could have avoided by reading the state machine.</div>
+  </div>
+</div>
+
+<!-- ── BUILD NOTE ── -->
+<div class="build-note">
+  <h3>vai-pr-build Phase 1 · <span>3–4 weeks</span></h3>
+  <div class="columns">
+    <div class="build-col">
+      <h4>Francis · vai-api</h4>
+      <ul>
+        <li><strong>Compliance events</strong> — append-only state machine + timeline API</li>
+        <li><strong>Passport identity</strong> — root model + grants + access logs + revocation</li>
+        <li><strong>AVANTI runtime</strong> — intent routing + state query + escalation API</li>
+        <li><strong>GAMEDAY APIs</strong> — decision threads + bracket state + exception queue</li>
+        <li><strong>Policy engine</strong> — starts with 3 gates: waivers, payment, medical</li>
+      </ul>
+    </div>
+    <div class="build-col">
+      <h4>Badinho · vai-mobile</h4>
+      <ul>
+        <li><strong>Passport home</strong> — 5-year record + active grants + transparency</li>
+        <li><strong>Green Line card</strong> — every athlete-relevant screen</li>
+        <li><strong>AVANTI thread</strong> — conversation per athlete + one-tap actions</li>
+        <li><strong>Parent approval flow</strong> — grant/revoke per club with scope toggles</li>
+        <li><strong>Coach exception view</strong> — mobile subset of GAMEDAY queue</li>
+      </ul>
+    </div>
+    <div class="build-col">
+      <h4>GAMEDAY · web (Phase 1)</h4>
+      <ul>
+        <li><strong>Exception queue</strong> — pre-loaded AVANTI context (landing view)</li>
+        <li><strong>Green Line overview</strong> — club-wide dashboard</li>
+        <li><strong>Teams + Roster</strong> — per-team view, Green Line filtered</li>
+        <li><strong>Schedule grid</strong> — fields × time × teams, conflict detection</li>
+        <li><strong>Comms hub</strong> — AVANTI-drafted, admin-approved</li>
+        <li><strong>Policy editor</strong> — gate configuration (3 to start)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:28px;padding-top:24px;border-top:1px solid #1a5a2a">
+    <div style="font-size:11px;color:#4CAF7D;letter-spacing:0.15em;text-transform:uppercase;font-weight:800;margin-bottom:14px;text-align:center">Phase 1.5 · Weeks 5-7 (Tournament & League Ops)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;font-size:12px;color:#aaa;line-height:1.5">
+      <div>
+        <strong style="color:#fff;display:block;margin-bottom:6px">Tournament bracket</strong>
+        Multiplayer canvas · seeding · field assignments · ref coordination
+      </div>
+      <div>
+        <strong style="color:#fff;display:block;margin-bottom:6px">Live scoring</strong>
+        Ref mobile view · scoreboard broadcast · event attach to Passport
+      </div>
+      <div>
+        <strong style="color:#fff;display:block;margin-bottom:6px">Standings engine</strong>
+        Computed from game events · dispute audit · top scorer leaderboards
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px;padding-top:20px;border-top:1px solid #1a5a2a;font-size:13px;color:#888;line-height:1.6;text-align:center">
+    <strong style="color:#4CAF7D">Scope is the number of gates, not the concepts.</strong><br>
+    Phase 1 ships 3 compliance gates (waivers + payment + medical) across all 4 layers + the core GAMEDAY surfaces (exceptions, teams, schedule, comms, policies). Phase 1.5 adds tournament bracket + live scoring + standings. Recruiting, Payments v2, Community, Fundraising, Migration plug into this stack without new layers — just more gates, more surfaces, same protocol.
+  </div>
+</div>
+
+</body>
+</html>

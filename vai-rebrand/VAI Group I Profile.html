@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VAI — Group I · Profile (Highlights · Bio · Ability · Stats · Velocity Detail · Game Log)</title>
+<link rel="stylesheet" href="styles.css" />
+<template id="__bundler_thumbnail" data-bg-color="#060608">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#060608"/>
+  <text x="50" y="32" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="700" fill="#F5F0EB">BEN</text>
+  <text x="50" y="44" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="700" fill="#F5F0EB">WHITESIDES</text>
+  <text x="50" y="56" text-anchor="middle" font-family="sans-serif" font-size="5" fill="#3B82F6">CLASS OF '26</text>
+  <rect x="20" y="62" width="60" height="3" rx="1.5" fill="#15151c"/>
+  <rect x="20" y="62" width="40" height="3" rx="1.5" fill="#3B82F6"/>
+  <text x="50" y="86" text-anchor="middle" font-family="sans-serif" font-size="6" font-weight="700" fill="#F7941E">GROUP I</text>
+</svg>
+</template>
+<style>html, body, #root { background: #060608; height: 100%; margin: 0; }</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="i-profile.jsx"></script>
+<script type="text/babel">
+const { DesignCanvas, DCSection, DCArtboard, P0Highlights, P0bChangeMetrics, P1Bio, P2Ability, P3Stats, P4Velocity, P5StatsGame,
+  TweaksPanel, useTweaks, TweakSection, TweakColor, TweakRadio } = window;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "teamColor": "#10B981"
+}/*EDITMODE-END*/;
+
+const PRESETS = [
+  { name: 'VAI Blue', value: '#3B82F6' },
+  { name: 'Crimson', value: '#EF4444' },
+  { name: 'Forest',  value: '#10B981' },
+  { name: 'Royal Purple', value: '#8B5CF6' },
+  { name: 'Burnt Orange', value: '#EA580C' },
+  { name: 'Gold', value: '#F59E0B' },
+  { name: 'Carolina', value: '#7DD3FC' },
+];
+
+const Frame = ({ children }) => (
+  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#060608' }} className="ambient-glow">
+    {children}
+  </div>
+);
+
+const Phone = ({ children }) => (
+  <div style={{
+    position: 'relative', width: 390, height: 844,
+    background: '#060608', borderRadius: 40,
+    boxShadow: '0 0 0 8px #1a1a20, 0 30px 60px -20px rgba(0,0,0,0.7)',
+    overflow: 'hidden',
+  }} className="ambient-glow">
+    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 44, padding: '0 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 10, fontFamily: 'DM Sans', fontSize: 13, fontWeight: 600, color: '#F5F0EB' }}>
+      <span>9:41</span>
+      <span style={{ fontFamily: 'JetBrains Mono', fontSize: 11, color: '#8888A0' }}>••• WiFi —</span>
+    </div>
+    <div style={{ position: 'absolute', inset: '44px 0 0 0' }}>{children}</div>
+  </div>
+);
+
+const SCREENS = [
+  ['p0', 'P0 Highlights', P0Highlights],
+  ['p0b', 'P0b Change Metrics', P0bChangeMetrics],
+  ['p1', 'P1 Bio', P1Bio],
+  ['p2', 'P2 Ability', P2Ability],
+  ['p3', 'P3 Stats', P3Stats],
+  ['p4', 'P4 Velocity', P4Velocity],
+  ['p5', 'P5 Game Log', P5StatsGame],
+];
+
+const App = () => {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [s, setS] = React.useState('p0');
+  const Comp = SCREENS.find(x => x[0] === s)[2];
+
+  // P0 ↔ P0b inline navigation (Edit Metrics / Back)
+  const passProps = { accent: t.teamColor };
+  if (s === 'p0') passProps.onChangeMetrics = () => setS('p0b');
+  if (s === 'p0b') passProps.onBack = () => setS('p0');
+
+  const Proto = (
+    <div style={{ position: 'relative', width: '100%', height: '100%' }} className="ambient-glow">
+      <Frame><Phone><Comp {...passProps} /></Phone></Frame>
+      <div style={{
+        position: 'absolute', bottom: 18, left: '50%', transform: 'translateX(-50%)',
+        display: 'flex', gap: 5, background: 'rgba(12,12,16,0.92)', backdropFilter: 'blur(8px)',
+        border: '1px solid #1e1e26', borderRadius: 999, padding: 4, zIndex: 20,
+      }}>
+        {SCREENS.map(([id, label]) => (
+          <button key={id} onClick={() => setS(id)} style={{
+            background: s === id ? '#F7941E' : 'transparent',
+            color: s === id ? '#000' : '#C8C8D0',
+            border: 'none', padding: '6px 12px', borderRadius: 999, cursor: 'pointer',
+            fontFamily: 'DM Sans', fontWeight: 600, fontSize: 11,
+          }}>{label}</button>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <DesignCanvas
+        title="GROUP I — Athlete Profile · Tweak the team color to re-theme every screen"
+        subtitle="7 mobile screens — Highlights (recruiting card), Change Metrics, Bio, Ability, Stats Season (OVR), Velocity drill-down, Stats Game"
+        defaultZoom={0.5}
+      >
+        <DCSection id="proto" title="Interactive Prototype — change team color in Tweaks panel">
+          <DCArtboard id="proto" label="Tap a pill · uses the active team color" width={460} height={920}>{Proto}</DCArtboard>
+        </DCSection>
+
+        <DCSection id="screens" title="P0–P5 — All 7 screens">
+          <DCArtboard id="P0" label="P0 — Highlights · recruiting card / first impression · full-bleed photo + giant stats" width={460} height={920}>
+            <Frame><Phone><P0Highlights accent={t.teamColor} onChangeMetrics={() => {}} /></Phone></Frame>
+          </DCArtboard>
+          <DCArtboard id="P0b" label="P0b — Change Metrics · customization picker (max 3 stats + OVR toggle)" width={460} height={920}>
+            <Frame><Phone><P0bChangeMetrics accent={t.teamColor} onBack={() => {}} /></Phone></Frame>
+          </DCArtboard>
+          <DCArtboard id="P1" label="P1 — Bio · name, class, sports, position cards, biometrics" width={460} height={920}>
+            <Frame><Phone><P1Bio accent={t.teamColor} /></Phone></Frame>
+          </DCArtboard>
+          <DCArtboard id="P2" label="P2 — Ability · Speed/Power/Agility/Football metrics + sparklines" width={460} height={920}>
+            <Frame><Phone><P2Ability accent={t.teamColor} /></Phone></Frame>
+          </DCArtboard>
+          <DCArtboard id="P3" label="P3 — Stats · OVR 84 + attribute bars + pending approval + tiles" width={460} height={920}>
+            <Frame><Phone><P3Stats accent={t.teamColor} /></Phone></Frame>
+          </DCArtboard>
+          <DCArtboard id="P4" label="P4 — Throw Velocity drill-down · 12mo chart + AVANTI Coaching" width={460} height={920}>
+            <Frame><Phone><P4Velocity accent={t.teamColor} /></Phone></Frame>
+          </DCArtboard>
+          <DCArtboard id="P5" label="P5 — Stats Game · Pending approval + Game Log table" width={460} height={920}>
+            <Frame><Phone><P5StatsGame accent={t.teamColor} /></Phone></Frame>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+
+      <TweaksPanel title="Profile Tweaks">
+        <TweakSection label="Team Color" />
+        <TweakColor label="Custom" value={t.teamColor} onChange={v => setTweak('teamColor', v)} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, padding: '4px 12px 10px' }}>
+          {PRESETS.map(p => (
+            <button key={p.value} onClick={() => setTweak('teamColor', p.value)} title={p.name} style={{
+              height: 32, borderRadius: 6, cursor: 'pointer',
+              background: p.value,
+              border: t.teamColor.toLowerCase() === p.value.toLowerCase() ? '2px solid #F5F0EB' : '1px solid #1e1e26',
+            }}></button>
+          ))}
+        </div>
+        <div style={{ padding: '4px 14px 12px', fontSize: 11, color: '#8888A0', lineHeight: 1.4 }}>
+          Recolors highlights, accent text, charts, and progress bars across every profile screen.
+        </div>
+      </TweaksPanel>
+    </>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

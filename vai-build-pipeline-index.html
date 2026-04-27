@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Build Pipeline Design Index</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #060608; font-family: -apple-system, 'Inter', sans-serif; color: #e8e8ec; padding: 40px 32px 100px; max-width: 1400px; margin: 0 auto; }
+
+/* PAGE HEADER */
+.page-header { margin-bottom: 56px; text-align: center; }
+.page-title { font-family: 'Oswald', sans-serif; font-size: 32px; font-weight: 700; letter-spacing: 0.06em; color: #F7941E; text-transform: uppercase; margin-bottom: 8px; }
+.page-sub { font-size: 14px; color: #8888a0; margin-bottom: 20px; }
+.page-meta { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.meta-pill { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 4px 12px; border: 1px solid; }
+.mp-orange { background: #1E1000; border-color: #4A3200; color: #F7941E; }
+.mp-green  { background: #051A10; border-color: #0D4A28; color: #34D399; }
+.mp-red    { background: #1A0808; border-color: #4A1A1A; color: #FF6B6B; }
+.mp-gray   { background: #141418; border-color: #2a2a35; color: #8888a0; }
+.mp-yellow { background: #1A1000; border-color: #4A3000; color: #FBBF24; }
+.mp-blue   { background: #0A1020; border-color: #1A2A50; color: #5577DD; }
+
+/* LEGEND */
+.legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 48px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #8888a0; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+/* PR SECTION */
+.pr-section { margin-bottom: 64px; }
+.pr-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #1a1a20; }
+.pr-badge { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.04em; padding: 6px 14px; border-radius: 8px; flex-shrink: 0; }
+.pr-badge.shipped  { background: #051A10; border: 1px solid #0D4A28; color: #34D399; }
+.pr-badge.ready    { background: #1E1000; border: 1px solid #4A3200; color: #F7941E; }
+.pr-badge.in-build { background: #0A1020; border: 1px solid #1A2A50; color: #5577DD; }
+.pr-badge.blocked  { background: #1A0808; border: 1px solid #4A1A1A; color: #FF6B6B; }
+.pr-badge.todo     { background: #141418; border: 1px solid #2a2a35; color: #8888a0; }
+
+.pr-info { flex: 1; }
+.pr-title { font-size: 20px; font-weight: 800; color: #F5F0EB; margin-bottom: 4px; }
+.pr-desc  { font-size: 13px; color: #8888a0; margin-bottom: 8px; }
+.pr-meta  { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.pr-status-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.status-bar { flex: 1; height: 3px; background: #1a1a20; border-radius: 999px; overflow: hidden; }
+.status-fill { height: 100%; border-radius: 999px; }
+.status-fill.green  { background: #34D399; }
+.status-fill.orange { background: #F7941E; }
+.status-fill.blue   { background: #5577DD; }
+.status-fill.red    { background: #FF6B6B; }
+.status-fill.gray   { background: #555568; }
+.status-pct { font-size: 11px; font-weight: 700; color: #8888a0; white-space: nowrap; }
+
+/* CARDS */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+
+.design-card { background: #0c0c10; border: 1px solid #1a1a20; border-radius: 12px; overflow: hidden; transition: border-color 0.15s; display: flex; flex-direction: column; }
+.design-card:hover { border-color: #F7941E; }
+.design-card.cd-primary { border-color: #34d39930; }
+.design-card.cd-primary:hover { border-color: #34D399; box-shadow: 0 0 24px rgba(52,211,153,0.08); }
+.design-card.blocked-card { border-color: #4A1A1A; opacity: 0.6; }
+.design-card.pending-card { border: 1px dashed #4A3200; }
+
+.card-preview { width: 100%; height: 180px; background: #080810; overflow: hidden; position: relative; }
+.card-preview iframe { width: 300%; height: 540px; border: none; transform: scale(0.333); transform-origin: top left; pointer-events: none; }
+.card-preview.web-preview iframe { width: 300%; height: 600px; transform: scale(0.333); transform-origin: top left; }
+.card-preview-placeholder { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.placeholder-icon { font-size: 36px; opacity: 0.2; }
+.placeholder-label { font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; }
+
+.cd-badge { position: absolute; top: 8px; right: 8px; background: #34D399; color: #000; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.08em; }
+
+.card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.card-id   { font-size: 10px; font-weight: 700; color: #555568; letter-spacing: 0.08em; text-transform: uppercase; }
+.card-name { font-size: 14px; font-weight: 700; color: #F5F0EB; }
+.card-desc { font-size: 11px; color: #555568; line-height: 1.5; flex: 1; }
+.card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.tag { font-size: 10px; font-weight: 600; border-radius: 999px; padding: 2px 8px; border: 1px solid; }
+.t-mobile  { background: #0A1020; border-color: #1A2A50; color: #5577DD; }
+.t-web     { background: #1A1000; border-color: #4A3000; color: #FBBF24; }
+.t-cd      { background: #051A10; border-color: #0D4A28; color: #34D399; }
+.t-orange  { background: #1E1000; border-color: #4A3200; color: #F7941E; }
+.t-red     { background: #1A0808; border-color: #4A1A1A; color: #FF6B6B; }
+.t-gray    { background: #141418; border-color: #2a2a35; color: #555568; }
+
+.card-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.link-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; text-decoration: none; border: 1px solid; transition: all 0.15s; letter-spacing: 0.04em; }
+.link-btn.vai { background: #1E1000; border-color: #4A3200; color: #F7941E; }
+.link-btn.vai:hover { background: #2A1800; }
+.link-btn.cd  { background: #051A10; border-color: #0D4A28; color: #34D399; }
+.link-btn.cd:hover { background: #0A2818; }
+.link-btn.gray { background: #141418; border-color: #2a2a35; color: #8888a0; cursor: default; }
+
+/* DIVIDER */
+.section-divider { height: 1px; background: linear-gradient(90deg, transparent, #2a2a35, transparent); margin: 48px 0; }
+
+/* BUILDER ROW */
+.builder-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.builder-chip { display: flex; align-items: center; gap: 6px; background: #0c0c10; border: 1px solid #1a1a20; border-radius: 999px; padding: 4px 10px; font-size: 11px; color: #C8BFB8; }
+.builder-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+/* FEATURE SECTION (beyond PRs) */
+.feature-section { margin-bottom: 64px; }
+.feature-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #1a1a20; }
+.feature-num { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0; background: #141418; border: 1px solid #2a2a35; color: #8888a0; }
+
+/* ALERT BANNER */
+.alert-banner { background: linear-gradient(90deg, rgba(247,148,30,0.08), rgba(247,148,30,0.02)); border: 1px solid #4A3200; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #F7941E; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.alert-banner.green { background: linear-gradient(90deg, rgba(52,211,153,0.08), rgba(52,211,153,0.02)); border-color: #0D4A28; color: #34D399; }
+.alert-banner.red { background: linear-gradient(90deg, rgba(255,107,107,0.08), rgba(255,107,107,0.02)); border-color: #4A1A1A; color: #FF6B6B; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">VAI Build Pipeline — Design Index</div>
+  <div class="page-sub">Ordered by deployment priority. CD React files live at localhost:8766. vai-demos renders at localhost:8765.</div>
+  <div class="page-meta">
+    <span class="meta-pill mp-green">9 CD Design Files</span>
+    <span class="meta-pill mp-orange">PR1 → PR8 Pipeline</span>
+    <span class="meta-pill mp-gray">Apr 26, 2026</span>
+    <span class="meta-pill mp-blue">vai-rebrand/project/ on Desktop</span>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#34D399"></div> CD React (localhost:8766)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#F7941E"></div> vai-demos render (localhost:8765)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#FF6B6B"></div> BLOCKED</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#555568"></div> Needs design / pending</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PR1 — AVANTI CORE -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="pr-section">
+  <div class="pr-header">
+    <div class="pr-badge ready">PR1</div>
+    <div class="pr-info">
+      <div class="pr-title">AVANTI Core</div>
+      <div class="pr-desc">Migration 061 · 5 adapters · actionsApi.ts · AvantiFormationAdapter. Handoff package ready for Francis.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-orange">Handoff Ready</span>
+        <span class="meta-pill mp-gray">Francis (backend)</span>
+        <span class="meta-pill mp-gray">vai-avanti-os-handoff-package/</span>
+      </div>
+    </div>
+  </div>
+  <div class="pr-status-row">
+    <div class="status-bar"><div class="status-fill orange" style="width:90%"></div></div>
+    <div class="status-pct">90% — Handoff packaged, pending PR</div>
+  </div>
+  <div class="builder-row">
+    <div class="builder-chip"><div class="builder-dot" style="background:#F7941E"></div>Francis — backend + adapters</div>
+  </div>
+  <div class="card-grid">
+
+    <div class="design-card cd-primary">
+      <div class="card-preview" style="background:#060608;">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">🤖</div>
+          <div class="placeholder-label" style="color:#34D399;">CD REACT PROJECT</div>
+          <div style="font-size:10px;color:#555568;margin-top:4px;">Open in browser to preview</div>
+        </div>
+        <div class="cd-badge">CD</div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">B · Group B — AVANTI OS</div>
+        <div class="card-name">VAI AVANTI OS — React Design</div>
+        <div class="card-desc">Half-screen overlay (home + club context), GAMEDAY floating bubble, action card patterns (green=read, yellow=confirm), AVANTI nav tab treatment.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-web">Web</span><span class="tag t-cd">CD React</span></div>
+        <div class="card-links">
+          <a class="link-btn cd" href="http://localhost:8766/VAI%20AVANTI%20OS.html" target="_blank">CD React ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card">
+      <div class="card-preview">
+        <iframe src="vai-avanti-os-overlay.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">B1 — AVANTI Overlay</div>
+        <div class="card-name">AVANTI OS Overlay Detail</div>
+        <div class="card-desc">Half-screen bottom sheet. Green/yellow action cards. Confirm CTA pattern. Read-only callout strip.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-avanti-os-overlay.html" target="_blank">Open ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card">
+      <div class="card-preview">
+        <iframe src="avanti-connect-flow.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">F2 — PR1 Connect Flow</div>
+        <div class="card-name">AVANTI Connect — OAuth Flow</div>
+        <div class="card-desc">Provider select: Stripe, PayPal, QuickBooks. Permission grant screen. AVANTI read-only data toggle. Green-dominant success state.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="avanti-connect-flow.html" target="_blank">Open ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PR2 — CLUB OS PATCH -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="pr-section">
+  <div class="pr-header">
+    <div class="pr-badge ready">PR2</div>
+    <div class="pr-info">
+      <div class="pr-title">Club OS Patch</div>
+      <div class="pr-desc">All phases code-complete (Phase 1 + 1.5 + 2). Pending: seed-demo-club.sql Phase 2 + INSTALL.md update. Christmas Package.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-green">Code All PASS</span>
+        <span class="meta-pill mp-orange">Closing Items Pending</span>
+        <span class="meta-pill mp-gray">Francis + Badinho</span>
+      </div>
+    </div>
+  </div>
+  <div class="pr-status-row">
+    <div class="status-bar"><div class="status-fill green" style="width:95%"></div></div>
+    <div class="status-pct">95% — Code PASS, seed + INSTALL.md remaining</div>
+  </div>
+  <div class="builder-row">
+    <div class="builder-chip"><div class="builder-dot" style="background:#F7941E"></div>Francis — backend + GAMEDAY web</div>
+    <div class="builder-chip"><div class="builder-dot" style="background:#5577DD"></div>Badinho — mobile screens</div>
+  </div>
+  <div class="alert-banner green">✅ Code Masters PASS — All 10 steps audited. Design refs below for final visual QA before PR.</div>
+  <div class="card-grid">
+
+    <div class="design-card cd-primary">
+      <div class="card-preview" style="background:#060608;">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">🏟️</div>
+          <div class="placeholder-label" style="color:#34D399;">CD REACT — GAMEDAY D1–D6</div>
+          <div style="font-size:10px;color:#555568;margin-top:4px;">Overview · Roster · Schedule · Mentor · Finances</div>
+        </div>
+        <div class="cd-badge">CD</div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">D · Group D — GAMEDAY Web</div>
+        <div class="card-name">VAI GAMEDAY Web — All Screens</div>
+        <div class="card-desc">D1 Overview · D2 Roster · D3 Schedule · D4 Mentor Dashboard · D5/D6 Finances. Gold standard GAMEDAY layout: sidebar, topbar, card system, AVANTI bubble.</div>
+        <div class="card-tags"><span class="tag t-web">Web</span><span class="tag t-cd">CD React</span></div>
+        <div class="card-links">
+          <a class="link-btn cd" href="http://localhost:8766/VAI%20GAMEDAY%20Web.html" target="_blank">CD React ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card">
+      <div class="card-preview web-preview">
+        <iframe src="vai-club-os-gameday-phase15.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">D1/D2/D3 — Phase 1.5</div>
+        <div class="card-name">GAMEDAY Dashboard + Roster + Schedule</div>
+        <div class="card-desc">Overview stats, roster table, schedule calendar. GAMEDAY logo topbar. Role-aware sidebar. AVANTI strip.</div>
+        <div class="card-tags"><span class="tag t-web">Web</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-club-os-gameday-phase15.html" target="_blank">Open ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card">
+      <div class="card-preview web-preview">
+        <iframe src="vai-club-os-gameday-phase2.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">D4 — Phase 2 Mentor</div>
+        <div class="card-name">GAMEDAY Mentor Dashboard</div>
+        <div class="card-desc">Earnings summary (orange), booking requests table, availability settings panel, calendar sync status cards. Floating AVANTI bubble.</div>
+        <div class="card-tags"><span class="tag t-web">Web</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-club-os-gameday-phase2.html" target="_blank">Open ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card cd-primary">
+      <div class="card-preview" style="background:#060608;">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">📱</div>
+          <div class="placeholder-label" style="color:#34D399;">CD REACT — CLUB OS MOBILE</div>
+          <div style="font-size:10px;color:#555568;margin-top:4px;">Sub-grid · Roster · Compliance · Booking</div>
+        </div>
+        <div class="cd-badge">CD</div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">C · Group C — Club OS Mobile</div>
+        <div class="card-name">VAI Club OS Mobile — All Screens</div>
+        <div class="card-desc">Club sub-grid, roster with PLAY dots, compliance gating, schedule booking, tournament bracket, scoring live view. Gold standard mobile treatment.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-cd">CD React</span></div>
+        <div class="card-links">
+          <a class="link-btn cd" href="http://localhost:8766/VAI%20Club%20OS%20Mobile.html" target="_blank">CD React ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card">
+      <div class="card-preview">
+        <iframe src="vai-club-os-mobile-phase1.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">C1–C3 (M1–M11)</div>
+        <div class="card-name">Club OS Mobile Phase 1</div>
+        <div class="card-desc">Sub-grid, Roster, Compliance, Tournament, Scoring, Standings screens.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-club-os-mobile-phase1.html" target="_blank">Open ↗</a>
+          <a class="link-btn vai" href="vai-club-os-mobile-phase15.html" target="_blank">Phase 1.5 ↗</a>
+          <a class="link-btn vai" href="vai-club-os-mobile-phase2.html" target="_blank">Phase 2 ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PR3 — WALLET -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="pr-section">
+  <div class="pr-header">
+    <div class="pr-badge in-build">PR3</div>
+    <div class="pr-info">
+      <div class="pr-title">Wallet</div>
+      <div class="pr-desc">Phase 1 in progress (Francis). Spec PASS. Wallet home, send/receive, payout, tier-gated features. IWalletClient abstraction.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-blue">In Build</span>
+        <span class="meta-pill mp-gray">Francis (backend) · Badinho (mobile UI)</span>
+      </div>
+    </div>
+  </div>
+  <div class="pr-status-row">
+    <div class="status-bar"><div class="status-fill blue" style="width:60%"></div></div>
+    <div class="status-pct">60% — Phase 1 in progress</div>
+  </div>
+  <div class="builder-row">
+    <div class="builder-chip"><div class="builder-dot" style="background:#F7941E"></div>Francis — Wallet backend + IWalletClient</div>
+    <div class="builder-chip"><div class="builder-dot" style="background:#5577DD"></div>Badinho — Wallet mobile screens</div>
+  </div>
+  <div class="card-grid">
+
+    <div class="design-card cd-primary">
+      <div class="card-preview" style="background:#060608;">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">💳</div>
+          <div class="placeholder-label" style="color:#34D399;">CD REACT — WALLET + ADMIN + WEARABLES</div>
+          <div style="font-size:10px;color:#555568;margin-top:4px;">F1 Wallet · F2 OAuth · F3/F4 Wearables · F5 Admin</div>
+        </div>
+        <div class="cd-badge">CD</div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">F1 · Group F — Wallet</div>
+        <div class="card-name">VAI Wallet + Admin + Wearables</div>
+        <div class="card-desc">F1: Wallet home, send/receive, payout (orange dominant). F2: OAuth provider flow. F3/F4: Wearables device connect. F5: Admin portal user management + affiliate ledger.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-web">Web</span><span class="tag t-cd">CD React</span></div>
+        <div class="card-links">
+          <a class="link-btn cd" href="http://localhost:8766/VAI%20Wallet%20Admin%20Wearables.html" target="_blank">CD React ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card">
+      <div class="card-preview">
+        <iframe src="vai-wallet-screens.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">F1 — Wallet Screens</div>
+        <div class="card-name">VAI Wallet — Gold Standard</div>
+        <div class="card-desc">Balance card, transaction list, send/receive flow, payout modal, affiliate earnings strip. Orange CTA. Tier-gated states.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-wallet-screens.html" target="_blank">Open ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card">
+      <div class="card-preview web-preview">
+        <iframe src="vai-club-financials-gameday.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">D5/D6 — Finances GAMEDAY</div>
+        <div class="card-name">Club Financials GAMEDAY — Connected + Setup</div>
+        <div class="card-desc">QB/Stripe/PayPal hub. AVANTI financial strip. Import table. Setup flow. Connects from Wallet Settings.</div>
+        <div class="card-tags"><span class="tag t-web">Web</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-club-financials-gameday.html" target="_blank">Open ↗</a>
+          <a class="link-btn vai" href="vai-club-financials-mobile.html" target="_blank">Mobile ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PR4 — ONESIGNAL -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="pr-section">
+  <div class="pr-header">
+    <div class="pr-badge todo">PR4</div>
+    <div class="pr-info">
+      <div class="pr-title">OneSignal Push Notifications</div>
+      <div class="pr-desc">In-app notification center, push opt-in, AVANTI-triggered alerts (dues, session, roster). Notification preferences screen.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-gray">Needs Design</span>
+        <span class="meta-pill mp-gray">Francis (backend)</span>
+      </div>
+    </div>
+  </div>
+  <div class="pr-status-row">
+    <div class="status-bar"><div class="status-fill gray" style="width:15%"></div></div>
+    <div class="status-pct">15% — Spec locked, no design render yet</div>
+  </div>
+  <div class="card-grid">
+    <div class="design-card pending-card">
+      <div class="card-preview">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">🔔</div>
+          <div class="placeholder-label" style="color:#F7941E;">NEEDS CLAUDE DESIGN</div>
+          <div style="font-size:10px;color:#555568;margin-top:4px;">In-app notification center + push opt-in</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">G3 — PR4</div>
+        <div class="card-name">OneSignal Push — Notification System</div>
+        <div class="card-desc">Notification center, push opt-in prompt, AVANTI alert cards (dues reminder, session reminder, roster update). Preferences screen with category toggles.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-gray">Generate</span></div>
+        <div class="card-links">
+          <span class="link-btn gray">No render yet</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PR5 — HOME GRID + GAMEDAY -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="pr-section">
+  <div class="pr-header">
+    <div class="pr-badge in-build">PR5</div>
+    <div class="pr-info">
+      <div class="pr-title">Home Grid + GAMEDAY Command Grid</div>
+      <div class="pr-desc">Dynamic scrollable tile grid (Android launcher paging). Home screen v2. GAMEDAY command grid redesign. Spec PASS.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-blue">Spec PASS</span>
+        <span class="meta-pill mp-gray">Francis (GAMEDAY web) · Badinho (mobile)</span>
+      </div>
+    </div>
+  </div>
+  <div class="pr-status-row">
+    <div class="status-bar"><div class="status-fill blue" style="width:40%"></div></div>
+    <div class="status-pct">40% — Spec PASS, build pending</div>
+  </div>
+  <div class="builder-row">
+    <div class="builder-chip"><div class="builder-dot" style="background:#5577DD"></div>Badinho — mobile home grid</div>
+    <div class="builder-chip"><div class="builder-dot" style="background:#F7941E"></div>Francis — GAMEDAY command grid</div>
+  </div>
+  <div class="card-grid">
+
+    <div class="design-card cd-primary">
+      <div class="card-preview" style="background:#060608;">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">🏠</div>
+          <div class="placeholder-label" style="color:#34D399;">CD REACT — HOME ALL TIERS</div>
+          <div style="font-size:10px;color:#555568;margin-top:4px;">A1 Basic · A2 VAI+ · A3 Mentor · A4 Club</div>
+        </div>
+        <div class="cd-badge">CD</div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">A · Group A — VAI Home</div>
+        <div class="card-name">VAI Home — All Tier States</div>
+        <div class="card-desc">Android launcher-style paging grid. Tier-gated tiles. Club hero tile drill-in. Long-press customize. All 4 tier variants. Canonical nav treatment.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-cd">CD React</span></div>
+        <div class="card-links">
+          <a class="link-btn cd" href="http://localhost:8766/VAI%20Home.html" target="_blank">CD React ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card">
+      <div class="card-preview">
+        <iframe src="vai-navigation-flow.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">A1–A4 ⭐ PRIMARY REFERENCE</div>
+        <div class="card-name">Navigation Flow — Canonical Home</div>
+        <div class="card-desc">The locked home screen design. Standard → VAI+ with club tile → Club sub-grid with back nav. Use this, not vai-home-final.html.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-orange">PRIMARY REF</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-navigation-flow.html" target="_blank">Open ↗</a>
+          <a class="link-btn vai" href="vai-home-states.html" target="_blank">Tier States ↗</a>
+          <a class="link-btn vai" href="vai-home-customize.html" target="_blank">Customize ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PR6 — MENTOR CALENDAR -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="pr-section">
+  <div class="pr-header">
+    <div class="pr-badge in-build">PR6</div>
+    <div class="pr-info">
+      <div class="pr-title">Mentor Calendar</div>
+      <div class="pr-desc">Personal booking link, availability grid, Stripe PaymentSheet, group sessions, AVANTI templates. 2-3 weeks, no blockers.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-blue">In Build (2-3 wks)</span>
+        <span class="meta-pill mp-gray">Badinho (mobile) · Francis (backend)</span>
+      </div>
+    </div>
+  </div>
+  <div class="pr-status-row">
+    <div class="status-bar"><div class="status-fill blue" style="width:50%"></div></div>
+    <div class="status-pct">50% — In build, Calendar Phase active</div>
+  </div>
+  <div class="builder-row">
+    <div class="builder-chip"><div class="builder-dot" style="background:#5577DD"></div>Badinho — mobile booking flow</div>
+    <div class="builder-chip"><div class="builder-dot" style="background:#F7941E"></div>Francis — backend scheduling engine</div>
+  </div>
+  <div class="card-grid">
+
+    <div class="design-card cd-primary">
+      <div class="card-preview" style="background:#060608;">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">📅</div>
+          <div class="placeholder-label" style="color:#34D399;">CD REACT — MENTOR CALENDAR</div>
+          <div style="font-size:10px;color:#555568;margin-top:4px;">Booking · Availability · Earnings · GAMEDAY D4</div>
+        </div>
+        <div class="cd-badge">CD</div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">H · Group H — Mentor Calendar</div>
+        <div class="card-name">VAI Group H Mentor Calendar</div>
+        <div class="card-desc">M1–M7: Browse → Calendar → Time Slot → Confirm+Pay (countdown timer) → Confirmed → Set Availability → Booking Requests. GAMEDAY D4 earnings grid + Stripe PaymentSheet.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-web">Web</span><span class="tag t-cd">CD React</span></div>
+        <div class="card-links">
+          <a class="link-btn cd" href="http://localhost:8766/VAI%20Group%20H%20Mentor%20Calendar.html" target="_blank">CD React ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="design-card">
+      <div class="card-preview">
+        <iframe src="vai-mentor-calendar.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">G1 — Mentor Calendar vai-demos</div>
+        <div class="card-name">Mentor Calendar — Gold Standard</div>
+        <div class="card-desc">M1–M7 + M3a/b/c waitlist variants + group session + GAMEDAY D4. Full booking and availability flow with AVANTI strip.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-web">Web</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-mentor-calendar.html" target="_blank">Open ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PR7 — WEARABLES (BLOCKED) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="pr-section">
+  <div class="pr-header">
+    <div class="pr-badge blocked">PR7</div>
+    <div class="pr-info">
+      <div class="pr-title">Wearables Layer 1</div>
+      <div class="pr-desc">Apple HealthKit + Google Health Connect. BLOCKED pending Apple HealthKit approval. Review MAU at 3-month mark for Layer 2 (ROOK/Terra).</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-red">BLOCKED</span>
+        <span class="meta-pill mp-gray">Bruno (backend) · Badinho (mobile)</span>
+        <span class="meta-pill mp-gray">Recon complete — ready when unblocked</span>
+      </div>
+    </div>
+  </div>
+  <div class="pr-status-row">
+    <div class="status-bar"><div class="status-fill red" style="width:30%"></div></div>
+    <div class="status-pct">BLOCKED — Awaiting HealthKit approval</div>
+  </div>
+  <div class="alert-banner red">🔴 BLOCKED — Do not build. Awaiting Apple HealthKit API approval. Design refs locked and ready.</div>
+  <div class="card-grid">
+
+    <div class="design-card cd-primary" style="opacity:0.7;">
+      <div class="card-preview" style="background:#060608;">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">⌚</div>
+          <div class="placeholder-label" style="color:#34D399;">CD REACT — WEARABLES (F3/F4)</div>
+          <div style="font-size:10px;color:#FF6B6B;margin-top:4px;">BLOCKED — Design ready, build when approved</div>
+        </div>
+        <div class="cd-badge">CD</div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">F3/F4 — Wearables Design</div>
+        <div class="card-name">Wearables — Device Connect + Variations</div>
+        <div class="card-desc">Apple Watch, WHOOP, Garmin device cards. Permission/HealthKit prompt. Connected states: HR ring, recovery score, biometric tile in Home Grid.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-cd">CD React</span><span class="tag t-red">BLOCKED</span></div>
+        <div class="card-links">
+          <a class="link-btn cd" href="http://localhost:8766/VAI%20Wallet%20Admin%20Wearables.html" target="_blank">CD React (F3/F4 tab) ↗</a>
+          <a class="link-btn vai" href="VAI Wearables Entry Point _standalone_.html" target="_blank">Entry ↗</a>
+          <a class="link-btn vai" href="VAI Wearables Variations _standalone_.html" target="_blank">Variations ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PR8 — CAMP + TRYOUT -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="pr-section">
+  <div class="pr-header">
+    <div class="pr-badge todo">PR8</div>
+    <div class="pr-info">
+      <div class="pr-title">Camp + Tryout (Programs)</div>
+      <div class="pr-desc">Programs wrapper over existing primitives. Browse, detail, registration, payment, GAMEDAY admin view. Migration 062 covers entity types.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-gray">Spec PASS</span>
+        <span class="meta-pill mp-gray">Francis (backend) · Badinho (mobile)</span>
+      </div>
+    </div>
+  </div>
+  <div class="pr-status-row">
+    <div class="status-bar"><div class="status-fill gray" style="width:25%"></div></div>
+    <div class="status-pct">25% — Spec PASS, build not started</div>
+  </div>
+  <div class="card-grid">
+
+    <div class="design-card cd-primary">
+      <div class="card-preview" style="background:#060608;">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">⛺</div>
+          <div class="placeholder-label" style="color:#34D399;">CD REACT — GAMEDAY FLAGSHIP + G2</div>
+          <div style="font-size:10px;color:#555568;margin-top:4px;">Camp browse · Detail · Registration · GAMEDAY admin</div>
+        </div>
+        <div class="cd-badge">CD</div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">G · Group G — GAMEDAY Flagship</div>
+        <div class="card-name">VAI Group G GAMEDAY Flagship</div>
+        <div class="card-desc">G2 Camp+Tryout: Programs browse (filter: All/Camps/Tryouts/Open), camp detail, tryout registration with eligibility check + PLAY status gate, Stripe payment, GAMEDAY admin list view.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-web">Web</span><span class="tag t-cd">CD React</span></div>
+        <div class="card-links">
+          <a class="link-btn cd" href="http://localhost:8766/VAI%20Group%20G%20GAMEDAY%20Flagship.html" target="_blank">CD React ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- FEATURE TODO — Beyond PRs -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div style="text-align:center;margin-bottom:32px;">
+  <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#555568;text-transform:uppercase;">Feature Build Queue — Beyond PR Pipeline</div>
+</div>
+
+<!-- #7 FORMATION VIEW -->
+<div class="feature-section">
+  <div class="feature-header">
+    <div class="feature-num" style="background:#051A10;border-color:#0D4A28;color:#34D399;">#7</div>
+    <div class="pr-info">
+      <div class="pr-title">Formation View + Depth Chart</div>
+      <div class="pr-desc">Spec LOCKED Apr 26. Migration 063. AvantiFormationAdapter. formationId required (no null fallback). Ready for Francis + Badinho.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-green">Spec Locked</span>
+        <span class="meta-pill mp-gray">Francis (backend + GAMEDAY) · Badinho (mobile)</span>
+        <span class="meta-pill mp-gray">Codex: 2026-04-26/okay-brother-you-are-a-master/</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-grid">
+    <div class="design-card">
+      <div class="card-preview">
+        <iframe src="vai-formation-mobile.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">#7 — Formation Mobile</div>
+        <div class="card-name">Formation View — Mobile</div>
+        <div class="card-desc">Portrait/landscape field view. Athletes mapped to positions with PLAY dots. Tap → AVANTI athlete panel (Mode 3). Formation presets: I-FORM 11 / SPREAD / PISTOL. Off/Def/ST tabs.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-formation-mobile.html" target="_blank">Open ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="design-card pending-card">
+      <div class="card-preview">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">🏈</div>
+          <div class="placeholder-label" style="color:#F7941E;">GAMEDAY FORMATION RENDER PENDING</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">#7 — Formation GAMEDAY</div>
+        <div class="card-name">Formation View — GAMEDAY Web</div>
+        <div class="card-desc">Web field view with depth chart table. AVANTI panel right side. Coach drag-assign (Phase 2). Needs Claude Design render.</div>
+        <div class="card-tags"><span class="tag t-web">Web</span><span class="tag t-gray">Generate</span></div>
+        <div class="card-links"><span class="link-btn gray">No render yet</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- #8 OVR + BADGES -->
+<div class="feature-section">
+  <div class="feature-header">
+    <div class="feature-num" style="background:#1E1000;border-color:#4A3200;color:#F7941E;">#8</div>
+    <div class="pr-info">
+      <div class="pr-title">OVR Rating System + Badge Achievement Layer</div>
+      <div class="pr-desc">Position-weighted OVR per sport. Bronze/Silver/Gold/Elite badges. OVR visibility toggle. "Next badge" progress bar. No new migration needed — builds on existing ability + stats.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-orange">Design Locked (CD P3)</span>
+        <span class="meta-pill mp-gray">Tommy (spec) → Francis (OVR calc) → Badinho (badge UI)</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-grid">
+    <div class="design-card">
+      <div class="card-preview">
+        <iframe src="vai-profile-me-tab.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">#8 / H — OVR + Me Tab</div>
+        <div class="card-name">Me Tab — OVR Badge + Achievement Layer</div>
+        <div class="card-desc">OVR badge (FIFA/Madden style), Bronze/Silver/Gold/Elite tiers, OVR toggle (athlete hides from public), sparklines, progress graph, game log + stat approval flow.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-profile-me-tab.html" target="_blank">Open ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- #10 PROFILE -->
+<div class="feature-section">
+  <div class="feature-header">
+    <div class="feature-num" style="background:#0A1020;border-color:#1A2A50;color:#5577DD;">#10</div>
+    <div class="pr-info">
+      <div class="pr-title">Profile Highlights Tab + Public Profile</div>
+      <div class="pr-desc">Full-bleed action photo hero. Ghost stat watermarks (40YD DASH · PRO AGILITY · OVR QB). Team color gradient wash. Share button (recruiter card export). AVANTI strip. No OVR shield on public view.</div>
+      <div class="pr-meta">
+        <span class="meta-pill mp-blue">Design Locked (CD I)</span>
+        <span class="meta-pill mp-gray">Badinho (mobile UI — no backend needed)</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-grid">
+    <div class="design-card cd-primary">
+      <div class="card-preview" style="background:#060608;">
+        <div class="card-preview-placeholder">
+          <div class="placeholder-icon">⭐</div>
+          <div class="placeholder-label" style="color:#34D399;">CD REACT — PROFILE GROUP I</div>
+          <div style="font-size:10px;color:#555568;margin-top:4px;">Public profile · Highlights · Recruiter card</div>
+        </div>
+        <div class="cd-badge">CD</div>
+      </div>
+      <div class="card-body">
+        <div class="card-id">I · Group I — Profile</div>
+        <div class="card-name">VAI Group I — Profile</div>
+        <div class="card-desc">Full-bleed hero photo. Ghost stat watermarks. Team color wash. AVANTI recruiter activity strip. Share → recruiter card export. OVR shield deferred from public view until algo calibrated.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-cd">CD React</span></div>
+        <div class="card-links">
+          <a class="link-btn cd" href="http://localhost:8766/VAI%20Group%20I%20Profile.html" target="_blank">CD React ↗</a>
+        </div>
+      </div>
+    </div>
+    <div class="design-card">
+      <div class="card-preview">
+        <iframe src="vai-profile-public-redesign.html" scrolling="no"></iframe>
+      </div>
+      <div class="card-body">
+        <div class="card-id">#10 — Public Profile</div>
+        <div class="card-name">Profile Public Redesign</div>
+        <div class="card-desc">Public-facing athlete profile. Full-bleed photo, stats, team color overlay, share/export CTA.</div>
+        <div class="card-tags"><span class="tag t-mobile">Mobile</span><span class="tag t-orange">vai-demos</span></div>
+        <div class="card-links">
+          <a class="link-btn vai" href="vai-profile-public-redesign.html" target="_blank">Open ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<div style="text-align:center;padding:24px 0 0;">
+  <div style="font-size:13px;color:#555568;margin-bottom:6px;">CD React project → <code style="color:#34D399;font-size:11px;">http://localhost:8766</code> (vai-rebrand/project/)</div>
+  <div style="font-size:13px;color:#555568;margin-bottom:6px;">vai-demos renders → <code style="color:#F7941E;font-size:11px;">http://localhost:8765</code></div>
+  <div style="font-size:11px;color:#2a2a35;margin-top:8px;">PR order locked Apr 25 · Pricing locked Apr 26 · Formation spec locked Apr 26</div>
+</div>
+
+</body>
+</html>

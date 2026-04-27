@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VAI — Group H · Mentor Calendar (Booking + Waitlist + Group Sessions)</title>
+<link rel="stylesheet" href="styles.css" />
+<template id="__bundler_thumbnail" data-bg-color="#060608">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#060608"/>
+  <rect x="20" y="22" width="60" height="56" rx="6" fill="#0c0c10" stroke="#1e1e26"/>
+  <text x="50" y="36" text-anchor="middle" font-family="sans-serif" font-size="6" font-weight="700" fill="#F5F0EB">May 2026</text>
+  <g fill="#34D399"><circle cx="32" cy="48" r="1"/><circle cx="40" cy="48" r="1"/><circle cx="48" cy="48" r="1"/><circle cx="56" cy="48" r="1"/><circle cx="64" cy="48" r="1"/></g>
+  <rect x="44" y="56" width="12" height="10" rx="2" fill="#F7941E"/>
+  <text x="50" y="63" text-anchor="middle" font-family="sans-serif" font-size="5" font-weight="700" fill="#000">10</text>
+  <text x="50" y="92" text-anchor="middle" font-family="sans-serif" font-size="5" font-weight="700" fill="#F7941E">GROUP H</text>
+</svg>
+</template>
+<style>
+html, body, #root { background: #060608; height: 100%; margin: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel" src="components.jsx"></script>
+<script type="text/babel" src="h-mentor-calendar.jsx"></script>
+<script type="text/babel">
+const { DesignCanvas, DCSection, DCArtboard, M1Browse, M2Date, M3Time, M3aWaitlist, M3bConfirmed, M3cGroup } = window;
+
+const Frame = ({ children }) => (
+  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#060608' }} className="ambient-glow">
+    {children}
+  </div>
+);
+
+const Phone = ({ children }) => (
+  <div style={{
+    position: 'relative', width: 390, height: 844,
+    background: '#060608', borderRadius: 40,
+    boxShadow: '0 0 0 8px #1a1a20, 0 30px 60px -20px rgba(0,0,0,0.7)',
+    overflow: 'hidden',
+  }} className="ambient-glow">
+    {/* status bar */}
+    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 44, padding: '0 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 10, fontFamily: 'DM Sans', fontSize: 13, fontWeight: 600, color: '#F5F0EB' }}>
+      <span>9:41</span>
+      <span style={{ fontFamily: 'JetBrains Mono', fontSize: 11, color: '#8888A0' }}>••• WiFi —</span>
+    </div>
+    <div style={{ position: 'absolute', inset: '44px 0 0 0' }}>
+      {children}
+    </div>
+  </div>
+);
+
+// Interactive prototype
+const SCREENS = [
+  ['m1', 'M1 Browse', M1Browse],
+  ['m2', 'M2 Date', M2Date],
+  ['m3', 'M3 Time', M3Time],
+  ['m3a', 'M3a Full', M3aWaitlist],
+  ['m3b', 'M3b Confirmed', M3bConfirmed],
+  ['m3c', 'M3c Group', M3cGroup],
+];
+
+const Prototype = () => {
+  const [s, setS] = React.useState('m1');
+  const Comp = SCREENS.find(x => x[0] === s)[2];
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%' }} className="ambient-glow">
+      <Frame><Phone><Comp /></Phone></Frame>
+      <div style={{
+        position: 'absolute', bottom: 18, left: '50%', transform: 'translateX(-50%)',
+        display: 'flex', gap: 5, background: 'rgba(12,12,16,0.92)', backdropFilter: 'blur(8px)',
+        border: '1px solid #1e1e26', borderRadius: 999, padding: 4, zIndex: 20,
+      }}>
+        {SCREENS.map(([id, label]) => (
+          <button key={id} onClick={() => setS(id)} style={{
+            background: s === id ? '#F7941E' : 'transparent',
+            color: s === id ? '#000' : '#C8C8D0',
+            border: 'none', padding: '6px 12px', borderRadius: 999, cursor: 'pointer',
+            fontFamily: 'DM Sans', fontWeight: 600, fontSize: 11,
+          }}>{label}</button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const App = () => (
+  <DesignCanvas
+    title="GROUP H — Mentor Calendar · Browse · Date · Time · Waitlist · Group"
+    subtitle="6 mobile screens covering 1:1 booking flow, full-slot waitlist, and group session signup"
+    defaultZoom={0.5}
+  >
+    <DCSection id="proto" title="Interactive Prototype — switch screens">
+      <DCArtboard id="proto" label="Tap a pill to navigate" width={460} height={920}>
+        <Prototype />
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="m1-3" title="M1–M3 — 1:1 Booking Flow">
+      <DCArtboard id="M1" label="M1 — Browse Mentors · sport filters · AVANTI insight · open / few / full" width={460} height={920}>
+        <Frame><Phone><M1Browse /></Phone></Frame>
+      </DCArtboard>
+      <DCArtboard id="M2" label="M2 — Pick a Date · May 2026 · availability dots · selected May 10" width={460} height={920}>
+        <Frame><Phone><M2Date /></Phone></Frame>
+      </DCArtboard>
+      <DCArtboard id="M3" label="M3 — Pick a Time · morning + afternoon · 10AM selected" width={460} height={920}>
+        <Frame><Phone><M3Time /></Phone></Frame>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="m3-waitlist" title="M3a–M3b — Waitlist Flow (full slot)">
+      <DCArtboard id="M3a" label="M3a — Full slot · Join Waitlist (#2 position · AVANTI alert promise)" width={460} height={920}>
+        <Frame><Phone><M3aWaitlist /></Phone></Frame>
+      </DCArtboard>
+      <DCArtboard id="M3b" label="M3b — Waitlist Confirmed · #2 of 3 · 2hr window · $0.00 now" width={460} height={920}>
+        <Frame><Phone><M3bConfirmed /></Phone></Frame>
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="m3-group" title="M3c — Group Session Signup">
+      <DCArtboard id="M3c" label="M3c — Group Session · 8 of 12 spots · joined avatars · session details" width={460} height={920}>
+        <Frame><Phone><M3cGroup /></Phone></Frame>
+      </DCArtboard>
+    </DCSection>
+  </DesignCanvas>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
