@@ -306,7 +306,10 @@
     btn.textContent = 'Signing in...';
     overlay.classList.add('show');
     setTimeout(() => {
-      window.location.href = 'https://ben-whitesides.github.io/vai-demos/vai-club-os-gameday-phase2.html';
+      const isMobile = window.innerWidth < 768;
+      window.location.href = isMobile
+        ? 'https://ben-whitesides.github.io/vai-demos/vai-game-os-mobile-standalone.html'
+        : 'https://ben-whitesides.github.io/vai-demos/vai-club-os-gameday-phase2.html';
     }, 1800);
   }
 </script>
