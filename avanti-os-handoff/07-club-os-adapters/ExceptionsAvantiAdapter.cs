@@ -79,6 +79,18 @@ public sealed class ExceptionsAvantiAdapter(
             .SendBulkExceptionNudgesAsync(request, cancellationToken)
             .ConfigureAwait(false);
 
+        // Fail closed: null outbox id means the bulk nudge didn't queue.
+        if (string.IsNullOrEmpty(outboxId))
+        {
+            return new AvantiExecutionResultDto(
+                Success: false,
+                OutboxEventId: null,
+                FailureCode: "service_returned_no_outbox",
+                FailureMessage: "CommsService.SendBulkExceptionNudgesAsync returned null/empty outbox id; bulk nudges were not queued.",
+                Result: JsonSerializer.SerializeToElement(new { sent = false })
+            );
+        }
+
         return new AvantiExecutionResultDto(
             Success: true,
             OutboxEventId: outboxId,
