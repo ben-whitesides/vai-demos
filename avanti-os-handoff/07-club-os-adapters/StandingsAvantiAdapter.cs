@@ -82,6 +82,18 @@ public sealed class StandingsAvantiAdapter(
             .ApplyScoreCorrectionAsync(request, cancellationToken)
             .ConfigureAwait(false);
 
+        // Fail closed: null outbox id means the score correction didn't apply.
+        if (string.IsNullOrEmpty(outboxId))
+        {
+            return new AvantiExecutionResultDto(
+                Success: false,
+                OutboxEventId: null,
+                FailureCode: "service_returned_no_outbox",
+                FailureMessage: "ScoringService.ApplyScoreCorrectionAsync returned null/empty outbox id; score correction was not applied.",
+                Result: JsonSerializer.SerializeToElement(new { applied = false })
+            );
+        }
+
         return new AvantiExecutionResultDto(
             Success: true,
             OutboxEventId: outboxId,
