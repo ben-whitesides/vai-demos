@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GAME OS — Demo</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #000;
+      --sidebar: #080808;
+      --card: #0d0d0d;
+      --border: #1c1c1c;
+      --border2: #282828;
+      --orange: #F7941E;
+      --orange-d: rgba(247,148,30,0.1);
+      --orange-b: rgba(247,148,30,0.2);
+      --green: #34d399;
+      --green-d: rgba(52,211,153,0.08);
+      --green-b: rgba(52,211,153,0.2);
+      --text: #fff;
+      --muted: #666;
+      --dim: #333;
+    }
+    html, body { height: 100%; overflow: hidden; background: var(--black); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
+
+    /* ── SHELL ── */
+    .shell { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: 52px 1fr; height: 100vh; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      grid-column: 1 / -1;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px 0 0;
+      background: var(--sidebar); border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    .topbar-left { display: flex; align-items: center; height: 100%; }
+    .topbar-logo { display: flex; align-items: center; gap: 8px; padding: 0 16px; width: 220px; border-right: 1px solid var(--border); height: 100%; }
+    .topbar-logo img:first-child { height: 28px; }
+    .topbar-logo img:last-child { height: 16px; opacity: .85; }
+    .topbar-club { display: flex; align-items: center; gap: 8px; padding: 0 16px; font-size: 13px; font-weight: 600; color: var(--muted); }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .avanti-pill {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--green-d); border: 1px solid var(--green-b);
+      border-radius: 100px; padding: 5px 14px;
+      font-size: 11px; font-weight: 700; color: var(--green); cursor: pointer;
+      transition: background .15s;
+    }
+    .avanti-pill:hover { background: rgba(52,211,153,0.14); }
+    .avanti-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+    .demo-badge {
+      font-size: 10px; font-weight: 700; background: var(--orange-d);
+      border: 1px solid var(--orange-b); color: var(--orange);
+      padding: 3px 10px; border-radius: 100px; letter-spacing: .06em; text-transform: uppercase;
+    }
+    .topbar-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--muted); transition: color .15s; }
+    .topbar-icon:hover { color: var(--text); }
+    .hamburger { display: none; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--sidebar); border-right: 1px solid var(--border);
+      overflow-y: auto; padding: 12px 8px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    .nav-section-label {
+      font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--dim); padding: 10px 8px 6px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: 8px;
+      font-size: 12px; font-weight: 500; color: var(--muted);
+      cursor: pointer; text-decoration: none;
+      transition: background .12s, color .12s;
+      border: 1px solid transparent;
+      position: relative;
+    }
+    .nav-item:hover { background: rgba(255,255,255,.04); color: var(--text); }
+    .nav-item.active { background: var(--green-d); color: var(--green); border-color: var(--green-b); font-weight: 600; }
+    .nav-item svg { flex-shrink: 0; opacity: .5; }
+    .nav-item.active svg { opacity: 1; }
+    .nav-badge {
+      margin-left: auto; font-size: 10px; font-weight: 700;
+      background: var(--orange); color: #000;
+      padding: 1px 6px; border-radius: 100px; min-width: 18px; text-align: center;
+    }
+    .nav-divider { height: 1px; background: var(--border); margin: 6px 0; }
+    .back-link {
+      display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px;
+      font-size: 11px; color: var(--dim); text-decoration: none; margin-top: auto;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--muted); }
+
+    /* ── CONTENT FRAME ── */
+    .content-area { position: relative; overflow: hidden; background: #060608; }
+    .content-frame {
+      width: 100%; height: 100%; border: none;
+      display: block;
+    }
+    .frame-loading {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+      background: #060608; z-index: 10;
+    }
+    .frame-loading.hidden { display: none; }
+    .spinner { width: 36px; height: 36px; border: 2px solid var(--border2); border-top-color: var(--orange); border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-label { font-size: 13px; color: var(--muted); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .shell { grid-template-columns: 1fr; grid-template-rows: 52px 1fr; }
+      .sidebar { display: none; position: fixed; top: 52px; left: 0; bottom: 0; width: 240px; z-index: 200; border-right: 1px solid var(--border2); padding-bottom: 60px; }
+      .sidebar.open { display: flex; }
+      .hamburger { display: flex; }
+      .topbar-logo { width: auto; border-right: none; }
+      .topbar-club { display: none; }
+      .sidebar-overlay { display: none; position: fixed; inset: 0; top: 52px; background: rgba(0,0,0,.7); z-index: 199; }
+      .sidebar-overlay.open { display: block; }
+      .demo-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">
+        <img src="https://gameday.vai.app/logo.png" alt="VAI">
+        <img src="https://ben-whitesides.github.io/vai-demos/gameday-logo.png" alt="GAMEDAY">
+      </div>
+      <div class="topbar-club">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" fill="#F7941E"/></svg>
+        VAI FC North
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style="opacity:.4"><path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="demo-badge">Demo Mode</div>
+      <div class="avanti-pill" onclick="setPage('avanti')">
+        <div class="avanti-dot"></div>
+        AVANTI ON
+      </div>
+      <div class="topbar-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7a2 2 0 104 0 2 2 0 00-4 0" stroke="currentColor" stroke-width="1.3"/></svg>
+      </div>
+      <div class="topbar-icon hamburger" id="hamburgerBtn" onclick="toggleSidebar()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h10M2 10h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="nav-section-label">Club OS</div>
+
+    <a class="nav-item active" id="nav-dashboard" onclick="setPage('dashboard')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor"/></svg>
+      Dashboard
+    </a>
+
+    <a class="nav-item" id="nav-play" onclick="setPage('play')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>
+      PLAY Status
+    </a>
+
+    <a class="nav-item" id="nav-formation" onclick="setPage('formation')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5l5-4 5 4v6" stroke="currentColor" stroke-width="1.3"/><rect x="5" y="8" width="4" height="3" rx=".5" stroke="currentColor" stroke-width="1.3"/></svg>
+      Formations
+    </a>
+
+    <a class="nav-item" id="nav-schedule" onclick="setPage('schedule')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 1v3M10 1v3M1 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Schedule
+    </a>
+
+    <a class="nav-item" id="nav-tournament" onclick="setPage('tournament')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3"/></svg>
+      Tournaments
+    </a>
+
+    <a class="nav-item" id="nav-finances" onclick="setPage('finances')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M2 7l3-3M2 7l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Finances
+    </a>
+
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">My Mentor</div>
+
+    <a class="nav-item" id="nav-sessions" onclick="setPage('sessions')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 1v3M10 1v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      My Sessions
+      <span class="nav-badge">3</span>
+    </a>
+
+    <a class="nav-item" id="nav-avanti" onclick="setPage('avanti')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" fill="#F7941E"/></svg>
+      AVANTI
+    </a>
+
+    <div class="nav-divider"></div>
+
+    <a href="vai-game-os-landing.html" class="back-link">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to GAME OS
+    </a>
+  </div>
+
+  <!-- SIDEBAR OVERLAY (mobile) -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+  <!-- CONTENT AREA -->
+  <div class="content-area">
+    <div class="frame-loading" id="frameLoading">
+      <div class="spinner"></div>
+      <div class="loading-label">Loading screen...</div>
+    </div>
+    <iframe class="content-frame" id="contentFrame" src="" onload="frameLoaded()"></iframe>
+  </div>
+
+</div>
+
+<script>
+  const BASE = 'https://ben-whitesides.github.io/vai-demos/';
+  const isMobile = window.innerWidth < 768;
+
+  const pages = {
+    dashboard:  BASE + 'vai-club-os-gameday-phase2.html',
+    play:       BASE + 'vai-club-os-gameday-phase15.html',
+    formation:  BASE + 'vai-gameday-flagship-standalone.html',
+    schedule:   BASE + 'vai-club-os-gameday-phase2.html',
+    tournament: BASE + 'vai-club-os-gameday-phase2.html',
+    finances:   BASE + 'vai-club-financials-gameday.html',
+    sessions:   BASE + 'vai-mentor-calendar-standalone.html',
+    avanti:     BASE + 'vai-avanti-gameday.html',
+  };
+
+  const mobilePages = {
+    dashboard:  BASE + 'vai-game-os-mobile-standalone.html',
+    play:       BASE + 'vai-club-os-mobile-phase2.html',
+    formation:  BASE + 'vai-game-os-mobile-standalone.html',
+    schedule:   BASE + 'vai-club-os-mobile-phase15.html',
+    tournament: BASE + 'vai-club-os-mobile-phase2.html',
+    finances:   BASE + 'vai-club-financials-mobile-standalone.html',
+    sessions:   BASE + 'vai-mentor-calendar-standalone.html',
+    avanti:     BASE + 'vai-avanti-os-standalone.html',
+  };
+
+  let current = 'dashboard';
+
+  function setPage(key) {
+    // Update active nav
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    const navEl = document.getElementById('nav-' + key);
+    if (navEl) navEl.classList.add('active');
+
+    // Show loading
+    document.getElementById('frameLoading').classList.remove('hidden');
+
+    // Load page
+    const pageMap = isMobile ? mobilePages : pages;
+    const url = pageMap[key] || pages[key];
+    document.getElementById('contentFrame').src = url;
+    current = key;
+
+    // Close mobile sidebar
+    if (window.innerWidth < 768) toggleSidebar(false);
+  }
+
+  function frameLoaded() {
+    document.getElementById('frameLoading').classList.add('hidden');
+  }
+
+  function toggleSidebar(force) {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const open = force !== undefined ? force : !sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', open);
+    overlay.classList.toggle('open', open);
+  }
+
+  // Load dashboard on start
+  setPage('dashboard');
+</script>
+
+</body>
+</html>
