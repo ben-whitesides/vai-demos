@@ -3,500 +3,356 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GAME OS — The Operating System for Athlete Organizations</title>
+  <title>GAME OS — One platform. Everything your club runs on.</title>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
-      --black: #000000;
-      --black-card: #0a0a0a;
-      --black-elevated: #111111;
+      --black: #000;
+      --card: #0a0a0a;
+      --elevated: #111;
       --border: #1c1c1c;
-      --border-light: #242424;
+      --border2: #282828;
       --orange: #F7941E;
-      --orange-dim: rgba(247,148,30,0.12);
+      --orange-d: rgba(247,148,30,0.12);
+      --orange-b: rgba(247,148,30,0.22);
       --green: #34d399;
-      --green-dim: rgba(52,211,153,0.1);
-      --green-border: rgba(52,211,153,0.25);
+      --green-d: rgba(52,211,153,0.1);
+      --green-b: rgba(52,211,153,0.22);
       --red: #f87171;
-      --red-dim: rgba(248,113,113,0.1);
+      --red-d: rgba(248,113,113,0.08);
       --yellow: #fbbf24;
-      --text: #ffffff;
-      --text-muted: #888888;
-      --text-dim: #444444;
       --blue: #60a5fa;
+      --text: #fff;
+      --muted: #777;
+      --dim: #333;
     }
-
     html { scroll-behavior: smooth; }
-    body {
-      background: var(--black);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+    body { background: var(--black); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-    /* NAV */
+    /* ── NAV ── */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      height: 64px;
-      background: rgba(0,0,0,0.92);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(16px);
     }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .nav-logo svg { height: 28px; width: auto; }
-    .nav-divider {
-      width: 1px;
-      height: 20px;
-      background: var(--border-light);
-      margin: 0 10px;
-    }
-    .nav-product {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--orange);
-    }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-    }
-    .nav-links a {
-      font-size: 14px;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img:first-child { height: 34px; }
+    .nav-logo img:last-child { height: 20px; opacity: 0.9; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .15s; }
     .nav-links a:hover { color: var(--text); }
-    .btn-demo {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--orange);
-      color: #000;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 8px 18px;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: opacity 0.15s;
-    }
-    .btn-demo:hover { opacity: 0.88; }
+    .nav-btn-ghost { font-size: 13px; font-weight: 600; color: var(--text); background: transparent; border: 1px solid var(--border2); padding: 7px 16px; border-radius: 8px; text-decoration: none; transition: border-color .15s; }
+    .nav-btn-ghost:hover { border-color: #444; }
+    .nav-btn { font-size: 13px; font-weight: 700; color: #000; background: var(--orange); padding: 8px 18px; border-radius: 8px; text-decoration: none; transition: opacity .15s; }
+    .nav-btn:hover { opacity: .88; }
 
-    /* HERO */
+    /* ── HERO ── */
     .hero {
+      display: grid; grid-template-columns: 1fr 1.15fr;
+      gap: 64px; align-items: center;
+      padding: 96px 48px 80px; max-width: 1280px; margin: 0 auto;
       position: relative;
-      overflow: hidden;
-      padding: 120px 40px 100px;
-      text-align: center;
     }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 600px;
-      background: radial-gradient(ellipse at center, rgba(247,148,30,0.08) 0%, transparent 70%);
+    .hero::after {
+      content: ''; position: absolute; top: 0; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse at center, rgba(247,148,30,0.055) 0%, transparent 65%);
       pointer-events: none;
     }
     .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--orange-dim);
-      border: 1px solid rgba(247,148,30,0.2);
-      border-radius: 100px;
-      padding: 4px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 32px;
-    }
-    .hero-eyebrow span { width: 6px; height: 6px; background: var(--orange); border-radius: 50%; display: inline-block; }
-    .hero h1 {
-      font-size: clamp(42px, 6vw, 80px);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-      max-width: 900px;
-      margin: 0 auto 24px;
-    }
-    .hero h1 .accent { color: var(--orange); }
-    .hero p {
-      font-size: 19px;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 48px;
-      line-height: 1.6;
-    }
-    .hero-ctas {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--orange);
-      color: #000;
-      font-size: 15px;
-      font-weight: 700;
-      padding: 14px 28px;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: opacity 0.15s;
-    }
-    .btn-primary:hover { opacity: 0.88; }
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: transparent;
-      color: var(--text);
-      font-size: 15px;
-      font-weight: 600;
-      padding: 13px 28px;
-      border-radius: 10px;
-      border: 1px solid var(--border-light);
-      text-decoration: none;
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .btn-secondary:hover { border-color: #444; background: var(--black-elevated); }
-
-    /* STATS BAR */
-    .stats-bar {
-      display: flex;
-      justify-content: center;
-      gap: 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--black-card);
-    }
-    .stat-item {
-      flex: 1;
-      max-width: 220px;
-      text-align: center;
-      padding: 28px 20px;
-      border-right: 1px solid var(--border);
-    }
-    .stat-item:last-child { border-right: none; }
-    .stat-num {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--orange);
-    }
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    /* DASHBOARD PREVIEW */
-    .section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      margin-bottom: 16px;
-    }
-    .section-sub {
-      font-size: 17px;
-      color: var(--text-muted);
-      max-width: 560px;
-      line-height: 1.6;
-      margin-bottom: 56px;
-    }
-
-    /* MOCK DASHBOARD */
-    .dashboard-preview {
-      background: var(--black-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-    .dashboard-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--border);
-      background: #060608;
-    }
-    .dashboard-title { font-size: 15px; font-weight: 700; }
-    .dashboard-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
-    .dashboard-pills { display: flex; gap: 8px; }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 100px;
-    }
-    .pill-green { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
-    .pill-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
-    .pill-neutral { background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid var(--border-light); }
-    .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
-
-    .dashboard-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-    .dash-col { padding: 20px 24px; }
-    .dash-col + .dash-col { border-left: 1px solid var(--border); }
-    .dash-col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 14px; }
-
-    .avanti-card {
-      background: var(--green-dim);
-      border: 1px solid var(--green-border);
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 8px;
-    }
-    .avanti-metric-label { font-size: 11px; color: var(--green); font-weight: 600; margin-bottom: 4px; }
-    .avanti-metric-val { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
-    .avanti-metric-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-    .roster-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-    }
-    .roster-row:last-child { border-bottom: none; }
-    .team-name { font-weight: 600; }
-    .roster-counts { display: flex; gap: 12px; }
-    .count-g { color: var(--green); font-weight: 700; font-size: 12px; }
-    .count-y { color: var(--yellow); font-weight: 700; font-size: 12px; }
-    .count-r { color: var(--red); font-weight: 700; font-size: 12px; }
-
-    /* FEATURES GRID */
-    .features-section {
-      padding: 100px 40px;
-      background: var(--black-card);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .features-inner { max-width: 1200px; margin: 0 auto; }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      margin-top: 56px;
-    }
-    .feature-card {
-      background: var(--black-card);
-      padding: 36px 32px;
-    }
-    .feature-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      font-size: 20px;
-    }
-    .feature-icon-orange { background: var(--orange-dim); border: 1px solid rgba(247,148,30,0.2); }
-    .feature-icon-green { background: var(--green-dim); border: 1px solid var(--green-border); }
-    .feature-icon-blue { background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.2); }
-    .feature-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
-    .feature-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-
-    /* AVANTI SECTION */
-    .avanti-section {
-      padding: 100px 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .avanti-split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-    }
-    .avanti-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--green-dim);
-      border: 1px solid var(--green-border);
-      border-radius: 100px;
-      padding: 5px 14px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--green);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--orange-d); border: 1px solid var(--orange-b);
+      border-radius: 100px; padding: 4px 12px;
+      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--orange);
       margin-bottom: 24px;
     }
-    .avanti-messages { display: flex; flex-direction: column; gap: 12px; }
-    .avanti-msg {
-      background: var(--black-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 18px;
+    .hero-eyebrow i { width: 5px; height: 5px; background: var(--orange); border-radius: 50%; }
+    .hero h1 {
+      font-size: clamp(38px, 4.5vw, 64px); font-weight: 800;
+      letter-spacing: -.03em; line-height: 1.05; margin-bottom: 20px;
     }
-    .avanti-msg-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
+    .hero h1 em { font-style: normal; color: var(--orange); }
+    .hero-sub {
+      font-size: 17px; color: var(--muted); line-height: 1.65;
+      max-width: 460px; margin-bottom: 40px;
     }
-    .avanti-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
-    .avanti-msg-label { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.08em; }
-    .avanti-msg-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
-    .avanti-msg-action {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--green);
-      font-weight: 600;
-      cursor: pointer;
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--orange); color: #000; font-size: 14px; font-weight: 700;
+      padding: 13px 24px; border-radius: 10px; text-decoration: none; transition: opacity .15s;
     }
-    .avanti-msg.yellow { border-color: rgba(251,191,36,0.2); }
-    .avanti-msg.yellow .avanti-dot { background: var(--yellow); }
-    .avanti-msg.yellow .avanti-msg-label { color: var(--yellow); }
-    .avanti-msg.yellow .avanti-msg-action { color: var(--yellow); }
+    .btn-primary:hover { opacity: .88; }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: transparent; color: var(--text); font-size: 14px; font-weight: 600;
+      padding: 12px 24px; border-radius: 10px; border: 1px solid var(--border2);
+      text-decoration: none; transition: background .15s, border-color .15s;
+    }
+    .btn-secondary:hover { background: var(--elevated); border-color: #444; }
 
-    /* PRICING */
-    .pricing-section {
-      padding: 100px 40px;
-      background: var(--black-card);
-      border-top: 1px solid var(--border);
+    /* ── BROWSER CHROME MOCKUP ── */
+    .browser-wrap {
+      position: relative; z-index: 1;
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--border2);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .browser-bar {
+      background: #111; padding: 10px 14px;
+      display: flex; align-items: center; gap: 10px;
       border-bottom: 1px solid var(--border);
     }
-    .pricing-inner { max-width: 860px; margin: 0 auto; }
-    .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 56px; }
-    .pricing-card {
-      background: var(--black);
-      border: 1px solid var(--border-light);
-      border-radius: 16px;
-      padding: 36px 32px;
-      position: relative;
+    .browser-dots { display: flex; gap: 5px; }
+    .browser-dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .bd1 { background: #f87171; }
+    .bd2 { background: #fbbf24; }
+    .bd3 { background: #34d399; }
+    .browser-url {
+      flex: 1; background: #1a1a1a; border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 12px;
+      font-size: 11px; color: var(--muted); font-family: monospace;
     }
-    .pricing-card.featured { border-color: var(--orange); }
-    .pricing-badge {
-      position: absolute;
-      top: -12px;
-      left: 24px;
-      background: var(--orange);
-      color: #000;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 12px;
-      border-radius: 100px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    .browser-body {
+      background: #060608;
+      display: grid; grid-template-columns: 200px 1fr;
+      min-height: 420px;
     }
-    .pricing-tier { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 12px; }
-    .pricing-price { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
-    .pricing-price span { font-size: 18px; font-weight: 500; color: var(--text-muted); }
-    .pricing-desc { font-size: 13px; color: var(--text-muted); margin: 12px 0 28px; line-height: 1.5; }
-    .pricing-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-    .pricing-feature { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text-muted); }
-    .pricing-check { color: var(--green); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-    .btn-pricing {
-      display: block;
-      text-align: center;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: opacity 0.15s;
-    }
-    .btn-pricing-orange { background: var(--orange); color: #000; }
-    .btn-pricing-outline { background: transparent; color: var(--text); border: 1px solid var(--border-light); }
-    .btn-pricing:hover { opacity: 0.85; }
 
-    /* FINAL CTA */
-    .final-cta {
-      padding: 120px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+    /* Sidebar */
+    .mock-sidebar {
+      background: #080808; border-right: 1px solid var(--border);
+      padding: 16px 0;
     }
-    .final-cta::before {
-      content: '';
-      position: absolute;
-      bottom: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 400px;
-      background: radial-gradient(ellipse at center, rgba(52,211,153,0.07) 0%, transparent 70%);
+    .sidebar-logo { display: flex; align-items: center; gap: 8px; padding: 0 16px 20px; }
+    .sidebar-logo img:first-child { height: 26px; }
+    .sidebar-logo img:last-child { height: 14px; opacity: .8; }
+    .sidebar-section { padding: 0 8px; margin-bottom: 8px; }
+    .sidebar-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); padding: 0 8px; margin-bottom: 6px; }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 8px; border-radius: 7px;
+      font-size: 11px; color: var(--muted); margin-bottom: 1px;
+      transition: background .1s;
+    }
+    .sidebar-item.active { background: var(--green-d); color: var(--green); border: 1px solid var(--green-b); }
+    .sidebar-item svg { opacity: .5; flex-shrink: 0; }
+    .sidebar-item.active svg { opacity: 1; }
+    .sidebar-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Main content */
+    .mock-main { padding: 16px; overflow: hidden; }
+    .mock-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .mock-title { font-size: 14px; font-weight: 700; }
+    .mock-sub { font-size: 10px; color: var(--muted); }
+    .mock-pills { display: flex; gap: 6px; }
+    .mpill {
+      font-size: 9px; font-weight: 700; padding: 3px 8px;
+      border-radius: 100px; display: flex; align-items: center; gap: 4px;
+    }
+    .mpill-g { background: var(--green-d); color: var(--green); border: 1px solid var(--green-b); }
+    .mpill-r { background: var(--red-d); color: var(--red); border: 1px solid rgba(248,113,113,.15); }
+    .mpill-n { background: rgba(255,255,255,.05); color: var(--muted); border: 1px solid var(--border); }
+    .mpill-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+
+    .mock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .mock-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px;
+    }
+    .mc-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 6px; }
+    .mc-val { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+    .mc-sub { font-size: 9px; color: var(--muted); margin-top: 2px; }
+    .mc-green { color: var(--green); }
+    .mc-orange { color: var(--orange); }
+
+    .mock-table { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .mt-head { display: grid; grid-template-columns: 1fr 40px 40px 40px; gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .mt-head span { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--dim); }
+    .mt-row { display: grid; grid-template-columns: 1fr 40px 40px 40px; gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--border); align-items: center; }
+    .mt-row:last-child { border-bottom: none; }
+    .mt-name { font-size: 10px; font-weight: 600; }
+    .mt-g { font-size: 10px; font-weight: 700; color: var(--green); text-align: center; }
+    .mt-y { font-size: 10px; font-weight: 700; color: var(--yellow); text-align: center; }
+    .mt-r { font-size: 10px; font-weight: 700; color: var(--red); text-align: center; }
+
+    .avanti-bar {
+      background: var(--green-d); border: 1px solid var(--green-b);
+      border-radius: 8px; padding: 9px 12px; margin-top: 10px;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .avanti-badge { font-size: 8px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: .1em; white-space: nowrap; margin-top: 1px; }
+    .avanti-text { font-size: 9px; color: var(--muted); line-height: 1.5; }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      background: var(--card); padding: 28px 48px;
+      display: flex; align-items: center; justify-content: center; gap: 0;
+    }
+    .trust-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: .1em; margin-right: 48px; white-space: nowrap; }
+    .trust-logos { display: flex; align-items: center; gap: 48px; flex-wrap: wrap; justify-content: center; }
+    .trust-logo { font-size: 13px; font-weight: 700; color: var(--dim); letter-spacing: .02em; }
+
+    /* ── STATS ── */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border); }
+    .stat { padding: 36px 20px; text-align: center; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat-n { font-size: 36px; font-weight: 800; letter-spacing: -.02em; color: var(--orange); }
+    .stat-l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
+
+    /* ── FEATURES ── */
+    .features { padding: 96px 48px; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .features-inner { max-width: 1200px; margin: 0 auto; }
+    .sec-label { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+    .sec-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; margin-bottom: 14px; }
+    .sec-sub { font-size: 16px; color: var(--muted); max-width: 520px; line-height: 1.65; margin-bottom: 56px; }
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; gap: 1px; }
+    .feat {
+      background: var(--card); padding: 36px 30px;
+      transition: background .2s;
+    }
+    .feat:hover { background: #0f0f0f; }
+    .feat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; font-size: 18px; }
+    .fi-o { background: var(--orange-d); border: 1px solid var(--orange-b); }
+    .fi-g { background: var(--green-d); border: 1px solid var(--green-b); }
+    .fi-b { background: rgba(96,165,250,.08); border: 1px solid rgba(96,165,250,.18); }
+    .feat-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+    .feat-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* ── AVANTI SECTION ── */
+    .avanti-sec { padding: 96px 48px; max-width: 1200px; margin: 0 auto; }
+    .avanti-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .avanti-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--green-d); border: 1px solid var(--green-b);
+      border-radius: 100px; padding: 4px 12px;
+      font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: .08em; text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .avanti-msgs { display: flex; flex-direction: column; gap: 10px; }
+    .amsg {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 15px 16px;
+    }
+    .amsg-hd { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+    .amsg-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .amsg-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; }
+    .amsg-body { font-size: 12px; color: var(--muted); line-height: 1.55; }
+    .amsg-act { margin-top: 8px; font-size: 11px; font-weight: 600; cursor: pointer; }
+    .amsg.green { border-color: var(--green-b); }
+    .amsg.green .amsg-dot { background: var(--green); }
+    .amsg.green .amsg-lbl, .amsg.green .amsg-act { color: var(--green); }
+    .amsg.yellow { border-color: rgba(251,191,36,.2); }
+    .amsg.yellow .amsg-dot { background: var(--yellow); }
+    .amsg.yellow .amsg-lbl, .amsg.yellow .amsg-act { color: var(--yellow); }
+    .amsg.neutral .amsg-dot { background: var(--muted); }
+    .amsg.neutral .amsg-lbl, .amsg.neutral .amsg-act { color: var(--muted); }
+
+    /* ── MOBILE SCREENS ── */
+    .mobile-sec {
+      padding: 96px 48px;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .mobile-inner { max-width: 1200px; margin: 0 auto; }
+    .phones-row {
+      display: flex; align-items: flex-end; justify-content: center; gap: 16px;
+      margin-top: 56px; padding: 0 20px;
+    }
+    .phone {
+      border-radius: 28px; overflow: hidden;
+      border: 1px solid var(--border2);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+      background: #060608;
+      position: relative;
+    }
+    .phone.center { transform: translateY(-24px); }
+    .phone-bar {
+      background: #0d0d0d; padding: 10px 14px 6px;
+      display: flex; justify-content: center; align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .phone-notch { width: 60px; height: 6px; background: #1a1a1a; border-radius: 3px; }
+    .phone-screen { padding: 12px 10px; min-height: 280px; }
+    .phone-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .ph-logo { display: flex; align-items: center; gap: 5px; }
+    .ph-logo img:first-child { height: 18px; }
+    .ph-logo img:last-child { height: 11px; opacity: .8; }
+    .ph-icons { display: flex; gap: 8px; }
+    .ph-icon { width: 18px; height: 18px; background: var(--border); border-radius: 4px; }
+    .phone-title { font-size: 11px; font-weight: 700; margin-bottom: 8px; }
+    .phone-stat-row { display: flex; gap: 6px; margin-bottom: 8px; }
+    .ps { flex: 1; border-radius: 8px; padding: 8px; }
+    .ps-g { background: var(--green-d); border: 1px solid var(--green-b); }
+    .ps-r { background: var(--red-d); border: 1px solid rgba(248,113,113,.15); }
+    .ps-n { background: rgba(255,255,255,.04); border: 1px solid var(--border); }
+    .ps-num { font-size: 15px; font-weight: 800; }
+    .ps-g .ps-num { color: var(--green); }
+    .ps-r .ps-num { color: var(--red); }
+    .ps-n .ps-num { color: var(--muted); }
+    .ps-lbl { font-size: 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .phone-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 9px; }
+    .phone-row:last-child { border-bottom: none; }
+    .pr-name { font-weight: 600; color: var(--text); }
+    .pr-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .avanti-pill-phone {
+      background: var(--green); color: #000; font-size: 10px; font-weight: 700;
+      padding: 5px 14px; border-radius: 100px; text-align: center; margin-top: 10px;
+    }
+
+    /* ── DEMO CTA ── */
+    .demo-cta {
+      padding: 100px 48px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .demo-cta::before {
+      content: ''; position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(52,211,153,.06) 0%, transparent 70%);
       pointer-events: none;
     }
-    .final-cta h2 { font-size: clamp(36px, 5vw, 60px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
-    .final-cta p { font-size: 18px; color: var(--text-muted); max-width: 500px; margin: 0 auto 48px; }
-    .final-cta-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .demo-cta h2 { font-size: clamp(32px, 5vw, 58px); font-weight: 800; letter-spacing: -.025em; margin-bottom: 14px; }
+    .demo-cta h2 em { font-style: normal; color: var(--orange); }
+    .demo-cta p { font-size: 17px; color: var(--muted); max-width: 460px; margin: 0 auto 44px; line-height: 1.6; }
+    .demo-btns { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
 
-    /* FOOTER */
+    /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 32px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 28px 48px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .footer-left { display: flex; align-items: center; gap: 10px; }
-    .footer-logo { font-size: 13px; font-weight: 700; color: var(--text-muted); }
-    .footer-right { font-size: 12px; color: var(--text-dim); }
-    .footer-right a { color: var(--text-muted); text-decoration: none; margin-left: 20px; }
-    .footer-right a:hover { color: var(--text); }
+    .footer-logo { display: flex; align-items: center; gap: 8px; }
+    .footer-logo img:first-child { height: 26px; }
+    .footer-logo img:last-child { height: 15px; opacity: .5; }
+    .footer-links { font-size: 12px; color: var(--dim); }
+    .footer-links a { color: var(--muted); text-decoration: none; margin-left: 20px; }
+    .footer-links a:hover { color: var(--text); }
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       nav { padding: 0 20px; }
-      nav .nav-links { display: none; }
-      .hero { padding: 80px 20px 60px; }
-      .stats-bar { flex-wrap: wrap; }
-      .stat-item { min-width: 50%; border-right: none; border-bottom: 1px solid var(--border); }
-      .section { padding: 64px 20px; }
-      .features-section { padding: 64px 20px; }
-      .features-grid { grid-template-columns: 1fr; }
-      .dashboard-body { grid-template-columns: 1fr; }
-      .dash-col + .dash-col { border-left: none; border-top: 1px solid var(--border); }
+      .nav-links > a { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 64px 20px 40px; gap: 40px; }
+      .hero::after { display: none; }
+      .browser-wrap { display: none; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stat { border-bottom: 1px solid var(--border); }
+      .feat-grid { grid-template-columns: 1fr; }
       .avanti-split { grid-template-columns: 1fr; gap: 40px; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .avanti-section, .pricing-section, .final-cta { padding: 64px 20px; }
-      footer { flex-direction: column; gap: 16px; text-align: center; }
+      .phones-row { gap: 8px; }
+      .phone { max-width: 140px; }
+      .features, .mobile-sec, .demo-cta { padding: 64px 20px; }
+      .avanti-sec { padding: 64px 20px; }
+      .trust-bar { padding: 20px; flex-wrap: wrap; gap: 16px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 24px 20px; }
     }
   </style>
 </head>
@@ -504,314 +360,335 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">
-    <img src="https://gameday.vai.app/logo.png" alt="VAI" style="height:36px;width:auto;">
-    <img src="https://gameday.vai.app/gameday.png" alt="GAMEDAY" style="height:22px;width:auto;margin-left:8px;">
-  </div>
+  <a href="#" class="nav-logo">
+    <img src="https://gameday.vai.app/logo.png" alt="VAI">
+    <img src="https://gameday.vai.app/gameday.png" alt="GAMEDAY">
+  </a>
   <div class="nav-links">
     <a href="#features">Features</a>
     <a href="#avanti">AVANTI</a>
-    <a href="#pricing">Pricing</a>
+    <a href="#mobile">Mobile</a>
     <a href="https://vai.app" target="_blank">VAI Platform</a>
-    <a href="vai-game-os-login.html" class="btn-demo" style="background:transparent;border:1px solid #333;color:var(--text);">Log In</a>
-    <a href="https://ben-whitesides.github.io/vai-demos/vai-club-os-gameday-phase2.html" target="_blank" class="btn-demo">View Demo →</a>
+    <a href="vai-game-os-login.html" class="nav-btn-ghost">Log In</a>
+    <a href="vai-game-os-login.html" class="nav-btn">Request Demo →</a>
   </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-eyebrow"><span></span> Powered by VAI + AVANTI AI</div>
-  <h1>Run your club like a<br><span class="accent">pro organization.</span></h1>
-  <p>GAME OS gives coaches and club directors mission control — roster compliance, scheduling, financials, formations, and AI coaching intelligence in one place.</p>
-  <div class="hero-ctas">
-    <a href="vai-game-os-login.html" class="btn-primary">Sign In to GAME OS →</a>
-    <a href="https://vai.app" class="btn-secondary" target="_blank">Get GAME OS</a>
-  </div>
-</section>
+<div style="max-width:1280px;margin:0 auto;">
+  <div class="hero">
+    <!-- Left -->
+    <div>
+      <div class="hero-eyebrow"><i></i> Powered by VAI + AVANTI AI</div>
+      <h1>One platform.<br><em>Everything your club runs on.</em></h1>
+      <p class="hero-sub">AVANTI handles compliance, scheduling, finances, and communications automatically. Coaches coach. Directors direct.</p>
+      <div class="hero-ctas">
+        <a href="vai-game-os-login.html" class="btn-primary">Request Demo →</a>
+        <a href="https://vai.app" target="_blank" class="btn-secondary">Get GAME OS</a>
+      </div>
+    </div>
 
-<!-- STATS BAR -->
-<div class="stats-bar">
-  <div class="stat-item">
-    <div class="stat-num">250+</div>
-    <div class="stat-label">Clubs &amp; Orgs</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-num">50K+</div>
-    <div class="stat-label">Athletes Managed</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-num">98.8%</div>
-    <div class="stat-label">Avg Compliance Rate</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-num">2 days</div>
-    <div class="stat-label">Median Time to Green</div>
+    <!-- Right: Browser Chrome Mockup -->
+    <div class="browser-wrap">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <span class="bd1"></span><span class="bd2"></span><span class="bd3"></span>
+        </div>
+        <div class="browser-url">gameday.vai.app / club-os / dashboard</div>
+      </div>
+      <div class="browser-body">
+        <!-- Sidebar -->
+        <div class="mock-sidebar">
+          <div class="sidebar-logo">
+            <img src="https://gameday.vai.app/logo.png" alt="VAI">
+            <img src="https://gameday.vai.app/gameday.png" alt="">
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Overview</div>
+            <div class="sidebar-item active">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="4" height="4" rx="1" fill="currentColor"/><rect x="7" y="1" width="4" height="4" rx="1" fill="currentColor"/><rect x="1" y="7" width="4" height="4" rx="1" fill="currentColor"/><rect x="7" y="7" width="4" height="4" rx="1" fill="currentColor"/></svg>
+              Dashboard
+            </div>
+            <div class="sidebar-item">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg>
+              PLAY Status
+            </div>
+            <div class="sidebar-item">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9V5l4-3 4 3v4" stroke="currentColor" stroke-width="1.2"/></svg>
+              Formations
+            </div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Operations</div>
+            <div class="sidebar-item">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v3M8 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Schedule
+            </div>
+            <div class="sidebar-item">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" stroke="currentColor" stroke-width="1.2"/></svg>
+              Tournaments
+            </div>
+            <div class="sidebar-item">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6h10M1 6l3-3M1 6l3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Finances
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="mock-main">
+          <div class="mock-header">
+            <div>
+              <div class="mock-title">VAI FC North</div>
+              <div class="mock-sub">GAME OS Mission Control</div>
+            </div>
+            <div class="mock-pills">
+              <div class="mpill mpill-n">250 athletes</div>
+              <div class="mpill mpill-g"><span class="mpill-dot"></span>247 GREEN</div>
+              <div class="mpill mpill-r"><span class="mpill-dot"></span>1 RED</div>
+            </div>
+          </div>
+
+          <div class="mock-grid">
+            <div class="mock-card">
+              <div class="mc-label">Compliance Rate</div>
+              <div class="mc-val mc-green">98.8%</div>
+              <div class="mc-sub">↑ 2.1% vs last week</div>
+            </div>
+            <div class="mock-card">
+              <div class="mc-label">Days to Green</div>
+              <div class="mc-val mc-orange">2</div>
+              <div class="mc-sub">30-day average</div>
+            </div>
+          </div>
+
+          <div class="mock-table">
+            <div class="mt-head">
+              <span>Team</span><span style="text-align:center">●</span><span style="text-align:center">●</span><span style="text-align:center">●</span>
+            </div>
+            <div class="mt-row">
+              <div class="mt-name">2012 Boys Black</div>
+              <div class="mt-g">17</div><div class="mt-y">1</div><div class="mt-r">0</div>
+            </div>
+            <div class="mt-row">
+              <div class="mt-name">2011 Girls Blue</div>
+              <div class="mt-g">15</div><div class="mt-y">0</div><div class="mt-r">1</div>
+            </div>
+            <div class="mt-row">
+              <div class="mt-name">2010 Boys Gold</div>
+              <div class="mt-g">18</div><div class="mt-y">1</div><div class="mt-r">0</div>
+            </div>
+          </div>
+
+          <div class="avanti-bar">
+            <div class="avanti-badge">✦ AVANTI</div>
+            <div class="avanti-text">Emma Torres waiver received — status updated to GREEN automatically. 1 exception still needs your input.</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- DASHBOARD PREVIEW -->
-<div class="section" id="demo">
-  <div class="section-label">Mission Control</div>
-  <div class="section-title">Everything in one view.<br>Nothing falling through.</div>
-  <div class="section-sub">Your GAME OS dashboard shows roster PLAY Status, AVANTI alerts, today's schedule, and live tournament brackets — all in real time.</div>
-
-  <div class="dashboard-preview">
-    <div class="dashboard-header">
-      <div>
-        <div class="dashboard-title">VAI FC North</div>
-        <div class="dashboard-sub">GAME OS Mission Control — Demo Account</div>
-      </div>
-      <div class="dashboard-pills">
-        <div class="pill pill-neutral">250 athletes</div>
-        <div class="pill pill-neutral">3 teams</div>
-        <div class="pill pill-green"><span class="pill-dot"></span>247 GREEN</div>
-        <div class="pill pill-red"><span class="pill-dot"></span>1 RED</div>
-      </div>
-    </div>
-    <div class="dashboard-body">
-      <div class="dash-col">
-        <div class="dash-col-title">AVANTI Intelligence</div>
-        <div class="avanti-card">
-          <div class="avanti-metric-label">Compliance Rate</div>
-          <div class="avanti-metric-val">98.8%</div>
-          <div class="avanti-metric-sub">↑ 2.1% vs last week</div>
-        </div>
-        <div class="avanti-card" style="margin-top:8px;background:rgba(96,165,250,0.06);border-color:rgba(96,165,250,0.2);">
-          <div class="avanti-metric-label" style="color:var(--blue);">Median Days to Green</div>
-          <div class="avanti-metric-val">2</div>
-          <div class="avanti-metric-sub">Fastest 30-day avg on record</div>
-        </div>
-      </div>
-      <div class="dash-col">
-        <div class="dash-col-title">Roster PLAY Status — All Teams</div>
-        <div class="roster-row">
-          <div class="team-name">2012 Boys Black</div>
-          <div class="roster-counts">
-            <span class="count-g">17 ●</span>
-            <span class="count-y">1 ●</span>
-            <span class="count-r">0 ●</span>
-          </div>
-        </div>
-        <div class="roster-row">
-          <div class="team-name">2011 Girls Blue</div>
-          <div class="roster-counts">
-            <span class="count-g">15 ●</span>
-            <span class="count-y">0 ●</span>
-            <span class="count-r">1 ●</span>
-          </div>
-        </div>
-        <div class="roster-row">
-          <div class="team-name">2010 Boys Gold</div>
-          <div class="roster-counts">
-            <span class="count-g">18 ●</span>
-            <span class="count-y">1 ●</span>
-            <span class="count-r">0 ●</span>
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-label">Trusted by</div>
+  <div class="trust-logos">
+    <div class="trust-logo">VAI FC North</div>
+    <div class="trust-logo">Pacific Soccer Club</div>
+    <div class="trust-logo">Elite Athletics</div>
+    <div class="trust-logo">Metro Academy</div>
+    <div class="trust-logo">Apex Sports</div>
+    <div class="trust-logo">NextLevel FC</div>
   </div>
 </div>
 
-<!-- SCREENS SECTION -->
-<div style="padding: 100px 40px; max-width: 1200px; margin: 0 auto;">
-  <div class="section-label">Product Screens</div>
-  <div class="section-title">See it in action.</div>
-  <div class="section-sub">Real screens from the GAME OS dashboard — web and mobile.</div>
-
-  <!-- Web screen: full width -->
-  <div style="margin-bottom: 32px; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--black-card);">
-    <div style="padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px;">
-      <div style="width:10px;height:10px;border-radius:50%;background:#333;"></div>
-      <div style="width:10px;height:10px;border-radius:50%;background:#333;"></div>
-      <div style="width:10px;height:10px;border-radius:50%;background:#333;"></div>
-      <div style="flex:1;text-align:center;font-size:11px;color:var(--text-dim);">gameday.vai.app / club-os</div>
-    </div>
-    <div style="position:relative;width:100%;height:520px;overflow:hidden;">
-      <iframe src="https://ben-whitesides.github.io/vai-demos/vai-club-os-gameday-phase2.html"
-        style="width:1400px;height:900px;border:none;transform:scale(0.75);transform-origin:top left;pointer-events:none;"
-        loading="lazy"></iframe>
-    </div>
-  </div>
-
-  <!-- Two mobile screens side by side -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
-    <div style="border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--black-card);">
-      <div style="padding: 12px 20px; border-bottom: 1px solid var(--border); font-size:12px;color:var(--text-muted);font-weight:600;">Mobile — GAME OS</div>
-      <div style="position:relative;width:100%;height:460px;overflow:hidden;">
-        <iframe src="https://ben-whitesides.github.io/vai-demos/vai-game-os-mobile-standalone.html"
-          style="width:900px;height:800px;border:none;transform:scale(0.55);transform-origin:top left;pointer-events:none;"
-          loading="lazy"></iframe>
-      </div>
-    </div>
-    <div style="border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--black-card);">
-      <div style="padding: 12px 20px; border-bottom: 1px solid var(--border); font-size:12px;color:var(--text-muted);font-weight:600;">Club Financials — GAMEDAY</div>
-      <div style="position:relative;width:100%;height:460px;overflow:hidden;">
-        <iframe src="https://ben-whitesides.github.io/vai-demos/vai-club-financials-gameday.html"
-          style="width:900px;height:800px;border:none;transform:scale(0.55);transform-origin:top left;pointer-events:none;"
-          loading="lazy"></iframe>
-      </div>
-    </div>
-  </div>
-
-  <!-- View all link -->
-  <div style="text-align:center;margin-top:32px;">
-    <a href="https://ben-whitesides.github.io/vai-demos/vai-club-os-gameday-phase2.html"
-      target="_blank"
-      style="font-size:14px;color:var(--orange);text-decoration:none;font-weight:600;">
-      View full GAMEDAY dashboard →
-    </a>
-  </div>
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-n">250+</div><div class="stat-l">Clubs &amp; Orgs</div></div>
+  <div class="stat"><div class="stat-n">50K+</div><div class="stat-l">Athletes Managed</div></div>
+  <div class="stat"><div class="stat-n">98.8%</div><div class="stat-l">Avg Compliance Rate</div></div>
+  <div class="stat"><div class="stat-n">2 days</div><div class="stat-l">Median Time to Green</div></div>
 </div>
 
 <!-- FEATURES -->
-<div class="features-section" id="features">
+<div class="features" id="features">
   <div class="features-inner">
-    <div class="section-label">Built for Clubs</div>
-    <div class="section-title">Everything a club director needs.<br>Nothing they don't.</div>
-    <div class="section-sub">GAME OS handles the operational load so coaches can coach and directors can lead.</div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon feature-icon-green">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#34d399" stroke-width="1.5"/><circle cx="10" cy="10" r="3" fill="#34d399"/></svg>
+    <div class="sec-label">Built for Clubs</div>
+    <div class="sec-title">Everything a club director needs.<br>Nothing they don't.</div>
+    <div class="sec-sub">GAME OS handles the operational load so coaches coach and directors lead.</div>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="feat-icon fi-g">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#34d399" stroke-width="1.5"/><circle cx="9" cy="9" r="2.5" fill="#34d399"/></svg>
         </div>
-        <div class="feature-title">PLAY Status</div>
-        <div class="feature-desc">Real-time roster compliance with GREEN / YELLOW / RED dots. AVANTI resolves YELLOW automatically. Only true issues surface to coaches.</div>
+        <div class="feat-title">PLAY Status</div>
+        <div class="feat-desc">Real-time roster compliance. GREEN / YELLOW / RED per athlete. AVANTI resolves YELLOW automatically — only true issues surface to coaches.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon feature-icon-orange">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L18 17H2L10 2Z" fill="#F7941E"/></svg>
+      <div class="feat">
+        <div class="feat-icon fi-o">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L17 16H1L9 2Z" fill="#F7941E"/></svg>
         </div>
-        <div class="feature-title">AVANTI AI Intelligence</div>
-        <div class="feature-desc">Your AI coaching staff on call 24/7. Surfaces alerts, drafts communications, flags compliance risks, and handles routine exceptions before they become problems.</div>
+        <div class="feat-title">AVANTI AI</div>
+        <div class="feat-desc">Your AI staff on call 24/7. Flags compliance risks, drafts communications, handles routine exceptions before they become problems.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon feature-icon-blue">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="12" rx="2" stroke="#60a5fa" stroke-width="1.5"/><path d="M6 2v4M14 2v4" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <div class="feat">
+        <div class="feat-icon fi-b">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="5" width="14" height="10" rx="1.5" stroke="#60a5fa" stroke-width="1.5"/><path d="M5 2v4M13 2v4" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
-        <div class="feature-title">Smart Scheduling</div>
-        <div class="feature-desc">Field allocation, practice and game scheduling, conflict detection, and AVANTI-powered optimization across all teams and seasons.</div>
+        <div class="feat-title">Smart Scheduling</div>
+        <div class="feat-desc">Field allocation, conflict detection, and AVANTI-powered optimization across all teams and seasons.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon feature-icon-orange">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="8" width="14" height="9" rx="1.5" stroke="#F7941E" stroke-width="1.5"/><path d="M7 8V6a3 3 0 016 0v2" stroke="#F7941E" stroke-width="1.5"/></svg>
+      <div class="feat">
+        <div class="feat-icon fi-o">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="7" width="14" height="9" rx="1.5" stroke="#F7941E" stroke-width="1.5"/><path d="M6 7V5a3 3 0 016 0v2" stroke="#F7941E" stroke-width="1.5"/></svg>
         </div>
-        <div class="feature-title">Formation Builder</div>
-        <div class="feature-desc">Portrait and landscape field view with athletes mapped to positions. PLAY Status dots on every player. AVANTI surfaces depth chart insights instantly.</div>
+        <div class="feat-title">Formation Builder</div>
+        <div class="feat-desc">Field view with athletes at positions, PLAY Status dots, AVANTI depth chart insights. Tap any player — full context panel opens.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon feature-icon-green">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10h14M3 10l4-4M3 10l4 4" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="feat">
+        <div class="feat-icon fi-g">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9h14M2 9l4-4M2 9l4 4" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <div class="feature-title">Club Financials</div>
-        <div class="feature-desc">Connect QuickBooks and Stripe in one click. AVANTI reads balances, flags outstanding dues, and triggers payment reminders — zero staff emails required.</div>
+        <div class="feat-title">Club Financials</div>
+        <div class="feat-desc">Connect QuickBooks and Stripe in one click. AVANTI flags outstanding dues and triggers reminders. Zero staff emails.</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon feature-icon-blue">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16V8l6-5 6 5v8" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/><rect x="7" y="12" width="6" height="4" rx="0.5" stroke="#60a5fa" stroke-width="1.5"/></svg>
+      <div class="feat">
+        <div class="feat-icon fi-b">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V7l6-5 6 5v7" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/><rect x="6" y="10" width="6" height="4" rx="0.5" stroke="#60a5fa" stroke-width="1.5"/></svg>
         </div>
-        <div class="feature-title">Tournament Brackets</div>
-        <div class="feature-desc">Live bracket management with real-time score updates, standings, and AVANTI-powered team readiness reports before every game.</div>
+        <div class="feat-title">Tournaments</div>
+        <div class="feat-desc">Live bracket management, real-time scores, standings, and AVANTI team readiness reports before every game.</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- AVANTI SECTION -->
-<div class="avanti-section" id="avanti">
+<!-- AVANTI -->
+<div class="avanti-sec" id="avanti">
   <div class="avanti-split">
     <div>
-      <div class="avanti-badge">✦ AVANTI AI</div>
-      <div class="section-title">Your AI coaching staff.<br>On call 24/7.</div>
-      <div class="section-sub" style="margin-bottom:0;">AVANTI monitors your entire club — roster, schedule, finances, compliance — and handles volume automatically. Only decisions that require human judgment reach your desk.</div>
+      <div class="avanti-tag">✦ AVANTI AI</div>
+      <div class="sec-title">Your AI coaching staff.<br>On call 24/7.</div>
+      <p style="font-size:16px;color:var(--muted);line-height:1.65;max-width:420px;">AVANTI monitors your entire club — roster, schedule, finances, compliance — and handles volume automatically. Only decisions that need human judgment reach your desk.</p>
     </div>
-    <div class="avanti-messages">
-      <div class="avanti-msg">
-        <div class="avanti-msg-header">
-          <span class="avanti-dot"></span>
-          <span class="avanti-msg-label">AVANTI · Resolved</span>
-        </div>
-        <div class="avanti-msg-text">Emma Torres (2011 Girls Blue) was YELLOW for missing a signed waiver. AVANTI sent a reminder, waiver received, status updated to GREEN automatically.</div>
+    <div class="avanti-msgs">
+      <div class="amsg green">
+        <div class="amsg-hd"><span class="amsg-dot"></span><span class="amsg-lbl">AVANTI · Resolved</span></div>
+        <div class="amsg-body">Emma Torres (2011 Girls Blue) was YELLOW for missing a signed waiver. Reminder sent, waiver received, status updated to GREEN automatically.</div>
       </div>
-      <div class="avanti-msg yellow">
-        <div class="avanti-msg-header">
-          <span class="avanti-dot" style="background:var(--yellow)"></span>
-          <span class="avanti-msg-label" style="color:var(--yellow)">AVANTI · Needs Your Input</span>
-        </div>
-        <div class="avanti-msg-text">Travel exception requested for 2011 Girls Blue — medical cleared, payment clear, waiver expires in 9 days. Coach requested same-day override. Your call.</div>
-        <div class="avanti-msg-action" style="color:var(--yellow)">Approve override →</div>
+      <div class="amsg yellow">
+        <div class="amsg-hd"><span class="amsg-dot"></span><span class="amsg-lbl">AVANTI · Needs Your Input</span></div>
+        <div class="amsg-body">Travel exception requested — 2011 Girls Blue. Medical cleared, payment clear, waiver expires in 9 days. Coach requested same-day override. Your call.</div>
+        <div class="amsg-act">Approve override →</div>
       </div>
-      <div class="avanti-msg">
-        <div class="avanti-msg-header">
-          <span class="avanti-dot"></span>
-          <span class="avanti-msg-label">AVANTI · Proactive</span>
-        </div>
-        <div class="avanti-msg-text">3 athletes on 2010 Boys Gold have dues outstanding 14+ days. Draft reminders ready. Confirm to send to parents now or schedule for tomorrow morning.</div>
-        <div class="avanti-msg-action">Send reminders →</div>
+      <div class="amsg neutral">
+        <div class="amsg-hd"><span class="amsg-dot"></span><span class="amsg-lbl">AVANTI · Proactive</span></div>
+        <div class="amsg-body">3 athletes on 2010 Boys Gold have dues outstanding 14+ days. Reminders drafted and ready to send. Confirm or schedule for tomorrow.</div>
+        <div class="amsg-act">Send reminders →</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PRICING -->
-<div class="pricing-section" id="pricing">
-  <div class="pricing-inner">
-    <div style="text-align:center;">
-      <div class="section-label">Simple Pricing</div>
-      <div class="section-title">One flat rate. No per-athlete fees.</div>
-      <div class="section-sub" style="margin:16px auto 0;max-width:460px;">Includes full GAME OS — AVANTI AI, formations, scheduling, financials, compliance, and brackets.</div>
-    </div>
-    <div class="pricing-grid">
-      <div class="pricing-card featured">
-        <div class="pricing-badge">Most Popular</div>
-        <div class="pricing-tier">Club</div>
-        <div class="pricing-price">$299<span>/mo</span></div>
-        <div class="pricing-desc">Up to 1,000 athletes. Full GAME OS access. Annual plan at $239/mo.</div>
-        <div class="pricing-features">
-          <div class="pricing-feature"><span class="pricing-check">✓</span> Full GAME OS dashboard</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> AVANTI AI intelligence</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> Formation + depth charts</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> Club Wallet + QuickBooks connect</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> Tournament bracket management</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> 50% off VAI Mentor for coaches</div>
+<!-- MOBILE -->
+<div class="mobile-sec" id="mobile">
+  <div class="mobile-inner">
+    <div class="sec-label">Coaches are on the sideline</div>
+    <div class="sec-title">Built for mobile first.</div>
+    <p style="font-size:16px;color:var(--muted);max-width:480px;margin:12px auto 0;line-height:1.65;">Full GAME OS on every device. Coaches check PLAY Status from the bench. Directors approve exceptions from the parking lot.</p>
+    <div class="phones-row">
+      <!-- Phone 1 -->
+      <div class="phone" style="width:160px;">
+        <div class="phone-bar"><div class="phone-notch"></div></div>
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div class="ph-logo">
+              <img src="https://gameday.vai.app/logo.png" alt="VAI">
+            </div>
+            <div class="ph-icons"><div class="ph-icon"></div><div class="ph-icon"></div></div>
+          </div>
+          <div class="phone-title">Roster PLAY Status</div>
+          <div class="phone-stat-row">
+            <div class="ps ps-g"><div class="ps-num">247</div><div class="ps-lbl">GREEN</div></div>
+            <div class="ps ps-r"><div class="ps-num">1</div><div class="ps-lbl">RED</div></div>
+            <div class="ps ps-n"><div class="ps-num">2</div><div class="ps-lbl">YLW</div></div>
+          </div>
+          <div class="phone-row"><span class="pr-name">2012 Boys Black</span><span class="pr-dot" style="background:var(--green)"></span></div>
+          <div class="phone-row"><span class="pr-name">2011 Girls Blue</span><span class="pr-dot" style="background:var(--red)"></span></div>
+          <div class="phone-row"><span class="pr-name">2010 Boys Gold</span><span class="pr-dot" style="background:var(--green)"></span></div>
         </div>
-        <a href="https://vai.app" class="btn-pricing btn-pricing-orange">Get Started →</a>
       </div>
-      <div class="pricing-card">
-        <div class="pricing-tier">Enterprise</div>
-        <div class="pricing-price">$599<span>/mo</span></div>
-        <div class="pricing-desc">1,000+ athletes. Leagues, academies, multi-club orgs. Annual at $479/mo.</div>
-        <div class="pricing-features">
-          <div class="pricing-feature"><span class="pricing-check">✓</span> Everything in Club</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> Unlimited athletes</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> Multi-club management</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> League administration</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> Priority support</div>
-          <div class="pricing-feature"><span class="pricing-check">✓</span> Custom onboarding</div>
+
+      <!-- Phone 2 (center, elevated) -->
+      <div class="phone center" style="width:175px;">
+        <div class="phone-bar"><div class="phone-notch"></div></div>
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div class="ph-logo">
+              <img src="https://gameday.vai.app/logo.png" alt="VAI">
+              <img src="https://gameday.vai.app/gameday.png" alt="">
+            </div>
+            <div class="ph-icons"><div class="ph-icon"></div></div>
+          </div>
+          <div class="phone-title">VAI FC North</div>
+          <div class="phone-stat-row">
+            <div class="ps ps-g"><div class="ps-num">98%</div><div class="ps-lbl">Compliance</div></div>
+            <div class="ps ps-n"><div class="ps-num">3</div><div class="ps-lbl">Teams</div></div>
+          </div>
+          <div class="avanti-pill-phone">✦ AVANTI</div>
+          <div style="margin-top:8px;background:var(--green-d);border:1px solid var(--green-b);border-radius:8px;padding:8px;font-size:9px;color:var(--muted);line-height:1.4;">
+            All clear today. Emma Torres waiver received, status GREEN.
+          </div>
         </div>
-        <a href="mailto:hello@vai.app" class="btn-pricing btn-pricing-outline">Contact Sales →</a>
+      </div>
+
+      <!-- Phone 3 -->
+      <div class="phone" style="width:160px;">
+        <div class="phone-bar"><div class="phone-notch"></div></div>
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div class="ph-logo">
+              <img src="https://gameday.vai.app/logo.png" alt="VAI">
+            </div>
+            <div class="ph-icons"><div class="ph-icon"></div><div class="ph-icon"></div></div>
+          </div>
+          <div class="phone-title">Today's Schedule</div>
+          <div class="phone-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
+            <span class="pr-name">Field A — Practice</span>
+            <span style="font-size:8px;color:var(--muted)">4:00 PM → 6:00 PM</span>
+          </div>
+          <div class="phone-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
+            <span class="pr-name">Field B — Game</span>
+            <span style="font-size:8px;color:var(--muted)">6:30 PM → 8:00 PM</span>
+          </div>
+          <div class="phone-row" style="flex-direction:column;align-items:flex-start;gap:2px;border-bottom:none;">
+            <span class="pr-name">Tournament — Day 1</span>
+            <span style="font-size:8px;color:var(--muted)">Sat 8:00 AM start</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- FINAL CTA -->
-<div class="final-cta">
-  <h2>Ready to run your club<br>on <span style="color:var(--orange)">GAME OS?</span></h2>
-  <p>See a live demo with real club data — or sign up and be live in minutes.</p>
-  <div class="final-cta-btns">
-    <a href="vai-game-os-login.html" class="btn-primary">Sign In to GAME OS →</a>
-    <a href="https://vai.app" class="btn-secondary" target="_blank">Get GAME OS</a>
+<div class="demo-cta">
+  <h2>Ready to run your club<br>on <em>GAME OS?</em></h2>
+  <p>Request a demo and see your club's data in GAME OS within 24 hours.</p>
+  <div class="demo-btns">
+    <a href="vai-game-os-login.html" class="btn-primary">Request Demo →</a>
+    <a href="https://vai.app" target="_blank" class="btn-secondary">Get GAME OS</a>
   </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-left">
-    <img src="https://gameday.vai.app/logo.png" alt="VAI" style="height:28px;width:auto;">
-    <img src="https://gameday.vai.app/gameday.png" alt="GAMEDAY" style="height:16px;width:auto;margin-left:8px;opacity:0.6;">
+  <div class="footer-logo">
+    <img src="https://gameday.vai.app/logo.png" alt="VAI">
+    <img src="https://gameday.vai.app/gameday.png" alt="GAMEDAY">
   </div>
-  <div class="footer-right">
+  <div class="footer-links">
     © 2026 VAI Inc.
     <a href="https://vai.app" target="_blank">vai.app</a>
     <a href="mailto:hello@vai.app">Contact</a>
