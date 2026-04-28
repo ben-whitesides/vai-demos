@@ -130,6 +130,19 @@ public sealed class PlayStatusAvantiAdapter(
             .SendComplianceNudgeAsync(request, cancellationToken)
             .ConfigureAwait(false);
 
+        // Fail closed: if the service didn't produce an outbox id, the side effect didn't happen.
+        // Never report Success: true without verifiable evidence the nudge was queued.
+        if (string.IsNullOrEmpty(outboxId))
+        {
+            return new AvantiExecutionResultDto(
+                Success: false,
+                OutboxEventId: null,
+                FailureCode: "service_returned_no_outbox",
+                FailureMessage: "ComplianceService.SendComplianceNudgeAsync returned null/empty outbox id; reminder was not queued.",
+                Result: JsonSerializer.SerializeToElement(new { sent = false })
+            );
+        }
+
         return new AvantiExecutionResultDto(
             Success: true,
             OutboxEventId: outboxId,
