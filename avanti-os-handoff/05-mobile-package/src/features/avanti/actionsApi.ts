@@ -85,8 +85,27 @@ export interface TileAvantiContext {
 // ─── API calls ───────────────────────────────────────────────────────────────
 
 const api = newApiInstance();
-const createIdempotencyKey = (): string =>
-  `idemp_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+
+// RFC 4122 v4 UUID — uses crypto.getRandomValues when available
+// (React Native: ensure 'react-native-get-random-values' is imported once at app entry)
+const createIdempotencyKey = (): string => {
+  const cryptoObj = (globalThis as { crypto?: Crypto }).crypto;
+  if (cryptoObj?.randomUUID) {
+    return `idemp_${cryptoObj.randomUUID()}`;
+  }
+  if (cryptoObj?.getRandomValues) {
+    const bytes = new Uint8Array(16);
+    cryptoObj.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40; // version 4
+    bytes[8] = (bytes[8] & 0x3f) | 0x80; // variant 10
+    const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+    return `idemp_${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+  }
+  throw new Error(
+    "createIdempotencyKey requires crypto.randomUUID or crypto.getRandomValues. " +
+    "On React Native, import 'react-native-get-random-values' at app entry."
+  );
+};
 
 export const avantiActionsApi = {
   /**
