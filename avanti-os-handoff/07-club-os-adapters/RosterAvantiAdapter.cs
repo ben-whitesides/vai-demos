@@ -76,6 +76,18 @@ public sealed class RosterAvantiAdapter(
             .SendRosterNudgesAsync(request, cancellationToken)
             .ConfigureAwait(false);
 
+        // Fail closed: null outbox id means the side effect didn't occur.
+        if (string.IsNullOrEmpty(outboxId))
+        {
+            return new AvantiExecutionResultDto(
+                Success: false,
+                OutboxEventId: null,
+                FailureCode: "service_returned_no_outbox",
+                FailureMessage: "TeamsService.SendRosterNudgesAsync returned null/empty outbox id; nudges were not queued.",
+                Result: JsonSerializer.SerializeToElement(new { sent = false })
+            );
+        }
+
         return new AvantiExecutionResultDto(
             Success: true,
             OutboxEventId: outboxId,
