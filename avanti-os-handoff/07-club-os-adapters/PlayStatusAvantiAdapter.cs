@@ -45,6 +45,35 @@ public sealed class PlayStatusAvantiAdapter(
     {
         var actions = new List<AvantiPreparedActionDto>();
 
+        // Green (club-scoped): read-only PLAY status summary for the club
+        // No mutation, no confirmation. Available whenever ClubId is in scope.
+        if (request.ClubId.HasValue)
+        {
+            var summary = await complianceService
+                .GetPlayStatusSummaryAsync(request.ClubId, request.AthleteId, cancellationToken)
+                .ConfigureAwait(false);
+
+            actions.Add(new AvantiPreparedActionDto(
+                FeatureKey: FeatureKey,
+                TileId: "play_status",
+                ActionType: "play_status.summarize_club",
+                RiskLevel: "green",
+                RequiresConfirmation: false,
+                Label: "Summarize club PLAY status",
+                Summary: $"{summary.GreenCount} GREEN · {summary.YellowCount} YELLOW · {summary.RedCount} RED",
+                Preview: JsonSerializer.SerializeToElement(new
+                {
+                    greenCount = summary.GreenCount,
+                    yellowCount = summary.YellowCount,
+                    redCount = summary.RedCount,
+                    totalAthletes = summary.GreenCount + summary.YellowCount + summary.RedCount
+                }),
+                TargetEntityType: "club",
+                TargetEntityId: request.ClubId,
+                ExpiresAt: DateTimeOffset.UtcNow.AddMinutes(15)
+            ));
+        }
+
         if (request.AthleteId.HasValue)
         {
             var block = await complianceService
@@ -83,7 +112,20 @@ public sealed class PlayStatusAvantiAdapter(
         AvantiConfirmedActionRequest request,
         CancellationToken cancellationToken = default)
     {
-        // Dispatch to compliance comms service — never mutates PLAY state directly
+        // Green action: summarize_club is read-only. Settled at prepare time.
+        // Should never reach Execute, but guard defensively if a caller misroutes.
+        if (request.ActionType == "play_status.summarize_club")
+        {
+            return new AvantiExecutionResultDto(
+                Success: true,
+                OutboxEventId: null,
+                FailureCode: null,
+                FailureMessage: null,
+                Result: JsonSerializer.SerializeToElement(new { read_only = true })
+            );
+        }
+
+        // Yellow action: dispatch to compliance comms service — never mutates PLAY state directly
         var outboxId = await complianceService
             .SendComplianceNudgeAsync(request, cancellationToken)
             .ConfigureAwait(false);
