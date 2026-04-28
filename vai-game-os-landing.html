@@ -338,21 +338,49 @@
     .footer-links a:hover { color: var(--text); }
 
     @media (max-width: 900px) {
-      nav { padding: 0 20px; }
-      .nav-links > a { display: none; }
-      .hero { grid-template-columns: 1fr; padding: 64px 20px 40px; gap: 40px; }
+      nav { padding: 0 16px; }
+      .nav-links > a:not(.nav-btn-ghost):not(.nav-btn) { display: none; }
+      .nav-links { gap: 10px; }
+      .nav-btn-ghost { padding: 6px 12px; font-size: 12px; }
+      .nav-btn { padding: 6px 14px; font-size: 12px; }
+
+      .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 0; }
       .hero::after { display: none; }
+      .hero h1 { font-size: 36px; }
+      .hero-sub { font-size: 15px; max-width: 100%; }
       .browser-wrap { display: none; }
+
+      .trust-bar { padding: 20px 16px; flex-wrap: wrap; gap: 12px; }
+      .trust-label { margin-right: 0; width: 100%; text-align: center; }
+      .trust-logos { gap: 20px; }
+      .trust-logo { font-size: 11px; }
+
       .stats { grid-template-columns: repeat(2, 1fr); }
-      .stat { border-bottom: 1px solid var(--border); }
-      .feat-grid { grid-template-columns: 1fr; }
-      .avanti-split { grid-template-columns: 1fr; gap: 40px; }
-      .phones-row { gap: 8px; }
-      .phone { max-width: 140px; }
-      .features, .mobile-sec, .demo-cta { padding: 64px 20px; }
-      .avanti-sec { padding: 64px 20px; }
-      .trust-bar { padding: 20px; flex-wrap: wrap; gap: 16px; }
-      footer { flex-direction: column; gap: 16px; text-align: center; padding: 24px 20px; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); padding: 24px 16px; }
+      .stat:nth-child(odd) { border-right: 1px solid var(--border); }
+      .stat-n { font-size: 28px; }
+
+      .features { padding: 56px 20px; }
+      .feat-grid { grid-template-columns: 1fr; border-radius: 12px; }
+      .feat { padding: 24px 20px; }
+
+      .avanti-sec { padding: 56px 20px; }
+      .avanti-split { grid-template-columns: 1fr; gap: 32px; }
+
+      .mobile-sec { padding: 56px 20px; }
+      .phones-row { gap: 8px; padding: 0; }
+      .phone { flex: 1; min-width: 0; }
+      .phone.center { transform: translateY(-16px); }
+      .phone-screen { padding: 8px 6px; }
+      .mc-val, .ps-num { font-size: 13px !important; }
+
+      .demo-cta { padding: 64px 20px; }
+      .demo-cta h2 { font-size: 32px; }
+      .demo-btns { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-secondary { width: 100%; max-width: 320px; justify-content: center; }
+
+      footer { flex-direction: column; gap: 14px; text-align: center; padding: 24px 20px; }
+      .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
     }
   </style>
 </head>
