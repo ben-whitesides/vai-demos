@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GAME OS — Sign In</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #000000;
+      --black-card: #0a0a0a;
+      --border: #1c1c1c;
+      --border-light: #2a2a2a;
+      --orange: #F7941E;
+      --green: #34d399;
+      --text: #ffffff;
+      --text-muted: #888888;
+    }
+    html, body {
+      height: 100%;
+      background: var(--black);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .nav-logo img { height: 32px; width: auto; }
+    .nav-logo img.wordmark { height: 20px; }
+    .nav-back {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    main::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(247,148,30,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* CARD */
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--black-card);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 48px 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+    .login-logo img { height: 36px; }
+    .login-logo img.wordmark { height: 22px; }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .login-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    input {
+      width: 100%;
+      background: #0f0f0f;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 13px 16px;
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+    }
+    input::placeholder { color: #444; }
+    input:focus { border-color: var(--orange); }
+
+    .demo-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(52,211,153,0.06);
+      border: 1px solid rgba(52,211,153,0.15);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 24px;
+      font-size: 12px;
+      color: var(--green);
+    }
+    .demo-hint strong { font-weight: 700; }
+
+    .btn-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background: var(--orange);
+      color: #000;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      font-family: inherit;
+    }
+    .btn-login:hover { opacity: 0.88; }
+    .btn-login.loading { opacity: 0.6; cursor: not-allowed; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider-text { font-size: 11px; color: var(--text-muted); }
+
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      font-family: inherit;
+    }
+    .btn-google:hover { background: #111; border-color: #333; }
+
+    .login-footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .login-footer a { color: var(--orange); text-decoration: none; }
+    .login-footer a:hover { text-decoration: underline; }
+
+    /* Loading overlay */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .loading-overlay.show { display: flex; }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--border-light);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 14px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="vai-game-os-landing.html" class="nav-logo">
+    <img src="https://gameday.vai.app/logo.png" alt="VAI">
+    <img src="https://gameday.vai.app/gameday.png" alt="GAMEDAY" class="wordmark">
+  </a>
+  <a href="vai-game-os-landing.html" class="nav-back">← Back to GAME OS</a>
+</nav>
+
+<main>
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="https://gameday.vai.app/logo.png" alt="VAI">
+      <img src="https://gameday.vai.app/gameday.png" alt="GAMEDAY" class="wordmark">
+    </div>
+
+    <h1>Welcome back.</h1>
+    <div class="login-sub">Sign in to your GAME OS dashboard.</div>
+
+    <div class="demo-hint">
+      ✦ <span>Demo mode — use any email and password to continue</span>
+    </div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="coach@yourclub.com" value="demo@vaigameos.com" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="••••••••" value="demo1234" required>
+      </div>
+      <button type="submit" class="btn-login" id="loginBtn">Sign In to GAME OS</button>
+    </form>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-text">or</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <button class="btn-google" onclick="handleLogin(event)">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615Z" fill="#4285F4"/>
+        <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
+        <path d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332Z" fill="#FBBC05"/>
+        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.96L3.964 7.292C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div class="login-footer">
+      Don't have an account? <a href="https://vai.app" target="_blank">Get GAME OS →</a>
+    </div>
+  </div>
+</main>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Signing you in...</div>
+</div>
+
+<script>
+  function handleLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('loginBtn');
+    const overlay = document.getElementById('loadingOverlay');
+    btn.classList.add('loading');
+    btn.textContent = 'Signing in...';
+    overlay.classList.add('show');
+    setTimeout(() => {
+      window.location.href = 'https://ben-whitesides.github.io/vai-demos/vai-club-os-gameday-phase2.html';
+    }, 1800);
+  }
+</script>
+
+</body>
+</html>
