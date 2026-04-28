@@ -18,106 +18,219 @@
       --green: #34d399;
       --green-d: rgba(52,211,153,0.08);
       --green-b: rgba(52,211,153,0.2);
+      --red: #ef4444;
+      --red-d: rgba(239,68,68,0.08);
+      --red-b: rgba(239,68,68,0.2);
+      --yellow: #fbbf24;
+      --yellow-d: rgba(251,191,36,0.08);
+      --yellow-b: rgba(251,191,36,0.2);
       --text: #fff;
+      --text2: #aaa;
       --muted: #666;
       --dim: #333;
     }
     html, body { height: 100%; overflow: hidden; background: var(--black); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
 
-    /* ── SHELL ── */
     .shell { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: 52px 1fr; height: 100vh; }
 
-    /* ── TOPBAR ── */
-    .topbar {
-      grid-column: 1 / -1;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px 0 0;
-      background: var(--sidebar); border-bottom: 1px solid var(--border);
-      z-index: 100;
-    }
+    /* TOPBAR */
+    .topbar { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding: 0 16px 0 0; background: var(--sidebar); border-bottom: 1px solid var(--border); z-index: 100; }
     .topbar-left { display: flex; align-items: center; height: 100%; }
     .topbar-logo { display: flex; align-items: center; gap: 8px; padding: 0 16px; width: 220px; border-right: 1px solid var(--border); height: 100%; }
-    .topbar-logo img:first-child { height: 28px; }
-    .topbar-logo img:last-child { height: 16px; opacity: .85; }
+    .topbar-logo img { height: 28px; }
+    .topbar-logo .logo-gd { height: 16px; opacity: .85; }
     .topbar-club { display: flex; align-items: center; gap: 8px; padding: 0 16px; font-size: 13px; font-weight: 600; color: var(--muted); }
     .topbar-right { display: flex; align-items: center; gap: 10px; }
-    .avanti-pill {
-      display: flex; align-items: center; gap: 6px;
-      background: var(--green-d); border: 1px solid var(--green-b);
-      border-radius: 100px; padding: 5px 14px;
-      font-size: 11px; font-weight: 700; color: var(--green); cursor: pointer;
-      transition: background .15s;
-    }
+    .avanti-pill { display: flex; align-items: center; gap: 6px; background: var(--green-d); border: 1px solid var(--green-b); border-radius: 100px; padding: 5px 14px; font-size: 11px; font-weight: 700; color: var(--green); cursor: pointer; transition: background .15s; }
     .avanti-pill:hover { background: rgba(52,211,153,0.14); }
     .avanti-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
-    .demo-badge {
-      font-size: 10px; font-weight: 700; background: var(--orange-d);
-      border: 1px solid var(--orange-b); color: var(--orange);
-      padding: 3px 10px; border-radius: 100px; letter-spacing: .06em; text-transform: uppercase;
-    }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+    .demo-badge { font-size: 10px; font-weight: 700; background: var(--orange-d); border: 1px solid var(--orange-b); color: var(--orange); padding: 3px 10px; border-radius: 100px; letter-spacing: .06em; text-transform: uppercase; }
     .topbar-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--muted); transition: color .15s; }
     .topbar-icon:hover { color: var(--text); }
     .hamburger { display: none; }
 
-    /* ── SIDEBAR ── */
-    .sidebar {
-      background: var(--sidebar); border-right: 1px solid var(--border);
-      overflow-y: auto; padding: 12px 8px;
-      display: flex; flex-direction: column; gap: 4px;
-    }
+    /* SIDEBAR */
+    .sidebar { background: var(--sidebar); border-right: 1px solid var(--border); overflow-y: auto; padding: 12px 8px; display: flex; flex-direction: column; gap: 4px; }
     .sidebar::-webkit-scrollbar { width: 4px; }
     .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-    .nav-section-label {
-      font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-      color: var(--dim); padding: 10px 8px 6px;
-    }
-    .nav-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 8px 10px; border-radius: 8px;
-      font-size: 12px; font-weight: 500; color: var(--muted);
-      cursor: pointer; text-decoration: none;
-      transition: background .12s, color .12s;
-      border: 1px solid transparent;
-      position: relative;
-    }
+    .nav-section-label { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); padding: 10px 8px 6px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; text-decoration: none; transition: background .12s, color .12s; border: 1px solid transparent; }
     .nav-item:hover { background: rgba(255,255,255,.04); color: var(--text); }
     .nav-item.active { background: var(--green-d); color: var(--green); border-color: var(--green-b); font-weight: 600; }
     .nav-item svg { flex-shrink: 0; opacity: .5; }
     .nav-item.active svg { opacity: 1; }
-    .nav-badge {
-      margin-left: auto; font-size: 10px; font-weight: 700;
-      background: var(--orange); color: #000;
-      padding: 1px 6px; border-radius: 100px; min-width: 18px; text-align: center;
-    }
+    .nav-badge { margin-left: auto; font-size: 10px; font-weight: 700; background: var(--orange); color: #000; padding: 1px 6px; border-radius: 100px; min-width: 18px; text-align: center; }
     .nav-divider { height: 1px; background: var(--border); margin: 6px 0; }
-    .back-link {
-      display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px;
-      font-size: 11px; color: var(--dim); text-decoration: none; margin-top: auto;
-      transition: color .15s;
-    }
+    .back-link { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; font-size: 11px; color: var(--dim); text-decoration: none; margin-top: auto; transition: color .15s; }
     .back-link:hover { color: var(--muted); }
 
-    /* ── CONTENT FRAME ── */
-    .content-area { position: relative; overflow: hidden; background: #060608; }
-    .content-frame {
-      width: 100%; height: 100%; border: none;
-      display: block;
-    }
-    .frame-loading {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
-      background: #060608; z-index: 10;
-    }
-    .frame-loading.hidden { display: none; }
-    .spinner { width: 36px; height: 36px; border: 2px solid var(--border2); border-top-color: var(--orange); border-radius: 50%; animation: spin .7s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-label { font-size: 13px; color: var(--muted); }
+    /* CONTENT */
+    .content-area { overflow: hidden; background: #060608; display: flex; flex-direction: column; }
 
-    /* ── MOBILE ── */
+    /* PANELS */
+    .panel { display: none; flex-direction: column; height: 100%; overflow: hidden; }
+    .panel.active { display: flex; }
+    .panel-scroll { flex: 1; overflow-y: auto; padding: 24px; }
+    .panel-scroll::-webkit-scrollbar { width: 5px; }
+    .panel-scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+    /* AVANTI STRIP */
+    .avanti-strip { background: rgba(52,211,153,0.04); border-bottom: 1px solid var(--green-b); padding: 10px 20px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .as-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; animation: pulse 2s infinite; }
+    .as-label { font-size: 9px; font-weight: 800; color: var(--green); letter-spacing: .12em; text-transform: uppercase; flex-shrink: 0; }
+    .as-text { font-size: 12px; color: var(--text2); flex: 1; }
+    .as-btn { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 100px; border: 1px solid var(--green-b); color: var(--green); background: var(--green-d); cursor: pointer; white-space: nowrap; transition: background .15s; }
+    .as-btn:hover { background: rgba(52,211,153,0.14); }
+
+    /* PAGE HEADER */
+    .page-header { padding: 20px 24px 16px; display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; border-bottom: 1px solid var(--border); }
+    .page-title { font-size: 18px; font-weight: 800; color: var(--text); }
+    .page-subtitle { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .page-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border2); color: var(--text2); border-radius: 7px; padding: 6px 12px; font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .15s; }
+    .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+    .btn-primary { background: var(--orange); color: #000; border: none; border-radius: 7px; padding: 6px 14px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+    /* STAT CARDS */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .stat-lbl { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+    .stat-val { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1; }
+    .stat-sub { font-size: 11px; color: var(--muted); margin-top: 5px; }
+    .stat-sub.g { color: var(--green); }
+    .stat-sub.o { color: var(--orange); }
+    .stat-sub.r { color: var(--red); }
+
+    /* SECTION */
+    .section-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .section-title { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
+    .section-link { font-size: 11px; color: var(--orange); cursor: pointer; font-weight: 600; }
+
+    /* TWO COL */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+
+    /* CARD */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
+    .card-hdr { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .card-title { font-size: 12px; font-weight: 700; color: var(--text2); }
+
+    /* GAME ROW */
+    .game-row { display: flex; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--border); gap: 12px; font-size: 12px; }
+    .game-row:last-child { border-bottom: none; }
+    .game-date { color: var(--muted); font-size: 11px; min-width: 48px; flex-shrink: 0; }
+    .game-teams { flex: 1; color: var(--text); font-weight: 500; }
+    .game-opp { color: var(--muted); font-weight: 400; }
+    .game-time { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+    .badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 100px; flex-shrink: 0; }
+    .badge-w { background: var(--green-d); color: var(--green); border: 1px solid var(--green-b); }
+    .badge-d { background: var(--yellow-d); color: var(--yellow); border: 1px solid var(--yellow-b); }
+    .badge-l { background: var(--red-d); color: var(--red); border: 1px solid var(--red-b); }
+    .badge-up { background: var(--orange-d); color: var(--orange); border: 1px solid var(--orange-b); }
+    .badge-green { background: var(--green-d); color: var(--green); border: 1px solid var(--green-b); }
+    .badge-yellow { background: var(--yellow-d); color: var(--yellow); border: 1px solid var(--yellow-b); }
+    .badge-red { background: var(--red-d); color: var(--red); border: 1px solid var(--red-b); }
+    .badge-paid { background: var(--green-d); color: var(--green); border: 1px solid var(--green-b); }
+    .badge-overdue { background: var(--red-d); color: var(--red); border: 1px solid var(--red-b); }
+    .badge-partial { background: var(--yellow-d); color: var(--yellow); border: 1px solid var(--yellow-b); }
+
+    /* STATUS DOT */
+    .sdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .sdot.g { background: var(--green); }
+    .sdot.y { background: var(--yellow); }
+    .sdot.r { background: var(--red); }
+
+    /* PLAYER ROW */
+    .player-row { display: flex; align-items: center; padding: 9px 16px; border-bottom: 1px solid var(--border); gap: 10px; font-size: 12px; }
+    .player-row:last-child { border-bottom: none; }
+    .player-num { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 20px; text-align: right; flex-shrink: 0; }
+    .player-name { flex: 1; color: var(--text); font-weight: 500; }
+    .player-pos { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: .04em; background: rgba(255,255,255,.05); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+
+    /* ACTIVITY */
+    .act-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .act-item:last-child { border-bottom: none; }
+    .act-icon { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .act-icon.g { background: var(--green-d); border: 1px solid var(--green-b); }
+    .act-icon.o { background: var(--orange-d); border: 1px solid var(--orange-b); }
+    .act-icon.y { background: var(--yellow-d); border: 1px solid var(--yellow-b); }
+    .act-body { flex: 1; color: var(--text2); line-height: 1.5; }
+    .act-body strong { color: var(--text); }
+    .act-time { font-size: 10px; color: var(--muted); white-space: nowrap; padding-top: 1px; }
+
+    /* FORMATION */
+    .ftabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+    .ftab { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer; border: 1px solid var(--border2); background: transparent; transition: all .15s; }
+    .ftab.active { background: var(--orange-d); color: var(--orange); border-color: var(--orange-b); }
+    .field-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; display: flex; justify-content: center; }
+    #fieldSvg { width: 100%; max-width: 340px; }
+
+    /* FINANCE BARS */
+    .fin-row { margin-bottom: 16px; }
+    .fin-row:last-child { margin-bottom: 0; }
+    .fin-lbl-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; }
+    .fin-lbl { color: var(--text2); }
+    .fin-val { color: var(--text); font-weight: 700; }
+    .bar-track { height: 5px; background: var(--border2); border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
+    .bar-o { background: var(--orange); }
+    .bar-g { background: var(--green); }
+    .bar-y { background: var(--yellow); }
+
+    /* SESSIONS */
+    .session-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; display: flex; gap: 14px; }
+    .session-date { background: var(--orange-d); border: 1px solid var(--orange-b); border-radius: 8px; padding: 8px 10px; text-align: center; min-width: 44px; flex-shrink: 0; }
+    .session-date.done { background: rgba(255,255,255,.03); border-color: var(--border); }
+    .session-month { font-size: 9px; font-weight: 800; color: var(--orange); text-transform: uppercase; letter-spacing: .1em; }
+    .session-date.done .session-month { color: var(--dim); }
+    .session-day { font-size: 20px; font-weight: 900; color: var(--orange); line-height: 1.1; }
+    .session-date.done .session-day { color: var(--dim); }
+    .session-info { flex: 1; }
+    .session-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .session-meta { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+
+    /* STANDINGS */
+    .standings-tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .standings-tbl th { padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid var(--border); }
+    .standings-tbl td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text2); }
+    .standings-tbl tr:last-child td { border-bottom: none; }
+    .standings-tbl tr.hl td { color: var(--text); background: rgba(247,148,30,0.04); }
+    .s-rank { color: var(--dim); font-weight: 700; }
+    .s-team { color: var(--text); font-weight: 600; }
+    .s-pts { font-weight: 800; color: var(--orange); }
+
+    /* AVANTI CHAT */
+    .avanti-panel { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+    .chat-hdr { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: var(--sidebar); }
+    .chat-hdr-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    .chat-hdr-name { font-size: 14px; font-weight: 800; color: var(--text); }
+    .chat-hdr-status { font-size: 11px; color: var(--green); }
+    .chat-msgs { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .chat-msgs::-webkit-scrollbar { width: 4px; }
+    .chat-msgs::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    .chat-msg { max-width: 72%; display: flex; flex-direction: column; gap: 4px; }
+    .chat-msg.from-ai { align-self: flex-start; }
+    .chat-msg.from-me { align-self: flex-end; }
+    .chat-sender { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .06em; }
+    .from-ai .chat-sender { color: var(--green); }
+    .chat-bubble { padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.55; }
+    .from-ai .chat-bubble { background: var(--card); border: 1px solid var(--border); color: var(--text2); border-radius: 4px 12px 12px 12px; }
+    .from-me .chat-bubble { background: var(--orange); color: #000; font-weight: 500; border-radius: 12px 12px 4px 12px; }
+    .chat-footer { border-top: 1px solid var(--border); padding: 14px 20px; display: flex; gap: 10px; background: var(--sidebar); flex-shrink: 0; }
+    .chat-input { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; font-size: 13px; color: var(--text); outline: none; transition: border-color .15s; font-family: inherit; }
+    .chat-input::placeholder { color: var(--muted); }
+    .chat-input:focus { border-color: var(--border2); }
+    .chat-send-btn { background: var(--orange); color: #000; border: none; border-radius: 8px; padding: 9px 18px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+    /* FILTER TABS */
+    .filter-tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+    .ftab-sm { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; border: 1px solid transparent; transition: all .15s; }
+    .ftab-sm.active { background: var(--card); border-color: var(--border2); color: var(--text); }
+
+    /* MOBILE */
     @media (max-width: 768px) {
-      .shell { grid-template-columns: 1fr; grid-template-rows: 52px 1fr; }
-      .sidebar { display: none; position: fixed; top: 52px; left: 0; bottom: 0; width: 240px; z-index: 200; border-right: 1px solid var(--border2); padding-bottom: 60px; }
+      .shell { grid-template-columns: 1fr; }
+      .sidebar { display: none; position: fixed; top: 52px; left: 0; bottom: 0; width: 240px; z-index: 200; border-right: 1px solid var(--border2); }
       .sidebar.open { display: flex; }
       .hamburger { display: flex; }
       .topbar-logo { width: auto; border-right: none; }
@@ -125,19 +238,20 @@
       .sidebar-overlay { display: none; position: fixed; inset: 0; top: 52px; background: rgba(0,0,0,.7); z-index: 199; }
       .sidebar-overlay.open { display: block; }
       .demo-badge { display: none; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-
 <div class="shell">
 
   <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-left">
       <div class="topbar-logo">
-        <img src="https://gameday.vai.app/logo.png" alt="VAI">
-        <img src="https://ben-whitesides.github.io/vai-demos/gameday-logo.png" alt="GAMEDAY">
+        <img src="https://ben-whitesides.github.io/vai-demos/Vai_logo_orange.svg" alt="VAI" onerror="this.style.display='none'">
+        <img src="https://ben-whitesides.github.io/vai-demos/gameday-logo.png" alt="GAMEDAY" class="logo-gd" onerror="this.style.display='none'">
       </div>
       <div class="topbar-club">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" fill="#F7941E"/></svg>
@@ -152,9 +266,9 @@
         AVANTI ON
       </div>
       <div class="topbar-icon">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/><path d="M5 7a2 2 0 104 0 2 2 0 00-4 0" stroke="currentColor" stroke-width="1.3"/></svg>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>
       </div>
-      <div class="topbar-icon hamburger" id="hamburgerBtn" onclick="toggleSidebar()">
+      <div class="topbar-icon hamburger" onclick="toggleSidebar()">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h10M2 10h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       </div>
     </div>
@@ -163,135 +277,562 @@
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <div class="nav-section-label">Club OS</div>
-
-    <a class="nav-item active" id="nav-dashboard" onclick="setPage('dashboard')">
+    <a class="nav-item" id="nav-dashboard" onclick="setPage('dashboard')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor"/></svg>
       Dashboard
     </a>
-
     <a class="nav-item" id="nav-play" onclick="setPage('play')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>
       PLAY Status
     </a>
-
     <a class="nav-item" id="nav-formation" onclick="setPage('formation')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5l5-4 5 4v6" stroke="currentColor" stroke-width="1.3"/><rect x="5" y="8" width="4" height="3" rx=".5" stroke="currentColor" stroke-width="1.3"/></svg>
       Formations
     </a>
-
     <a class="nav-item" id="nav-schedule" onclick="setPage('schedule')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 1v3M10 1v3M1 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Schedule
     </a>
-
     <a class="nav-item" id="nav-tournament" onclick="setPage('tournament')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3"/></svg>
       Tournaments
     </a>
-
     <a class="nav-item" id="nav-finances" onclick="setPage('finances')">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M2 7l3-3M2 7l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v6M5 6h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Finances
     </a>
-
     <div class="nav-divider"></div>
     <div class="nav-section-label">My Mentor</div>
-
     <a class="nav-item" id="nav-sessions" onclick="setPage('sessions')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 1v3M10 1v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       My Sessions
       <span class="nav-badge">3</span>
     </a>
-
     <a class="nav-item" id="nav-avanti" onclick="setPage('avanti')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" fill="#F7941E"/></svg>
       AVANTI
     </a>
-
     <div class="nav-divider"></div>
-
     <a href="vai-game-os-landing.html" class="back-link">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Back to GAME OS
     </a>
   </div>
 
-  <!-- SIDEBAR OVERLAY (mobile) -->
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
   <!-- CONTENT AREA -->
-  <div class="content-area">
-    <div class="frame-loading" id="frameLoading">
-      <div class="spinner"></div>
-      <div class="loading-label">Loading screen...</div>
-    </div>
-    <iframe class="content-frame" id="contentFrame" src="" onload="frameLoaded()"></iframe>
-  </div>
+  <div class="content-area" id="contentArea">
 
-</div>
+    <!-- ── DASHBOARD ── -->
+    <div class="panel" id="panel-dashboard">
+      <div class="avanti-strip">
+        <div class="as-dot"></div>
+        <span class="as-label">AVANTI</span>
+        <span class="as-text">Devon Harris flagged for fatigue — 3 consecutive heavy training days. Recommend rotating out vs. Highland Rangers on May 2.</span>
+        <span class="as-btn" onclick="setPage('avanti')">Ask AVANTI</span>
+      </div>
+      <div class="panel-scroll">
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-lbl">Roster</div>
+            <div class="stat-val">24</div>
+            <div class="stat-sub g">22 active · 2 injured</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Season Record</div>
+            <div class="stat-val">7-1-2</div>
+            <div class="stat-sub o">2nd · Spring Div I</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Next Game</div>
+            <div class="stat-val" style="font-size:17px;padding-top:3px">May 2</div>
+            <div class="stat-sub">vs. Highland Rangers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">PLAY Index</div>
+            <div class="stat-val">84</div>
+            <div class="stat-sub g">↑ 6 from last week</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div class="section-hdr">
+              <span class="section-title">Recent Results</span>
+              <span class="section-link" onclick="setPage('schedule')">Full schedule →</span>
+            </div>
+            <div class="card">
+              <div class="game-row"><span class="game-date">Apr 26</span><span class="game-teams">VAI FC North <span class="game-opp">vs Lakewood Utd</span></span><span class="badge badge-d">1–1</span></div>
+              <div class="game-row"><span class="game-date">Apr 20</span><span class="game-teams">VAI FC North <span class="game-opp">vs Riverside FC</span></span><span class="badge badge-w">3–1</span></div>
+              <div class="game-row"><span class="game-date">Apr 13</span><span class="game-teams">VAI FC North <span class="game-opp">vs Metro Athletic</span></span><span class="badge badge-w">2–0</span></div>
+              <div class="game-row"><span class="game-date">Apr 5</span><span class="game-teams">VAI FC North <span class="game-opp">vs Eastside FC</span></span><span class="badge badge-l">0–1</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="section-hdr">
+              <span class="section-title">PLAY Status</span>
+              <span class="section-link" onclick="setPage('play')">Full roster →</span>
+            </div>
+            <div class="card">
+              <div class="player-row"><div class="sdot g"></div><span class="player-name">Marcus Johnson</span><span class="player-pos">FW</span><span class="badge badge-green">GREEN</span></div>
+              <div class="player-row"><div class="sdot r"></div><span class="player-name">Devon Harris</span><span class="player-pos">FW</span><span class="badge badge-red">RED</span></div>
+              <div class="player-row"><div class="sdot y"></div><span class="player-name">Jake Williams</span><span class="player-pos">DF</span><span class="badge badge-yellow">YELLOW</span></div>
+              <div class="player-row"><div class="sdot g"></div><span class="player-name">Noah Martinez</span><span class="player-pos">MF</span><span class="badge badge-green">GREEN</span></div>
+              <div class="player-row"><div class="sdot y"></div><span class="player-name">Liam Davis</span><span class="player-pos">MF</span><span class="badge badge-yellow">YELLOW</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-hdr"><span class="section-title">Recent Activity</span></div>
+        <div class="card">
+          <div class="act-item">
+            <div class="act-icon g"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#34d399" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8.5 4" stroke="#34d399" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="act-body"><strong>Marcus Johnson</strong> completed strength session — PLAY index updated to GREEN</span>
+            <span class="act-time">2h ago</span>
+          </div>
+          <div class="act-item">
+            <div class="act-icon o"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1.5L10.5 10H1.5L6 1.5Z" fill="#F7941E" opacity=".7"/></svg></div>
+            <span class="act-body"><strong>AVANTI</strong> flagged Devon Harris for fatigue — 3rd consecutive heavy training day</span>
+            <span class="act-time">4h ago</span>
+          </div>
+          <div class="act-item">
+            <div class="act-icon y"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="10" height="8" rx="1" stroke="#fbbf24" stroke-width="1.2"/><path d="M3.5 1v2M8.5 1v2" stroke="#fbbf24" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+            <span class="act-body">Mentor session with <strong>Coach Rivera</strong> confirmed for May 1 at 4:00 PM</span>
+            <span class="act-time">6h ago</span>
+          </div>
+          <div class="act-item">
+            <div class="act-icon g"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#34d399" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8.5 4" stroke="#34d399" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <span class="act-body"><strong>Dues collected</strong> — 20 of 24 players current. $480 outstanding</span>
+            <span class="act-time">1d ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PLAY STATUS ── -->
+    <div class="panel" id="panel-play">
+      <div class="page-header">
+        <div>
+          <div class="page-title">PLAY Status</div>
+          <div class="page-subtitle">Readiness index across 24 players · Updated today</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn-ghost">Export</button>
+          <button class="btn-primary">Update Manually</button>
+        </div>
+      </div>
+      <div class="panel-scroll">
+        <div class="filter-tabs">
+          <span class="ftab-sm active">All (24)</span>
+          <span class="ftab-sm">GREEN (18)</span>
+          <span class="ftab-sm">YELLOW (4)</span>
+          <span class="ftab-sm">RED (2)</span>
+        </div>
+        <div class="card">
+          <div class="player-row"><span class="player-num">9</span><div class="sdot g"></div><span class="player-name">Marcus Johnson</span><span class="player-pos">FW</span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">11</span><div class="sdot r"></div><span class="player-name">Devon Harris</span><span class="player-pos">FW</span><span class="badge badge-red">RED</span></div>
+          <div class="player-row"><span class="player-num">17</span><div class="sdot g"></div><span class="player-name">Lucas White</span><span class="player-pos">FW</span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">16</span><div class="sdot g"></div><span class="player-name">Eli Young</span><span class="player-pos">FW</span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">8</span><div class="sdot g"></div><span class="player-name">Noah Martinez</span><span class="player-pos">MF</span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">7</span><div class="sdot g"></div><span class="player-name">Tyler Rodriguez</span><span class="player-pos">MF</span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">6</span><div class="sdot y"></div><span class="player-name">Liam Davis</span><span class="player-pos">MF</span><span class="badge badge-yellow">YELLOW</span></div>
+          <div class="player-row"><span class="player-num">14</span><div class="sdot y"></div><span class="player-name">Mason Clark</span><span class="player-pos">MF</span><span class="badge badge-yellow">YELLOW</span></div>
+          <div class="player-row"><span class="player-num">21</span><div class="sdot r"></div><span class="player-name">Finn Walker</span><span class="player-pos">MF</span><span class="badge badge-red">RED</span></div>
+          <div class="player-row"><span class="player-num">4</span><div class="sdot g"></div><span class="player-name">Ethan Brown</span><span class="player-pos">DF</span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">5</span><div class="sdot g"></div><span class="player-name">Owen Taylor</span><span class="player-pos">DF</span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">3</span><div class="sdot g"></div><span class="player-name">Aiden Wilson</span><span class="player-pos">DF</span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">2</span><div class="sdot g"></div><span class="player-name">Jackson Lee</span><span class="player-pos">DF</span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">10</span><div class="sdot y"></div><span class="player-name">Jake Williams</span><span class="player-pos">DF</span><span class="badge badge-yellow">YELLOW</span></div>
+          <div class="player-row"><span class="player-num">13</span><div class="sdot y"></div><span class="player-name">Carter Hall</span><span class="player-pos">DF</span><span class="badge badge-yellow">YELLOW</span></div>
+          <div class="player-row"><span class="player-num">1</span><div class="sdot g"></div><span class="player-name">Caleb Thompson</span><span class="player-pos">GK</span><span class="badge badge-green">GREEN</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FORMATIONS ── -->
+    <div class="panel" id="panel-formation">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Formations</div>
+          <div class="page-subtitle">Active: 4-3-3 · Last used Apr 26 vs Lakewood</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn-ghost">Save Formation</button>
+          <button class="btn-primary">Set Starting XI</button>
+        </div>
+      </div>
+      <div class="panel-scroll">
+        <div class="ftabs">
+          <span class="ftab active" onclick="switchFormation(this,'433')">4-3-3</span>
+          <span class="ftab" onclick="switchFormation(this,'4231')">4-2-3-1</span>
+          <span class="ftab" onclick="switchFormation(this,'352')">3-5-2</span>
+          <span class="ftab" onclick="switchFormation(this,'442')">4-4-2</span>
+        </div>
+        <div class="field-wrap">
+          <svg id="fieldSvg" viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="450" fill="#0a150a" rx="8"/>
+            <rect x="18" y="18" width="264" height="414" fill="none" stroke="#193319" stroke-width="1.5"/>
+            <line x1="18" y1="225" x2="282" y2="225" stroke="#193319" stroke-width="1"/>
+            <circle cx="150" cy="225" r="42" fill="none" stroke="#193319" stroke-width="1"/>
+            <circle cx="150" cy="225" r="3" fill="#193319"/>
+            <rect x="78" y="18" width="144" height="62" fill="none" stroke="#193319" stroke-width="1"/>
+            <rect x="112" y="18" width="76" height="26" fill="none" stroke="#193319" stroke-width="1"/>
+            <rect x="122" y="12" width="56" height="8" fill="none" stroke="#234023" stroke-width="1.5"/>
+            <rect x="78" y="370" width="144" height="62" fill="none" stroke="#193319" stroke-width="1"/>
+            <rect x="112" y="406" width="76" height="26" fill="none" stroke="#193319" stroke-width="1"/>
+            <rect x="122" y="430" width="56" height="8" fill="none" stroke="#234023" stroke-width="1.5"/>
+            <rect x="18" y="18" width="264" height="39" fill="rgba(255,255,255,.012)"/>
+            <rect x="18" y="96" width="264" height="39" fill="rgba(255,255,255,.012)"/>
+            <rect x="18" y="174" width="264" height="39" fill="rgba(255,255,255,.012)"/>
+            <rect x="18" y="252" width="264" height="39" fill="rgba(255,255,255,.012)"/>
+            <rect x="18" y="330" width="264" height="39" fill="rgba(255,255,255,.012)"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCHEDULE ── -->
+    <div class="panel" id="panel-schedule">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Schedule</div>
+          <div class="page-subtitle">Spring 2026 · Division I · 12 games remaining</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn-ghost">Add Game</button>
+        </div>
+      </div>
+      <div class="panel-scroll">
+        <div class="section-hdr"><span class="section-title">Upcoming</span></div>
+        <div class="card">
+          <div class="game-row"><span class="game-date">May 2</span><span class="game-teams">VAI FC North <span class="game-opp">vs Highland Rangers</span></span><span class="game-time">7:00 PM</span><span class="badge badge-up">Home</span></div>
+          <div class="game-row"><span class="game-date">May 9</span><span class="game-teams">VAI FC North <span class="game-opp">vs Metro Athletic</span></span><span class="game-time">6:30 PM</span><span class="badge badge-up">Away</span></div>
+          <div class="game-row"><span class="game-date">May 16</span><span class="game-teams">VAI FC North <span class="game-opp">vs Eastside FC</span></span><span class="game-time">7:00 PM</span><span class="badge badge-up">Home</span></div>
+          <div class="game-row"><span class="game-date">May 23</span><span class="game-teams">VAI FC North <span class="game-opp">vs Lakewood United</span></span><span class="game-time">5:00 PM</span><span class="badge badge-up">Away</span></div>
+          <div class="game-row"><span class="game-date">Jun 6</span><span class="game-teams">VAI FC North <span class="game-opp">vs Riverside FC</span></span><span class="game-time">7:00 PM</span><span class="badge badge-up">Home</span></div>
+        </div>
+        <div class="section-hdr"><span class="section-title">Past Results</span></div>
+        <div class="card">
+          <div class="game-row"><span class="game-date">Apr 26</span><span class="game-teams">VAI FC North <span class="game-opp">vs Lakewood United</span></span><span class="badge badge-d">1–1</span></div>
+          <div class="game-row"><span class="game-date">Apr 20</span><span class="game-teams">VAI FC North <span class="game-opp">vs Riverside FC</span></span><span class="badge badge-w">3–1</span></div>
+          <div class="game-row"><span class="game-date">Apr 13</span><span class="game-teams">VAI FC North <span class="game-opp">vs Metro Athletic</span></span><span class="badge badge-w">2–0</span></div>
+          <div class="game-row"><span class="game-date">Apr 5</span><span class="game-teams">VAI FC North <span class="game-opp">vs Eastside FC</span></span><span class="badge badge-l">0–1</span></div>
+          <div class="game-row"><span class="game-date">Mar 29</span><span class="game-teams">VAI FC North <span class="game-opp">vs Highland Rangers</span></span><span class="badge badge-w">4–2</span></div>
+          <div class="game-row"><span class="game-date">Mar 22</span><span class="game-teams">VAI FC North <span class="game-opp">vs Metro Athletic</span></span><span class="badge badge-w">1–0</span></div>
+          <div class="game-row"><span class="game-date">Mar 15</span><span class="game-teams">VAI FC North <span class="game-opp">vs Lakewood United</span></span><span class="badge badge-w">3–0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TOURNAMENTS ── -->
+    <div class="panel" id="panel-tournament">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Tournaments</div>
+          <div class="page-subtitle">Spring 2026 · Division I</div>
+        </div>
+      </div>
+      <div class="panel-scroll">
+        <div class="section-hdr"><span class="section-title">Division I Standings</span></div>
+        <div class="card">
+          <table class="standings-tbl">
+            <thead>
+              <tr><th>#</th><th>Team</th><th>GP</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="s-rank">1</td><td class="s-team">Highland Rangers</td><td>10</td><td>8</td><td>1</td><td>1</td><td>+14</td><td class="s-pts">25</td></tr>
+              <tr class="hl"><td class="s-rank">2</td><td class="s-team">VAI FC North ←</td><td>10</td><td>7</td><td>1</td><td>2</td><td>+9</td><td class="s-pts">22</td></tr>
+              <tr><td class="s-rank">3</td><td class="s-team">Lakewood United</td><td>10</td><td>5</td><td>3</td><td>2</td><td>+4</td><td class="s-pts">18</td></tr>
+              <tr><td class="s-rank">4</td><td class="s-team">Metro Athletic</td><td>10</td><td>4</td><td>2</td><td>4</td><td>−2</td><td class="s-pts">14</td></tr>
+              <tr><td class="s-rank">5</td><td class="s-team">Riverside FC</td><td>10</td><td>3</td><td>1</td><td>6</td><td>−8</td><td class="s-pts">10</td></tr>
+              <tr><td class="s-rank">6</td><td class="s-team">Eastside FC</td><td>10</td><td>2</td><td>0</td><td>8</td><td>−17</td><td class="s-pts">6</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="section-hdr"><span class="section-title">Upcoming Tournament</span></div>
+        <div class="card">
+          <div class="card-hdr">
+            <span class="card-title">State Cup Qualifier — Jun 14–15</span>
+            <span class="badge badge-up">Registered</span>
+          </div>
+          <div class="game-row"><span class="game-date">Jun 14</span><span class="game-teams">Pool A · Round 1 vs Westlake FC</span><span class="game-time">9:00 AM</span></div>
+          <div class="game-row"><span class="game-date">Jun 14</span><span class="game-teams">Pool A · Round 2 vs Northgate SC</span><span class="game-time">1:30 PM</span></div>
+          <div class="game-row"><span class="game-date">Jun 15</span><span class="game-teams">Semifinal (if qualified)</span><span class="game-time">10:00 AM</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FINANCES ── -->
+    <div class="panel" id="panel-finances">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Finances</div>
+          <div class="page-subtitle">Spring 2026 · Budget Period: Jan–Jun</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn-primary">Record Payment</button>
+        </div>
+      </div>
+      <div class="panel-scroll">
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat-card">
+            <div class="stat-lbl">Season Budget</div>
+            <div class="stat-val">$8,400</div>
+            <div class="stat-sub">$6,240 collected</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Outstanding Dues</div>
+            <div class="stat-val" style="color:var(--red)">$480</div>
+            <div class="stat-sub r">4 players overdue</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-lbl">Expenses YTD</div>
+            <div class="stat-val">$3,820</div>
+            <div class="stat-sub g">$2,420 remaining</div>
+          </div>
+        </div>
+        <div class="section-hdr"><span class="section-title">Budget Allocation</span></div>
+        <div class="card" style="padding:18px">
+          <div class="fin-row">
+            <div class="fin-lbl-row"><span class="fin-lbl">Field Rentals</span><span class="fin-val">$1,200 / $1,800</span></div>
+            <div class="bar-track"><div class="bar-fill bar-o" style="width:67%"></div></div>
+          </div>
+          <div class="fin-row">
+            <div class="fin-lbl-row"><span class="fin-lbl">Tournament Fees</span><span class="fin-val">$900 / $1,200</span></div>
+            <div class="bar-track"><div class="bar-fill bar-o" style="width:75%"></div></div>
+          </div>
+          <div class="fin-row">
+            <div class="fin-lbl-row"><span class="fin-lbl">Equipment & Kits</span><span class="fin-val">$1,420 / $2,000</span></div>
+            <div class="bar-track"><div class="bar-fill bar-y" style="width:71%"></div></div>
+          </div>
+          <div class="fin-row">
+            <div class="fin-lbl-row"><span class="fin-lbl">Coaching / Staff</span><span class="fin-val">$300 / $2,400</span></div>
+            <div class="bar-track"><div class="bar-fill bar-g" style="width:12%"></div></div>
+          </div>
+          <div class="fin-row">
+            <div class="fin-lbl-row"><span class="fin-lbl">Travel</span><span class="fin-val">$0 / $1,000</span></div>
+            <div class="bar-track"><div class="bar-fill bar-g" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="section-hdr"><span class="section-title">Dues Collection</span></div>
+        <div class="card">
+          <div class="player-row"><span class="player-name">Marcus Johnson</span><span class="badge badge-paid">PAID</span></div>
+          <div class="player-row"><span class="player-name">Noah Martinez</span><span class="badge badge-paid">PAID</span></div>
+          <div class="player-row"><span class="player-name">Ethan Brown</span><span class="badge badge-paid">PAID</span></div>
+          <div class="player-row"><span class="player-name">Devon Harris</span><span class="badge badge-overdue">OVERDUE</span></div>
+          <div class="player-row"><span class="player-name">Liam Davis</span><span class="badge badge-partial">PARTIAL</span></div>
+          <div class="player-row"><span class="player-name">Jake Williams</span><span class="badge badge-paid">PAID</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MY SESSIONS ── -->
+    <div class="panel" id="panel-sessions">
+      <div class="page-header">
+        <div>
+          <div class="page-title">My Sessions</div>
+          <div class="page-subtitle">3 upcoming · 12 completed this season</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn-primary">Book Session</button>
+        </div>
+      </div>
+      <div class="panel-scroll">
+        <div class="avanti-strip" style="border-radius:10px;border:1px solid var(--green-b);margin-bottom:20px">
+          <div class="as-dot"></div>
+          <span class="as-label">AVANTI</span>
+          <span class="as-text">Coach Rivera's tactical sessions correlate with a 22% improvement in your passing accuracy over the last 8 weeks.</span>
+        </div>
+        <div class="section-hdr"><span class="section-title">Upcoming</span></div>
+        <div class="session-card">
+          <div class="session-date"><div class="session-month">May</div><div class="session-day">1</div></div>
+          <div class="session-info">
+            <div class="session-title">Tactical Positioning — 1-on-1</div>
+            <div class="session-meta">Coach Rivera · 4:00 PM · 60 min · In Person</div>
+            <span class="badge badge-up">Upcoming</span>
+          </div>
+        </div>
+        <div class="session-card">
+          <div class="session-date"><div class="session-month">May</div><div class="session-day">8</div></div>
+          <div class="session-info">
+            <div class="session-title">Finishing & First Touch</div>
+            <div class="session-meta">Coach Rivera · 3:30 PM · 90 min · Field Session</div>
+            <span class="badge badge-up">Upcoming</span>
+          </div>
+        </div>
+        <div class="session-card">
+          <div class="session-date"><div class="session-month">May</div><div class="session-day">15</div></div>
+          <div class="session-info">
+            <div class="session-title">Video Review — Lakewood Match</div>
+            <div class="session-meta">Coach Rivera · 5:00 PM · 45 min · Virtual</div>
+            <span class="badge badge-up">Upcoming</span>
+          </div>
+        </div>
+        <div class="section-hdr" style="margin-top:4px"><span class="section-title">Recently Completed</span></div>
+        <div class="session-card">
+          <div class="session-date done"><div class="session-month">Apr</div><div class="session-day">24</div></div>
+          <div class="session-info">
+            <div class="session-title">Pre-Match Prep — Lakewood</div>
+            <div class="session-meta">Coach Rivera · 60 min · Tactical</div>
+            <span class="badge badge-green">Completed</span>
+          </div>
+        </div>
+        <div class="session-card">
+          <div class="session-date done"><div class="session-month">Apr</div><div class="session-day">17</div></div>
+          <div class="session-info">
+            <div class="session-title">Defensive Shape & Transitions</div>
+            <div class="session-meta">Coach Rivera · 90 min · Field Session</div>
+            <span class="badge badge-green">Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AVANTI ── -->
+    <div class="panel" id="panel-avanti">
+      <div class="avanti-panel">
+        <div class="chat-hdr">
+          <div class="chat-hdr-dot"></div>
+          <div>
+            <div class="chat-hdr-name">AVANTI</div>
+            <div class="chat-hdr-status">AI Coaching Intelligence · Active</div>
+          </div>
+        </div>
+        <div class="chat-msgs" id="chatMsgs">
+          <div class="chat-msg from-ai">
+            <span class="chat-sender">AVANTI</span>
+            <div class="chat-bubble">Good morning. Here's your pre-match intel for <strong>May 2 vs Highland Rangers</strong>.<br><br>• Devon Harris is flagged <strong>RED</strong> — fatigue risk, recommend bench.<br>• Jake Williams is <strong>YELLOW</strong> — monitor at warmup.<br>• Highland Rangers have scored in the 60–75 min window in 6 of their last 8 games. Consider a defensive sub at 58 min.<br><br>How do you want to approach the lineup?</div>
+          </div>
+          <div class="chat-msg from-me">
+            <span class="chat-sender">YOU</span>
+            <div class="chat-bubble">Who do you recommend starting in place of Devon?</div>
+          </div>
+          <div class="chat-msg from-ai">
+            <span class="chat-sender">AVANTI</span>
+            <div class="chat-bubble">Eli Young is GREEN and has the best recent training output of your available forwards. Lucas White is also GREEN but has only 2 starts this season — less reliable under pressure based on match data.<br><br>My recommendation: <strong>Eli Young (starter)</strong>, Lucas White on the bench as a 65-min option depending on scoreline.</div>
+          </div>
+        </div>
+        <div class="chat-footer">
+          <input class="chat-input" id="chatInput" type="text" placeholder="Ask AVANTI about your roster, next match, or training plan..." onkeydown="if(event.key==='Enter')sendChat()">
+          <button class="chat-send-btn" onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content-area -->
+</div><!-- /shell -->
 
 <script>
-  const BASE = 'https://ben-whitesides.github.io/vai-demos/';
-  const isMobile = window.innerWidth < 768;
-
-  const pages = {
-    dashboard:  BASE + 'vai-club-os-gameday-phase2.html',
-    play:       BASE + 'vai-club-os-gameday-phase15.html',
-    formation:  BASE + 'vai-gameday-flagship-standalone.html',
-    schedule:   BASE + 'vai-club-os-gameday-phase2.html',
-    tournament: BASE + 'vai-club-os-gameday-phase2.html',
-    finances:   BASE + 'vai-club-financials-gameday.html',
-    sessions:   BASE + 'vai-mentor-calendar-standalone.html',
-    avanti:     BASE + 'vai-avanti-gameday.html',
+  const formations = {
+    '433': [
+      {x:150,y:400,n:'Caleb T.',p:'GK'},
+      {x:58,y:335,n:'Jackson L.',p:'LB'},{x:108,y:330,n:'Owen T.',p:'CB'},{x:192,y:330,n:'Ethan B.',p:'CB'},{x:242,y:335,n:'Aiden W.',p:'RB'},
+      {x:78,y:248,n:'Liam D.',p:'LM'},{x:150,y:240,n:'Noah M.',p:'CM'},{x:222,y:248,n:'Tyler R.',p:'RM'},
+      {x:68,y:152,n:'Lucas W.',p:'LW'},{x:150,y:144,n:'Marcus J.',p:'ST'},{x:232,y:152,n:'Eli Y.',p:'RW'},
+    ],
+    '4231': [
+      {x:150,y:400,n:'Caleb T.',p:'GK'},
+      {x:58,y:335,n:'Jackson L.',p:'LB'},{x:108,y:330,n:'Owen T.',p:'CB'},{x:192,y:330,n:'Ethan B.',p:'CB'},{x:242,y:335,n:'Aiden W.',p:'RB'},
+      {x:108,y:268,n:'Mason C.',p:'CDM'},{x:192,y:268,n:'Liam D.',p:'CDM'},
+      {x:62,y:192,n:'Lucas W.',p:'LAM'},{x:150,y:186,n:'Tyler R.',p:'CAM'},{x:238,y:192,n:'Eli Y.',p:'RAM'},
+      {x:150,y:120,n:'Marcus J.',p:'ST'},
+    ],
+    '352': [
+      {x:150,y:400,n:'Caleb T.',p:'GK'},
+      {x:78,y:335,n:'Owen T.',p:'CB'},{x:150,y:325,n:'Ethan B.',p:'CB'},{x:222,y:335,n:'Aiden W.',p:'CB'},
+      {x:42,y:248,n:'Jackson L.',p:'LM'},{x:98,y:252,n:'Liam D.',p:'CM'},{x:150,y:244,n:'Noah M.',p:'CM'},{x:202,y:252,n:'Tyler R.',p:'CM'},{x:258,y:248,n:'Mason C.',p:'RM'},
+      {x:105,y:148,n:'Marcus J.',p:'ST'},{x:195,y:148,n:'Eli Y.',p:'ST'},
+    ],
+    '442': [
+      {x:150,y:400,n:'Caleb T.',p:'GK'},
+      {x:58,y:335,n:'Jackson L.',p:'LB'},{x:108,y:330,n:'Owen T.',p:'CB'},{x:192,y:330,n:'Ethan B.',p:'CB'},{x:242,y:335,n:'Aiden W.',p:'RB'},
+      {x:68,y:252,n:'Lucas W.',p:'LM'},{x:118,y:252,n:'Liam D.',p:'CM'},{x:182,y:252,n:'Tyler R.',p:'CM'},{x:232,y:252,n:'Mason C.',p:'RM'},
+      {x:105,y:148,n:'Marcus J.',p:'ST'},{x:195,y:148,n:'Eli Y.',p:'ST'},
+    ],
   };
 
-  const mobilePages = {
-    dashboard:  BASE + 'vai-game-os-mobile-standalone.html',
-    play:       BASE + 'vai-club-os-mobile-phase2.html',
-    formation:  BASE + 'vai-game-os-mobile-standalone.html',
-    schedule:   BASE + 'vai-club-os-mobile-phase15.html',
-    tournament: BASE + 'vai-club-os-mobile-phase2.html',
-    finances:   BASE + 'vai-club-financials-mobile-standalone.html',
-    sessions:   BASE + 'vai-mentor-calendar-standalone.html',
-    avanti:     BASE + 'vai-avanti-os-standalone.html',
-  };
+  function renderFormation(key) {
+    const svg = document.getElementById('fieldSvg');
+    svg.querySelectorAll('.pnode').forEach(n => n.remove());
+    (formations[key] || formations['433']).forEach(p => {
+      const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.classList.add('pnode');
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',p.x); c.setAttribute('cy',p.y); c.setAttribute('r','16');
+      c.setAttribute('fill','rgba(247,148,30,0.12)'); c.setAttribute('stroke','#F7941E'); c.setAttribute('stroke-width','1.5');
+      const t1 = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t1.setAttribute('x',p.x); t1.setAttribute('y',String(p.y-1));
+      t1.setAttribute('text-anchor','middle'); t1.setAttribute('fill','#fff');
+      t1.setAttribute('font-size','7'); t1.setAttribute('font-weight','700');
+      t1.setAttribute('font-family','-apple-system,sans-serif');
+      t1.textContent = p.n.split(' ')[0].substring(0,7);
+      const t2 = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t2.setAttribute('x',p.x); t2.setAttribute('y',String(p.y+9));
+      t2.setAttribute('text-anchor','middle'); t2.setAttribute('fill','#F7941E');
+      t2.setAttribute('font-size','6.5'); t2.setAttribute('font-weight','800');
+      t2.setAttribute('font-family','-apple-system,sans-serif');
+      t2.textContent = p.p;
+      g.appendChild(c); g.appendChild(t1); g.appendChild(t2);
+      svg.appendChild(g);
+    });
+  }
 
-  let current = 'dashboard';
+  function switchFormation(el, key) {
+    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    renderFormation(key);
+  }
 
   function setPage(key) {
-    // Update active nav
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    const navEl = document.getElementById('nav-' + key);
-    if (navEl) navEl.classList.add('active');
-
-    // Show loading
-    document.getElementById('frameLoading').classList.remove('hidden');
-
-    // Load page
-    const pageMap = isMobile ? mobilePages : pages;
-    const url = pageMap[key] || pages[key];
-    document.getElementById('contentFrame').src = url;
-    current = key;
-
-    // Close mobile sidebar
+    document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+    const nav = document.getElementById('nav-' + key);
+    if (nav) nav.classList.add('active');
+    const panel = document.getElementById('panel-' + key);
+    if (panel) panel.classList.add('active');
+    if (key === 'formation') renderFormation('433');
     if (window.innerWidth < 768) toggleSidebar(false);
   }
 
-  function frameLoaded() {
-    document.getElementById('frameLoading').classList.add('hidden');
-  }
-
   function toggleSidebar(force) {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    const open = force !== undefined ? force : !sidebar.classList.contains('open');
-    sidebar.classList.toggle('open', open);
-    overlay.classList.toggle('open', open);
+    const s = document.getElementById('sidebar');
+    const o = document.getElementById('sidebarOverlay');
+    const open = force !== undefined ? force : !s.classList.contains('open');
+    s.classList.toggle('open', open);
+    o.classList.toggle('open', open);
   }
 
-  // Load dashboard on start
+  const replies = [
+    "Based on this week's training data, I'd suggest keeping Marcus Johnson in the high-press role — his sprint metrics are up 12%.",
+    "Analyzing formation fit against Highland Rangers' 4-4-2... your 4-3-3 has a favorable matchup in wide areas. Eli Young vs their RB is a key advantage.",
+    "Checking roster availability and fatigue scores now. Liam Davis is borderline — monitor his warmup closely before committing to the starting XI.",
+    "Your last 3 wins came with Noah Martinez playing the box-to-box role. That's not coincidence — his defensive recovery stats are your best on the team.",
+  ];
+  let replyIdx = 0;
+
+  function sendChat() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    const container = document.getElementById('chatMsgs');
+    const userDiv = document.createElement('div');
+    userDiv.className = 'chat-msg from-me';
+    userDiv.innerHTML = '<span class="chat-sender">YOU</span><div class="chat-bubble">' + msg.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])) + '</div>';
+    container.appendChild(userDiv);
+    input.value = '';
+    container.scrollTop = container.scrollHeight;
+    setTimeout(() => {
+      const aiDiv = document.createElement('div');
+      aiDiv.className = 'chat-msg from-ai';
+      aiDiv.innerHTML = '<span class="chat-sender">AVANTI</span><div class="chat-bubble">' + replies[replyIdx % replies.length] + '</div>';
+      replyIdx++;
+      container.appendChild(aiDiv);
+      container.scrollTop = container.scrollHeight;
+    }, 900);
+  }
+
   setPage('dashboard');
 </script>
-
 </body>
 </html>
