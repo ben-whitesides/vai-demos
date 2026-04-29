@@ -229,6 +229,46 @@
     .ftab-sm { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; border: 1px solid transparent; transition: all .15s; }
     .ftab-sm.active { background: var(--card); border-color: var(--border2); color: var(--text); }
 
+    /* CALENDAR */
+    .cal-tabs { display: flex; background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: 8px; padding: 3px; gap: 2px; }
+    .cal-tab { background: transparent; border: none; color: var(--muted); font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-family: inherit; transition: all .15s; }
+    .cal-tab.active { background: var(--card); color: var(--text); border: 1px solid var(--border2); }
+    .sched-body { flex: 1; display: grid; grid-template-columns: 1fr 300px; overflow: hidden; border-top: 1px solid var(--border); }
+    .cal-container { padding: 20px 24px; overflow-y: auto; border-right: 1px solid var(--border); }
+    .cal-container::-webkit-scrollbar { width: 4px; }
+    .cal-container::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    .cal-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .cal-nav-btn { background: var(--card); border: 1px solid var(--border); color: var(--text2); width: 28px; height: 28px; border-radius: 6px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; font-family: inherit; }
+    .cal-nav-btn:hover { border-color: var(--border2); color: var(--text); }
+    .cal-month-lbl { font-size: 14px; font-weight: 800; color: var(--text); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .cal-dh { background: var(--card); padding: 8px 4px; font-size: 9px; font-weight: 700; color: var(--muted); text-align: center; letter-spacing: .08em; }
+    .cal-cell { background: var(--black); padding: 8px 6px; min-height: 72px; font-size: 11px; font-weight: 600; color: var(--text2); cursor: pointer; transition: background .12s; }
+    .cal-cell:hover { background: rgba(255,255,255,.03); }
+    .cal-cell.other { color: var(--dim); background: rgba(0,0,0,.4); }
+    .cal-pill { margin-top: 4px; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; letter-spacing: .03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pill-prac { background: rgba(52,211,153,0.15); color: var(--green); }
+    .pill-game { background: rgba(247,148,30,0.15); color: var(--orange); }
+    .pill-tourn { background: rgba(251,191,36,0.15); color: var(--yellow); }
+    .up-panel { overflow-y: auto; padding: 16px; background: var(--sidebar); }
+    .up-panel::-webkit-scrollbar { width: 4px; }
+    .up-panel::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    .up-hdr { font-size: 9px; font-weight: 700; color: var(--muted); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .up-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: border-color .15s; }
+    .up-card:hover { border-color: var(--border2); }
+    .up-date-row { font-size: 10px; color: var(--muted); margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+    .up-dow { font-weight: 700; color: var(--text2); font-size: 11px; }
+    .up-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .dot-game { background: var(--orange); }
+    .dot-prac { background: var(--green); }
+    .dot-tourn { background: var(--yellow); }
+    .up-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
+    .up-meta { font-size: 11px; color: var(--muted); }
+    .avanti-float { position: absolute; bottom: 20px; right: 20px; display: flex; align-items: center; gap: 10px; cursor: pointer; z-index: 10; }
+    .af-bubble { width: 40px; height: 40px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 4px 20px rgba(52,211,153,.3); flex-shrink: 0; }
+    .af-badge { position: absolute; top: -4px; right: -4px; width: 18px; height: 18px; border-radius: 50%; background: var(--orange); color: #000; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black); }
+    .af-label { font-size: 12px; color: var(--text2); background: var(--card); border: 1px solid var(--border); border-radius: 100px; padding: 6px 14px; white-space: nowrap; }
+
     /* MOBILE */
     @media (max-width: 768px) {
       .shell { grid-template-columns: 1fr; }
@@ -279,27 +319,49 @@
     <div class="nav-section-label">Club OS</div>
     <a class="nav-item" id="nav-dashboard" onclick="setPage('dashboard')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor"/></svg>
-      Dashboard
+      Overview
+    </a>
+    <a class="nav-item" id="nav-athletes" onclick="setPage('dashboard')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 12c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Athletes
     </a>
     <a class="nav-item" id="nav-play" onclick="setPage('play')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.3"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>
       PLAY Status
     </a>
+    <a class="nav-item" id="nav-roster" onclick="setPage('roster')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3h12M1 7h12M1 11h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Roster
+    </a>
     <a class="nav-item" id="nav-formation" onclick="setPage('formation')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5l5-4 5 4v6" stroke="currentColor" stroke-width="1.3"/><rect x="5" y="8" width="4" height="3" rx=".5" stroke="currentColor" stroke-width="1.3"/></svg>
-      Formations
+      Formation
     </a>
     <a class="nav-item" id="nav-schedule" onclick="setPage('schedule')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 1v3M10 1v3M1 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Schedule
     </a>
+    <a class="nav-item" id="nav-comms" onclick="setPage('dashboard')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 2h12v8H8l-3 2V10H1V2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      Comms
+    </a>
+    <a class="nav-item" id="nav-compliance" onclick="setPage('play')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L12 3v5c0 2.5-2.5 4.5-5 5C4 13 2 11 2 8V3L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      Compliance
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Live Ops</div>
     <a class="nav-item" id="nav-tournament" onclick="setPage('tournament')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3"/></svg>
       Tournaments
     </a>
-    <a class="nav-item" id="nav-finances" onclick="setPage('finances')">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v6M5 6h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      Finances
+    <a class="nav-item" id="nav-standings" onclick="setPage('tournament')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12V8M5 12V5M8 12V7M11 12V3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Standings
+    </a>
+    <a class="nav-item" id="nav-leagues" onclick="setPage('tournament')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M1 7h12M7 1c-2 2-3 4-3 6s1 4 3 6M7 1c2 2 3 4 3 6s-1 4-3 6" stroke="currentColor" stroke-width="1.3"/></svg>
+      Leagues
     </a>
     <div class="nav-divider"></div>
     <div class="nav-section-label">My Mentor</div>
@@ -308,9 +370,21 @@
       My Sessions
       <span class="nav-badge">3</span>
     </a>
-    <a class="nav-item" id="nav-avanti" onclick="setPage('avanti')">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" fill="#F7941E"/></svg>
-      AVANTI
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Finance</div>
+    <a class="nav-item" id="nav-finances" onclick="setPage('finances')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 4v6M5 6h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Finances
+    </a>
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Coming Soon</div>
+    <a class="nav-item" style="opacity:.4;cursor:default;">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Fundraising
+    </a>
+    <a class="nav-item" style="opacity:.4;cursor:default;">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 6h12" stroke="currentColor" stroke-width="1.3"/></svg>
+      Payments
     </a>
     <div class="nav-divider"></div>
     <a href="vai-game-os-landing.html" class="back-link">
@@ -411,7 +485,12 @@
     </div>
 
     <!-- ── PLAY STATUS ── -->
-    <div class="panel" id="panel-play">
+    <div class="panel" id="panel-play" style="position:relative;">
+      <div class="avanti-strip">
+        <div class="as-dot"></div>
+        <span class="as-label">AVANTI</span>
+        <span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span>
+      </div>
       <div class="page-header">
         <div>
           <div class="page-title">PLAY Status</div>
@@ -448,13 +527,88 @@
           <div class="player-row"><span class="player-num">1</span><div class="sdot g"></div><span class="player-name">Caleb Thompson</span><span class="player-pos">GK</span><span class="badge badge-green">GREEN</span></div>
         </div>
       </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">1</span></div>
+        <span class="af-label">Ask AVANTI about this page…</span>
+      </div>
+    </div>
+
+    <!-- ── ROSTER ── -->
+    <div class="panel" id="panel-roster" style="position:relative;">
+      <div class="avanti-strip">
+        <div class="as-dot"></div>
+        <span class="as-label">AVANTI</span>
+        <span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span>
+      </div>
+      <div class="page-header">
+        <div>
+          <div class="page-title">Roster</div>
+          <div class="page-subtitle">VAI FC North · Spring 2026 · 24 players</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn-ghost">Export</button>
+          <button class="btn-primary">+ Add Player</button>
+        </div>
+      </div>
+      <div class="panel-scroll">
+        <div class="filter-tabs">
+          <span class="ftab-sm active">All (24)</span>
+          <span class="ftab-sm">Field Players (22)</span>
+          <span class="ftab-sm">Goalkeepers (2)</span>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Forwards</span></div>
+          <div class="player-row"><span class="player-num">9</span><div class="sdot g"></div><span class="player-name">Marcus Rivera</span><span class="player-pos">ST</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">11</span><div class="sdot g"></div><span class="player-name">K. Mensah</span><span class="player-pos">LW</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">7</span><div class="sdot g"></div><span class="player-name">F. Costa</span><span class="player-pos">RW</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Midfielders</span></div>
+          <div class="player-row"><span class="player-num">10</span><div class="sdot g"></div><span class="player-name">I. Yong</span><span class="player-pos">CM</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">8</span><div class="sdot g"></div><span class="player-name">R. Vega</span><span class="player-pos">CDM</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">6</span><div class="sdot g"></div><span class="player-name">S. Boateng</span><span class="player-pos">CM</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">14</span><div class="sdot y"></div><span class="player-name">D. Hill</span><span class="player-pos">RM</span><span style="flex:1"></span><span class="badge badge-yellow">YELLOW</span></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Defenders</span></div>
+          <div class="player-row"><span class="player-num">3</span><div class="sdot g"></div><span class="player-name">F. Ahmed</span><span class="player-pos">LB</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">5</span><div class="sdot g"></div><span class="player-name">T. Cruz</span><span class="player-pos">CB</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">4</span><div class="sdot g"></div><span class="player-name">J. Park</span><span class="player-pos">CB</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">2</span><div class="sdot r"></div><span class="player-name">M. Lopez</span><span class="player-pos">RB</span><span style="flex:1"></span><span class="badge badge-red">RED</span></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Goalkeepers</span></div>
+          <div class="player-row"><span class="player-num">1</span><div class="sdot g"></div><span class="player-name">L. Park</span><span class="player-pos">GK</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+          <div class="player-row"><span class="player-num">22</span><div class="sdot g"></div><span class="player-name">A. Diaz</span><span class="player-pos">GK</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+        </div>
+      </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">1</span></div>
+        <span class="af-label">Ask AVANTI about this page…</span>
+      </div>
     </div>
 
     <!-- ── FORMATIONS ── -->
-    <div class="panel" id="panel-formation">
+    <div class="panel" id="panel-formation" style="position:relative;">
+      <div class="avanti-strip">
+        <div class="as-dot"></div>
+        <span class="as-label">AVANTI</span>
+        <span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span>
+      </div>
+      <div style="padding:10px 24px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:8px;flex-shrink:0;">
+        <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <div style="font-size:12px;color:var(--text2);">• <strong style="color:var(--text);">2 starters RED</strong> for Saturday — M. Lopez (RB) and D. Hill (RM). Depth chart shows adjusted lineup below.</div>
+          <button class="btn-ghost" style="font-size:10px;flex-shrink:0;">LINEUP</button>
+          <button class="btn-primary" style="flex-shrink:0;font-size:10px;">View adjustments</button>
+        </div>
+        <div style="background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <div style="font-size:12px;color:var(--text2);">• <strong style="color:var(--text);">D. Hill (RM)</strong> flagged YELLOW — recovery 64, training volume +18%. Watch Saturday warmup.</div>
+          <button class="btn-ghost" style="font-size:10px;flex-shrink:0;">WATCH</button>
+        </div>
+      </div>
       <div class="page-header">
         <div>
-          <div class="page-title">Formations</div>
+          <div class="page-title">Formation</div>
           <div class="page-subtitle">Active: 4-3-3 · Last used Apr 26 vs Lakewood</div>
         </div>
         <div class="page-actions">
@@ -490,38 +644,85 @@
           </svg>
         </div>
       </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">4</span></div>
+        <span class="af-label">Ask AVANTI about this page…</span>
+      </div>
     </div>
 
     <!-- ── SCHEDULE ── -->
-    <div class="panel" id="panel-schedule">
-      <div class="page-header">
+    <div class="panel" id="panel-schedule" style="position:relative;">
+      <div class="avanti-strip">
+        <div class="as-dot"></div>
+        <span class="as-label">AVANTI</span>
+        <span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span>
+      </div>
+      <div class="page-header" style="border-bottom:none;">
         <div>
           <div class="page-title">Schedule</div>
-          <div class="page-subtitle">Spring 2026 · Division I · 12 games remaining</div>
+          <div class="page-subtitle">May 2026 · 12 sessions · 4 games</div>
         </div>
-        <div class="page-actions">
-          <button class="btn-ghost">Add Game</button>
+        <div class="page-actions" style="align-items:center;">
+          <div class="cal-tabs">
+            <button class="cal-tab">Today</button>
+            <button class="cal-tab active">Month</button>
+            <button class="cal-tab">Week</button>
+            <button class="cal-tab">List</button>
+          </div>
+          <button class="btn-primary" style="margin-left:8px;">+ New Session</button>
         </div>
       </div>
-      <div class="panel-scroll">
-        <div class="section-hdr"><span class="section-title">Upcoming</span></div>
-        <div class="card">
-          <div class="game-row"><span class="game-date">May 2</span><span class="game-teams">VAI FC North <span class="game-opp">vs Highland Rangers</span></span><span class="game-time">7:00 PM</span><span class="badge badge-up">Home</span></div>
-          <div class="game-row"><span class="game-date">May 9</span><span class="game-teams">VAI FC North <span class="game-opp">vs Metro Athletic</span></span><span class="game-time">6:30 PM</span><span class="badge badge-up">Away</span></div>
-          <div class="game-row"><span class="game-date">May 16</span><span class="game-teams">VAI FC North <span class="game-opp">vs Eastside FC</span></span><span class="game-time">7:00 PM</span><span class="badge badge-up">Home</span></div>
-          <div class="game-row"><span class="game-date">May 23</span><span class="game-teams">VAI FC North <span class="game-opp">vs Lakewood United</span></span><span class="game-time">5:00 PM</span><span class="badge badge-up">Away</span></div>
-          <div class="game-row"><span class="game-date">Jun 6</span><span class="game-teams">VAI FC North <span class="game-opp">vs Riverside FC</span></span><span class="game-time">7:00 PM</span><span class="badge badge-up">Home</span></div>
+      <div class="sched-body">
+        <div class="cal-container">
+          <div class="cal-nav">
+            <button class="cal-nav-btn">‹</button>
+            <span class="cal-month-lbl">May 2026</span>
+            <button class="cal-nav-btn">›</button>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-dh">SUN</div><div class="cal-dh">MON</div><div class="cal-dh">TUE</div><div class="cal-dh">WED</div><div class="cal-dh">THU</div><div class="cal-dh">FRI</div><div class="cal-dh">SAT</div>
+            <div class="cal-cell other">27</div><div class="cal-cell other">28</div><div class="cal-cell other">29</div><div class="cal-cell other">30</div><div class="cal-cell">1</div><div class="cal-cell">2<div class="cal-pill pill-game">Game</div></div><div class="cal-cell">3</div>
+            <div class="cal-cell">4</div><div class="cal-cell">5<div class="cal-pill pill-prac">Practice</div></div><div class="cal-cell">6</div><div class="cal-cell">7<div class="cal-pill pill-prac">Practice</div></div><div class="cal-cell">8</div><div class="cal-cell">9<div class="cal-pill pill-game">Game</div></div><div class="cal-cell">10</div>
+            <div class="cal-cell">11</div><div class="cal-cell">12<div class="cal-pill pill-prac">Practice</div></div><div class="cal-cell">13</div><div class="cal-cell">14<div class="cal-pill pill-prac">Practice</div></div><div class="cal-cell">15</div><div class="cal-cell">16<div class="cal-pill pill-game">Game</div></div><div class="cal-cell">17</div>
+            <div class="cal-cell">18</div><div class="cal-cell">19<div class="cal-pill pill-prac">Practice</div></div><div class="cal-cell">20</div><div class="cal-cell">21<div class="cal-pill pill-prac">Practice</div></div><div class="cal-cell">22</div><div class="cal-cell">23<div class="cal-pill pill-game">Game</div></div><div class="cal-cell">24<div class="cal-pill pill-tourn">Tournament</div><div class="cal-pill pill-tourn">Tournament</div></div>
+            <div class="cal-cell">25</div><div class="cal-cell">26<div class="cal-pill pill-prac">Practice</div></div><div class="cal-cell">27</div><div class="cal-cell">28<div class="cal-pill pill-prac">Practice</div></div><div class="cal-cell">29</div><div class="cal-cell">30</div><div class="cal-cell">31</div>
+          </div>
         </div>
-        <div class="section-hdr"><span class="section-title">Past Results</span></div>
-        <div class="card">
-          <div class="game-row"><span class="game-date">Apr 26</span><span class="game-teams">VAI FC North <span class="game-opp">vs Lakewood United</span></span><span class="badge badge-d">1–1</span></div>
-          <div class="game-row"><span class="game-date">Apr 20</span><span class="game-teams">VAI FC North <span class="game-opp">vs Riverside FC</span></span><span class="badge badge-w">3–1</span></div>
-          <div class="game-row"><span class="game-date">Apr 13</span><span class="game-teams">VAI FC North <span class="game-opp">vs Metro Athletic</span></span><span class="badge badge-w">2–0</span></div>
-          <div class="game-row"><span class="game-date">Apr 5</span><span class="game-teams">VAI FC North <span class="game-opp">vs Eastside FC</span></span><span class="badge badge-l">0–1</span></div>
-          <div class="game-row"><span class="game-date">Mar 29</span><span class="game-teams">VAI FC North <span class="game-opp">vs Highland Rangers</span></span><span class="badge badge-w">4–2</span></div>
-          <div class="game-row"><span class="game-date">Mar 22</span><span class="game-teams">VAI FC North <span class="game-opp">vs Metro Athletic</span></span><span class="badge badge-w">1–0</span></div>
-          <div class="game-row"><span class="game-date">Mar 15</span><span class="game-teams">VAI FC North <span class="game-opp">vs Lakewood United</span></span><span class="badge badge-w">3–0</span></div>
+        <div class="up-panel">
+          <div class="up-hdr">Upcoming</div>
+          <div class="up-card">
+            <div class="up-date-row"><span class="up-dow">SAT 2</span><span>· 7:00 PM</span><span class="up-dot dot-game"></span></div>
+            <div class="up-title">VAI FC North vs Highland Rangers</div>
+            <div class="up-meta">Field 2 · Game · Home</div>
+          </div>
+          <div class="up-card">
+            <div class="up-date-row"><span class="up-dow">TUE 5</span><span>· 5:30 PM</span><span class="up-dot dot-prac"></span></div>
+            <div class="up-title">U15 Practice</div>
+            <div class="up-meta">Field 1 · 16/18 · 2 spots</div>
+          </div>
+          <div class="up-card">
+            <div class="up-date-row"><span class="up-dow">SAT 9</span><span>· 6:30 PM</span><span class="up-dot dot-game"></span></div>
+            <div class="up-title">VAI FC North vs Metro Athletic</div>
+            <div class="up-meta">Away · Game</div>
+          </div>
+          <div class="up-card">
+            <div class="up-date-row"><span class="up-dow">TUE 12</span><span>· 5:30 PM</span><span class="up-dot dot-prac"></span></div>
+            <div class="up-title">Speed & Agility Clinic</div>
+            <div class="up-meta">Provo Sports Complex · 5/8</div>
+          </div>
+          <div class="up-card">
+            <div class="up-date-row"><span class="up-dow">SAT 16</span><span>· 7:00 PM</span><span class="up-dot dot-game"></span></div>
+            <div class="up-title">VAI FC North vs Eastside FC</div>
+            <div class="up-meta">Field 3 · Game · Home</div>
+          </div>
         </div>
+      </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <div class="af-bubble">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg>
+          <span class="af-badge">2</span>
+        </div>
+        <span class="af-label">Ask AVANTI about this page…</span>
       </div>
     </div>
 
