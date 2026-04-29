@@ -1121,18 +1121,18 @@
           </div>
           <div class="form-selector">
             Formation
-            <button class="form-btn active">Spread 7v7</button>
-            <button class="form-btn">Air Raid</button>
-            <button class="form-btn">Trips Right</button>
-            <button class="form-btn">Gun Sneak</button>
-            <button class="form-btn">I-Form</button>
+            <button class="form-btn active" onclick="switchFormation(this,'spread7v7')">Spread 7v7</button>
+            <button class="form-btn" onclick="switchFormation(this,'airraid')">Air Raid</button>
+            <button class="form-btn" onclick="switchFormation(this,'tripright')">Trips Right</button>
+            <button class="form-btn" onclick="switchFormation(this,'gunsneak')">Gun Sneak</button>
+            <button class="form-btn" onclick="switchFormation(this,'iform')">I-Form</button>
             <button class="btn-ghost" style="font-size:10px;margin-left:8px;">Save</button>
-            <button class="btn-primary" style="font-size:10px;">Set Starting XI</button>
+            <button class="btn-primary" style="font-size:10px;">Set Lineup</button>
           </div>
         </div>
         <div class="field-container">
           <div class="field-svg-wrap">
-            <svg viewBox="0 0 560 750" xmlns="http://www.w3.org/2000/svg">
+            <svg id="fieldSvg" viewBox="0 0 560 750" xmlns="http://www.w3.org/2000/svg">
               <!-- Football field background -->
               <rect width="560" height="750" fill="#071007" rx="10"/>
               <!-- Field outline -->
@@ -1164,99 +1164,7 @@
               <text x="50" y="55" font-size="11" fill="#2a5a2a" font-family="-apple-system,sans-serif" font-weight="700" letter-spacing="1">OFFENSE →</text>
               <text x="50" y="720" font-size="11" fill="#2a5a2a" font-family="-apple-system,sans-serif" font-weight="700" letter-spacing="1">← DEFENSE</text>
               <!-- Formation label -->
-              <text x="500" y="55" font-size="18" fill="#2a5a2a" font-family="-apple-system,sans-serif" font-weight="900" text-anchor="end">Spread</text>
-
-              <!-- Helper macro: player circle -->
-              <!-- ST - A. Taylor #1 — QB -->
-              <g transform="translate(280,100)">
-                <circle r="30" fill="#0d1f0d"/><circle r="30" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="13" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">QB</text>
-                <text x="0" y="-14" text-anchor="middle" font-size="8" fill="#34d399" font-family="-apple-system,sans-serif">87</text>
-                <circle cx="22" cy="-22" r="6" fill="#34d399"/>
-                <text x="0" y="46" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">A. Taylor #1 — QB</text>
-                <text x="0" y="57" text-anchor="middle" font-size="8" fill="#555" font-family="-apple-system,sans-serif">+1 DEPTH</text>
-              </g>
-
-              <!-- LW - E. Williams #88 — WR -->
-              <g transform="translate(90,195)">
-                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">WR</text>
-                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
-                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">E. Williams #88 — WR</text>
-              </g>
-
-              <!-- RW - S. Park #82 — TE -->
-              <g transform="translate(470,195)">
-                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">TE</text>
-                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
-                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">S. Park #82 — TE</text>
-              </g>
-
-              <!-- CM - R. Davis #50 — C -->
-              <g transform="translate(150,310)">
-                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">C</text>
-                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
-                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">R. Davis #50 — C</text>
-              </g>
-
-              <!-- CDM - M. Chen #32 — RB -->
-              <g transform="translate(280,345)">
-                <circle r="30" fill="#0d1f0d"/><circle r="30" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">DB</text>
-                <circle cx="22" cy="-22" r="6" fill="#34d399"/>
-                <text x="0" y="46" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">M. Chen #32 — RB</text>
-              </g>
-
-              <!-- CM - K. Johnson #55 — LB -->
-              <g transform="translate(410,310)">
-                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">C</text>
-                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
-                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">K. Johnson #55 — LB</text>
-              </g>
-
-              <!-- LB - T. Brown #44 — DE -->
-              <g transform="translate(75,490)">
-                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">DE</text>
-                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
-                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">T. Brown #44 — DE</text>
-              </g>
-
-              <!-- CB - J. Rivera #22 — DB -->
-              <g transform="translate(195,470)">
-                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">DE</text>
-                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
-                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">J. Rivera #22 — DB</text>
-              </g>
-
-              <!-- CB - L. White #21 — DB -->
-              <g transform="translate(365,470)">
-                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">DE</text>
-                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
-                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">L. White #21 — DB</text>
-              </g>
-
-              <!-- RB - N. Harris #20 — S YELLOW -->
-              <g transform="translate(485,490)">
-                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">DB</text>
-                <circle cx="20" cy="-20" r="6" fill="#fbbf24"/>
-                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">N. Harris #20 — S</text>
-              </g>
-
-              <!-- GK - C. Martinez #10 — S -->
-              <g transform="translate(280,635)">
-                <circle r="30" fill="#0d1f0d"/><circle r="30" fill="none" stroke="#34d399" stroke-width="2"/>
-                <text x="0" y="5" text-anchor="middle" font-size="13" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">S</text>
-                <circle cx="22" cy="-22" r="6" fill="#34d399"/>
-                <text x="0" y="46" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">C. Martinez #10 — S</text>
-                <text x="0" y="57" text-anchor="middle" font-size="8" fill="#555" font-family="-apple-system,sans-serif">+1 DEPTH</text>
-              </g>
+              <text id="formationLabel" x="500" y="55" font-size="18" fill="#2a5a2a" font-family="-apple-system,sans-serif" font-weight="900" text-anchor="end">Spread 7v7</text>
             </svg>
           </div>
           <div class="bench-section">
@@ -2383,62 +2291,132 @@
 </div><!-- /shell -->
 
 <script>
+  const formationLabels = {
+    'spread7v7':'Spread 7v7','airraid':'Air Raid','tripright':'Trips Right','gunsneak':'Gun Sneak','iform':'I-Form'
+  };
   const formations = {
-    '433': [
-      {x:150,y:400,n:'Caleb T.',p:'GK'},
-      {x:58,y:335,n:'Jackson L.',p:'LB'},{x:108,y:330,n:'Owen T.',p:'CB'},{x:192,y:330,n:'Ethan B.',p:'CB'},{x:242,y:335,n:'Aiden W.',p:'RB'},
-      {x:78,y:248,n:'Liam D.',p:'LM'},{x:150,y:240,n:'Noah M.',p:'CM'},{x:222,y:248,n:'Tyler R.',p:'RM'},
-      {x:68,y:152,n:'Lucas W.',p:'LW'},{x:150,y:144,n:'Marcus J.',p:'ST'},{x:232,y:152,n:'Eli Y.',p:'RW'},
+    'spread7v7': [
+      {x:280,y:380,n:'A. Taylor',p:'QB',play:'g'},
+      {x:60,y:320,n:'E. Williams',p:'WR',play:'g'},
+      {x:500,y:320,n:'S. Park',p:'WR',play:'g'},
+      {x:165,y:340,n:'M. Chen',p:'SLOT',play:'g'},
+      {x:395,y:340,n:'T. Torres',p:'SLOT',play:'g'},
+      {x:420,y:428,n:'R. Davis',p:'TE',play:'g'},
+      {x:280,y:443,n:'K. Johnson',p:'C',play:'g'},
+      {x:70,y:498,n:'T. Brown',p:'DE',play:'g'},
+      {x:490,y:498,n:'N. Harris',p:'DE',play:'y'},
+      {x:280,y:508,n:'L. White',p:'LB',play:'g'},
+      {x:75,y:550,n:'J. Rivera',p:'CB',play:'g'},
+      {x:485,y:550,n:'D. Hill',p:'CB',play:'y'},
+      {x:185,y:590,n:'F. Walker',p:'DB',play:'g'},
+      {x:280,y:625,n:'C. Martinez',p:'S',play:'g'},
     ],
-    '4231': [
-      {x:150,y:400,n:'Caleb T.',p:'GK'},
-      {x:58,y:335,n:'Jackson L.',p:'LB'},{x:108,y:330,n:'Owen T.',p:'CB'},{x:192,y:330,n:'Ethan B.',p:'CB'},{x:242,y:335,n:'Aiden W.',p:'RB'},
-      {x:108,y:268,n:'Mason C.',p:'CDM'},{x:192,y:268,n:'Liam D.',p:'CDM'},
-      {x:62,y:192,n:'Lucas W.',p:'LAM'},{x:150,y:186,n:'Tyler R.',p:'CAM'},{x:238,y:192,n:'Eli Y.',p:'RAM'},
-      {x:150,y:120,n:'Marcus J.',p:'ST'},
+    'airraid': [
+      {x:280,y:355,n:'A. Taylor',p:'QB',play:'g'},
+      {x:50,y:285,n:'E. Williams',p:'WR',play:'g'},
+      {x:510,y:285,n:'S. Park',p:'WR',play:'g'},
+      {x:145,y:310,n:'M. Chen',p:'SLOT',play:'g'},
+      {x:415,y:310,n:'T. Torres',p:'SLOT',play:'g'},
+      {x:280,y:310,n:'R. Davis',p:'TE',play:'g'},
+      {x:280,y:443,n:'K. Johnson',p:'C',play:'g'},
+      {x:70,y:500,n:'T. Brown',p:'DE',play:'g'},
+      {x:490,y:500,n:'N. Harris',p:'DE',play:'y'},
+      {x:180,y:520,n:'L. White',p:'LB',play:'g'},
+      {x:380,y:520,n:'J. Rivera',p:'LB',play:'g'},
+      {x:80,y:560,n:'D. Hill',p:'CB',play:'y'},
+      {x:480,y:560,n:'F. Walker',p:'CB',play:'g'},
+      {x:280,y:610,n:'C. Martinez',p:'S',play:'g'},
     ],
-    '352': [
-      {x:150,y:400,n:'Caleb T.',p:'GK'},
-      {x:78,y:335,n:'Owen T.',p:'CB'},{x:150,y:325,n:'Ethan B.',p:'CB'},{x:222,y:335,n:'Aiden W.',p:'CB'},
-      {x:42,y:248,n:'Jackson L.',p:'LM'},{x:98,y:252,n:'Liam D.',p:'CM'},{x:150,y:244,n:'Noah M.',p:'CM'},{x:202,y:252,n:'Tyler R.',p:'CM'},{x:258,y:248,n:'Mason C.',p:'RM'},
-      {x:105,y:148,n:'Marcus J.',p:'ST'},{x:195,y:148,n:'Eli Y.',p:'ST'},
+    'tripright': [
+      {x:280,y:368,n:'A. Taylor',p:'QB',play:'g'},
+      {x:60,y:305,n:'E. Williams',p:'WR',play:'g'},
+      {x:385,y:278,n:'S. Park',p:'WR',play:'g'},
+      {x:455,y:328,n:'M. Chen',p:'WR',play:'g'},
+      {x:495,y:388,n:'T. Torres',p:'TE',play:'g'},
+      {x:200,y:388,n:'R. Davis',p:'RB',play:'g'},
+      {x:280,y:443,n:'K. Johnson',p:'C',play:'g'},
+      {x:70,y:500,n:'T. Brown',p:'DE',play:'g'},
+      {x:490,y:510,n:'N. Harris',p:'DE',play:'y'},
+      {x:200,y:510,n:'L. White',p:'LB',play:'g'},
+      {x:360,y:510,n:'J. Rivera',p:'LB',play:'g'},
+      {x:80,y:555,n:'D. Hill',p:'CB',play:'y'},
+      {x:440,y:545,n:'F. Walker',p:'CB',play:'g'},
+      {x:280,y:610,n:'C. Martinez',p:'S',play:'g'},
     ],
-    '442': [
-      {x:150,y:400,n:'Caleb T.',p:'GK'},
-      {x:58,y:335,n:'Jackson L.',p:'LB'},{x:108,y:330,n:'Owen T.',p:'CB'},{x:192,y:330,n:'Ethan B.',p:'CB'},{x:242,y:335,n:'Aiden W.',p:'RB'},
-      {x:68,y:252,n:'Lucas W.',p:'LM'},{x:118,y:252,n:'Liam D.',p:'CM'},{x:182,y:252,n:'Tyler R.',p:'CM'},{x:232,y:252,n:'Mason C.',p:'RM'},
-      {x:105,y:148,n:'Marcus J.',p:'ST'},{x:195,y:148,n:'Eli Y.',p:'ST'},
+    'gunsneak': [
+      {x:280,y:348,n:'A. Taylor',p:'QB',play:'g'},
+      {x:280,y:443,n:'K. Johnson',p:'C',play:'g'},
+      {x:70,y:298,n:'E. Williams',p:'WR',play:'g'},
+      {x:490,y:298,n:'S. Park',p:'WR',play:'g'},
+      {x:200,y:378,n:'R. Davis',p:'RB',play:'g'},
+      {x:370,y:398,n:'T. Torres',p:'TE',play:'g'},
+      {x:150,y:358,n:'M. Chen',p:'SLOT',play:'g'},
+      {x:80,y:500,n:'T. Brown',p:'DE',play:'g'},
+      {x:480,y:500,n:'N. Harris',p:'DE',play:'y'},
+      {x:180,y:510,n:'L. White',p:'LB',play:'g'},
+      {x:380,y:510,n:'J. Rivera',p:'LB',play:'g'},
+      {x:80,y:555,n:'D. Hill',p:'CB',play:'y'},
+      {x:480,y:555,n:'F. Walker',p:'CB',play:'g'},
+      {x:280,y:608,n:'C. Martinez',p:'S',play:'g'},
+    ],
+    'iform': [
+      {x:280,y:318,n:'A. Taylor',p:'QB',play:'g'},
+      {x:280,y:368,n:'M. Chen',p:'FB',play:'g'},
+      {x:280,y:418,n:'R. Davis',p:'RB',play:'g'},
+      {x:280,y:445,n:'K. Johnson',p:'C',play:'g'},
+      {x:158,y:430,n:'T. Torres',p:'TE',play:'g'},
+      {x:402,y:430,n:'S. Park',p:'TE',play:'g'},
+      {x:60,y:278,n:'E. Williams',p:'WR',play:'g'},
+      {x:80,y:500,n:'T. Brown',p:'DE',play:'g'},
+      {x:480,y:500,n:'N. Harris',p:'DE',play:'y'},
+      {x:170,y:510,n:'L. White',p:'LB',play:'g'},
+      {x:390,y:510,n:'J. Rivera',p:'LB',play:'g'},
+      {x:280,y:490,n:'F. Walker',p:'DT',play:'g'},
+      {x:80,y:555,n:'D. Hill',p:'CB',play:'y'},
+      {x:280,y:618,n:'C. Martinez',p:'S',play:'g'},
     ],
   };
 
+  const playColor = {g:'#34d399',y:'#fbbf24',r:'#ef4444'};
+
   function renderFormation(key) {
     const svg = document.getElementById('fieldSvg');
+    if (!svg) return;
     svg.querySelectorAll('.pnode').forEach(n => n.remove());
-    (formations[key] || formations['433']).forEach(p => {
-      const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    const lbl = document.getElementById('formationLabel');
+    if (lbl) lbl.textContent = formationLabels[key] || key;
+    const ns = 'http://www.w3.org/2000/svg';
+    (formations[key] || formations['spread7v7']).forEach(p => {
+      const g = document.createElementNS(ns,'g');
       g.classList.add('pnode');
-      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      c.setAttribute('cx',p.x); c.setAttribute('cy',p.y); c.setAttribute('r','16');
-      c.setAttribute('fill','rgba(247,148,30,0.12)'); c.setAttribute('stroke','#F7941E'); c.setAttribute('stroke-width','1.5');
-      const t1 = document.createElementNS('http://www.w3.org/2000/svg','text');
-      t1.setAttribute('x',p.x); t1.setAttribute('y',String(p.y-1));
-      t1.setAttribute('text-anchor','middle'); t1.setAttribute('fill','#fff');
-      t1.setAttribute('font-size','7'); t1.setAttribute('font-weight','700');
-      t1.setAttribute('font-family','-apple-system,sans-serif');
-      t1.textContent = p.n.split(' ')[0].substring(0,7);
-      const t2 = document.createElementNS('http://www.w3.org/2000/svg','text');
-      t2.setAttribute('x',p.x); t2.setAttribute('y',String(p.y+9));
-      t2.setAttribute('text-anchor','middle'); t2.setAttribute('fill','#F7941E');
-      t2.setAttribute('font-size','6.5'); t2.setAttribute('font-weight','800');
-      t2.setAttribute('font-family','-apple-system,sans-serif');
-      t2.textContent = p.p;
-      g.appendChild(c); g.appendChild(t1); g.appendChild(t2);
+      const isOff = p.y < 460;
+      const stroke = isOff ? '#34d399' : '#F7941E';
+      const fill = isOff ? 'rgba(52,211,153,0.08)' : 'rgba(247,148,30,0.10)';
+      const c = document.createElementNS(ns,'circle');
+      c.setAttribute('cx',p.x); c.setAttribute('cy',p.y); c.setAttribute('r','24');
+      c.setAttribute('fill',fill); c.setAttribute('stroke',stroke); c.setAttribute('stroke-width','1.8');
+      const pos = document.createElementNS(ns,'text');
+      pos.setAttribute('x',p.x); pos.setAttribute('y',String(p.y+5));
+      pos.setAttribute('text-anchor','middle'); pos.setAttribute('fill','#fff');
+      pos.setAttribute('font-size','10'); pos.setAttribute('font-weight','900');
+      pos.setAttribute('font-family','-apple-system,sans-serif');
+      pos.textContent = p.p;
+      const name = document.createElementNS(ns,'text');
+      name.setAttribute('x',p.x); name.setAttribute('y',String(p.y+36));
+      name.setAttribute('text-anchor','middle'); name.setAttribute('fill','#888');
+      name.setAttribute('font-size','8'); name.setAttribute('font-weight','600');
+      name.setAttribute('font-family','-apple-system,sans-serif');
+      name.textContent = p.n.split(' ').map(w=>w[0]).join('.')+'.';
+      const dot = document.createElementNS(ns,'circle');
+      dot.setAttribute('cx',String(p.x+18)); dot.setAttribute('cy',String(p.y-18)); dot.setAttribute('r','5');
+      dot.setAttribute('fill', p.play ? (playColor[p.play]||'#666') : stroke);
+      g.appendChild(c); g.appendChild(pos); g.appendChild(name); g.appendChild(dot);
       svg.appendChild(g);
     });
   }
 
   function switchFormation(el, key) {
-    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.form-btn').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
     renderFormation(key);
   }
@@ -2450,7 +2428,7 @@
     if (nav) nav.classList.add('active');
     const panel = document.getElementById('panel-' + key);
     if (panel) panel.classList.add('active');
-    if (key === 'formation') renderFormation('433');
+    if (key === 'formation') renderFormation('spread7v7');
     if (key === 'athletes') hideAthleteTeam();
     if (window.innerWidth < 768) toggleSidebar(false);
   }
