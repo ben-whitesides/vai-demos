@@ -264,10 +264,23 @@
     .dot-tourn { background: var(--yellow); }
     .up-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
     .up-meta { font-size: 11px; color: var(--muted); }
-    .avanti-float { position: absolute; bottom: 20px; right: 20px; display: flex; align-items: center; gap: 10px; cursor: pointer; z-index: 10; }
-    .af-bubble { width: 40px; height: 40px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 4px 20px rgba(52,211,153,.3); flex-shrink: 0; }
-    .af-badge { position: absolute; top: -4px; right: -4px; width: 18px; height: 18px; border-radius: 50%; background: var(--orange); color: #000; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black); }
-    .af-label { font-size: 12px; color: var(--text2); background: var(--card); border: 1px solid var(--border); border-radius: 100px; padding: 6px 14px; white-space: nowrap; }
+    .avanti-float { position: absolute; bottom: 24px; right: 24px; cursor: pointer; z-index: 10; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .af-label { font-size: 11px; color: var(--text2); background: var(--card); border: 1px solid var(--border); border-radius: 100px; padding: 5px 14px; white-space: nowrap; }
+    .af-pill-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+    .af-ring { position: absolute; border-radius: 100px; border: 1px solid rgba(52,211,153,0.35); animation: af-breathe 3s ease-in-out infinite; pointer-events: none; }
+    .af-ring:nth-child(1) { inset: -8px; animation-delay: 0s; }
+    .af-ring:nth-child(2) { inset: -18px; animation-delay: .4s; border-color: rgba(52,211,153,0.2); }
+    .af-ring.active:nth-child(1) { animation-duration: 2.2s; }
+    .af-ring.active:nth-child(2) { animation-duration: 2.2s; animation-delay: .3s; }
+    .af-ring.active:nth-child(3) { inset: -28px; animation-duration: 2.2s; animation-delay: .6s; border-color: rgba(52,211,153,0.1); }
+    .af-ring.active:nth-child(4) { inset: -38px; animation-duration: 2.2s; animation-delay: .9s; border-color: rgba(52,211,153,0.05); }
+    @keyframes af-breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.04)} }
+    .af-pill { background: #5effc4; border-radius: 100px; padding: 11px 22px; display: flex; align-items: center; gap: 10px; box-shadow: 0 0 32px rgba(52,211,153,.45), 0 0 8px rgba(52,211,153,.3); animation: af-glow 3s ease-in-out infinite; position: relative; }
+    @keyframes af-glow { 0%,100%{box-shadow:0 0 32px rgba(52,211,153,.45),0 0 8px rgba(52,211,153,.3)} 50%{box-shadow:0 0 48px rgba(52,211,153,.65),0 0 16px rgba(52,211,153,.45)} }
+    .af-icon { width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.2); display: flex; align-items: center; justify-content: center; }
+    .af-text { font-size: 13px; font-weight: 800; color: #003d26; letter-spacing: .04em; }
+    .af-dot { width: 6px; height: 6px; border-radius: 50%; background: #003d26; opacity: .5; }
+    .af-badge { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; background: var(--orange); color: #000; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black); }
 
     /* ROSTER */
     .roster-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
@@ -350,6 +363,46 @@
     .act-desc { color: var(--text2); }
     .act-arrow { color: var(--muted); margin-left: auto; }
 
+    /* COMMS */
+    .comms-layout { display: flex; flex: 1; overflow: hidden; }
+    .comms-ch-list { width: 220px; flex-shrink: 0; background: var(--sidebar); border-right: 1px solid var(--border); overflow-y: auto; padding: 12px 0; }
+    .comms-ch-list::-webkit-scrollbar { width: 4px; }
+    .comms-ch-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    .ch-group { font-size: 9px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: .12em; padding: 10px 14px 4px; }
+    .ch-item { display: flex; align-items: center; gap: 8px; padding: 6px 14px; font-size: 12px; color: var(--muted); cursor: pointer; transition: background .12s, color .12s; }
+    .ch-item:hover { background: rgba(255,255,255,.04); color: var(--text2); }
+    .ch-item.active { background: rgba(247,148,30,0.1); color: var(--text); }
+    .ch-hash { font-size: 14px; opacity: .5; flex-shrink: 0; }
+    .ch-name { flex: 1; }
+    .ch-badge { font-size: 9px; font-weight: 800; background: var(--orange); color: #000; padding: 1px 5px; border-radius: 100px; }
+    .ch-lock { font-size: 10px; opacity: .4; flex-shrink: 0; }
+    .comms-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .comms-hdr { padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: var(--sidebar); }
+    .comms-hdr-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .comms-hdr-meta { font-size: 11px; color: var(--muted); }
+    .comms-hdr-pill { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 100px; margin-left: auto; }
+    .comms-msgs { flex: 1; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 2px; }
+    .comms-msgs::-webkit-scrollbar { width: 4px; }
+    .comms-msgs::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    .msg-date-divider { text-align: center; font-size: 10px; color: var(--dim); padding: 8px 0; display: flex; align-items: center; gap: 8px; }
+    .msg-date-divider::before, .msg-date-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .msg-row { display: flex; gap: 10px; padding: 4px 0; }
+    .msg-row:hover { background: rgba(255,255,255,.02); border-radius: 6px; }
+    .msg-avatar { width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #000; margin-top: 1px; }
+    .msg-body { flex: 1; }
+    .msg-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .msg-sender { font-size: 12px; font-weight: 700; color: var(--text); }
+    .msg-time { font-size: 10px; color: var(--dim); }
+    .msg-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+    .msg-avanti { background: rgba(52,211,153,0.06); border: 1px solid var(--green-b); border-radius: 8px; padding: 8px 12px; margin-top: 6px; }
+    .msg-avanti-lbl { font-size: 9px; font-weight: 800; color: var(--green); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+    .msg-avanti-text { font-size: 12px; color: var(--text2); }
+    .comms-input-area { border-top: 1px solid var(--border); padding: 12px 20px; background: var(--sidebar); flex-shrink: 0; }
+    .comms-input-row { display: flex; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; }
+    .comms-input { flex: 1; background: transparent; border: none; font-size: 13px; color: var(--text); outline: none; font-family: inherit; }
+    .comms-input::placeholder { color: var(--muted); }
+    .comms-send { background: var(--orange); color: #000; border: none; border-radius: 6px; padding: 6px 14px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
     /* MOBILE */
     @media (max-width: 768px) {
       .shell { grid-template-columns: 1fr; }
@@ -422,7 +475,7 @@
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 1v3M10 1v3M1 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Schedule
     </a>
-    <a class="nav-item" id="nav-comms" onclick="setPage('dashboard')">
+    <a class="nav-item" id="nav-comms" onclick="setPage('comms')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 2h12v8H8l-3 2V10H1V2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
       Comms
     </a>
@@ -555,12 +608,18 @@
           <div class="act-row"><span class="act-time-sm">08:30</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Coach Diaz</span> <span class="act-desc">Created Saturday lineup — U17 Girls A</span></span><span class="act-arrow">›</span></div>
           <div class="act-row"><span class="act-time-sm">Yest.</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Jordan Lee</span> <span class="act-desc">Registered — U15 Boys</span></span><span class="act-arrow">›</span></div>
         </div>
-      </div>
-      <div class="avanti-float" onclick="setPage('avanti')">
-        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">3</span></div>
+      </div>      <div class="avanti-float" onclick="setPage('avanti')">
         <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill">
+            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <span class="af-text">AVANTI</span>
+            <span class="af-dot"></span>
+            <span class="af-badge">3</span>
+          </div>
+        </div>
       </div>
-    </div>
 
     <!-- ── PLAY STATUS ── -->
     <div class="panel" id="panel-play" style="position:relative;">
@@ -604,12 +663,18 @@
           <div class="player-row"><span class="player-num">13</span><div class="sdot y"></div><span class="player-name">Carter Hall</span><span class="player-pos">DF</span><span class="badge badge-yellow">YELLOW</span></div>
           <div class="player-row"><span class="player-num">1</span><div class="sdot g"></div><span class="player-name">Caleb Thompson</span><span class="player-pos">GK</span><span class="badge badge-green">GREEN</span></div>
         </div>
-      </div>
-      <div class="avanti-float" onclick="setPage('avanti')">
-        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">1</span></div>
+      </div>      <div class="avanti-float" onclick="setPage('avanti')">
         <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill">
+            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <span class="af-text">AVANTI</span>
+            <span class="af-dot"></span>
+            <span class="af-badge">1</span>
+          </div>
+        </div>
       </div>
-    </div>
 
     <!-- ── ROSTER ── -->
     <div class="panel" id="panel-roster" style="position:relative;">
@@ -711,12 +776,18 @@
             <div class="tc-coach">Coach: Carlos Vega</div>
           </div>
         </div>
-      </div>
-      <div class="avanti-float" onclick="setPage('avanti')">
-        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">3</span></div>
+      </div>      <div class="avanti-float" onclick="setPage('avanti')">
         <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill">
+            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <span class="af-text">AVANTI</span>
+            <span class="af-dot"></span>
+            <span class="af-badge">3</span>
+          </div>
+        </div>
       </div>
-    </div>
 
     <!-- ── FORMATIONS ── -->
     <div class="panel" id="panel-formation" style="position:relative;">
@@ -773,12 +844,18 @@
             <rect x="18" y="330" width="264" height="39" fill="rgba(255,255,255,.012)"/>
           </svg>
         </div>
-      </div>
-      <div class="avanti-float" onclick="setPage('avanti')">
-        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">4</span></div>
+      </div>      <div class="avanti-float" onclick="setPage('avanti')">
         <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill">
+            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <span class="af-text">AVANTI</span>
+            <span class="af-dot"></span>
+            <span class="af-badge">4</span>
+          </div>
+        </div>
       </div>
-    </div>
 
     <!-- ── SCHEDULE ── -->
     <div class="panel" id="panel-schedule" style="position:relative;">
@@ -846,13 +923,114 @@
             <div class="up-meta">Field 3 · Game · Home</div>
           </div>
         </div>
-      </div>
-      <div class="avanti-float" onclick="setPage('avanti')">
-        <div class="af-bubble">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg>
-          <span class="af-badge">2</span>
-        </div>
+      </div>      <div class="avanti-float" onclick="setPage('avanti')">
         <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill">
+            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <span class="af-text">AVANTI</span>
+            <span class="af-dot"></span>
+            <span class="af-badge">2</span>
+          </div>
+        </div>
+      </div>
+
+    <!-- ── COMMS ── -->
+    <div class="panel" id="panel-comms" style="position:relative;">
+      <div class="avanti-strip" style="padding:8px 16px;">
+        <div class="as-dot"></div>
+        <span class="as-label">AVANTI</span>
+        <span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span>
+      </div>
+      <div class="comms-layout">
+        <div class="comms-ch-list">
+          <div class="ch-group">Team Chats</div>
+          <div class="ch-item active"><span class="ch-hash">#</span><span class="ch-name">U17 Girls A</span><span class="ch-badge">3</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">U17 Girls B</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">U15 Girls</span><span class="ch-badge">1</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">U19 Girls</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">U13 Girls</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">U15 Boys</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">U13 Boys</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">U17 Boys</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">U11 Girls</span></div>
+          <div class="ch-group">Staff</div>
+          <div class="ch-item"><span class="ch-lock">🔒</span><span class="ch-name">Coaches Only</span><span class="ch-badge">2</span></div>
+          <div class="ch-item"><span class="ch-lock">🔒</span><span class="ch-name">Directors</span></div>
+          <div class="ch-item"><span class="ch-lock">🔒</span><span class="ch-name">Admin Staff</span></div>
+          <div class="ch-group">Club-Wide</div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">All Club</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">Announcements</span></div>
+          <div class="ch-item"><span class="ch-hash">#</span><span class="ch-name">Tryouts 2026</span></div>
+        </div>
+        <div class="comms-main">
+          <div class="comms-hdr">
+            <span class="ch-hash" style="font-size:16px;color:var(--muted)">#</span>
+            <div>
+              <div class="comms-hdr-name">U17 Girls A</div>
+              <div class="comms-hdr-meta">28 members · Premier Division</div>
+            </div>
+            <div class="comms-hdr-pill badge badge-up" style="margin-left:auto;">28 members</div>
+          </div>
+          <div class="comms-msgs">
+            <div class="msg-date-divider">Today</div>
+            <div class="msg-row">
+              <div class="msg-avatar" style="background:#F7941E;">JR</div>
+              <div class="msg-body">
+                <div class="msg-meta"><span class="msg-sender">Coach Rivera</span><span class="msg-time">9:14 AM</span></div>
+                <div class="msg-text">Team — Saturday warmup starts at 6:30 AM sharp. Field 2. Bring both jerseys.</div>
+              </div>
+            </div>
+            <div class="msg-row">
+              <div class="msg-avatar" style="background:#34d399;">AV</div>
+              <div class="msg-body">
+                <div class="msg-meta"><span class="msg-sender" style="color:var(--green)">AVANTI</span><span class="msg-time">9:22 AM</span></div>
+                <div class="msg-avanti">
+                  <div class="msg-avanti-lbl">AVANTI · Automated insight</div>
+                  <div class="msg-avanti-text">2 players flagged for Saturday — M. Lopez (RED) and D. Hill (YELLOW). Adjusted lineup suggestion sent to Coach Rivera. PLAY status will be re-checked Friday morning.</div>
+                </div>
+              </div>
+            </div>
+            <div class="msg-row">
+              <div class="msg-avatar" style="background:#6366f1;">SM</div>
+              <div class="msg-body">
+                <div class="msg-meta"><span class="msg-sender">Sarah M.</span><span class="msg-time">10:01 AM</span></div>
+                <div class="msg-text">Is there a makeup practice for those who missed Tuesday?</div>
+              </div>
+            </div>
+            <div class="msg-row">
+              <div class="msg-avatar" style="background:#F7941E;">JR</div>
+              <div class="msg-body">
+                <div class="msg-meta"><span class="msg-sender">Coach Rivera</span><span class="msg-time">10:08 AM</span></div>
+                <div class="msg-text">Yes — Thursday 5:30 PM, Field 1. Optional but encouraged before Saturday.</div>
+              </div>
+            </div>
+            <div class="msg-row">
+              <div class="msg-avatar" style="background:#ec4899;">KP</div>
+              <div class="msg-body">
+                <div class="msg-meta"><span class="msg-sender">Kai P. (parent)</span><span class="msg-time">11:32 AM</span></div>
+                <div class="msg-text">Thanks coach! Emma will be there Thursday.</div>
+              </div>
+            </div>
+            <div class="msg-row">
+              <div class="msg-avatar" style="background:#34d399;">AV</div>
+              <div class="msg-body">
+                <div class="msg-meta"><span class="msg-sender" style="color:var(--green)">AVANTI</span><span class="msg-time">2:15 PM</span></div>
+                <div class="msg-avanti">
+                  <div class="msg-avanti-lbl">AVANTI · Reminder</div>
+                  <div class="msg-avanti-text">3 waivers still unsigned for Saturday's game. Families: Rodriguez, Chen, Williams. Reminder sent automatically at 12:00 PM.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comms-input-area">
+            <div class="comms-input-row">
+              <input class="comms-input" placeholder="Message #U17 Girls A…" type="text">
+              <button class="comms-send">Send</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
