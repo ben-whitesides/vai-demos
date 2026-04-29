@@ -2011,13 +2011,15 @@
         </div>
         <div class="page-actions"><button class="btn-ghost">Export Profiles</button><button class="btn-primary">Enable AVANTI CONNECT</button></div>
       </div>
-      <div class="tourn-tabs" style="padding:0 24px;">
-        <div class="tourn-tab active">Overview</div>
-        <div class="tourn-tab">Leaderboards</div>
-        <div class="tourn-tab">College Activity</div>
-        <div class="tourn-tab">Athlete Profiles</div>
+      <div class="tourn-tabs" style="padding:0 24px;" id="recruit-tabs">
+        <div class="tourn-tab active" onclick="switchRecruitTab(this,'overview')">Overview</div>
+        <div class="tourn-tab" onclick="switchRecruitTab(this,'leaderboards')">Leaderboards</div>
+        <div class="tourn-tab" onclick="switchRecruitTab(this,'college')">College Activity</div>
+        <div class="tourn-tab" onclick="switchRecruitTab(this,'profiles')">Athlete Profiles</div>
       </div>
-      <div class="panel-scroll" style="padding-top:20px;">
+
+      <!-- OVERVIEW TAB -->
+      <div id="recruit-tab-overview" class="panel-scroll" style="padding-top:20px;">
 
         <!-- CONNECT callout -->
         <div style="background:linear-gradient(135deg,rgba(52,211,153,.08),rgba(247,148,30,.05));border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
@@ -2044,137 +2046,95 @@
         </div>
 
         <div class="db-grid">
-          <!-- Leaderboard widget -->
-          <div class="card" style="padding:16px;margin:0;grid-column:1/-1;">
-            <div class="lb-controls">
-              <div style="display:flex;align-items:center;gap:12px;">
-                <span style="font-size:13px;font-weight:800;color:var(--text);">Leaderboards</span>
-                <div class="lb-age-tabs">
-                  <span class="lb-age-tab active">U17+</span>
-                  <span class="lb-age-tab">U15</span>
-                  <span class="lb-age-tab">U13</span>
-                  <span class="lb-age-tab">All</span>
-                </div>
-              </div>
-              <div class="lb-stat-tabs">
-                <span class="lb-stat-tab active">PLAY Index</span>
-                <span class="lb-stat-tab">Speed</span>
-                <span class="lb-stat-tab">Technical</span>
-                <span class="lb-stat-tab">Academic</span>
-                <span class="lb-stat-tab">College Views</span>
-              </div>
-            </div>
-
-            <!-- Podium top 3 -->
-            <div class="lb-podium">
-              <div class="lb-pod silver" onclick="">
-                <div class="lb-rank silver">2</div>
-                <div class="lb-pod-num">#8</div>
-                <div class="lb-pod-name">R. Vega</div>
-                <div class="lb-pod-meta">CDM · U17 Girls A</div>
-                <div class="lb-pod-score silver">94</div>
-                <div class="lb-pod-sub">PLAY Index</div>
-                <span class="lb-pod-badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">CONNECT ACTIVE</span>
-              </div>
-              <div class="lb-pod gold" onclick="">
-                <div class="lb-rank gold">1</div>
-                <div class="lb-pod-num">#9</div>
-                <div class="lb-pod-name">Marcus Rivera</div>
-                <div class="lb-pod-meta">ST · U17 Girls A</div>
-                <div class="lb-pod-score gold">97</div>
-                <div class="lb-pod-sub">PLAY Index</div>
-                <span class="lb-pod-badge" style="background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.3);">4 COLLEGE OFFERS</span>
-              </div>
-              <div class="lb-pod bronze" onclick="">
-                <div class="lb-rank bronze">3</div>
-                <div class="lb-pod-num">#7</div>
-                <div class="lb-pod-name">F. Costa</div>
-                <div class="lb-pod-meta">RW · U17 Girls A</div>
-                <div class="lb-pod-score bronze">92</div>
-                <div class="lb-pod-sub">PLAY Index</div>
-                <span class="lb-pod-badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">CONNECT ACTIVE</span>
-              </div>
-            </div>
-
-            <!-- Ranked list 4-10 -->
-            <div class="lb-list">
-              <div class="lb-row" onclick="">
-                <span class="lb-row-rank">4</span>
-                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">SB</div>
-                <div class="lb-row-info"><div class="lb-row-name">S. Boateng</div><div class="lb-row-meta">CM · U17 Girls A · Premier</div></div>
-                <span class="lb-row-score" style="color:var(--green);">91</span>
-                <span class="lb-row-connect"><span class="badge badge-up" style="font-size:9px;">INVITE</span></span>
-                <span style="color:var(--orange);">›</span>
-              </div>
-              <div class="lb-row" onclick="">
-                <span class="lb-row-rank">5</span>
-                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">KM</div>
-                <div class="lb-row-info"><div class="lb-row-name">K. Mensah</div><div class="lb-row-meta">LW · U17 Girls A · Premier</div></div>
-                <span class="lb-row-score" style="color:var(--green);">89</span>
-                <span class="lb-row-connect"><span class="badge badge-up" style="font-size:9px;">INVITE</span></span>
-                <span style="color:var(--orange);">›</span>
-              </div>
-              <div class="lb-row" onclick="">
-                <span class="lb-row-rank">6</span>
-                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">IY</div>
-                <div class="lb-row-info"><div class="lb-row-name">I. Yong</div><div class="lb-row-meta">CM · U17 Girls A · Premier</div></div>
-                <span class="lb-row-score" style="color:var(--green);">88</span>
-                <span class="lb-row-connect"><span class="badge badge-up" style="font-size:9px;">INVITE</span></span>
-                <span style="color:var(--orange);">›</span>
-              </div>
-              <div class="lb-row" onclick="">
-                <span class="lb-row-rank">7</span>
-                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">FA</div>
-                <div class="lb-row-info"><div class="lb-row-name">F. Ahmed</div><div class="lb-row-meta">LB · U17 Girls A · Premier</div></div>
-                <span class="lb-row-score" style="color:var(--green);">86</span>
-                <span class="lb-row-connect"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></span>
-                <span style="color:var(--orange);">›</span>
-              </div>
-              <div class="lb-row" onclick="">
-                <span class="lb-row-rank">8</span>
-                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">LP</div>
-                <div class="lb-row-info"><div class="lb-row-name">L. Park</div><div class="lb-row-meta">GK · U17 Girls A · Premier</div></div>
-                <span class="lb-row-score" style="color:var(--green);">85</span>
-                <span class="lb-row-connect"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></span>
-                <span style="color:var(--orange);">›</span>
-              </div>
-              <div class="lb-row" onclick="" style="opacity:.6;">
-                <span class="lb-row-rank" style="color:var(--dim);">+286 more</span>
-                <div class="lb-row-info"><div class="lb-row-meta">across all age groups</div></div>
-                <span class="db-section-link" style="font-size:11px;">View full leaderboard →</span>
-              </div>
-            </div>
-          </div>
-
           <!-- Recent college activity -->
           <div class="card" style="padding:16px;margin:0;">
-            <div class="db-section-hdr"><span>College Activity</span><span class="db-section-link">All contacts →</span></div>
+            <div class="db-section-hdr"><span>College Activity</span><span class="db-section-link" onclick="switchRecruitTab(document.querySelectorAll('#recruit-tabs .tourn-tab')[2],'college')">All contacts →</span></div>
             <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Today</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">BYU Soccer</span> <span class="act-desc">Viewed Marcus Rivera's profile</span></span><span class="act-arrow">›</span></div>
             <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Yesterday</span><div class="sdot o" style="margin-top:2px;flex-shrink:0;background:var(--orange)"></div><span><span class="act-name">Utah State</span> <span class="act-desc">Sent recruiting inquiry — R. Vega</span></span><span class="act-arrow">›</span></div>
             <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Apr 27</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Stanford Women</span> <span class="act-desc">Bookmarked F. Costa</span></span><span class="act-arrow">›</span></div>
             <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Apr 26</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Colorado FC</span> <span class="act-desc">Offer extended — Marcus Rivera</span></span><span class="act-arrow">›</span></div>
             <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Apr 24</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">San Jose State</span> <span class="act-desc">Offer extended — S. Boateng</span></span><span class="act-arrow">›</span></div>
           </div>
-
           <!-- Top recruits -->
           <div class="card" style="padding:16px;margin:0;">
             <div class="db-section-hdr"><span>Top Recruits This Month</span></div>
             <div class="player-row" style="padding:10px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">Marcus Rivera <span style="font-size:10px;color:var(--muted);">#9 · ST</span></span><span style="margin-left:auto;font-size:11px;color:var(--green);font-weight:700;">4 offers</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
             <div class="player-row" style="padding:10px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">R. Vega <span style="font-size:10px;color:var(--muted);">#8 · CDM</span></span><span style="margin-left:auto;font-size:11px;color:var(--green);font-weight:700;">2 offers</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
             <div class="player-row" style="padding:10px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">S. Boateng <span style="font-size:10px;color:var(--muted);">#6 · CM</span></span><span style="margin-left:auto;font-size:11px;color:var(--orange);font-weight:700;">1 offer</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
-            <div class="player-row" style="padding:10px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">F. Costa <span style="font-size:10px;color:var(--muted);">#7 · RW</span></span><span style="margin-left:auto;font-size:11px;color:var(--orange);font-weight:700;">1 offer</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
             <div class="player-row" style="padding:10px 0;border-color:var(--border);border-bottom:none;"><div class="sdot g"></div><span class="player-name">K. Mensah <span style="font-size:10px;color:var(--muted);">#11 · LW</span></span><span style="margin-left:auto;font-size:11px;color:var(--muted);">Watching</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
           </div>
-
           <!-- Invite to Connect -->
           <div class="card" style="padding:16px;margin:0;">
             <div class="db-section-hdr"><span>Not Yet on AVANTI CONNECT</span><span class="db-section-link">Invite all →</span></div>
-            <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">269 eligible athletes haven't activated their recruiting profile. AVANTI can auto-build and invite them.</div>
-            <div class="player-row" style="padding:8px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">T. Cruz <span style="font-size:10px;color:var(--muted);">#5 · CB</span></span><span style="margin-left:auto;"><button class="btn-ghost" style="font-size:10px;padding:3px 10px;">Invite</button></span></div>
-            <div class="player-row" style="padding:8px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">L. Park <span style="font-size:10px;color:var(--muted);">#1 · GK</span></span><span style="margin-left:auto;"><button class="btn-ghost" style="font-size:10px;padding:3px 10px;">Invite</button></span></div>
-            <div class="player-row" style="padding:8px 0;border-color:var(--border);border-bottom:none;"><div class="sdot g"></div><span class="player-name">F. Ahmed <span style="font-size:10px;color:var(--muted);">#3 · LB</span></span><span style="margin-left:auto;"><button class="btn-ghost" style="font-size:10px;padding:3px 10px;">Invite</button></span></div>
-            <button class="btn-primary" style="width:100%;margin-top:12px;">Invite All 269 Athletes to CONNECT</button>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">269 eligible athletes haven't activated their recruiting profile.</div>
+            <div class="player-row" style="padding:8px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">T. Cruz</span><span style="margin-left:auto;"><button class="btn-ghost" style="font-size:10px;padding:3px 10px;">Invite</button></span></div>
+            <div class="player-row" style="padding:8px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">L. Park</span><span style="margin-left:auto;"><button class="btn-ghost" style="font-size:10px;padding:3px 10px;">Invite</button></span></div>
+            <div class="player-row" style="padding:8px 0;border-color:var(--border);border-bottom:none;"><div class="sdot g"></div><span class="player-name">F. Ahmed</span><span style="margin-left:auto;"><button class="btn-ghost" style="font-size:10px;padding:3px 10px;">Invite</button></span></div>
+            <button class="btn-primary" style="width:100%;margin-top:12px;">Invite All 269 to CONNECT</button>
           </div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARDS TAB -->
+      <div id="recruit-tab-leaderboards" class="panel-scroll" style="padding-top:20px;display:none;">
+        <div class="lb-controls">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="lb-age-tabs">
+              <span class="lb-age-tab active">U17+</span>
+              <span class="lb-age-tab">U15</span>
+              <span class="lb-age-tab">U13</span>
+              <span class="lb-age-tab">All</span>
+            </div>
+          </div>
+          <div class="lb-stat-tabs">
+            <span class="lb-stat-tab active">PLAY Index</span>
+            <span class="lb-stat-tab">Speed</span>
+            <span class="lb-stat-tab">Technical</span>
+            <span class="lb-stat-tab">Academic</span>
+            <span class="lb-stat-tab">College Views</span>
+          </div>
+        </div>
+        <div class="lb-podium">
+          <div class="lb-pod silver" onclick=""><div class="lb-rank silver">2</div><div class="lb-pod-num">#8</div><div class="lb-pod-name">R. Vega</div><div class="lb-pod-meta">CDM · U17 Girls A</div><div class="lb-pod-score silver">94</div><div class="lb-pod-sub">PLAY Index</div><span class="lb-pod-badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">CONNECT ACTIVE</span></div>
+          <div class="lb-pod gold" onclick=""><div class="lb-rank gold">1</div><div class="lb-pod-num">#9</div><div class="lb-pod-name">Marcus Rivera</div><div class="lb-pod-meta">ST · U17 Girls A</div><div class="lb-pod-score gold">97</div><div class="lb-pod-sub">PLAY Index</div><span class="lb-pod-badge" style="background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.3);">4 COLLEGE OFFERS</span></div>
+          <div class="lb-pod bronze" onclick=""><div class="lb-rank bronze">3</div><div class="lb-pod-num">#7</div><div class="lb-pod-name">F. Costa</div><div class="lb-pod-meta">RW · U17 Girls A</div><div class="lb-pod-score bronze">92</div><div class="lb-pod-sub">PLAY Index</div><span class="lb-pod-badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">CONNECT ACTIVE</span></div>
+        </div>
+        <div class="lb-list">
+          <div class="lb-row" onclick=""><span class="lb-row-rank">4</span><div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">SB</div><div class="lb-row-info"><div class="lb-row-name">S. Boateng</div><div class="lb-row-meta">CM · U17 Girls A · Premier</div></div><span class="lb-row-score" style="color:var(--green);">91</span><span class="lb-row-connect"><span class="badge badge-up" style="font-size:9px;">INVITE</span></span><span style="color:var(--orange);">›</span></div>
+          <div class="lb-row" onclick=""><span class="lb-row-rank">5</span><div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">KM</div><div class="lb-row-info"><div class="lb-row-name">K. Mensah</div><div class="lb-row-meta">LW · U17 Girls A · Premier</div></div><span class="lb-row-score" style="color:var(--green);">89</span><span class="lb-row-connect"><span class="badge badge-up" style="font-size:9px;">INVITE</span></span><span style="color:var(--orange);">›</span></div>
+          <div class="lb-row" onclick=""><span class="lb-row-rank">6</span><div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">IY</div><div class="lb-row-info"><div class="lb-row-name">I. Yong</div><div class="lb-row-meta">CM · U17 Girls A · Premier</div></div><span class="lb-row-score" style="color:var(--green);">88</span><span class="lb-row-connect"><span class="badge badge-up" style="font-size:9px;">INVITE</span></span><span style="color:var(--orange);">›</span></div>
+          <div class="lb-row" onclick=""><span class="lb-row-rank">7</span><div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">FA</div><div class="lb-row-info"><div class="lb-row-name">F. Ahmed</div><div class="lb-row-meta">LB · U17 Girls A · Premier</div></div><span class="lb-row-score" style="color:var(--green);">86</span><span class="lb-row-connect"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></span><span style="color:var(--orange);">›</span></div>
+          <div class="lb-row" onclick=""><span class="lb-row-rank">8</span><div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">LP</div><div class="lb-row-info"><div class="lb-row-name">L. Park</div><div class="lb-row-meta">GK · U17 Girls A · Premier</div></div><span class="lb-row-score" style="color:var(--green);">85</span><span class="lb-row-connect"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></span><span style="color:var(--orange);">›</span></div>
+          <div class="lb-row" onclick="" style="opacity:.6;"><span class="lb-row-rank" style="color:var(--dim);">+286 more</span><div class="lb-row-info"><div class="lb-row-meta">across all age groups</div></div><span class="db-section-link" style="font-size:11px;">View full leaderboard →</span></div>
+        </div>
+      </div>
+
+      <!-- COLLEGE ACTIVITY TAB -->
+      <div id="recruit-tab-college" class="panel-scroll" style="padding-top:20px;display:none;">
+        <div class="section-hdr" style="margin-bottom:12px;"><span class="section-title">All College Activity</span><span class="section-link">Export →</span></div>
+        <div class="card">
+          <table class="fin-table">
+            <thead><tr><th>Date</th><th>Institution</th><th>Action</th><th>Athlete</th><th class="r">Status</th></tr></thead>
+            <tbody>
+              <tr><td>Apr 29</td><td class="name">BYU Soccer</td><td>Profile view</td><td>Marcus Rivera</td><td class="r"><span class="badge badge-green" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">VIEWED</span></td></tr>
+              <tr><td>Apr 28</td><td class="name">Utah State</td><td>Recruiting inquiry</td><td>R. Vega</td><td class="r"><span class="badge badge-up" style="font-size:9px;">INQUIRY</span></td></tr>
+              <tr><td>Apr 27</td><td class="name">Stanford Women</td><td>Bookmarked</td><td>F. Costa</td><td class="r"><span class="badge badge-green" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">SAVED</span></td></tr>
+              <tr><td>Apr 26</td><td class="name">Colorado FC</td><td>Offer extended</td><td>Marcus Rivera</td><td class="r"><span class="badge badge-up" style="font-size:9px;background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.3);">OFFER</span></td></tr>
+              <tr><td>Apr 24</td><td class="name">San Jose State</td><td>Offer extended</td><td>S. Boateng</td><td class="r"><span class="badge badge-up" style="font-size:9px;background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.3);">OFFER</span></td></tr>
+              <tr><td>Apr 23</td><td class="name">USC Women's</td><td>Profile view</td><td>K. Mensah</td><td class="r"><span class="badge badge-green" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">VIEWED</span></td></tr>
+              <tr><td>Apr 22</td><td class="name">Cal Poly</td><td>Commitment confirmed</td><td>R. Vega</td><td class="r"><span class="badge badge-up" style="font-size:9px;background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.3);">COMMITTED</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ATHLETE PROFILES TAB -->
+      <div id="recruit-tab-profiles" class="panel-scroll" style="padding-top:20px;display:none;">
+        <div style="text-align:center;padding:60px 20px;color:var(--muted);">
+          <div style="font-size:40px;margin-bottom:12px;">⚡</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:6px;">AVANTI CONNECT Profiles</div>
+          <div style="font-size:12px;margin-bottom:20px;">Full athlete recruiting profiles with stats, highlights, and coach contact history.</div>
+          <button class="btn-primary" onclick="setPage('athletes')">View Athlete Shields →</button>
         </div>
       </div>
       <div class="avanti-float" onclick="setPage('avanti')">
@@ -2555,6 +2515,15 @@
         <div style="text-align:center;color:var(--muted);font-size:20px;padding:40px 0;">+</div>
       </div>
     </div>`;
+  }
+
+  function switchRecruitTab(el, tabKey) {
+    document.querySelectorAll('#recruit-tabs .tourn-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    ['overview','leaderboards','college','profiles'].forEach(k => {
+      const el = document.getElementById('recruit-tab-' + k);
+      if (el) el.style.display = k === tabKey ? '' : 'none';
+    });
   }
 
   function hideAthleteTeam() {
