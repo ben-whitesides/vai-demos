@@ -301,6 +301,55 @@
     .tc-stat span.g { color: var(--green); } .tc-stat span.y { color: var(--yellow); } .tc-stat span.r { color: var(--red); }
     .tc-coach { font-size: 10px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
 
+    /* DASHBOARD */
+    .db-alerts { display: flex; flex-direction: column; gap: 6px; padding: 12px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .db-alert { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; font-size: 12px; }
+    .db-alert.urgent { border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.04); }
+    .db-alert.warn { border-color: rgba(251,191,36,0.3); background: rgba(251,191,36,0.04); }
+    .db-alert.ok { border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.04); }
+    .da-label { font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; flex-shrink: 0; }
+    .da-label.r { color: var(--red); } .da-label.y { color: var(--yellow); } .da-label.g { color: var(--green); }
+    .da-text { flex: 1; color: var(--text2); }
+    .da-text strong { color: var(--text); }
+    .da-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .da-btn { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer; border: 1px solid; }
+    .da-btn.ghost { background: transparent; border-color: var(--border2); color: var(--muted); }
+    .da-btn.urgent { background: var(--red); border-color: var(--red); color: #fff; }
+    .da-btn.primary { background: var(--orange); border-color: var(--orange); color: #000; }
+    .da-btn.clear { background: transparent; border-color: var(--green-b); color: var(--green); }
+    .db-kpi { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; margin-bottom: 18px; }
+    .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+    .kpi-lbl { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+    .kpi-val { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1; }
+    .kpi-val.o { color: var(--orange); } .kpi-val.g { color: var(--green); } .kpi-val.r { color: var(--red); }
+    .kpi-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
+    .db-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+    .db-wide { grid-column: 1 / -1; }
+    .db-section-hdr { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+    .db-section-link { font-size: 11px; color: var(--orange); cursor: pointer; font-weight: 600; text-transform: none; letter-spacing: 0; }
+    .team-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .team-row:last-child { border-bottom: none; }
+    .tr-name { font-weight: 600; color: var(--text); width: 110px; flex-shrink: 0; }
+    .tr-bar { flex: 1; height: 4px; background: var(--border2); border-radius: 2px; overflow: hidden; display: flex; }
+    .tr-count { font-size: 10px; color: var(--muted); width: 36px; text-align: right; flex-shrink: 0; }
+    .fin-stat { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .fin-stat:last-child { border-bottom: none; }
+    .fin-stat-lbl { color: var(--muted); }
+    .fin-stat-val { font-weight: 700; color: var(--text); }
+    .fin-stat-val.r { color: var(--red); } .fin-stat-val.g { color: var(--green); }
+    .comp-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .comp-row:last-child { border-bottom: none; }
+    .comp-lbl { flex: 1; color: var(--text2); font-weight: 500; }
+    .comp-bar-wrap { width: 120px; height: 4px; background: var(--border2); border-radius: 2px; overflow: hidden; }
+    .comp-bar-fill { height: 100%; border-radius: 2px; }
+    .comp-pct { font-size: 11px; font-weight: 700; width: 36px; text-align: right; }
+    .act-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .act-row:last-child { border-bottom: none; }
+    .act-time-sm { font-size: 10px; color: var(--muted); white-space: nowrap; min-width: 36px; }
+    .act-name { font-weight: 700; color: var(--text); }
+    .act-desc { color: var(--text2); }
+    .act-arrow { color: var(--muted); margin-left: auto; }
+
     /* MOBILE */
     @media (max-width: 768px) {
       .shell { grid-template-columns: 1fr; }
@@ -431,88 +480,85 @@
   <div class="content-area" id="contentArea">
 
     <!-- ── DASHBOARD ── -->
-    <div class="panel" id="panel-dashboard">
-      <div class="avanti-strip">
+    <div class="panel" id="panel-dashboard" style="position:relative;">
+      <div class="avanti-strip" style="padding:8px 16px;">
         <div class="as-dot"></div>
         <span class="as-label">AVANTI</span>
-        <span class="as-text">Devon Harris flagged for fatigue — 3 consecutive heavy training days. Recommend rotating out vs. Highland Rangers on May 2.</span>
-        <span class="as-btn" onclick="setPage('avanti')">Ask AVANTI</span>
+        <span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span>
+      </div>
+      <div class="db-alerts">
+        <div class="db-alert urgent">
+          <span class="da-label r">AVANTI</span>
+          <span class="da-text"><strong>Mia Rodriguez</strong> — payment 4 days overdue. PLAY blocked Saturday.</span>
+          <div class="da-actions"><button class="da-btn ghost">URGENT</button><button class="da-btn primary">Notify</button></div>
+        </div>
+        <div class="db-alert warn">
+          <span class="da-label y">AVANTI</span>
+          <span class="da-text"><strong>12 families</strong> overdue on Spring dues — total $3,840 outstanding.</span>
+          <div class="da-actions"><button class="da-btn ghost">CONFIRM</button><button class="da-btn primary">Send Reminder</button></div>
+        </div>
+        <div class="db-alert ok">
+          <span class="da-label g">AVANTI</span>
+          <span class="da-text"><strong>Schedule:</strong> Saturday home games across 4 teams. 89% of players GREEN.</span>
+          <div class="da-actions"><button class="da-btn clear">CLEAR</button></div>
+        </div>
       </div>
       <div class="panel-scroll">
-        <div class="stat-grid">
-          <div class="stat-card">
-            <div class="stat-lbl">Roster</div>
-            <div class="stat-val">24</div>
-            <div class="stat-sub g">22 active · 2 injured</div>
+        <div class="db-kpi">
+          <div class="kpi"><div class="kpi-lbl">Athletes</div><div class="kpi-val">312</div><div class="kpi-sub">298 active · 14 pending</div></div>
+          <div class="kpi"><div class="kpi-lbl">Teams</div><div class="kpi-val">9</div><div class="kpi-sub">3 Premier · 6 Div I</div></div>
+          <div class="kpi"><div class="kpi-lbl">PLAY Index</div><div class="kpi-val g">89%</div><div class="kpi-sub">↑ 3% this week</div></div>
+          <div class="kpi"><div class="kpi-lbl">Dues Collected</div><div class="kpi-val">$41,360</div><div class="kpi-sub g">$3,840 outstanding</div></div>
+          <div class="kpi"><div class="kpi-lbl">Waivers</div><div class="kpi-val o">294/312</div><div class="kpi-sub r">18 unsigned</div></div>
+          <div class="kpi"><div class="kpi-lbl">Coaches</div><div class="kpi-val">18</div><div class="kpi-sub">2 bg checks pending</div></div>
+        </div>
+
+        <div class="db-grid">
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>Team Health</span><span class="db-section-link" onclick="setPage('roster')">All teams →</span></div>
+            <div class="team-row"><span class="tr-name">U17 Girls A</span><div class="tr-bar"><div class="pb-g" style="width:75%"></div><div class="pb-y" style="width:18%"></div><div class="pb-r" style="width:7%"></div></div><span class="tr-count">28</span></div>
+            <div class="team-row"><span class="tr-name">U15 Girls</span><div class="tr-bar"><div class="pb-g" style="width:81%"></div><div class="pb-y" style="width:15%"></div><div class="pb-r" style="width:4%"></div></div><span class="tr-count">26</span></div>
+            <div class="team-row"><span class="tr-name">U19 Girls</span><div class="tr-bar"><div class="pb-g" style="width:77%"></div><div class="pb-y" style="width:15%"></div><div class="pb-r" style="width:8%"></div></div><span class="tr-count">26</span></div>
+            <div class="team-row"><span class="tr-name">U13 Girls</span><div class="tr-bar"><div class="pb-g" style="width:83%"></div><div class="pb-y" style="width:13%"></div><div class="pb-r" style="width:4%"></div></div><span class="tr-count">24</span></div>
+            <div class="team-row"><span class="tr-name">U17 Boys</span><div class="tr-bar"><div class="pb-g" style="width:77%"></div><div class="pb-y" style="width:14%"></div><div class="pb-r" style="width:9%"></div></div><span class="tr-count">22</span></div>
           </div>
-          <div class="stat-card">
-            <div class="stat-lbl">Season Record</div>
-            <div class="stat-val">7-1-2</div>
-            <div class="stat-sub o">2nd · Spring Div I</div>
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>Finances</span><span class="db-section-link" onclick="setPage('finances')">Full report →</span></div>
+            <div class="fin-stat"><span class="fin-stat-lbl">Spring Dues (total)</span><span class="fin-stat-val">$45,200</span></div>
+            <div class="fin-stat"><span class="fin-stat-lbl">Collected</span><span class="fin-stat-val g">$41,360 (91%)</span></div>
+            <div class="fin-stat"><span class="fin-stat-lbl">Outstanding</span><span class="fin-stat-val r">$3,840 · 12 families</span></div>
+            <div class="fin-stat"><span class="fin-stat-lbl">Overdue &gt;30 days</span><span class="fin-stat-val r">$1,200 · 4 families</span></div>
+            <div class="fin-stat"><span class="fin-stat-lbl">Field Rentals (May)</span><span class="fin-stat-val">$2,400 due</span></div>
           </div>
-          <div class="stat-card">
-            <div class="stat-lbl">Next Game</div>
-            <div class="stat-val" style="font-size:17px;padding-top:3px">May 2</div>
-            <div class="stat-sub">vs. Highland Rangers</div>
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>Registration & Compliance</span><span class="db-section-link">Manage →</span></div>
+            <div class="comp-row"><span class="comp-lbl">Waivers signed</span><div class="comp-bar-wrap"><div class="comp-bar-fill bar-g" style="width:94%"></div></div><span class="comp-pct" style="color:var(--green)">94%</span></div>
+            <div class="comp-row"><span class="comp-lbl">Dues current</span><div class="comp-bar-wrap"><div class="comp-bar-fill bar-g" style="width:91%"></div></div><span class="comp-pct" style="color:var(--green)">91%</span></div>
+            <div class="comp-row"><span class="comp-lbl">Medical forms</span><div class="comp-bar-wrap"><div class="comp-bar-fill bar-y" style="width:78%"></div></div><span class="comp-pct" style="color:var(--yellow)">78%</span></div>
+            <div class="comp-row"><span class="comp-lbl">Coach bg checks</span><div class="comp-bar-wrap"><div class="comp-bar-fill bar-y" style="width:89%"></div></div><span class="comp-pct" style="color:var(--yellow)">89%</span></div>
+            <div class="comp-row"><span class="comp-lbl">Uniform assigned</span><div class="comp-bar-wrap"><div class="comp-bar-fill bar-g" style="width:97%"></div></div><span class="comp-pct" style="color:var(--green)">97%</span></div>
           </div>
-          <div class="stat-card">
-            <div class="stat-lbl">PLAY Index</div>
-            <div class="stat-val">84</div>
-            <div class="stat-sub g">↑ 6 from last week</div>
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>Upcoming</span><span class="db-section-link" onclick="setPage('schedule')">Full schedule →</span></div>
+            <div class="game-row" style="padding:8px 0;border-color:var(--border)"><span class="game-date">May 2</span><span class="game-teams">4 games · <span class="game-opp">home + away</span></span><span class="badge badge-up">Saturday</span></div>
+            <div class="game-row" style="padding:8px 0;border-color:var(--border)"><span class="game-date">May 5</span><span class="game-teams">8 practices · <span class="game-opp">all teams</span></span><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b)">Tuesday</span></div>
+            <div class="game-row" style="padding:8px 0;border-color:var(--border)"><span class="game-date">May 10</span><span class="game-teams">Tryouts — U13/U15 · <span class="game-opp">Field 1</span></span><span class="badge badge-up">9:00 AM</span></div>
+            <div class="game-row" style="padding:8px 0;border-color:var(--border);border-bottom:none"><span class="game-date">May 24</span><span class="game-teams">State Cup Qualifier · <span class="game-opp">Premier teams</span></span><span class="badge badge-yellow">Tournament</span></div>
           </div>
         </div>
 
-        <div class="two-col">
-          <div>
-            <div class="section-hdr">
-              <span class="section-title">Recent Results</span>
-              <span class="section-link" onclick="setPage('schedule')">Full schedule →</span>
-            </div>
-            <div class="card">
-              <div class="game-row"><span class="game-date">Apr 26</span><span class="game-teams">VAI FC North <span class="game-opp">vs Lakewood Utd</span></span><span class="badge badge-d">1–1</span></div>
-              <div class="game-row"><span class="game-date">Apr 20</span><span class="game-teams">VAI FC North <span class="game-opp">vs Riverside FC</span></span><span class="badge badge-w">3–1</span></div>
-              <div class="game-row"><span class="game-date">Apr 13</span><span class="game-teams">VAI FC North <span class="game-opp">vs Metro Athletic</span></span><span class="badge badge-w">2–0</span></div>
-              <div class="game-row"><span class="game-date">Apr 5</span><span class="game-teams">VAI FC North <span class="game-opp">vs Eastside FC</span></span><span class="badge badge-l">0–1</span></div>
-            </div>
-          </div>
-          <div>
-            <div class="section-hdr">
-              <span class="section-title">PLAY Status</span>
-              <span class="section-link" onclick="setPage('play')">Full roster →</span>
-            </div>
-            <div class="card">
-              <div class="player-row"><div class="sdot g"></div><span class="player-name">Marcus Johnson</span><span class="player-pos">FW</span><span class="badge badge-green">GREEN</span></div>
-              <div class="player-row"><div class="sdot r"></div><span class="player-name">Devon Harris</span><span class="player-pos">FW</span><span class="badge badge-red">RED</span></div>
-              <div class="player-row"><div class="sdot y"></div><span class="player-name">Jake Williams</span><span class="player-pos">DF</span><span class="badge badge-yellow">YELLOW</span></div>
-              <div class="player-row"><div class="sdot g"></div><span class="player-name">Noah Martinez</span><span class="player-pos">MF</span><span class="badge badge-green">GREEN</span></div>
-              <div class="player-row"><div class="sdot y"></div><span class="player-name">Liam Davis</span><span class="player-pos">MF</span><span class="badge badge-yellow">YELLOW</span></div>
-            </div>
-          </div>
+        <div class="card" style="padding:16px;margin-bottom:16px;">
+          <div class="db-section-hdr"><span>Recent Activity</span><span style="font-size:10px;color:var(--muted);">LAST 24H</span></div>
+          <div class="act-row"><span class="act-time-sm">11:42</span><div class="sdot r" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Mia Rodriguez</span> <span class="act-desc">Payment marked OVERDUE</span></span><span class="act-arrow">›</span></div>
+          <div class="act-row"><span class="act-time-sm">10:17</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Kai Tanaka</span> <span class="act-desc">Waiver signed</span></span><span class="act-arrow">›</span></div>
+          <div class="act-row"><span class="act-time-sm">09:55</span><div class="sdot y" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">AVANTI</span> <span class="act-desc">Sent reminder to 3 families · overdue Spring dues</span></span><span class="act-arrow">›</span></div>
+          <div class="act-row"><span class="act-time-sm">08:30</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Coach Diaz</span> <span class="act-desc">Created Saturday lineup — U17 Girls A</span></span><span class="act-arrow">›</span></div>
+          <div class="act-row"><span class="act-time-sm">Yest.</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Jordan Lee</span> <span class="act-desc">Registered — U15 Boys</span></span><span class="act-arrow">›</span></div>
         </div>
-
-        <div class="section-hdr"><span class="section-title">Recent Activity</span></div>
-        <div class="card">
-          <div class="act-item">
-            <div class="act-icon g"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#34d399" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8.5 4" stroke="#34d399" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <span class="act-body"><strong>Marcus Johnson</strong> completed strength session — PLAY index updated to GREEN</span>
-            <span class="act-time">2h ago</span>
-          </div>
-          <div class="act-item">
-            <div class="act-icon o"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1.5L10.5 10H1.5L6 1.5Z" fill="#F7941E" opacity=".7"/></svg></div>
-            <span class="act-body"><strong>AVANTI</strong> flagged Devon Harris for fatigue — 3rd consecutive heavy training day</span>
-            <span class="act-time">4h ago</span>
-          </div>
-          <div class="act-item">
-            <div class="act-icon y"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="10" height="8" rx="1" stroke="#fbbf24" stroke-width="1.2"/><path d="M3.5 1v2M8.5 1v2" stroke="#fbbf24" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-            <span class="act-body">Mentor session with <strong>Coach Rivera</strong> confirmed for May 1 at 4:00 PM</span>
-            <span class="act-time">6h ago</span>
-          </div>
-          <div class="act-item">
-            <div class="act-icon g"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#34d399" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8.5 4" stroke="#34d399" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <span class="act-body"><strong>Dues collected</strong> — 20 of 24 players current. $480 outstanding</span>
-            <span class="act-time">1d ago</span>
-          </div>
-        </div>
+      </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">3</span></div>
+        <span class="af-label">Ask AVANTI about this page…</span>
       </div>
     </div>
 
