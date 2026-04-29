@@ -658,6 +658,11 @@
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 11H1L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M7 1L13 11H1L7 1Z" stroke="currentColor" stroke-width="1.3"/><path d="M5 11v2M9 11v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Camps
     </a>
+    <a class="nav-item" id="nav-recruiting" onclick="setPage('recruiting')" style="position:relative;">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Recruiting
+      <span class="nav-badge" style="background:var(--green);color:#000;">NEW</span>
+    </a>
     <div class="nav-divider"></div>
     <div class="nav-section-label">Live Ops</div>
     <a class="nav-item" id="nav-tournament" onclick="setPage('tournament')">
@@ -1897,6 +1902,113 @@
         <div class="af-pill-wrap">
           <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
           <div class="af-pill"><div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RECRUITING ── -->
+    <div class="panel" id="panel-recruiting" style="position:relative;">
+      <div class="avanti-strip" style="padding:8px 16px;"><div class="as-dot"></div><span class="as-label">AVANTI</span><span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span></div>
+      <div class="page-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="page-title">Recruiting</div>
+            <span style="font-size:10px;font-weight:800;background:var(--green-d);color:var(--green);border:1px solid var(--green-b);padding:3px 10px;border-radius:100px;letter-spacing:.08em;">AVANTI CONNECT</span>
+          </div>
+          <div class="page-subtitle">UHSGFA · 43 athletes with active recruiting profiles · 12 college contacts this month</div>
+        </div>
+        <div class="page-actions"><button class="btn-ghost">Export Profiles</button><button class="btn-primary">Enable AVANTI CONNECT</button></div>
+      </div>
+      <div class="tourn-tabs" style="padding:0 24px;">
+        <div class="tourn-tab active">Overview</div>
+        <div class="tourn-tab">Leaderboards</div>
+        <div class="tourn-tab">College Activity</div>
+        <div class="tourn-tab">Athlete Profiles</div>
+      </div>
+      <div class="panel-scroll" style="padding-top:20px;">
+
+        <!-- CONNECT callout -->
+        <div style="background:linear-gradient(135deg,rgba(52,211,153,.08),rgba(247,148,30,.05));border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+          <div style="width:44px;height:44px;border-radius:10px;background:var(--green-d);border:1px solid var(--green-b);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L20 18H2L11 2Z" fill="#34d399"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:3px;">AVANTI CONNECT — Recruiting Intelligence</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.5;">AVANTI automatically builds verified recruiting profiles from athlete performance data, PLAY history, and VAI Passport. College coaches browse and contact athletes directly through the platform.</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:20px;font-weight:900;color:var(--green);">43</div>
+            <div style="font-size:10px;color:var(--muted);">active profiles</div>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="db-kpi" style="grid-template-columns:repeat(5,1fr);margin-bottom:20px;">
+          <div class="kpi"><div class="kpi-lbl">Active Profiles</div><div class="kpi-val g">43</div><div class="kpi-sub">on AVANTI CONNECT</div></div>
+          <div class="kpi"><div class="kpi-lbl">College Views</div><div class="kpi-val">284</div><div class="kpi-sub">this month</div></div>
+          <div class="kpi"><div class="kpi-lbl">Contacts Made</div><div class="kpi-val o">12</div><div class="kpi-sub">coach inquiries</div></div>
+          <div class="kpi"><div class="kpi-lbl">Commitments</div><div class="kpi-val g">3</div><div class="kpi-sub">Spring 2026</div></div>
+          <div class="kpi"><div class="kpi-lbl">Offers Received</div><div class="kpi-val">8</div><div class="kpi-sub">across all athletes</div></div>
+        </div>
+
+        <div class="db-grid">
+          <!-- Leaderboard widget -->
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>PLAY Index Leaderboard</span><span class="db-section-link">Full board →</span></div>
+            <div style="display:flex;gap:6px;margin-bottom:12px;">
+              <span class="ftab-sm active" style="font-size:10px;padding:3px 10px;">U17+</span>
+              <span class="ftab-sm" style="font-size:10px;padding:3px 10px;">U15</span>
+              <span class="ftab-sm" style="font-size:10px;padding:3px 10px;">U13</span>
+            </div>
+            <table class="fin-table">
+              <thead><tr><th>#</th><th>Athlete</th><th>Pos</th><th class="r">PLAY</th><th class="r">Connect</th></tr></thead>
+              <tbody>
+                <tr><td style="font-weight:900;color:var(--orange);">1</td><td class="name">Marcus Rivera</td><td>ST</td><td class="r" style="color:var(--green);font-weight:800;">97</td><td class="r"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></td></tr>
+                <tr><td style="font-weight:900;color:var(--orange);">2</td><td class="name">R. Vega</td><td>CDM</td><td class="r" style="color:var(--green);font-weight:800;">94</td><td class="r"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></td></tr>
+                <tr><td style="font-weight:900;color:var(--orange);">3</td><td class="name">F. Costa</td><td>RW</td><td class="r" style="color:var(--green);font-weight:800;">92</td><td class="r"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></td></tr>
+                <tr><td style="color:var(--muted);">4</td><td class="name">S. Boateng</td><td>CM</td><td class="r" style="color:var(--green);font-weight:800;">91</td><td class="r"><span class="badge badge-up" style="font-size:9px;">INVITE</span></td></tr>
+                <tr><td style="color:var(--muted);">5</td><td class="name">K. Mensah</td><td>LW</td><td class="r" style="color:var(--green);font-weight:800;">89</td><td class="r"><span class="badge badge-up" style="font-size:9px;">INVITE</span></td></tr>
+                <tr><td style="color:var(--muted);">6</td><td class="name">I. Yong</td><td>CM</td><td class="r" style="color:var(--green);font-weight:800;">88</td><td class="r"><span class="badge badge-up" style="font-size:9px;">INVITE</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Recent college activity -->
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>College Activity</span><span class="db-section-link">All contacts →</span></div>
+            <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Today</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">BYU Soccer</span> <span class="act-desc">Viewed Marcus Rivera's profile</span></span><span class="act-arrow">›</span></div>
+            <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Yesterday</span><div class="sdot o" style="margin-top:2px;flex-shrink:0;background:var(--orange)"></div><span><span class="act-name">Utah State</span> <span class="act-desc">Sent recruiting inquiry — R. Vega</span></span><span class="act-arrow">›</span></div>
+            <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Apr 27</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Stanford Women</span> <span class="act-desc">Bookmarked F. Costa</span></span><span class="act-arrow">›</span></div>
+            <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Apr 26</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">Colorado FC</span> <span class="act-desc">Offer extended — Marcus Rivera</span></span><span class="act-arrow">›</span></div>
+            <div class="act-row" style="cursor:pointer;"><span class="act-time-sm">Apr 24</span><div class="sdot g" style="margin-top:2px;flex-shrink:0;"></div><span><span class="act-name">San Jose State</span> <span class="act-desc">Offer extended — S. Boateng</span></span><span class="act-arrow">›</span></div>
+          </div>
+
+          <!-- Top recruits -->
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>Top Recruits This Month</span></div>
+            <div class="player-row" style="padding:10px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">Marcus Rivera <span style="font-size:10px;color:var(--muted);">#9 · ST</span></span><span style="margin-left:auto;font-size:11px;color:var(--green);font-weight:700;">4 offers</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
+            <div class="player-row" style="padding:10px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">R. Vega <span style="font-size:10px;color:var(--muted);">#8 · CDM</span></span><span style="margin-left:auto;font-size:11px;color:var(--green);font-weight:700;">2 offers</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
+            <div class="player-row" style="padding:10px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">S. Boateng <span style="font-size:10px;color:var(--muted);">#6 · CM</span></span><span style="margin-left:auto;font-size:11px;color:var(--orange);font-weight:700;">1 offer</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
+            <div class="player-row" style="padding:10px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">F. Costa <span style="font-size:10px;color:var(--muted);">#7 · RW</span></span><span style="margin-left:auto;font-size:11px;color:var(--orange);font-weight:700;">1 offer</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
+            <div class="player-row" style="padding:10px 0;border-color:var(--border);border-bottom:none;"><div class="sdot g"></div><span class="player-name">K. Mensah <span style="font-size:10px;color:var(--muted);">#11 · LW</span></span><span style="margin-left:auto;font-size:11px;color:var(--muted);">Watching</span><span style="color:var(--orange);margin-left:8px;">›</span></div>
+          </div>
+
+          <!-- Invite to Connect -->
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>Not Yet on AVANTI CONNECT</span><span class="db-section-link">Invite all →</span></div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">269 eligible athletes haven't activated their recruiting profile. AVANTI can auto-build and invite them.</div>
+            <div class="player-row" style="padding:8px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">T. Cruz <span style="font-size:10px;color:var(--muted);">#5 · CB</span></span><span style="margin-left:auto;"><button class="btn-ghost" style="font-size:10px;padding:3px 10px;">Invite</button></span></div>
+            <div class="player-row" style="padding:8px 0;border-color:var(--border);"><div class="sdot g"></div><span class="player-name">L. Park <span style="font-size:10px;color:var(--muted);">#1 · GK</span></span><span style="margin-left:auto;"><button class="btn-ghost" style="font-size:10px;padding:3px 10px;">Invite</button></span></div>
+            <div class="player-row" style="padding:8px 0;border-color:var(--border);border-bottom:none;"><div class="sdot g"></div><span class="player-name">F. Ahmed <span style="font-size:10px;color:var(--muted);">#3 · LB</span></span><span style="margin-left:auto;"><button class="btn-ghost" style="font-size:10px;padding:3px 10px;">Invite</button></span></div>
+            <button class="btn-primary" style="width:100%;margin-top:12px;">Invite All 269 Athletes to CONNECT</button>
+          </div>
+        </div>
+      </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill"><div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">4</span></div>
         </div>
       </div>
     </div>
