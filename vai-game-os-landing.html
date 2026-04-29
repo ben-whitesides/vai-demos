@@ -3,7 +3,66 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GAME OS — One platform. Everything your club runs on.</title>
+  <title>GAME OS — The Operating System for Youth Sports Organizations | Powered by VAI + AVANTI AI</title>
+  <meta name="description" content="GAME OS by VAI is the all-in-one club management platform for youth sports organizations. PLAY Status compliance, AVANTI AI coaching intelligence, formation builder, recruiting, scheduling, and financials — in one command center.">
+  <meta name="keywords" content="youth sports management software, club OS, sports club software, PLAY status compliance, AVANTI AI, flag football management, youth soccer club software, sports organization software, athlete compliance tracking, club director software">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vaigameos.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vaigameos.com/">
+  <meta property="og:title" content="GAME OS — The Operating System for Youth Sports Organizations">
+  <meta property="og:description" content="AVANTI AI handles compliance, scheduling, finances, and recruiting automatically. Coaches coach. Directors direct. Built for every sport — flag football, soccer, baseball, basketball.">
+  <meta property="og:image" content="https://ben-whitesides.github.io/vai-demos/game-os-og.png">
+  <meta property="og:site_name" content="GAME OS by VAI">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@vai_app">
+  <meta name="twitter:title" content="GAME OS — The Operating System for Youth Sports Organizations">
+  <meta name="twitter:description" content="PLAY Status compliance, AVANTI AI, formation tools, recruiting, scheduling, and financials — in one club command center. Powered by VAI.">
+  <meta name="twitter:image" content="https://ben-whitesides.github.io/vai-demos/game-os-og.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "GAME OS",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web, iOS, Android",
+    "url": "https://vaigameos.com",
+    "description": "GAME OS by VAI is the complete operating system for youth sports organizations. AVANTI AI handles compliance, scheduling, finances, and recruiting automatically.",
+    "offers": {
+      "@type": "Offer",
+      "price": "299",
+      "priceCurrency": "USD",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "299",
+        "priceCurrency": "USD",
+        "billingDuration": "P1M"
+      }
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "VAI Inc.",
+      "url": "https://vai.app",
+      "logo": "https://gameday.vai.app/logo.png"
+    },
+    "featureList": [
+      "PLAY Status athlete compliance tracking",
+      "AVANTI AI coaching intelligence",
+      "Formation builder for flag football, soccer, baseball, basketball",
+      "Tournament and standings management",
+      "Club financials with QuickBooks and Stripe integration",
+      "AVANTI CONNECT recruiting platform",
+      "Role-based access for Super Admin, Admin, Director, Coach, and Parent"
+    ]
+  }
+  </script>
+
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -29,217 +88,123 @@
     html { scroll-behavior: smooth; }
     body { background: var(--black); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-    /* ── NAV ── */
-    nav {
-      position: sticky; top: 0; z-index: 200;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px; height: 64px;
-      background: rgba(0,0,0,0.9); border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(16px);
-    }
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 64px; background: rgba(0,0,0,0.92); border-bottom: 1px solid var(--border); backdrop-filter: blur(16px); }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo img:first-child { height: 34px; }
-    .nav-logo img:last-child { height: 20px; opacity: 0.9; }
+    .nav-wordmark { font-size: 16px; font-weight: 800; letter-spacing: .06em; }
+    .nav-wordmark span:first-child { color: var(--orange); }
+    .nav-wordmark span:last-child { color: #fff; }
+    .nav-badge { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 100px; background: var(--orange-d); color: var(--orange); border: 1px solid var(--orange-b); margin-left: 4px; letter-spacing: .06em; }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .15s; }
     .nav-links a:hover { color: var(--text); }
-    .nav-btn-ghost { font-size: 13px; font-weight: 600; color: var(--text); background: transparent; border: 1px solid var(--border2); padding: 7px 16px; border-radius: 8px; text-decoration: none; transition: border-color .15s; }
-    .nav-btn-ghost:hover { border-color: #444; }
-    .nav-btn { font-size: 13px; font-weight: 700; color: #000; background: var(--orange); padding: 8px 18px; border-radius: 8px; text-decoration: none; transition: opacity .15s; }
-    .nav-btn:hover { opacity: .88; }
+    .nav-btn-ghost { font-size: 13px; font-weight: 600; color: var(--text); background: transparent; border: 1px solid var(--border2); padding: 7px 16px; border-radius: 8px; text-decoration: none; }
+    .nav-btn { font-size: 13px; font-weight: 700; color: #000; background: var(--orange); padding: 8px 18px; border-radius: 8px; text-decoration: none; }
+    .nav-btn:hover { opacity: .9; }
 
-    /* ── HERO ── */
-    .hero {
-      display: grid; grid-template-columns: 1fr 1.15fr;
-      gap: 64px; align-items: center;
-      padding: 96px 48px 80px; max-width: 1280px; margin: 0 auto;
-      position: relative;
-    }
-    .hero::after {
-      content: ''; position: absolute; top: 0; right: -200px;
-      width: 700px; height: 700px;
-      background: radial-gradient(ellipse at center, rgba(247,148,30,0.055) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: var(--orange-d); border: 1px solid var(--orange-b);
-      border-radius: 100px; padding: 4px 12px;
-      font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--orange);
-      margin-bottom: 24px;
-    }
+    /* HERO */
+    .hero { display: grid; grid-template-columns: 1fr 1.15fr; gap: 64px; align-items: center; padding: 96px 48px 80px; max-width: 1280px; margin: 0 auto; position: relative; }
+    .hero::after { content: ''; position: absolute; top: 0; right: -200px; width: 700px; height: 700px; background: radial-gradient(ellipse at center, rgba(247,148,30,0.055) 0%, transparent 65%); pointer-events: none; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; background: var(--orange-d); border: 1px solid var(--orange-b); border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); margin-bottom: 24px; }
     .hero-eyebrow i { width: 5px; height: 5px; background: var(--orange); border-radius: 50%; }
-    .hero h1 {
-      font-size: clamp(38px, 4.5vw, 64px); font-weight: 800;
-      letter-spacing: -.03em; line-height: 1.05; margin-bottom: 20px;
-    }
+    .hero h1 { font-size: clamp(38px, 4.5vw, 64px); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; margin-bottom: 20px; }
     .hero h1 em { font-style: normal; color: var(--orange); }
-    .hero-sub {
-      font-size: 17px; color: var(--muted); line-height: 1.65;
-      max-width: 460px; margin-bottom: 40px;
-    }
+    .hero-sub { font-size: 17px; color: var(--muted); line-height: 1.65; max-width: 460px; margin-bottom: 40px; }
     .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: var(--orange); color: #000; font-size: 14px; font-weight: 700;
-      padding: 13px 24px; border-radius: 10px; text-decoration: none; transition: opacity .15s;
-    }
+    .btn-primary { display: inline-flex; align-items: center; gap: 7px; background: var(--orange); color: #000; font-size: 14px; font-weight: 700; padding: 13px 24px; border-radius: 10px; text-decoration: none; transition: opacity .15s; }
     .btn-primary:hover { opacity: .88; }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: transparent; color: var(--text); font-size: 14px; font-weight: 600;
-      padding: 12px 24px; border-radius: 10px; border: 1px solid var(--border2);
-      text-decoration: none; transition: background .15s, border-color .15s;
-    }
-    .btn-secondary:hover { background: var(--elevated); border-color: #444; }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 7px; background: transparent; color: var(--text); font-size: 14px; font-weight: 600; padding: 12px 24px; border-radius: 10px; border: 1px solid var(--border2); text-decoration: none; transition: background .15s; }
+    .btn-secondary:hover { background: var(--elevated); }
+    .hero-fine { margin-top: 20px; font-size: 12px; color: var(--dim); }
 
-    /* ── BROWSER CHROME MOCKUP ── */
-    .browser-wrap {
-      position: relative; z-index: 1;
-      border-radius: 14px; overflow: hidden;
-      border: 1px solid var(--border2);
-      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
-    }
-    .browser-bar {
-      background: #111; padding: 10px 14px;
-      display: flex; align-items: center; gap: 10px;
-      border-bottom: 1px solid var(--border);
-    }
+    /* BROWSER MOCKUP */
+    .browser-wrap { position: relative; z-index: 1; border-radius: 14px; overflow: hidden; border: 1px solid var(--border2); box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04); }
+    .browser-bar { background: #111; padding: 10px 14px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
     .browser-dots { display: flex; gap: 5px; }
     .browser-dots span { width: 10px; height: 10px; border-radius: 50%; }
-    .bd1 { background: #f87171; }
-    .bd2 { background: #fbbf24; }
-    .bd3 { background: #34d399; }
-    .browser-url {
-      flex: 1; background: #1a1a1a; border: 1px solid var(--border);
-      border-radius: 6px; padding: 4px 12px;
-      font-size: 11px; color: var(--muted); font-family: monospace;
-    }
-    .browser-body {
-      background: #060608;
-      display: grid; grid-template-columns: 200px 1fr;
-      min-height: 420px;
-    }
-
-    /* Sidebar */
-    .mock-sidebar {
-      background: #080808; border-right: 1px solid var(--border);
-      padding: 16px 0;
-    }
-    .sidebar-logo { display: flex; align-items: center; gap: 8px; padding: 0 16px 20px; }
-    .sidebar-logo img:first-child { height: 26px; }
-    .sidebar-logo img:last-child { height: 14px; opacity: .8; }
-    .sidebar-section { padding: 0 8px; margin-bottom: 8px; }
-    .sidebar-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); padding: 0 8px; margin-bottom: 6px; }
-    .sidebar-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 7px 8px; border-radius: 7px;
-      font-size: 11px; color: var(--muted); margin-bottom: 1px;
-      transition: background .1s;
-    }
+    .bd1 { background: #f87171; } .bd2 { background: #fbbf24; } .bd3 { background: #34d399; }
+    .browser-url { flex: 1; background: #1a1a1a; border: 1px solid var(--border); border-radius: 6px; padding: 4px 12px; font-size: 11px; color: var(--muted); font-family: monospace; }
+    .browser-body { background: #060608; display: grid; grid-template-columns: 185px 1fr; min-height: 400px; }
+    .mock-sidebar { background: #080808; border-right: 1px solid var(--border); padding: 14px 0; }
+    .sidebar-header { padding: 0 12px 14px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .sidebar-wordmark { font-size: 13px; font-weight: 800; letter-spacing: .06em; }
+    .sidebar-wordmark span:first-child { color: var(--orange); }
+    .sidebar-org { font-size: 10px; color: var(--dim); margin-top: 4px; }
+    .sidebar-section { padding: 0 8px; margin-bottom: 6px; }
+    .sidebar-label { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); padding: 6px 8px 4px; }
+    .sidebar-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 7px; font-size: 11px; color: var(--muted); margin-bottom: 1px; }
     .sidebar-item.active { background: var(--green-d); color: var(--green); border: 1px solid var(--green-b); }
-    .sidebar-item svg { opacity: .5; flex-shrink: 0; }
-    .sidebar-item.active svg { opacity: 1; }
-    .sidebar-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-
-    /* Main content */
-    .mock-main { padding: 16px; overflow: hidden; }
-    .mock-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 14px;
-    }
+    .mock-main { padding: 16px; }
+    .mock-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .mock-title { font-size: 14px; font-weight: 700; }
-    .mock-sub { font-size: 10px; color: var(--muted); }
-    .mock-pills { display: flex; gap: 6px; }
-    .mpill {
-      font-size: 9px; font-weight: 700; padding: 3px 8px;
-      border-radius: 100px; display: flex; align-items: center; gap: 4px;
-    }
+    .mock-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .mpill { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 100px; display: inline-flex; align-items: center; gap: 4px; }
     .mpill-g { background: var(--green-d); color: var(--green); border: 1px solid var(--green-b); }
     .mpill-r { background: var(--red-d); color: var(--red); border: 1px solid rgba(248,113,113,.15); }
     .mpill-n { background: rgba(255,255,255,.05); color: var(--muted); border: 1px solid var(--border); }
     .mpill-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
-
-    .mock-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-    .mock-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px;
-    }
-    .mc-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 6px; }
-    .mc-val { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
-    .mc-sub { font-size: 9px; color: var(--muted); margin-top: 2px; }
-    .mc-green { color: var(--green); }
-    .mc-orange { color: var(--orange); }
-
-    .mock-table { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    .mt-head { display: grid; grid-template-columns: 1fr 40px 40px 40px; gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .mock-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .mock-card { background: var(--card); border: 1px solid var(--border); border-radius: 9px; padding: 10px; }
+    .mc-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 5px; }
+    .mc-val { font-size: 20px; font-weight: 800; letter-spacing: -.02em; }
+    .mc-sub { font-size: 8px; color: var(--muted); margin-top: 2px; }
+    .mc-green { color: var(--green); } .mc-orange { color: var(--orange); } .mc-text { color: var(--text); }
+    .mock-table { background: var(--card); border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+    .mt-head { display: grid; grid-template-columns: 1fr 36px 36px 36px; padding: 7px 10px; border-bottom: 1px solid var(--border); }
     .mt-head span { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--dim); }
-    .mt-row { display: grid; grid-template-columns: 1fr 40px 40px 40px; gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--border); align-items: center; }
+    .mt-row { display: grid; grid-template-columns: 1fr 36px 36px 36px; padding: 7px 10px; border-bottom: 1px solid var(--border); align-items: center; }
     .mt-row:last-child { border-bottom: none; }
     .mt-name { font-size: 10px; font-weight: 600; }
     .mt-g { font-size: 10px; font-weight: 700; color: var(--green); text-align: center; }
     .mt-y { font-size: 10px; font-weight: 700; color: var(--yellow); text-align: center; }
     .mt-r { font-size: 10px; font-weight: 700; color: var(--red); text-align: center; }
-
-    .avanti-bar {
-      background: var(--green-d); border: 1px solid var(--green-b);
-      border-radius: 8px; padding: 9px 12px; margin-top: 10px;
-      display: flex; align-items: flex-start; gap: 8px;
-    }
+    .avanti-bar { background: var(--green-d); border: 1px solid var(--green-b); border-radius: 8px; padding: 9px 12px; margin-top: 10px; display: flex; align-items: flex-start; gap: 8px; }
     .avanti-badge { font-size: 8px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: .1em; white-space: nowrap; margin-top: 1px; }
     .avanti-text { font-size: 9px; color: var(--muted); line-height: 1.5; }
 
-    /* ── TRUST BAR ── */
-    .trust-bar {
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      background: var(--card); padding: 28px 48px;
-      display: flex; align-items: center; justify-content: center; gap: 0;
-    }
+    /* TRUST BAR */
+    .trust-bar { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--card); padding: 24px 48px; display: flex; align-items: center; justify-content: center; gap: 0; }
     .trust-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: .1em; margin-right: 48px; white-space: nowrap; }
-    .trust-logos { display: flex; align-items: center; gap: 48px; flex-wrap: wrap; justify-content: center; }
+    .trust-logos { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; justify-content: center; }
     .trust-logo { font-size: 13px; font-weight: 700; color: var(--dim); letter-spacing: .02em; }
 
-    /* ── STATS ── */
+    /* STATS */
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border); }
     .stat { padding: 36px 20px; text-align: center; border-right: 1px solid var(--border); }
     .stat:last-child { border-right: none; }
     .stat-n { font-size: 36px; font-weight: 800; letter-spacing: -.02em; color: var(--orange); }
     .stat-l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
 
-    /* ── FEATURES ── */
+    /* FEATURES */
     .features { padding: 96px 48px; background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .features-inner { max-width: 1200px; margin: 0 auto; }
     .sec-label { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
     .sec-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; margin-bottom: 14px; }
     .sec-sub { font-size: 16px; color: var(--muted); max-width: 520px; line-height: 1.65; margin-bottom: 56px; }
     .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; gap: 1px; }
-    .feat {
-      background: var(--card); padding: 36px 30px;
-      transition: background .2s;
-    }
+    .feat { background: var(--card); padding: 36px 30px; transition: background .2s; }
     .feat:hover { background: #0f0f0f; }
-    .feat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; font-size: 18px; }
+    .feat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
     .fi-o { background: var(--orange-d); border: 1px solid var(--orange-b); }
     .fi-g { background: var(--green-d); border: 1px solid var(--green-b); }
     .fi-b { background: rgba(96,165,250,.08); border: 1px solid rgba(96,165,250,.18); }
     .feat-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
     .feat-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
-    /* ── AVANTI SECTION ── */
+    /* ROLES */
+    .roles-sec { padding: 80px 48px; max-width: 1200px; margin: 0 auto; }
+    .roles-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 48px; }
+    .role-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; }
+    .role-tag { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+    .role-name { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .role-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    /* AVANTI SECTION */
     .avanti-sec { padding: 96px 48px; max-width: 1200px; margin: 0 auto; }
     .avanti-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-    .avanti-tag {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: var(--green-d); border: 1px solid var(--green-b);
-      border-radius: 100px; padding: 4px 12px;
-      font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: .08em; text-transform: uppercase;
-      margin-bottom: 22px;
-    }
+    .avanti-tag { display: inline-flex; align-items: center; gap: 7px; background: var(--green-d); border: 1px solid var(--green-b); border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 22px; }
     .avanti-msgs { display: flex; flex-direction: column; gap: 10px; }
-    .amsg {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 15px 16px;
-    }
+    .amsg { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 15px 16px; }
     .amsg-hd { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
     .amsg-dot { width: 7px; height: 7px; border-radius: 50%; }
     .amsg-lbl { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; }
@@ -253,86 +218,33 @@
     .amsg.yellow .amsg-lbl, .amsg.yellow .amsg-act { color: var(--yellow); }
     .amsg.neutral .amsg-dot { background: var(--muted); }
     .amsg.neutral .amsg-lbl, .amsg.neutral .amsg-act { color: var(--muted); }
+    .amsg.red { border-color: rgba(248,113,113,.2); }
+    .amsg.red .amsg-dot { background: var(--red); }
+    .amsg.red .amsg-lbl { color: var(--red); }
 
-    /* ── MOBILE SCREENS ── */
-    .mobile-sec {
-      padding: 96px 48px;
-      background: var(--card);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-    }
-    .mobile-inner { max-width: 1200px; margin: 0 auto; }
-    .phones-row {
-      display: flex; align-items: flex-end; justify-content: center; gap: 16px;
-      margin-top: 56px; padding: 0 20px;
-    }
-    .phone {
-      border-radius: 28px; overflow: hidden;
-      border: 1px solid var(--border2);
-      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
-      background: #060608;
-      position: relative;
-    }
-    .phone.center { transform: translateY(-24px); }
-    .phone-bar {
-      background: #0d0d0d; padding: 10px 14px 6px;
-      display: flex; justify-content: center; align-items: center;
-      border-bottom: 1px solid var(--border);
-    }
-    .phone-notch { width: 60px; height: 6px; background: #1a1a1a; border-radius: 3px; }
-    .phone-screen { padding: 12px 10px; min-height: 280px; }
-    .phone-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .ph-logo { display: flex; align-items: center; gap: 5px; }
-    .ph-logo img:first-child { height: 18px; }
-    .ph-logo img:last-child { height: 11px; opacity: .8; }
-    .ph-icons { display: flex; gap: 8px; }
-    .ph-icon { width: 18px; height: 18px; background: var(--border); border-radius: 4px; }
-    .phone-title { font-size: 11px; font-weight: 700; margin-bottom: 8px; }
-    .phone-stat-row { display: flex; gap: 6px; margin-bottom: 8px; }
-    .ps { flex: 1; border-radius: 8px; padding: 8px; }
-    .ps-g { background: var(--green-d); border: 1px solid var(--green-b); }
-    .ps-r { background: var(--red-d); border: 1px solid rgba(248,113,113,.15); }
-    .ps-n { background: rgba(255,255,255,.04); border: 1px solid var(--border); }
-    .ps-num { font-size: 15px; font-weight: 800; }
-    .ps-g .ps-num { color: var(--green); }
-    .ps-r .ps-num { color: var(--red); }
-    .ps-n .ps-num { color: var(--muted); }
-    .ps-lbl { font-size: 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-    .phone-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 9px; }
-    .phone-row:last-child { border-bottom: none; }
-    .pr-name { font-weight: 600; color: var(--text); }
-    .pr-dot { width: 6px; height: 6px; border-radius: 50%; }
-    .avanti-pill-phone {
-      background: var(--green); color: #000; font-size: 10px; font-weight: 700;
-      padding: 5px 14px; border-radius: 100px; text-align: center; margin-top: 10px;
-    }
+    /* SPORTS BAR */
+    .sports-bar { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 48px; overflow-x: auto; }
+    .sports-inner { display: flex; gap: 8px; justify-content: center; min-width: max-content; margin: 0 auto; }
+    .sport-pill { font-size: 11px; font-weight: 600; padding: 6px 14px; border-radius: 100px; background: var(--card); border: 1px solid var(--border); color: var(--muted); white-space: nowrap; }
+    .sport-pill.active { background: var(--orange-d); border-color: var(--orange-b); color: var(--orange); }
 
-    /* ── DEMO CTA ── */
-    .demo-cta {
-      padding: 100px 48px; text-align: center;
-      position: relative; overflow: hidden;
-    }
-    .demo-cta::before {
-      content: ''; position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
-      width: 600px; height: 400px;
-      background: radial-gradient(ellipse, rgba(52,211,153,.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
+    /* DEMO CTA */
+    .demo-cta { padding: 100px 48px; text-align: center; position: relative; overflow: hidden; }
+    .demo-cta::before { content: ''; position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(ellipse, rgba(52,211,153,.06) 0%, transparent 70%); pointer-events: none; }
     .demo-cta h2 { font-size: clamp(32px, 5vw, 58px); font-weight: 800; letter-spacing: -.025em; margin-bottom: 14px; }
     .demo-cta h2 em { font-style: normal; color: var(--orange); }
     .demo-cta p { font-size: 17px; color: var(--muted); max-width: 460px; margin: 0 auto 44px; line-height: 1.6; }
     .demo-btns { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .demo-roles { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 32px; }
+    .demo-role { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; font-size: 12px; }
+    .demo-role-name { font-weight: 700; color: var(--orange); margin-bottom: 2px; }
+    .demo-role-email { font-size: 11px; color: var(--green); font-family: monospace; }
 
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 28px 48px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .footer-logo { display: flex; align-items: center; gap: 8px; }
-    .footer-logo img:first-child { height: 26px; }
-    .footer-logo img:last-child { height: 15px; opacity: .5; }
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 32px 48px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-brand { display: flex; align-items: center; gap: 10px; }
+    .footer-wordmark { font-size: 14px; font-weight: 800; letter-spacing: .06em; }
+    .footer-wordmark span:first-child { color: var(--orange); }
     .footer-links { font-size: 12px; color: var(--dim); }
     .footer-links a { color: var(--muted); text-decoration: none; margin-left: 20px; }
     .footer-links a:hover { color: var(--text); }
@@ -341,46 +253,24 @@
       nav { padding: 0 16px; }
       .nav-links > a:not(.nav-btn-ghost):not(.nav-btn) { display: none; }
       .nav-links { gap: 10px; }
-      .nav-btn-ghost { padding: 6px 12px; font-size: 12px; }
-      .nav-btn { padding: 6px 14px; font-size: 12px; }
-
       .hero { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 0; }
       .hero::after { display: none; }
-      .hero h1 { font-size: 36px; }
-      .hero-sub { font-size: 15px; max-width: 100%; }
       .browser-wrap { display: none; }
-
       .trust-bar { padding: 20px 16px; flex-wrap: wrap; gap: 12px; }
       .trust-label { margin-right: 0; width: 100%; text-align: center; }
-      .trust-logos { gap: 20px; }
-      .trust-logo { font-size: 11px; }
-
       .stats { grid-template-columns: repeat(2, 1fr); }
       .stat { border-right: none; border-bottom: 1px solid var(--border); padding: 24px 16px; }
       .stat:nth-child(odd) { border-right: 1px solid var(--border); }
-      .stat-n { font-size: 28px; }
-
       .features { padding: 56px 20px; }
       .feat-grid { grid-template-columns: 1fr; border-radius: 12px; }
-      .feat { padding: 24px 20px; }
-
+      .roles-sec { padding: 56px 20px; }
+      .roles-grid { grid-template-columns: repeat(2, 1fr); }
       .avanti-sec { padding: 56px 20px; }
       .avanti-split { grid-template-columns: 1fr; gap: 32px; }
-
-      .mobile-sec { padding: 56px 20px; }
-      .phones-row { gap: 8px; padding: 0; }
-      .phone { flex: 1; min-width: 0; }
-      .phone.center { transform: translateY(-16px); }
-      .phone-screen { padding: 8px 6px; }
-      .mc-val, .ps-num { font-size: 13px !important; }
-
       .demo-cta { padding: 64px 20px; }
-      .demo-cta h2 { font-size: 32px; }
       .demo-btns { flex-direction: column; align-items: center; }
       .btn-primary, .btn-secondary { width: 100%; max-width: 320px; justify-content: center; }
-
       footer { flex-direction: column; gap: 14px; text-align: center; padding: 24px 20px; }
-      .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
     }
   </style>
 </head>
@@ -388,133 +278,135 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">
-    <img src="https://gameday.vai.app/logo.png" alt="VAI">
-    <img src="https://ben-whitesides.github.io/vai-demos/gameday-logo.png" alt="GAMEDAY">
+  <a href="https://vaigameos.com" class="nav-logo">
+    <svg width="20" height="24" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#F7941E"/></svg>
+    <div class="nav-wordmark"><span>GAME</span><span> OS</span></div>
+    <div class="nav-badge">by VAI</div>
   </a>
   <div class="nav-links">
     <a href="#features">Features</a>
-    <a href="#avanti">AVANTI</a>
-    <a href="#mobile">Mobile</a>
-    <a href="https://vai.app" target="_blank">VAI Platform</a>
-    <a href="vai-game-os-login.html" class="nav-btn-ghost">Log In</a>
-    <a href="vai-game-os-login.html" class="nav-btn">Request Demo →</a>
+    <a href="#avanti">AVANTI AI</a>
+    <a href="#roles">Who It's For</a>
+    <a href="https://vai.app" target="_blank" rel="noopener">VAI Platform</a>
+    <a href="https://vaigameos.com/login" class="nav-btn-ghost">Sign In</a>
+    <a href="https://vaigameos.com/onboarding" class="nav-btn">Get Started →</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <div style="max-width:1280px;margin:0 auto;">
   <div class="hero">
-    <!-- Left -->
     <div>
       <div class="hero-eyebrow"><i></i> Powered by VAI + AVANTI AI</div>
-      <h1>One platform.<br><em>Everything your club runs on.</em></h1>
-      <p class="hero-sub">AVANTI handles compliance, scheduling, finances, and communications automatically. Coaches coach. Directors direct.</p>
+      <h1>One platform.<br><em>Everything your<br>club runs on.</em></h1>
+      <p class="hero-sub">AVANTI handles compliance, scheduling, finances, and recruiting automatically. Coaches coach. Directors direct. Built for every sport.</p>
       <div class="hero-ctas">
-        <a href="vai-game-os-login.html" class="btn-primary">Request Demo →</a>
-        <a href="https://vai.app" target="_blank" class="btn-secondary">Get GAME OS</a>
+        <a href="https://vaigameos.com/onboarding" class="btn-primary">Set Up Your Club →</a>
+        <a href="https://vaigameos.com/login" class="btn-secondary">View Live Demo</a>
       </div>
+      <div class="hero-fine">No credit card required · Live in minutes · Free demo with your data</div>
     </div>
 
-    <!-- Right: Browser Chrome Mockup -->
+    <!-- Browser mockup -->
     <div class="browser-wrap">
       <div class="browser-bar">
-        <div class="browser-dots">
-          <span class="bd1"></span><span class="bd2"></span><span class="bd3"></span>
-        </div>
-        <div class="browser-url">gameday.vai.app / club-os / dashboard</div>
+        <div class="browser-dots"><span class="bd1"></span><span class="bd2"></span><span class="bd3"></span></div>
+        <div class="browser-url">vaigameos.com / dashboard</div>
       </div>
       <div class="browser-body">
-        <!-- Sidebar -->
         <div class="mock-sidebar">
-          <div class="sidebar-logo">
-            <img src="https://gameday.vai.app/logo.png" alt="VAI">
-            <img src="https://ben-whitesides.github.io/vai-demos/gameday-logo.png" alt="">
+          <div class="sidebar-header">
+            <div class="sidebar-wordmark"><span>GAME</span><span> OS</span></div>
+            <div class="sidebar-org">UHSGFA Flag Football</div>
           </div>
           <div class="sidebar-section">
-            <div class="sidebar-label">Overview</div>
+            <div class="sidebar-label">Club OS</div>
             <div class="sidebar-item active">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="4" height="4" rx="1" fill="currentColor"/><rect x="7" y="1" width="4" height="4" rx="1" fill="currentColor"/><rect x="1" y="7" width="4" height="4" rx="1" fill="currentColor"/><rect x="7" y="7" width="4" height="4" rx="1" fill="currentColor"/></svg>
               Dashboard
             </div>
             <div class="sidebar-item">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg>
-              PLAY Status
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="4" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M2 10c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Athletes
+            </div>
+            <div class="sidebar-item">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 3h10M1 6h10M1 9h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Roster
             </div>
             <div class="sidebar-item">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9V5l4-3 4 3v4" stroke="currentColor" stroke-width="1.2"/></svg>
-              Formations
+              Formation
             </div>
           </div>
           <div class="sidebar-section">
-            <div class="sidebar-label">Operations</div>
-            <div class="sidebar-item">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v3M8 1v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-              Schedule
-            </div>
+            <div class="sidebar-label">Live Ops</div>
             <div class="sidebar-item">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" stroke="currentColor" stroke-width="1.2"/></svg>
               Tournaments
             </div>
             <div class="sidebar-item">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6h10M1 6l3-3M1 6l3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Finances
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10V6M4 10V4M6 10V5M8 10V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Standings
             </div>
           </div>
         </div>
-
-        <!-- Main Content -->
         <div class="mock-main">
           <div class="mock-header">
             <div>
-              <div class="mock-title">VAI FC North</div>
-              <div class="mock-sub">GAME OS Mission Control</div>
+              <div class="mock-title">UHSGFA Dashboard</div>
+              <div class="mock-sub">Flag Football · Fall 2026 · League Command Center</div>
             </div>
-            <div class="mock-pills">
-              <div class="mpill mpill-n">250 athletes</div>
-              <div class="mpill mpill-g"><span class="mpill-dot"></span>247 GREEN</div>
-              <div class="mpill mpill-r"><span class="mpill-dot"></span>1 RED</div>
+            <div style="display:flex;gap:5px;">
+              <div class="mpill mpill-n">172 athletes</div>
+              <div class="mpill mpill-g"><span class="mpill-dot"></span>140 GREEN</div>
+              <div class="mpill mpill-r"><span class="mpill-dot"></span>9 RED</div>
             </div>
           </div>
-
           <div class="mock-grid">
             <div class="mock-card">
-              <div class="mc-label">Compliance Rate</div>
-              <div class="mc-val mc-green">98.8%</div>
-              <div class="mc-sub">↑ 2.1% vs last week</div>
+              <div class="mc-label">PLAY Index</div>
+              <div class="mc-val mc-green">81.4%</div>
+              <div class="mc-sub">↑ 3.2% this week</div>
             </div>
             <div class="mock-card">
-              <div class="mc-label">Days to Green</div>
-              <div class="mc-val mc-orange">2</div>
-              <div class="mc-sub">30-day average</div>
+              <div class="mc-label">Reg. Collected</div>
+              <div class="mc-val mc-orange">$21.6K</div>
+              <div class="mc-sub">92% of 172 athletes</div>
+            </div>
+            <div class="mock-card">
+              <div class="mc-label">Games This Week</div>
+              <div class="mc-val mc-text">4</div>
+              <div class="mc-sub">Next: Sat 9 AM</div>
             </div>
           </div>
-
           <div class="mock-table">
-            <div class="mt-head">
-              <span>Team</span><span style="text-align:center">●</span><span style="text-align:center">●</span><span style="text-align:center">●</span>
-            </div>
-            <div class="mt-row">
-              <div class="mt-name">2012 Boys Black</div>
-              <div class="mt-g">17</div><div class="mt-y">1</div><div class="mt-r">0</div>
-            </div>
-            <div class="mt-row">
-              <div class="mt-name">2011 Girls Blue</div>
-              <div class="mt-g">15</div><div class="mt-y">0</div><div class="mt-r">1</div>
-            </div>
-            <div class="mt-row">
-              <div class="mt-name">2010 Boys Gold</div>
-              <div class="mt-g">18</div><div class="mt-y">1</div><div class="mt-r">0</div>
-            </div>
+            <div class="mt-head"><span>Team</span><span style="text-align:center">G</span><span style="text-align:center">Y</span><span style="text-align:center">R</span></div>
+            <div class="mt-row"><div class="mt-name">Jordan High Varsity</div><div class="mt-g">21</div><div class="mt-y">5</div><div class="mt-r">2</div></div>
+            <div class="mt-row"><div class="mt-name">Skyline HS Varsity</div><div class="mt-g">21</div><div class="mt-y">4</div><div class="mt-r">1</div></div>
+            <div class="mt-row"><div class="mt-name">Mountain Crest Var.</div><div class="mt-g">20</div><div class="mt-y">4</div><div class="mt-r">2</div></div>
           </div>
-
           <div class="avanti-bar">
             <div class="avanti-badge">✦ AVANTI</div>
-            <div class="avanti-text">Emma Torres waiver received — status updated to GREEN automatically. 1 exception still needs your input.</div>
+            <div class="avanti-text">2 starters flagged RED before Saturday. Depth chart adjusted. Waiver reminders sent to 3 families automatically.</div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- SPORTS BAR -->
+<div class="sports-bar">
+  <div class="sports-inner">
+    <div class="sport-pill active">🏈 Flag Football</div>
+    <div class="sport-pill">⚽ Soccer</div>
+    <div class="sport-pill">⚾ Baseball</div>
+    <div class="sport-pill">🏀 Basketball</div>
+    <div class="sport-pill">🥍 Lacrosse</div>
+    <div class="sport-pill">🏐 Volleyball</div>
+    <div class="sport-pill">🎾 Tennis</div>
+    <div class="sport-pill">🤸 Gymnastics</div>
+    <div class="sport-pill">+ Any Sport</div>
   </div>
 </div>
 
@@ -522,21 +414,21 @@
 <div class="trust-bar">
   <div class="trust-label">Trusted by</div>
   <div class="trust-logos">
+    <div class="trust-logo">UHSGFA</div>
     <div class="trust-logo">VAI FC North</div>
-    <div class="trust-logo">Pacific Soccer Club</div>
     <div class="trust-logo">Elite Athletics</div>
     <div class="trust-logo">Metro Academy</div>
+    <div class="trust-logo">Pacific SC</div>
     <div class="trust-logo">Apex Sports</div>
-    <div class="trust-logo">NextLevel FC</div>
   </div>
 </div>
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="stat-n">250+</div><div class="stat-l">Clubs &amp; Orgs</div></div>
-  <div class="stat"><div class="stat-n">50K+</div><div class="stat-l">Athletes Managed</div></div>
-  <div class="stat"><div class="stat-n">98.8%</div><div class="stat-l">Avg Compliance Rate</div></div>
-  <div class="stat"><div class="stat-n">2 days</div><div class="stat-l">Median Time to Green</div></div>
+  <div class="stat"><div class="stat-n">16</div><div class="stat-l">Screens Built</div></div>
+  <div class="stat"><div class="stat-n">5</div><div class="stat-l">User Roles</div></div>
+  <div class="stat"><div class="stat-n">9+</div><div class="stat-l">Sports Supported</div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">AVANTI Powered</div></div>
 </div>
 
 <!-- FEATURES -->
@@ -544,181 +436,146 @@
   <div class="features-inner">
     <div class="sec-label">Built for Clubs</div>
     <div class="sec-title">Everything a club director needs.<br>Nothing they don't.</div>
-    <div class="sec-sub">GAME OS handles the operational load so coaches coach and directors lead.</div>
+    <div class="sec-sub">GAME OS handles the operational load so coaches coach and directors lead. AVANTI resolves routine issues before they reach your desk.</div>
     <div class="feat-grid">
       <div class="feat">
-        <div class="feat-icon fi-g">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#34d399" stroke-width="1.5"/><circle cx="9" cy="9" r="2.5" fill="#34d399"/></svg>
-        </div>
+        <div class="feat-icon fi-g"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#34d399" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#34d399" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="feat-title">PLAY Status</div>
-        <div class="feat-desc">Real-time roster compliance. GREEN / YELLOW / RED per athlete. AVANTI resolves YELLOW automatically — only true issues surface to coaches.</div>
+        <div class="feat-desc">Real-time roster compliance — GREEN, YELLOW, RED per athlete. AVANTI resolves YELLOW automatically. Only genuine issues reach coaches.</div>
       </div>
       <div class="feat">
-        <div class="feat-icon fi-o">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L17 16H1L9 2Z" fill="#F7941E"/></svg>
-        </div>
+        <div class="feat-icon fi-o"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2L18 17H2L10 2Z" fill="#F7941E"/></svg></div>
         <div class="feat-title">AVANTI AI</div>
-        <div class="feat-desc">Your AI staff on call 24/7. Flags compliance risks, drafts communications, handles routine exceptions before they become problems.</div>
+        <div class="feat-desc">Your AI staff — 24/7. Pre-game lineup recommendations, opponent analysis, dues reminders, formation suggestions, and financial insights, all automated.</div>
       </div>
       <div class="feat">
-        <div class="feat-icon fi-b">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="5" width="14" height="10" rx="1.5" stroke="#60a5fa" stroke-width="1.5"/><path d="M5 2v4M13 2v4" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/></svg>
-        </div>
-        <div class="feat-title">Smart Scheduling</div>
-        <div class="feat-desc">Field allocation, conflict detection, and AVANTI-powered optimization across all teams and seasons.</div>
+        <div class="feat-icon fi-b"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="1" fill="none" stroke="#60a5fa" stroke-width="1.5"/><rect x="11" y="2" width="7" height="7" rx="1" fill="none" stroke="#60a5fa" stroke-width="1.5"/><rect x="2" y="11" width="7" height="7" rx="1" fill="none" stroke="#60a5fa" stroke-width="1.5"/><rect x="11" y="11" width="7" height="7" rx="1" fill="none" stroke="#60a5fa" stroke-width="1.5"/></svg></div>
+        <div class="feat-title">Club Command Center</div>
+        <div class="feat-desc">Every team, every division, every stat in one dashboard. Built for league directors, club admins, coaching staff, and parents — with role-based access.</div>
       </div>
       <div class="feat">
-        <div class="feat-icon fi-o">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="7" width="14" height="9" rx="1.5" stroke="#F7941E" stroke-width="1.5"/><path d="M6 7V5a3 3 0 016 0v2" stroke="#F7941E" stroke-width="1.5"/></svg>
-        </div>
+        <div class="feat-icon fi-o"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 16V8l8-5 8 5v8" stroke="#F7941E" stroke-width="1.5"/><rect x="7" y="11" width="6" height="5" rx=".5" stroke="#F7941E" stroke-width="1.3"/></svg></div>
         <div class="feat-title">Formation Builder</div>
-        <div class="feat-desc">Field view with athletes at positions, PLAY Status dots, AVANTI depth chart insights. Tap any player — full context panel opens.</div>
+        <div class="feat-desc">Drag-and-drop lineup tools for flag football, soccer, baseball, and basketball. AVANTI recommends formations based on opponent data and PLAY Status.</div>
       </div>
       <div class="feat">
-        <div class="feat-icon fi-g">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 9h14M2 9l4-4M2 9l4 4" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="feat-title">Club Financials</div>
-        <div class="feat-desc">Connect QuickBooks and Stripe in one click. AVANTI flags outstanding dues and triggers reminders. Zero staff emails.</div>
+        <div class="feat-icon fi-g"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 10h16M10 2l8 8-8 8" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="feat-title">AVANTI CONNECT</div>
+        <div class="feat-desc">Built-in recruiting intelligence. Verified athlete profiles, college coach activity, offer tracking, and recruiting leaderboards — automated by AVANTI.</div>
       </div>
       <div class="feat">
-        <div class="feat-icon fi-b">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14V7l6-5 6 5v7" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/><rect x="6" y="10" width="6" height="4" rx="0.5" stroke="#60a5fa" stroke-width="1.5"/></svg>
-        </div>
-        <div class="feat-title">Tournaments</div>
-        <div class="feat-desc">Live bracket management, real-time scores, standings, and AVANTI team readiness reports before every game.</div>
+        <div class="feat-icon fi-b"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="13" rx="2" stroke="#60a5fa" stroke-width="1.5"/><path d="M2 9h16M6 2v3M14 2v3" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="feat-title">Schedule + Events</div>
+        <div class="feat-desc">Games, practices, tryouts, camps, tournaments — all in one calendar. AVANTI auto-adjusts lineups before every event based on live PLAY Status.</div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ROLES -->
+<section id="roles">
+<div class="roles-sec">
+  <div class="sec-label">Role-Based Access</div>
+  <div class="sec-title">Every seat at the table<br>has the right view.</div>
+  <div class="sec-sub">Five roles, one platform. Every user sees exactly what they need — nothing more.</div>
+  <div class="roles-grid">
+    <div class="role-card">
+      <div class="role-tag" style="color:var(--orange)">Super Admin</div>
+      <div class="role-name">League Director</div>
+      <div class="role-desc">Full access. All teams, all data, finance, recruiting, compliance, settings.</div>
+    </div>
+    <div class="role-card">
+      <div class="role-tag" style="color:var(--blue)">Admin</div>
+      <div class="role-name">Org Admin / Staff</div>
+      <div class="role-desc">Roster, compliance, registration, communications, event management.</div>
+    </div>
+    <div class="role-card">
+      <div class="role-tag" style="color:var(--blue)">Director</div>
+      <div class="role-name">Club Director</div>
+      <div class="role-desc">Cross-team oversight, financial summary, coaches management, reporting.</div>
+    </div>
+    <div class="role-card">
+      <div class="role-tag" style="color:var(--green)">Coach</div>
+      <div class="role-name">Head / Asst Coach</div>
+      <div class="role-desc">Their team's athletes, formation, schedule, coaches corner, AVANTI insights.</div>
+    </div>
+    <div class="role-card">
+      <div class="role-tag" style="color:var(--muted)">Parent</div>
+      <div class="role-name">Parent / Guardian</div>
+      <div class="role-desc">Their athlete's schedule, PLAY Status, compliance, and team announcements.</div>
+    </div>
+  </div>
+</div>
+</section>
+
 <!-- AVANTI -->
+<div style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
 <div class="avanti-sec" id="avanti">
   <div class="avanti-split">
     <div>
-      <div class="avanti-tag">✦ AVANTI AI</div>
+      <div class="avanti-tag">✦ AVANTI AI — Always On</div>
       <div class="sec-title">Your AI coaching staff.<br>On call 24/7.</div>
-      <p style="font-size:16px;color:var(--muted);line-height:1.65;max-width:420px;">AVANTI monitors your entire club — roster, schedule, finances, compliance — and handles volume automatically. Only decisions that need human judgment reach your desk.</p>
+      <p style="font-size:16px;color:var(--muted);line-height:1.65;max-width:420px;margin-bottom:28px;">AVANTI monitors your entire club — roster, schedule, finances, compliance, formations — and handles volume automatically. Only decisions that need human judgment reach your desk.</p>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+        <li style="font-size:13px;color:var(--text);display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--green);margin-top:2px;">✓</span> Pre-game lineup adjustments based on PLAY Status</li>
+        <li style="font-size:13px;color:var(--text);display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--green);margin-top:2px;">✓</span> Automated dues reminders to overdue families</li>
+        <li style="font-size:13px;color:var(--text);display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--green);margin-top:2px;">✓</span> Opponent analysis + formation recommendations</li>
+        <li style="font-size:13px;color:var(--text);display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--green);margin-top:2px;">✓</span> Financial alerts — Stripe balance, outstanding invoices</li>
+        <li style="font-size:13px;color:var(--text);display:flex;align-items:flex-start;gap:10px;"><span style="color:var(--green);margin-top:2px;">✓</span> Waiver + compliance status resolved without staff emails</li>
+      </ul>
     </div>
     <div class="avanti-msgs">
       <div class="amsg green">
-        <div class="amsg-hd"><span class="amsg-dot"></span><span class="amsg-lbl">AVANTI · Resolved</span></div>
-        <div class="amsg-body">Emma Torres (2011 Girls Blue) was YELLOW for missing a signed waiver. Reminder sent, waiver received, status updated to GREEN automatically.</div>
+        <div class="amsg-hd"><span class="amsg-dot"></span><span class="amsg-lbl">AVANTI · Resolved Automatically</span></div>
+        <div class="amsg-body">Mia Rodriguez (S) waiver received — status updated to GREEN. No action needed from staff. Saturday lineup confirmed.</div>
       </div>
       <div class="amsg yellow">
         <div class="amsg-hd"><span class="amsg-dot"></span><span class="amsg-lbl">AVANTI · Needs Your Input</span></div>
-        <div class="amsg-body">Travel exception requested — 2011 Girls Blue. Medical cleared, payment clear, waiver expires in 9 days. Coach requested same-day override. Your call.</div>
-        <div class="amsg-act">Approve override →</div>
+        <div class="amsg-body">I. Yong (CB) flagged YELLOW — recovery index 64, training volume +18%. Recommend limited reps in warmup Saturday. Override available.</div>
+        <div class="amsg-act">View depth chart →</div>
       </div>
       <div class="amsg neutral">
         <div class="amsg-hd"><span class="amsg-dot"></span><span class="amsg-lbl">AVANTI · Proactive</span></div>
-        <div class="amsg-body">3 athletes on 2010 Boys Gold have dues outstanding 14+ days. Reminders drafted and ready to send. Confirm or schedule for tomorrow.</div>
+        <div class="amsg-body">3 families have outstanding registration — $800 overdue 30+ days. Reminders drafted and ready to send. Confirm or schedule for tomorrow.</div>
         <div class="amsg-act">Send reminders →</div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- MOBILE -->
-<div class="mobile-sec" id="mobile">
-  <div class="mobile-inner">
-    <div class="sec-label">Coaches are on the sideline</div>
-    <div class="sec-title">Built for mobile first.</div>
-    <p style="font-size:16px;color:var(--muted);max-width:480px;margin:12px auto 0;line-height:1.65;">Full GAME OS on every device. Coaches check PLAY Status from the bench. Directors approve exceptions from the parking lot.</p>
-    <div class="phones-row">
-      <!-- Phone 1 -->
-      <div class="phone" style="width:160px;">
-        <div class="phone-bar"><div class="phone-notch"></div></div>
-        <div class="phone-screen">
-          <div class="phone-header">
-            <div class="ph-logo">
-              <img src="https://gameday.vai.app/logo.png" alt="VAI">
-            </div>
-            <div class="ph-icons"><div class="ph-icon"></div><div class="ph-icon"></div></div>
-          </div>
-          <div class="phone-title">Roster PLAY Status</div>
-          <div class="phone-stat-row">
-            <div class="ps ps-g"><div class="ps-num">247</div><div class="ps-lbl">GREEN</div></div>
-            <div class="ps ps-r"><div class="ps-num">1</div><div class="ps-lbl">RED</div></div>
-            <div class="ps ps-n"><div class="ps-num">2</div><div class="ps-lbl">YLW</div></div>
-          </div>
-          <div class="phone-row"><span class="pr-name">2012 Boys Black</span><span class="pr-dot" style="background:var(--green)"></span></div>
-          <div class="phone-row"><span class="pr-name">2011 Girls Blue</span><span class="pr-dot" style="background:var(--red)"></span></div>
-          <div class="phone-row"><span class="pr-name">2010 Boys Gold</span><span class="pr-dot" style="background:var(--green)"></span></div>
-        </div>
-      </div>
-
-      <!-- Phone 2 (center, elevated) -->
-      <div class="phone center" style="width:175px;">
-        <div class="phone-bar"><div class="phone-notch"></div></div>
-        <div class="phone-screen">
-          <div class="phone-header">
-            <div class="ph-logo">
-              <img src="https://gameday.vai.app/logo.png" alt="VAI">
-              <img src="https://ben-whitesides.github.io/vai-demos/gameday-logo.png" alt="">
-            </div>
-            <div class="ph-icons"><div class="ph-icon"></div></div>
-          </div>
-          <div class="phone-title">VAI FC North</div>
-          <div class="phone-stat-row">
-            <div class="ps ps-g"><div class="ps-num">98%</div><div class="ps-lbl">Compliance</div></div>
-            <div class="ps ps-n"><div class="ps-num">3</div><div class="ps-lbl">Teams</div></div>
-          </div>
-          <div class="avanti-pill-phone">✦ AVANTI</div>
-          <div style="margin-top:8px;background:var(--green-d);border:1px solid var(--green-b);border-radius:8px;padding:8px;font-size:9px;color:var(--muted);line-height:1.4;">
-            All clear today. Emma Torres waiver received, status GREEN.
-          </div>
-        </div>
-      </div>
-
-      <!-- Phone 3 -->
-      <div class="phone" style="width:160px;">
-        <div class="phone-bar"><div class="phone-notch"></div></div>
-        <div class="phone-screen">
-          <div class="phone-header">
-            <div class="ph-logo">
-              <img src="https://gameday.vai.app/logo.png" alt="VAI">
-            </div>
-            <div class="ph-icons"><div class="ph-icon"></div><div class="ph-icon"></div></div>
-          </div>
-          <div class="phone-title">Today's Schedule</div>
-          <div class="phone-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
-            <span class="pr-name">Field A — Practice</span>
-            <span style="font-size:8px;color:var(--muted)">4:00 PM → 6:00 PM</span>
-          </div>
-          <div class="phone-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
-            <span class="pr-name">Field B — Game</span>
-            <span style="font-size:8px;color:var(--muted)">6:30 PM → 8:00 PM</span>
-          </div>
-          <div class="phone-row" style="flex-direction:column;align-items:flex-start;gap:2px;border-bottom:none;">
-            <span class="pr-name">Tournament — Day 1</span>
-            <span style="font-size:8px;color:var(--muted)">Sat 8:00 AM start</span>
-          </div>
-        </div>
+      <div class="amsg red">
+        <div class="amsg-hd"><span class="amsg-dot"></span><span class="amsg-lbl">AVANTI · Game Day Alert</span></div>
+        <div class="amsg-body">Skyline HS blitzes 73% on 3rd down. Spread Right Fade recommended vs their CB #8. Confidence: 94%. Marcus Rivera speed advantage confirmed.</div>
       </div>
     </div>
   </div>
 </div>
+</div>
 
-<!-- FINAL CTA -->
+<!-- DEMO CTA -->
 <div class="demo-cta">
   <h2>Ready to run your club<br>on <em>GAME OS?</em></h2>
-  <p>Request a demo and see your club's data in GAME OS within 24 hours.</p>
+  <p>Live demo available now — UHSGFA Flag Football, Fall 2026. Every screen, every role.</p>
   <div class="demo-btns">
-    <a href="vai-game-os-login.html" class="btn-primary">Request Demo →</a>
-    <a href="https://vai.app" target="_blank" class="btn-secondary">Get GAME OS</a>
+    <a href="https://vaigameos.com/onboarding" class="btn-primary">Set Up Your Club →</a>
+    <a href="https://vaigameos.com/login" class="btn-secondary">Explore Live Demo</a>
   </div>
+  <div class="demo-roles">
+    <div class="demo-role"><div class="demo-role-name">Super Admin</div><div class="demo-role-email">super@uhsgfa.com</div></div>
+    <div class="demo-role"><div class="demo-role-name">Admin</div><div class="demo-role-email">admin@uhsgfa.com</div></div>
+    <div class="demo-role"><div class="demo-role-name">Coach</div><div class="demo-role-email">coach@uhsgfa.com</div></div>
+    <div class="demo-role"><div class="demo-role-name">Parent</div><div class="demo-role-email">parent@uhsgfa.com</div></div>
+  </div>
+  <div style="margin-top:16px;font-size:12px;color:var(--dim);">Password for all demo accounts: <span style="color:var(--muted);font-family:monospace;background:var(--card);padding:2px 8px;border-radius:4px;border:1px solid var(--border)">demo</span></div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">
-    <img src="https://gameday.vai.app/logo.png" alt="VAI">
-    <img src="https://ben-whitesides.github.io/vai-demos/gameday-logo.png" alt="GAMEDAY">
+  <div class="footer-brand">
+    <svg width="18" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#F7941E"/></svg>
+    <div class="footer-wordmark"><span>GAME</span><span> OS</span></div>
+    <span style="font-size:11px;color:var(--dim);margin-left:8px;">by VAI Inc.</span>
   </div>
   <div class="footer-links">
     © 2026 VAI Inc.
-    <a href="https://vai.app" target="_blank">vai.app</a>
+    <a href="https://vai.app" target="_blank" rel="noopener">vai.app</a>
+    <a href="https://vaigameos.com" target="_blank">vaigameos.com</a>
     <a href="mailto:hello@vai.app">Contact</a>
   </div>
 </footer>
