@@ -570,6 +570,39 @@
     .athletes-team-name { font-size: 16px; font-weight: 800; color: var(--text); }
     .athletes-team-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
+    /* LEADERBOARD */
+    .lb-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    .lb-age-tabs { display: flex; gap: 4px; }
+    .lb-age-tab { padding: 5px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer; border: 1px solid transparent; transition: all .15s; }
+    .lb-age-tab.active { background: var(--orange-d); color: var(--orange); border-color: var(--orange-b); }
+    .lb-stat-tabs { display: flex; gap: 4px; }
+    .lb-stat-tab { padding: 5px 12px; border-radius: 6px; font-size: 10px; font-weight: 700; color: var(--muted); cursor: pointer; border: 1px solid var(--border); transition: all .15s; }
+    .lb-stat-tab.active { background: var(--card); color: var(--text); border-color: var(--border2); }
+    .lb-podium { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .lb-pod { border-radius: 10px; padding: 16px 12px; text-align: center; cursor: pointer; transition: transform .15s; border: 1px solid; }
+    .lb-pod:hover { transform: translateY(-3px); }
+    .lb-pod.gold { background: linear-gradient(135deg,rgba(255,215,0,.1),rgba(247,148,30,.06)); border-color: rgba(255,215,0,.3); }
+    .lb-pod.silver { background: linear-gradient(135deg,rgba(192,192,192,.08),rgba(255,255,255,.03)); border-color: rgba(192,192,192,.2); }
+    .lb-pod.bronze { background: linear-gradient(135deg,rgba(205,127,50,.08),rgba(247,148,30,.03)); border-color: rgba(205,127,50,.2); }
+    .lb-rank { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
+    .lb-rank.gold { color: #FFD700; } .lb-rank.silver { color: #C0C0C0; } .lb-rank.bronze { color: #CD7F32; }
+    .lb-pod-num { font-size: 22px; font-weight: 900; margin-bottom: 2px; color: var(--text); }
+    .lb-pod-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .lb-pod-meta { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+    .lb-pod-score { font-size: 28px; font-weight: 900; line-height: 1; }
+    .lb-pod-score.gold { color: #FFD700; } .lb-pod-score.silver { color: #C0C0C0; } .lb-pod-score.bronze { color: #CD7F32; }
+    .lb-pod-sub { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
+    .lb-pod-badge { display: inline-block; font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 100px; margin-top: 6px; }
+    .lb-list { display: flex; flex-direction: column; gap: 6px; }
+    .lb-row { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; cursor: pointer; transition: border-color .15s; }
+    .lb-row:hover { border-color: var(--border2); }
+    .lb-row-rank { font-size: 13px; font-weight: 800; color: var(--muted); min-width: 20px; text-align: center; }
+    .lb-row-info { flex: 1; }
+    .lb-row-name { font-size: 12px; font-weight: 700; color: var(--text); }
+    .lb-row-meta { font-size: 10px; color: var(--muted); }
+    .lb-row-score { font-size: 16px; font-weight: 900; margin-left: auto; }
+    .lb-row-connect { flex-shrink: 0; }
+
     /* MOBILE */
     @media (max-width: 768px) {
       .shell { grid-template-columns: 1fr; }
@@ -1953,24 +1986,105 @@
 
         <div class="db-grid">
           <!-- Leaderboard widget -->
-          <div class="card" style="padding:16px;margin:0;">
-            <div class="db-section-hdr"><span>PLAY Index Leaderboard</span><span class="db-section-link">Full board →</span></div>
-            <div style="display:flex;gap:6px;margin-bottom:12px;">
-              <span class="ftab-sm active" style="font-size:10px;padding:3px 10px;">U17+</span>
-              <span class="ftab-sm" style="font-size:10px;padding:3px 10px;">U15</span>
-              <span class="ftab-sm" style="font-size:10px;padding:3px 10px;">U13</span>
+          <div class="card" style="padding:16px;margin:0;grid-column:1/-1;">
+            <div class="lb-controls">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:13px;font-weight:800;color:var(--text);">Leaderboards</span>
+                <div class="lb-age-tabs">
+                  <span class="lb-age-tab active">U17+</span>
+                  <span class="lb-age-tab">U15</span>
+                  <span class="lb-age-tab">U13</span>
+                  <span class="lb-age-tab">All</span>
+                </div>
+              </div>
+              <div class="lb-stat-tabs">
+                <span class="lb-stat-tab active">PLAY Index</span>
+                <span class="lb-stat-tab">Speed</span>
+                <span class="lb-stat-tab">Technical</span>
+                <span class="lb-stat-tab">Academic</span>
+                <span class="lb-stat-tab">College Views</span>
+              </div>
             </div>
-            <table class="fin-table">
-              <thead><tr><th>#</th><th>Athlete</th><th>Pos</th><th class="r">PLAY</th><th class="r">Connect</th></tr></thead>
-              <tbody>
-                <tr><td style="font-weight:900;color:var(--orange);">1</td><td class="name">Marcus Rivera</td><td>ST</td><td class="r" style="color:var(--green);font-weight:800;">97</td><td class="r"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></td></tr>
-                <tr><td style="font-weight:900;color:var(--orange);">2</td><td class="name">R. Vega</td><td>CDM</td><td class="r" style="color:var(--green);font-weight:800;">94</td><td class="r"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></td></tr>
-                <tr><td style="font-weight:900;color:var(--orange);">3</td><td class="name">F. Costa</td><td>RW</td><td class="r" style="color:var(--green);font-weight:800;">92</td><td class="r"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></td></tr>
-                <tr><td style="color:var(--muted);">4</td><td class="name">S. Boateng</td><td>CM</td><td class="r" style="color:var(--green);font-weight:800;">91</td><td class="r"><span class="badge badge-up" style="font-size:9px;">INVITE</span></td></tr>
-                <tr><td style="color:var(--muted);">5</td><td class="name">K. Mensah</td><td>LW</td><td class="r" style="color:var(--green);font-weight:800;">89</td><td class="r"><span class="badge badge-up" style="font-size:9px;">INVITE</span></td></tr>
-                <tr><td style="color:var(--muted);">6</td><td class="name">I. Yong</td><td>CM</td><td class="r" style="color:var(--green);font-weight:800;">88</td><td class="r"><span class="badge badge-up" style="font-size:9px;">INVITE</span></td></tr>
-              </tbody>
-            </table>
+
+            <!-- Podium top 3 -->
+            <div class="lb-podium">
+              <div class="lb-pod silver" onclick="">
+                <div class="lb-rank silver">2</div>
+                <div class="lb-pod-num">#8</div>
+                <div class="lb-pod-name">R. Vega</div>
+                <div class="lb-pod-meta">CDM · U17 Girls A</div>
+                <div class="lb-pod-score silver">94</div>
+                <div class="lb-pod-sub">PLAY Index</div>
+                <span class="lb-pod-badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">CONNECT ACTIVE</span>
+              </div>
+              <div class="lb-pod gold" onclick="">
+                <div class="lb-rank gold">1</div>
+                <div class="lb-pod-num">#9</div>
+                <div class="lb-pod-name">Marcus Rivera</div>
+                <div class="lb-pod-meta">ST · U17 Girls A</div>
+                <div class="lb-pod-score gold">97</div>
+                <div class="lb-pod-sub">PLAY Index</div>
+                <span class="lb-pod-badge" style="background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.3);">4 COLLEGE OFFERS</span>
+              </div>
+              <div class="lb-pod bronze" onclick="">
+                <div class="lb-rank bronze">3</div>
+                <div class="lb-pod-num">#7</div>
+                <div class="lb-pod-name">F. Costa</div>
+                <div class="lb-pod-meta">RW · U17 Girls A</div>
+                <div class="lb-pod-score bronze">92</div>
+                <div class="lb-pod-sub">PLAY Index</div>
+                <span class="lb-pod-badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">CONNECT ACTIVE</span>
+              </div>
+            </div>
+
+            <!-- Ranked list 4-10 -->
+            <div class="lb-list">
+              <div class="lb-row" onclick="">
+                <span class="lb-row-rank">4</span>
+                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">SB</div>
+                <div class="lb-row-info"><div class="lb-row-name">S. Boateng</div><div class="lb-row-meta">CM · U17 Girls A · Premier</div></div>
+                <span class="lb-row-score" style="color:var(--green);">91</span>
+                <span class="lb-row-connect"><span class="badge badge-up" style="font-size:9px;">INVITE</span></span>
+                <span style="color:var(--orange);">›</span>
+              </div>
+              <div class="lb-row" onclick="">
+                <span class="lb-row-rank">5</span>
+                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">KM</div>
+                <div class="lb-row-info"><div class="lb-row-name">K. Mensah</div><div class="lb-row-meta">LW · U17 Girls A · Premier</div></div>
+                <span class="lb-row-score" style="color:var(--green);">89</span>
+                <span class="lb-row-connect"><span class="badge badge-up" style="font-size:9px;">INVITE</span></span>
+                <span style="color:var(--orange);">›</span>
+              </div>
+              <div class="lb-row" onclick="">
+                <span class="lb-row-rank">6</span>
+                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">IY</div>
+                <div class="lb-row-info"><div class="lb-row-name">I. Yong</div><div class="lb-row-meta">CM · U17 Girls A · Premier</div></div>
+                <span class="lb-row-score" style="color:var(--green);">88</span>
+                <span class="lb-row-connect"><span class="badge badge-up" style="font-size:9px;">INVITE</span></span>
+                <span style="color:var(--orange);">›</span>
+              </div>
+              <div class="lb-row" onclick="">
+                <span class="lb-row-rank">7</span>
+                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">FA</div>
+                <div class="lb-row-info"><div class="lb-row-name">F. Ahmed</div><div class="lb-row-meta">LB · U17 Girls A · Premier</div></div>
+                <span class="lb-row-score" style="color:var(--green);">86</span>
+                <span class="lb-row-connect"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></span>
+                <span style="color:var(--orange);">›</span>
+              </div>
+              <div class="lb-row" onclick="">
+                <span class="lb-row-rank">8</span>
+                <div style="width:32px;height:32px;border-radius:8px;background:var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;">LP</div>
+                <div class="lb-row-info"><div class="lb-row-name">L. Park</div><div class="lb-row-meta">GK · U17 Girls A · Premier</div></div>
+                <span class="lb-row-score" style="color:var(--green);">85</span>
+                <span class="lb-row-connect"><span class="badge" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);font-size:9px;">ACTIVE</span></span>
+                <span style="color:var(--orange);">›</span>
+              </div>
+              <div class="lb-row" onclick="" style="opacity:.6;">
+                <span class="lb-row-rank" style="color:var(--dim);">+286 more</span>
+                <div class="lb-row-info"><div class="lb-row-meta">across all age groups</div></div>
+                <span class="db-section-link" style="font-size:11px;">View full leaderboard →</span>
+              </div>
+            </div>
           </div>
 
           <!-- Recent college activity -->
