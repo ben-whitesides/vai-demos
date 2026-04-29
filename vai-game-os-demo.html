@@ -646,6 +646,14 @@
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L12 3v5c0 2.5-2.5 4.5-5 5C4 13 2 11 2 8V3L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
       Compliance
     </a>
+    <a class="nav-item" id="nav-registration" onclick="setPage('registration')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h10v10H2V2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M5 5h4M5 7h4M5 9h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Registration
+    </a>
+    <a class="nav-item" id="nav-tryouts" onclick="setPage('tryouts')">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 12c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M11 7l1.5 1.5L14 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Tryouts
+    </a>
     <div class="nav-divider"></div>
     <div class="nav-section-label">Live Ops</div>
     <a class="nav-item" id="nav-tournament" onclick="setPage('tournament')">
@@ -854,12 +862,26 @@
           </div>
         </div>
         <div class="play-zone">
-          <div class="pz-hdr n"><span class="pz-title n">No Status</span><span class="pz-count n">0</span></div>
-          <div class="pz-players" style="align-items:center;justify-content:center;">
-            <div style="text-align:center;color:var(--dim);font-size:12px;padding:20px;">
-              <div style="font-size:24px;margin-bottom:8px;">✓</div>
-              All 312 athletes have PLAY status assigned
+          <div class="pz-hdr" style="border-color:#F7941E;background:rgba(247,148,30,0.06);">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" fill="#F7941E"/></svg>
+              <span class="pz-title" style="color:#F7941E;">VAI Passport</span>
             </div>
+            <span class="pz-count" style="color:#F7941E;">187</span>
+          </div>
+          <div class="pz-players">
+            <div style="width:100%;padding:8px 4px 10px;border-bottom:1px solid var(--border);margin-bottom:8px;">
+              <div style="font-size:10px;color:var(--muted);line-height:1.5;">Athletes on the VAI app with a verified digital profile. <strong style="color:var(--orange);">Always GREEN.</strong> Push all athletes here.</div>
+            </div>
+            <div class="pz-chip" style="border-left:2px solid #F7941E;"><span class="pz-num">9</span><span class="pz-name">Marcus Rivera</span><span class="pz-pos">FW</span></div>
+            <div class="pz-chip" style="border-left:2px solid #F7941E;"><span class="pz-num">8</span><span class="pz-name">R. Vega</span><span class="pz-pos">CDM</span></div>
+            <div class="pz-chip" style="border-left:2px solid #F7941E;"><span class="pz-num">7</span><span class="pz-name">T. Rodriguez</span><span class="pz-pos">MF</span></div>
+            <div class="pz-chip" style="border-left:2px solid #F7941E;"><span class="pz-num">4</span><span class="pz-name">E. Brown</span><span class="pz-pos">DF</span></div>
+            <div class="pz-chip" style="border-left:2px solid #F7941E;"><span class="pz-num">1</span><span class="pz-name">C. Thompson</span><span class="pz-pos">GK</span></div>
+            <div class="pz-chip" style="border-left:2px solid #F7941E;"><span class="pz-num">5</span><span class="pz-name">O. Taylor</span><span class="pz-pos">DF</span></div>
+            <div class="pz-chip" style="border-left:2px solid #F7941E;"><span class="pz-num">17</span><span class="pz-name">L. White</span><span class="pz-pos">FW</span></div>
+            <div class="pz-chip" style="border-left:2px solid #F7941E;"><span class="pz-num">19</span><span class="pz-name">S. Torres</span><span class="pz-pos">FW</span></div>
+            <div style="font-size:10px;color:var(--muted);padding:4px 2px;">+179 more on VAI Passport ›</div>
           </div>
         </div>
       </div>      <div class="avanti-float" onclick="setPage('avanti')">
@@ -1667,6 +1689,129 @@
         <div class="af-pill-wrap">
           <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
           <div class="af-pill"><div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="2.93" y1="2.93" x2="5.05" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="10.95" y1="10.95" x2="13.07" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="13.07" y1="2.93" x2="10.95" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="5.05" y1="10.95" x2="2.93" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">2</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REGISTRATION ── -->
+    <div class="panel" id="panel-registration" style="position:relative;">
+      <div class="avanti-strip" style="padding:8px 16px;"><div class="as-dot"></div><span class="as-label">AVANTI</span><span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span></div>
+      <div class="page-header">
+        <div><div class="page-title">Registration</div><div class="page-subtitle">UHSGFA · Spring 2026 · 294 registered · 18 pending</div></div>
+        <div class="page-actions"><button class="btn-ghost">Export</button><button class="btn-primary">+ New Registration Period</button></div>
+      </div>
+      <div class="panel-scroll">
+        <div class="db-kpi" style="grid-template-columns:repeat(4,1fr);">
+          <div class="kpi"><div class="kpi-lbl">Total Registered</div><div class="kpi-val g">294</div><div class="kpi-sub">of 312 athletes</div></div>
+          <div class="kpi"><div class="kpi-lbl">Pending</div><div class="kpi-val o">18</div><div class="kpi-sub">awaiting completion</div></div>
+          <div class="kpi"><div class="kpi-lbl">Waivers Signed</div><div class="kpi-val g">294</div><div class="kpi-sub">94% complete</div></div>
+          <div class="kpi"><div class="kpi-lbl">Dues Paid</div><div class="kpi-val g">284</div><div class="kpi-sub">$41,360 collected</div></div>
+        </div>
+
+        <div style="background:rgba(247,148,30,0.05);border:1px solid rgba(247,148,30,0.2);border-radius:8px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#F7941E"/></svg>
+          <div style="flex:1;">
+            <div style="font-size:11px;font-weight:800;color:#F7941E;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;">VAI Passport Integration</div>
+            <div style="font-size:12px;color:var(--text2);">Athletes registered on the <strong style="color:var(--text);">VAI app</strong> automatically complete registration and stay GREEN year-round. <strong style="color:var(--orange);">187 athletes already on Passport.</strong></div>
+          </div>
+          <button class="btn-primary" style="flex-shrink:0;">Invite Athletes to VAI</button>
+        </div>
+
+        <div class="section-hdr" style="margin-bottom:8px;"><span class="section-title">Active Registration Periods</span><span class="section-link">+ Create →</span></div>
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-hdr"><span class="card-title">Spring 2026 Season Registration</span><span class="badge badge-green" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">OPEN</span></div>
+          <div class="fin-stat"><span class="fin-stat-lbl">Registration window</span><span class="fin-stat-val">Mar 1 – Apr 30, 2026</span></div>
+          <div class="fin-stat"><span class="fin-stat-lbl">Completed</span><span class="fin-stat-val g">294 athletes</span></div>
+          <div class="fin-stat"><span class="fin-stat-lbl">Outstanding</span><span class="fin-stat-val r">18 athletes · deadline passed</span></div>
+          <div class="fin-stat"><span class="fin-stat-lbl">Required documents</span><span class="fin-stat-val">Waiver · Medical form · Payment</span></div>
+        </div>
+
+        <div class="section-hdr" style="margin-bottom:8px;"><span class="section-title">Pending Athletes</span><span class="section-link">Send Reminders →</span></div>
+        <div class="card">
+          <table class="fin-table">
+            <thead><tr><th>Athlete</th><th>Team</th><th>Missing</th><th class="r">Days Overdue</th><th class="r">Action</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Jordan Lee</td><td>U15 Boys</td><td style="color:var(--yellow);">Medical form</td><td class="r" style="color:var(--yellow);">14 days</td><td class="r"><span class="section-link">Send reminder</span></td></tr>
+              <tr><td class="name">Mia Rodriguez</td><td>U17 Girls A</td><td style="color:var(--red);">Payment overdue</td><td class="r" style="color:var(--red);">28 days</td><td class="r"><span class="section-link">Notify</span></td></tr>
+              <tr><td class="name">Alex Thompson</td><td>U13 Boys</td><td style="color:var(--yellow);">Waiver unsigned</td><td class="r" style="color:var(--yellow);">7 days</td><td class="r"><span class="section-link">Send reminder</span></td></tr>
+              <tr><td class="name">Taylor Brooks</td><td>U15 Girls</td><td style="color:var(--yellow);">Medical form</td><td class="r" style="color:var(--yellow);">7 days</td><td class="r"><span class="section-link">Send reminder</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill"><div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">2</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TRYOUTS ── -->
+    <div class="panel" id="panel-tryouts" style="position:relative;">
+      <div class="avanti-strip" style="padding:8px 16px;"><div class="as-dot"></div><span class="as-label">AVANTI</span><span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span></div>
+      <div class="page-header">
+        <div><div class="page-title">Tryouts</div><div class="page-subtitle">UHSGFA · 2026 Season · 2 upcoming events</div></div>
+        <div class="page-actions"><button class="btn-ghost">Past Tryouts</button><button class="btn-primary">+ Create Tryout</button></div>
+      </div>
+      <div class="panel-scroll">
+        <div class="db-kpi" style="grid-template-columns:repeat(4,1fr);">
+          <div class="kpi"><div class="kpi-lbl">Upcoming</div><div class="kpi-val o">2</div><div class="kpi-sub">events scheduled</div></div>
+          <div class="kpi"><div class="kpi-lbl">Registered</div><div class="kpi-val g">84</div><div class="kpi-sub">across both events</div></div>
+          <div class="kpi"><div class="kpi-lbl">Invites Sent</div><div class="kpi-val">120</div><div class="kpi-sub">via AVANTI</div></div>
+          <div class="kpi"><div class="kpi-lbl">Open Spots</div><div class="kpi-val o">36</div><div class="kpi-sub">remaining capacity</div></div>
+        </div>
+
+        <div class="section-hdr" style="margin-bottom:8px;"><span class="section-title">Upcoming Tryouts</span></div>
+
+        <div class="tourn-card" style="margin-bottom:16px;">
+          <div class="tc-top">
+            <div><div class="tc-t">U13 & U15 Girls — Summer Tryouts</div><div class="tc-d">May 10, 2026 · 9:00 AM – 12:00 PM · Jordan Valley Sports Complex, Field 1</div></div>
+            <span class="badge badge-up">Registered</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+            <div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Age groups</span><span class="fin-stat-val">U13 Girls · U15 Girls</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Max capacity</span><span class="fin-stat-val">60 athletes</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Registered</span><span class="fin-stat-val g">44 athletes</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Open spots</span><span class="fin-stat-val o">16 remaining</span></div>
+            </div>
+            <div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Coaches assigned</span><span class="fin-stat-val">3 (Dana Park, Mike Torres, +1)</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Evaluation criteria</span><span class="fin-stat-val">Speed · Technique · IQ</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">AVANTI analysis</span><span class="fin-stat-val g">Enabled</span></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;"><button class="btn-ghost">View Registrants</button><button class="btn-ghost">Send Invites</button><button class="btn-primary">Manage Event</button></div>
+        </div>
+
+        <div class="tourn-card">
+          <div class="tc-top">
+            <div><div class="tc-t">U17 Girls — Elite Tryouts</div><div class="tc-d">May 17, 2026 · 2:00 PM – 5:00 PM · Provo Sports Complex, Field A</div></div>
+            <span class="badge badge-up">Open</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+            <div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Age groups</span><span class="fin-stat-val">U17 Girls (Premier only)</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Max capacity</span><span class="fin-stat-val">40 athletes</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Registered</span><span class="fin-stat-val g">20 athletes</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Open spots</span><span class="fin-stat-val o">20 remaining</span></div>
+            </div>
+            <div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Coaches assigned</span><span class="fin-stat-val">James Rivera (Head)</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">Format</span><span class="fin-stat-val">Scrimmage + individual eval</span></div>
+              <div class="fin-stat"><span class="fin-stat-lbl">AVANTI analysis</span><span class="fin-stat-val g">Enabled</span></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;"><button class="btn-ghost">View Registrants</button><button class="btn-ghost">Send Invites</button><button class="btn-primary">Manage Event</button></div>
+        </div>
+      </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill"><div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">1</span></div>
         </div>
       </div>
     </div>
