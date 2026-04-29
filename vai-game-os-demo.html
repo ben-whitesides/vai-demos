@@ -486,6 +486,24 @@
     .fin-kpi-val.pos { color: var(--green); } .fin-kpi-val.neg { color: var(--red); }
     .fin-kpi-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
+    /* FORMATION */
+    .formation-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .sport-controls { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .sport-tabs { display: flex; gap: 4px; }
+    .sport-tab { padding: 6px 16px; border-radius: 7px; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; border: 1px solid transparent; transition: all .15s; }
+    .sport-tab.active { background: var(--orange); color: #000; border-color: var(--orange); }
+    .sport-tab:not(.active):hover { background: rgba(255,255,255,.04); color: var(--text2); }
+    .form-selector { display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+    .form-btn { padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer; border: 1px solid var(--border); background: transparent; transition: all .15s; font-family: inherit; }
+    .form-btn.active { background: var(--green-d); color: var(--green); border-color: var(--green-b); }
+    .field-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 8px 12px 0; }
+    .field-svg-wrap { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .field-svg-wrap svg { height: 100%; max-height: calc(100vh - 340px); width: auto; }
+    .bench-section { flex-shrink: 0; padding: 8px 16px; border-top: 1px solid var(--border); background: var(--sidebar); }
+    .bench-lbl { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
+    .bench-players { display: flex; gap: 8px; flex-wrap: wrap; }
+    .bench-chip { display: flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 11px; }
+
     /* MOBILE */
     @media (max-width: 768px) {
       .shell { grid-template-columns: 1fr; }
@@ -908,58 +926,169 @@
 
     <!-- ── FORMATIONS ── -->
     <div class="panel" id="panel-formation" style="position:relative;">
-      <div class="avanti-strip">
-        <div class="as-dot"></div>
-        <span class="as-label">AVANTI</span>
+      <div class="avanti-strip" style="padding:8px 16px;">
+        <div class="as-dot"></div><span class="as-label">AVANTI</span>
         <span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span>
       </div>
-      <div style="padding:10px 24px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:8px;flex-shrink:0;">
-        <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
-          <div style="font-size:12px;color:var(--text2);">• <strong style="color:var(--text);">2 starters RED</strong> for Saturday — M. Lopez (RB) and D. Hill (RM). Depth chart shows adjusted lineup below.</div>
+      <div style="padding:8px 20px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+        <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <div style="font-size:12px;color:var(--text2);">• <strong style="color:var(--text);">2 starters RED</strong> for Saturday — M. Lopez (RB) and D. Hill (RM). Depth chart shows adjusted lineup.</div>
           <button class="btn-ghost" style="font-size:10px;flex-shrink:0;">LINEUP</button>
           <button class="btn-primary" style="flex-shrink:0;font-size:10px;">View adjustments</button>
         </div>
-        <div style="background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div style="background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
           <div style="font-size:12px;color:var(--text2);">• <strong style="color:var(--text);">D. Hill (RM)</strong> flagged YELLOW — recovery 64, training volume +18%. Watch Saturday warmup.</div>
           <button class="btn-ghost" style="font-size:10px;flex-shrink:0;">WATCH</button>
         </div>
       </div>
-      <div class="page-header">
-        <div>
-          <div class="page-title">Formation</div>
-          <div class="page-subtitle">Active: 4-3-3 · Last used Apr 26 vs Lakewood</div>
+      <div class="formation-body">
+        <div class="sport-controls">
+          <div class="sport-tabs">
+            <div class="sport-tab">Football</div>
+            <div class="sport-tab active">Soccer</div>
+            <div class="sport-tab">Basketball</div>
+          </div>
+          <div class="form-selector">
+            Formation
+            <button class="form-btn active">4-3-3</button>
+            <button class="form-btn">3-5-2</button>
+            <button class="form-btn">4-4-2</button>
+            <button class="btn-ghost" style="font-size:10px;margin-left:8px;">Save</button>
+            <button class="btn-primary" style="font-size:10px;">Set Starting XI</button>
+          </div>
         </div>
-        <div class="page-actions">
-          <button class="btn-ghost">Save Formation</button>
-          <button class="btn-primary">Set Starting XI</button>
-        </div>
-      </div>
-      <div class="panel-scroll">
-        <div class="ftabs">
-          <span class="ftab active" onclick="switchFormation(this,'433')">4-3-3</span>
-          <span class="ftab" onclick="switchFormation(this,'4231')">4-2-3-1</span>
-          <span class="ftab" onclick="switchFormation(this,'352')">3-5-2</span>
-          <span class="ftab" onclick="switchFormation(this,'442')">4-4-2</span>
-        </div>
-        <div class="field-wrap">
-          <svg id="fieldSvg" viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg">
-            <rect width="300" height="450" fill="#0a150a" rx="8"/>
-            <rect x="18" y="18" width="264" height="414" fill="none" stroke="#193319" stroke-width="1.5"/>
-            <line x1="18" y1="225" x2="282" y2="225" stroke="#193319" stroke-width="1"/>
-            <circle cx="150" cy="225" r="42" fill="none" stroke="#193319" stroke-width="1"/>
-            <circle cx="150" cy="225" r="3" fill="#193319"/>
-            <rect x="78" y="18" width="144" height="62" fill="none" stroke="#193319" stroke-width="1"/>
-            <rect x="112" y="18" width="76" height="26" fill="none" stroke="#193319" stroke-width="1"/>
-            <rect x="122" y="12" width="56" height="8" fill="none" stroke="#234023" stroke-width="1.5"/>
-            <rect x="78" y="370" width="144" height="62" fill="none" stroke="#193319" stroke-width="1"/>
-            <rect x="112" y="406" width="76" height="26" fill="none" stroke="#193319" stroke-width="1"/>
-            <rect x="122" y="430" width="56" height="8" fill="none" stroke="#234023" stroke-width="1.5"/>
-            <rect x="18" y="18" width="264" height="39" fill="rgba(255,255,255,.012)"/>
-            <rect x="18" y="96" width="264" height="39" fill="rgba(255,255,255,.012)"/>
-            <rect x="18" y="174" width="264" height="39" fill="rgba(255,255,255,.012)"/>
-            <rect x="18" y="252" width="264" height="39" fill="rgba(255,255,255,.012)"/>
-            <rect x="18" y="330" width="264" height="39" fill="rgba(255,255,255,.012)"/>
-          </svg>
+        <div class="field-container">
+          <div class="field-svg-wrap">
+            <svg viewBox="0 0 560 750" xmlns="http://www.w3.org/2000/svg">
+              <!-- Field background -->
+              <rect width="560" height="750" fill="#071007" rx="10"/>
+              <!-- Field outline -->
+              <rect x="30" y="30" width="500" height="690" fill="none" stroke="#1a3d1a" stroke-width="2"/>
+              <!-- Midfield line -->
+              <line x1="30" y1="375" x2="530" y2="375" stroke="#1a3d1a" stroke-width="1.5"/>
+              <!-- Center circle -->
+              <circle cx="280" cy="375" r="65" fill="none" stroke="#1a3d1a" stroke-width="1.5"/>
+              <circle cx="280" cy="375" r="4" fill="#1a3d1a"/>
+              <!-- Top penalty area -->
+              <rect x="150" y="30" width="260" height="110" fill="none" stroke="#1a3d1a" stroke-width="1.5"/>
+              <rect x="205" y="30" width="150" height="45" fill="none" stroke="#1a3d1a" stroke-width="1.5"/>
+              <path d="M 205 140 A 65 65 0 0 1 355 140" fill="none" stroke="#1a3d1a" stroke-width="1.5"/>
+              <!-- Bottom penalty area -->
+              <rect x="150" y="610" width="260" height="110" fill="none" stroke="#1a3d1a" stroke-width="1.5"/>
+              <rect x="205" y="675" width="150" height="45" fill="none" stroke="#1a3d1a" stroke-width="1.5"/>
+              <path d="M 205 610 A 65 65 0 0 0 355 610" fill="none" stroke="#1a3d1a" stroke-width="1.5"/>
+              <!-- Goals -->
+              <rect x="225" y="14" width="110" height="18" fill="none" stroke="#2a5a2a" stroke-width="2"/>
+              <rect x="225" y="718" width="110" height="18" fill="none" stroke="#2a5a2a" stroke-width="2"/>
+              <!-- ATTACK/DEFEND labels -->
+              <text x="50" y="55" font-size="11" fill="#2a5a2a" font-family="-apple-system,sans-serif" font-weight="700" letter-spacing="1">ATTACK →</text>
+              <text x="50" y="720" font-size="11" fill="#2a5a2a" font-family="-apple-system,sans-serif" font-weight="700" letter-spacing="1">← DEFEND</text>
+              <!-- Formation label -->
+              <text x="500" y="55" font-size="18" fill="#2a5a2a" font-family="-apple-system,sans-serif" font-weight="900" text-anchor="end">4-3-3</text>
+
+              <!-- Helper macro: player circle -->
+              <!-- ST - Marcus Rivera #9 -->
+              <g transform="translate(280,100)">
+                <circle r="30" fill="#0d1f0d"/><circle r="30" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="13" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">ST</text>
+                <text x="0" y="-14" text-anchor="middle" font-size="8" fill="#34d399" font-family="-apple-system,sans-serif">87</text>
+                <circle cx="22" cy="-22" r="6" fill="#34d399"/>
+                <text x="0" y="46" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">Marcus Rivera #9</text>
+                <text x="0" y="57" text-anchor="middle" font-size="8" fill="#555" font-family="-apple-system,sans-serif">+1 DEPTH</text>
+              </g>
+
+              <!-- LW - K. Mensah #11 -->
+              <g transform="translate(90,195)">
+                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">LW</text>
+                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
+                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">K. Mensah #11</text>
+              </g>
+
+              <!-- RW - F. Costa #7 -->
+              <g transform="translate(470,195)">
+                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">RW</text>
+                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
+                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">F. Costa #7</text>
+              </g>
+
+              <!-- CM - I. Yong #10 -->
+              <g transform="translate(150,310)">
+                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">CM</text>
+                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
+                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">I. Yong #10</text>
+              </g>
+
+              <!-- CDM - R. Vega #8 -->
+              <g transform="translate(280,345)">
+                <circle r="30" fill="#0d1f0d"/><circle r="30" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">CDM</text>
+                <circle cx="22" cy="-22" r="6" fill="#34d399"/>
+                <text x="0" y="46" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">R. Vega #8</text>
+              </g>
+
+              <!-- CM - S. Boateng #6 -->
+              <g transform="translate(410,310)">
+                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">CM</text>
+                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
+                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">S. Boateng #6</text>
+              </g>
+
+              <!-- LB - F. Ahmed #3 -->
+              <g transform="translate(75,490)">
+                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">LB</text>
+                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
+                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">F. Ahmed #3</text>
+              </g>
+
+              <!-- CB - T. Cruz #5 -->
+              <g transform="translate(195,470)">
+                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">CB</text>
+                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
+                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">T. Cruz #5</text>
+              </g>
+
+              <!-- CB - J. Park #4 -->
+              <g transform="translate(365,470)">
+                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">CB</text>
+                <circle cx="20" cy="-20" r="6" fill="#34d399"/>
+                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">J. Park #4</text>
+              </g>
+
+              <!-- RB - M. Lopez #2 YELLOW -->
+              <g transform="translate(485,490)">
+                <circle r="28" fill="#0d1f0d"/><circle r="28" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="12" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">RB</text>
+                <circle cx="20" cy="-20" r="6" fill="#fbbf24"/>
+                <text x="0" y="42" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">M. Lopez #2</text>
+              </g>
+
+              <!-- GK - L. Park #1 -->
+              <g transform="translate(280,635)">
+                <circle r="30" fill="#0d1f0d"/><circle r="30" fill="none" stroke="#34d399" stroke-width="2"/>
+                <text x="0" y="5" text-anchor="middle" font-size="13" font-weight="900" fill="#fff" font-family="-apple-system,sans-serif">GK</text>
+                <circle cx="22" cy="-22" r="6" fill="#34d399"/>
+                <text x="0" y="46" text-anchor="middle" font-size="9" fill="#aaa" font-family="-apple-system,sans-serif">L. Park #1</text>
+                <text x="0" y="57" text-anchor="middle" font-size="8" fill="#555" font-family="-apple-system,sans-serif">+1 DEPTH</text>
+              </g>
+            </svg>
+          </div>
+          <div class="bench-section">
+            <div class="bench-lbl">Bench · Substitutes (5)</div>
+            <div class="bench-players">
+              <div class="bench-chip"><span class="player-num">22</span><div class="sdot g"></div><span style="font-size:11px;font-weight:600;color:var(--text);">A. Diaz</span><span class="player-pos">GK</span></div>
+              <div class="bench-chip"><span class="player-num">15</span><div class="sdot g"></div><span style="font-size:11px;font-weight:600;color:var(--text);">R. Park</span><span class="player-pos">MF</span></div>
+              <div class="bench-chip"><span class="player-num">19</span><div class="sdot g"></div><span style="font-size:11px;font-weight:600;color:var(--text);">S. Torres</span><span class="player-pos">FW</span></div>
+              <div class="bench-chip"><span class="player-num">14</span><div class="sdot y"></div><span style="font-size:11px;font-weight:600;color:var(--text);">D. Hill</span><span class="player-pos">RM</span></div>
+              <div class="bench-chip"><span class="player-num">11</span><div class="sdot r"></div><span style="font-size:11px;font-weight:600;color:var(--text);">F. Walker</span><span class="player-pos">MF</span></div>
+            </div>
+          </div>
         </div>
       </div>      <div class="avanti-float" onclick="setPage('avanti')">
         <span class="af-label">Ask AVANTI about this page…</span>
