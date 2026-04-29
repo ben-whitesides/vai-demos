@@ -266,21 +266,19 @@
     .up-meta { font-size: 11px; color: var(--muted); }
     .avanti-float { position: absolute; bottom: 24px; right: 24px; cursor: pointer; z-index: 10; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
     .af-label { font-size: 11px; color: var(--text2); background: var(--card); border: 1px solid var(--border); border-radius: 100px; padding: 5px 14px; white-space: nowrap; }
-    .af-pill-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; }
-    .af-ring { position: absolute; border-radius: 100px; border: 1px solid rgba(52,211,153,0.35); animation: af-breathe 3s ease-in-out infinite; pointer-events: none; }
-    .af-ring:nth-child(1) { inset: -8px; animation-delay: 0s; }
-    .af-ring:nth-child(2) { inset: -18px; animation-delay: .4s; border-color: rgba(52,211,153,0.2); }
-    .af-ring.active:nth-child(1) { animation-duration: 2.2s; }
-    .af-ring.active:nth-child(2) { animation-duration: 2.2s; animation-delay: .3s; }
-    .af-ring.active:nth-child(3) { inset: -28px; animation-duration: 2.2s; animation-delay: .6s; border-color: rgba(52,211,153,0.1); }
-    .af-ring.active:nth-child(4) { inset: -38px; animation-duration: 2.2s; animation-delay: .9s; border-color: rgba(52,211,153,0.05); }
-    @keyframes af-breathe { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.04)} }
-    .af-pill { background: #5effc4; border-radius: 100px; padding: 11px 22px; display: flex; align-items: center; gap: 10px; box-shadow: 0 0 32px rgba(52,211,153,.45), 0 0 8px rgba(52,211,153,.3); animation: af-glow 3s ease-in-out infinite; position: relative; }
-    @keyframes af-glow { 0%,100%{box-shadow:0 0 32px rgba(52,211,153,.45),0 0 8px rgba(52,211,153,.3)} 50%{box-shadow:0 0 48px rgba(52,211,153,.65),0 0 16px rgba(52,211,153,.45)} }
-    .af-icon { width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.2); display: flex; align-items: center; justify-content: center; }
-    .af-text { font-size: 13px; font-weight: 800; color: #003d26; letter-spacing: .04em; }
-    .af-dot { width: 6px; height: 6px; border-radius: 50%; background: #003d26; opacity: .5; }
-    .af-badge { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; background: var(--orange); color: #000; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black); }
+    .af-pill-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 24px; margin: -24px; }
+    .af-ring { position: absolute; border-radius: 100px; pointer-events: none; animation: af-breathe 3s ease-in-out infinite; }
+    .af-ring:nth-child(1) { inset: 12px; background: rgba(52,211,153,0.18); animation-delay: 0s; }
+    .af-ring:nth-child(2) { inset: 4px; background: rgba(52,211,153,0.12); animation-delay: .5s; }
+    .af-ring:nth-child(3) { inset: -4px; background: rgba(52,211,153,0.07); animation-delay: 1s; }
+    .af-ring:nth-child(4) { inset: -14px; background: rgba(52,211,153,0.03); animation-delay: 1.5s; }
+    @keyframes af-breathe { 0%,100%{opacity:1} 50%{opacity:.35} }
+    .af-pill { background: #5dffc3; border-radius: 100px; padding: 12px 24px; display: flex; align-items: center; gap: 12px; animation: af-glow 3s ease-in-out infinite; position: relative; z-index: 2; }
+    @keyframes af-glow { 0%,100%{box-shadow:0 0 0 2px rgba(52,211,153,0.5),0 0 28px rgba(52,211,153,.5)} 50%{box-shadow:0 0 0 2px rgba(52,211,153,0.7),0 0 44px rgba(52,211,153,.7)} }
+    .af-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(0,60,35,.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .af-text { font-size: 15px; font-weight: 900; color: #001a10; letter-spacing: .08em; }
+    .af-dot { width: 7px; height: 7px; border-radius: 50%; background: #001a10; opacity: .6; flex-shrink: 0; }
+    .af-badge { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; background: var(--orange); color: #000; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black); z-index: 3; }
 
     /* ROSTER */
     .roster-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
@@ -646,13 +644,14 @@
         <div class="af-pill-wrap">
           <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
           <div class="af-pill">
-            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="2.93" y1="2.93" x2="5.05" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="10.95" y1="10.95" x2="13.07" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="13.07" y1="2.93" x2="10.95" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="5.05" y1="10.95" x2="2.93" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div>
             <span class="af-text">AVANTI</span>
             <span class="af-dot"></span>
             <span class="af-badge">3</span>
           </div>
         </div>
       </div>
+    </div>
 
     <!-- ── PLAY STATUS ── -->
     <div class="panel" id="panel-play" style="position:relative;">
@@ -701,13 +700,14 @@
         <div class="af-pill-wrap">
           <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
           <div class="af-pill">
-            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="2.93" y1="2.93" x2="5.05" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="10.95" y1="10.95" x2="13.07" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="13.07" y1="2.93" x2="10.95" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="5.05" y1="10.95" x2="2.93" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div>
             <span class="af-text">AVANTI</span>
             <span class="af-dot"></span>
             <span class="af-badge">1</span>
           </div>
         </div>
       </div>
+    </div>
 
     <!-- ── ROSTER ── -->
     <div class="panel" id="panel-roster" style="position:relative;">
@@ -814,13 +814,14 @@
         <div class="af-pill-wrap">
           <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
           <div class="af-pill">
-            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="2.93" y1="2.93" x2="5.05" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="10.95" y1="10.95" x2="13.07" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="13.07" y1="2.93" x2="10.95" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="5.05" y1="10.95" x2="2.93" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div>
             <span class="af-text">AVANTI</span>
             <span class="af-dot"></span>
             <span class="af-badge">3</span>
           </div>
         </div>
       </div>
+    </div>
 
     <!-- ── FORMATIONS ── -->
     <div class="panel" id="panel-formation" style="position:relative;">
@@ -882,13 +883,14 @@
         <div class="af-pill-wrap">
           <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
           <div class="af-pill">
-            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="2.93" y1="2.93" x2="5.05" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="10.95" y1="10.95" x2="13.07" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="13.07" y1="2.93" x2="10.95" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="5.05" y1="10.95" x2="2.93" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div>
             <span class="af-text">AVANTI</span>
             <span class="af-dot"></span>
             <span class="af-badge">4</span>
           </div>
         </div>
       </div>
+    </div>
 
     <!-- ── SCHEDULE ── -->
     <div class="panel" id="panel-schedule" style="position:relative;">
@@ -961,13 +963,14 @@
         <div class="af-pill-wrap">
           <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
           <div class="af-pill">
-            <div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div>
+            <div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="2.93" y1="2.93" x2="5.05" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="10.95" y1="10.95" x2="13.07" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="13.07" y1="2.93" x2="10.95" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="5.05" y1="10.95" x2="2.93" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div>
             <span class="af-text">AVANTI</span>
             <span class="af-dot"></span>
             <span class="af-badge">2</span>
           </div>
         </div>
       </div>
+    </div>
 
     <!-- ── COMMS ── -->
     <div class="panel" id="panel-comms" style="position:relative;">
@@ -1135,7 +1138,7 @@
         <span class="af-label">Ask AVANTI about this page…</span>
         <div class="af-pill-wrap">
           <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
-          <div class="af-pill"><div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">1</span></div>
+          <div class="af-pill"><div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="2.93" y1="2.93" x2="5.05" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="10.95" y1="10.95" x2="13.07" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="13.07" y1="2.93" x2="10.95" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/><line x1="5.05" y1="10.95" x2="2.93" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">1</span></div>
         </div>
       </div>
     </div>
