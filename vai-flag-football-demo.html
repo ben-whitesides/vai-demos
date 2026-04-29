@@ -692,6 +692,11 @@
       Recruiting
       <span class="nav-badge" style="background:var(--green);color:#000;">NEW</span>
     </a>
+    <a class="nav-item" id="nav-coaches" onclick="setPage('coaches')" style="position:relative;">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 5v8H1V5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M5 13V8h4v5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Coaches Corner
+      <span class="nav-badge" style="background:var(--orange);color:#000;">AI</span>
+    </a>
     <div class="nav-divider"></div>
     <div class="nav-section-label">Live Ops</div>
     <a class="nav-item" id="nav-tournament" onclick="setPage('tournament')">
@@ -1679,7 +1684,7 @@
           </div>
           <div style="background:var(--card);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:20px;text-align:center;background:linear-gradient(135deg,rgba(52,211,153,.06),rgba(52,211,153,.02));">
             <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Net Position</div>
-            <div style="font-size:32px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;">++$18,200</div>
+            <div style="font-size:32px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;">+$18,200</div>
             <div style="font-size:11px;color:var(--green);margin-top:4px;">↑ 49% margin · On track</div>
           </div>
         </div>
@@ -2186,6 +2191,137 @@
         <div class="af-pill-wrap">
           <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
           <div class="af-pill"><div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">4</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COACHES CORNER ── -->
+    <div class="panel" id="panel-coaches" style="position:relative;">
+      <div class="avanti-strip" style="padding:8px 16px;"><div class="as-dot"></div><span class="as-label">AVANTI</span><span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span></div>
+      <div class="page-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="page-title">Coaches Corner</div>
+            <span style="font-size:10px;font-weight:800;background:var(--orange-d);color:var(--orange);border:1px solid var(--orange-b);padding:3px 10px;border-radius:100px;letter-spacing:.08em;">AVANTI AI</span>
+          </div>
+          <div class="page-subtitle">Play library · AI recommendations · Game planning · Opponent analysis</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn-ghost">+ Upload Play</button>
+          <button class="btn-primary">Game Plan vs Jordan High</button>
+        </div>
+      </div>
+      <div class="tourn-tabs" style="padding:0 24px;">
+        <div class="tourn-tab active">AVANTI Recommends</div>
+        <div class="tourn-tab">Play Library</div>
+        <div class="tourn-tab">Game Plan</div>
+        <div class="tourn-tab">Opponent Analysis</div>
+      </div>
+      <div class="panel-scroll" style="padding-top:20px;">
+
+        <!-- AVANTI situation prompt -->
+        <div style="background:linear-gradient(135deg,rgba(247,148,30,.08),rgba(247,148,30,.03));border:1px solid rgba(247,148,30,.25);border-radius:10px;padding:16px 20px;margin-bottom:20px;">
+          <div style="font-size:10px;font-weight:800;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">AVANTI — Reading Current Situation</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px;">
+            <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Opponent</div>
+              <div style="font-size:13px;font-weight:800;color:var(--text);">Jordan High</div>
+            </div>
+            <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Key Flags</div>
+              <div style="font-size:13px;font-weight:800;color:var(--yellow);">M. Lopez RED · D. Hill YLW</div>
+            </div>
+            <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Your Record</div>
+              <div style="font-size:13px;font-weight:800;color:var(--green);">7–1–2</div>
+            </div>
+            <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">PLAY Index</div>
+              <div style="font-size:13px;font-weight:800;color:var(--green);">89% GREEN</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6;border-top:1px solid var(--border);padding-top:12px;">
+            <strong style="color:var(--orange);">AVANTI Analysis:</strong> Jordan High blitzes 73% on 3rd down. M. Lopez (RB) is RED — adjust backfield. D. Hill (RM) is YELLOW — monitor warmup. Your best matchup is A. Taylor (QB) vs their RB (#14) — speed differential favors you in wide areas. Recommend attacking left flank early.
+          </div>
+        </div>
+
+        <!-- Play Recommendations -->
+        <div class="section-hdr" style="margin-bottom:12px;"><span class="section-title">AVANTI Recommended Plays — Saturday vs Jordan High</span><span class="section-link">Refresh →</span></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+          <!-- Play card 1 -->
+          <div style="background:var(--card);border:1px solid rgba(247,148,30,.3);border-radius:10px;padding:16px;cursor:pointer;" onclick="">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <span style="font-size:11px;font-weight:800;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;">AVANTI #1 PICK</span>
+              <span style="font-size:10px;color:var(--green);font-weight:700;">94% confidence</span>
+            </div>
+            <div style="font-size:15px;font-weight:900;color:var(--text);margin-bottom:4px;">Flood Right Slant</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">Formation: Spread 7v7 · QB scramble right · WR1 flood route</div>
+            <div style="background:rgba(52,211,153,.06);border:1px solid var(--green-b);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text2);">
+              <strong style="color:var(--green);">Why:</strong> Highland's RB #14 has been beaten wide in 4/5 recent games. Mensah speed advantage confirmed. M. Lopez absence means adjusted overlap from Vega.
+            </div>
+            <div style="margin-top:10px;display:flex;gap:6px;">
+              <button class="btn-primary" style="flex:1;font-size:10px;">Add to Game Plan</button>
+              <button class="btn-ghost" style="font-size:10px;">View Play</button>
+            </div>
+          </div>
+
+          <!-- Play card 2 -->
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;" onclick="">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <span style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;">AVANTI #2</span>
+              <span style="font-size:10px;color:var(--green);font-weight:700;">87% confidence</span>
+            </div>
+            <div style="font-size:15px;font-weight:900;color:var(--text);margin-bottom:4px;">Blitz Package</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">Formation: 3-2-2 · 5-rusher blitz · Cover 1</div>
+            <div style="background:rgba(52,211,153,.06);border:1px solid var(--green-b);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text2);">
+              <strong style="color:var(--green);">Why:</strong> Jordan QB throws high under pressure — 68% completion. Your team PLAY Index is 89% — energy advantage in first 20 min.
+            </div>
+            <div style="margin-top:10px;display:flex;gap:6px;">
+              <button class="btn-primary" style="flex:1;font-size:10px;">Add to Game Plan</button>
+              <button class="btn-ghost" style="font-size:10px;">View Play</button>
+            </div>
+          </div>
+
+          <!-- Play card 3 -->
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;" onclick="">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <span style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;">AVANTI #3</span>
+              <span style="font-size:10px;color:var(--yellow);font-weight:700;">71% confidence</span>
+            </div>
+            <div style="font-size:15px;font-weight:900;color:var(--text);margin-bottom:4px;">Draw Play Up Middle</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">Formation: 4-3-3 · Vega + Martinez counter burst · Switch ball to Yong</div>
+            <div style="background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.2);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text2);">
+              <strong style="color:var(--yellow);">Caution:</strong> D. Hill (RM) is YELLOW — this play requires his sprint. Monitor warmup before committing.
+            </div>
+            <div style="margin-top:10px;display:flex;gap:6px;">
+              <button class="btn-primary" style="flex:1;font-size:10px;">Add to Game Plan</button>
+              <button class="btn-ghost" style="font-size:10px;">View Play</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Play Library preview -->
+        <div class="section-hdr" style="margin-bottom:12px;"><span class="section-title">Play Library</span><span class="section-link" style="font-size:11px;">View all 47 plays →</span></div>
+        <div class="card">
+          <table class="fin-table">
+            <thead><tr><th>Play Name</th><th>Formation</th><th>Type</th><th>Win Rate</th><th class="r">AVANTI Score</th><th class="r">Action</th></tr></thead>
+            <tbody>
+              <tr><td class="name">Flood Right Slant</td><td>4-3-3</td><td>Attack</td><td style="color:var(--green);">78%</td><td class="r" style="color:var(--green);font-weight:800;">94</td><td class="r"><span class="section-link">Use</span></td></tr>
+              <tr><td class="name">Blitz Package</td><td>4-3-3</td><td>Press</td><td style="color:var(--green);">71%</td><td class="r" style="color:var(--green);font-weight:800;">87</td><td class="r"><span class="section-link">Use</span></td></tr>
+              <tr><td class="name">Draw Play Up Middle</td><td>4-3-3</td><td>Counter</td><td style="color:var(--yellow);">64%</td><td class="r" style="color:var(--yellow);font-weight:800;">71</td><td class="r"><span class="section-link">Use</span></td></tr>
+              <tr><td class="name">Prevent Defense</td><td>4-5-1</td><td>Defensive</td><td style="color:var(--green);">82%</td><td class="r" style="color:var(--green);font-weight:800;">88</td><td class="r"><span class="section-link">Use</span></td></tr>
+              <tr><td class="name">Quick Slant Package</td><td>3-4-3</td><td>Attack</td><td style="color:var(--green);">69%</td><td class="r" style="color:var(--yellow);font-weight:800;">76</td><td class="r"><span class="section-link">Use</span></td></tr>
+              <tr style="opacity:.5;cursor:pointer;"><td colspan="6" style="text-align:center;padding:10px;font-size:12px;color:var(--muted);">+ 42 more plays in library — <span style="color:var(--orange);">Upload your own →</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill"><div class="af-icon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".7"/><line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/><line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".8"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">3</span></div>
         </div>
       </div>
     </div>
