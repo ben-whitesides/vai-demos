@@ -1633,97 +1633,152 @@
     <!-- ── FINANCES ── -->
     <div class="panel" id="panel-finances" style="position:relative;">
       <div class="avanti-strip" style="padding:8px 16px;"><div class="as-dot"></div><span class="as-label">AVANTI</span><span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span></div>
-      <div class="fin-tabs">
-        <div class="fin-tab active">Connected</div>
-        <div class="fin-tab">Setup State</div>
+
+      <!-- FINANCE DASHBOARD VIEW -->
+      <div class="athletes-view active" id="fin-dashboard-view">
+      <div class="page-header">
+        <div><div class="page-title">Finances</div><div class="page-subtitle">UHSGFA · Spring 2026 · Budget Period: Jan–Jun</div></div>
+        <div class="page-actions">
+          <button class="btn-ghost" onclick="document.getElementById('fin-dashboard-view').classList.remove('active');document.getElementById('fin-connections-view').classList.add('active')">⚡ Connections</button>
+          <button class="btn-ghost">Export</button>
+          <button class="btn-primary">Record Payment</button>
+        </div>
       </div>
-      <div class="page-header" style="border-bottom:none;padding-bottom:0;">
-        <div><div class="page-title">Finances</div><div class="page-subtitle">Connected financial tools and club data imports.</div></div>
-        <div class="page-actions"><button class="btn-ghost">⚙ Settings</button></div>
       </div>
+      <!-- ORG Finance Dashboard -->
       <div class="panel-scroll">
         <div class="fin-insights-bar">
           <div class="fib-dot"></div>
           <span class="fib-label">AVANTI – Financial Insights</span>
-          <span class="fib-text">3 outstanding dues · Stripe balance $4,280 · Last payout Apr 22 · QuickBooks, Stripe, PayPal connected</span>
+          <span class="fib-text">3 families overdue · $3,840 outstanding · Stripe balance $4,280 · Next payout est. May 1</span>
           <div class="fib-actions">
-            <button class="fib-btn warn">⚠ Dues Reminder</button>
-            <button class="fib-btn ghost">✎ Summarize</button>
+            <button class="fib-btn warn">⚠ Send Reminders</button>
+            <button class="fib-btn ghost">✎ Generate Report</button>
           </div>
         </div>
 
-        <div class="fin-tools-grid">
-          <div class="fin-tool-card">
-            <div class="ftc-hdr">
-              <div class="ftc-left"><div class="ftc-logo qb">QB</div><div><div class="ftc-name">QuickBooks</div><div class="ftc-sub">Accounting &amp; Invoicing</div></div></div>
-              <span class="ftc-badge connected">● CONNECTED</span>
-            </div>
-            <div class="ftc-rows">
-              <div class="ftc-row"><span class="ftc-row-lbl">Outstanding invoices</span><span class="ftc-row-val">3</span></div>
-              <div class="ftc-row"><span class="ftc-row-lbl">Total receivable</span><span class="ftc-row-val pos">$1,240</span></div>
-              <div class="ftc-row"><span class="ftc-row-lbl">Recent transactions</span><span class="ftc-row-val">14</span></div>
-            </div>
-            <button class="ftc-open-btn">Open QuickBooks ↗</button>
+        <!-- Hero KPIs -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Total Revenue</div>
+            <div style="font-size:32px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;">$45,200</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Spring 2026 · Jan–Jun</div>
           </div>
-          <div class="fin-tool-card">
-            <div class="ftc-hdr">
-              <div class="ftc-left"><div class="ftc-logo stripe">S</div><div><div class="ftc-name">Stripe</div><div class="ftc-sub">Payments &amp; Payouts</div></div></div>
-              <span class="ftc-badge connected">● CONNECTED</span>
-            </div>
-            <div class="ftc-rows">
-              <div class="ftc-row"><span class="ftc-row-lbl">Available balance</span><span class="ftc-row-val pos">$4,280</span></div>
-              <div class="ftc-row"><span class="ftc-row-lbl">Last payout</span><span class="ftc-row-val">Apr 22</span></div>
-              <div class="ftc-row"><span class="ftc-row-lbl">Pending</span><span class="ftc-row-val">$320</span></div>
-            </div>
-            <button class="ftc-open-btn">Open Stripe ↗</button>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Total Expenses</div>
+            <div style="font-size:32px;font-weight:900;color:var(--text);font-variant-numeric:tabular-nums;">$22,940</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">YTD through Apr 2026</div>
           </div>
-          <div class="fin-tool-card">
-            <div class="ftc-hdr">
-              <div class="ftc-left"><div class="ftc-logo paypal">P</div><div><div class="ftc-name">PayPal</div><div class="ftc-sub">Online Payments</div></div></div>
-              <span class="ftc-badge connected">● CONNECTED</span>
-            </div>
-            <div class="ftc-rows">
-              <div class="ftc-row"><span class="ftc-row-lbl">Merchant status</span><span class="ftc-row-val pos">Authorized</span></div>
-              <div class="ftc-row"><span class="ftc-row-lbl">Connected</span><span class="ftc-row-val">Apr 25, 2026</span></div>
-              <div class="ftc-row"><span class="ftc-row-lbl">Last payment</span><span class="ftc-row-val">$225</span></div>
-            </div>
-            <button class="ftc-open-btn">Open PayPal ↗</button>
-          </div>
-          <div class="fin-tool-card">
-            <div class="ftc-hdr">
-              <div class="ftc-left"><div class="ftc-logo venmo">V</div><div><div class="ftc-name">Venmo Business</div><div class="ftc-sub">Dashboard Shortcut</div></div></div>
-              <span class="ftc-badge shortcut">SHORTCUT</span>
-            </div>
-            <div class="ftc-rows">
-              <div class="ftc-row"><span class="ftc-row-lbl">Profile</span><span class="ftc-row-val pos">@vaifcnorth</span></div>
-              <div class="ftc-row"><span class="ftc-row-lbl">Access</span><span class="ftc-row-val muted">Dashboard only</span></div>
-              <div class="ftc-row"><span class="ftc-row-lbl">Status</span><span class="ftc-row-val">Active</span></div>
-            </div>
-            <button class="ftc-open-btn">Open Venmo ↗</button>
+          <div style="background:var(--card);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:20px;text-align:center;background:linear-gradient(135deg,rgba(52,211,153,.06),rgba(52,211,153,.02));">
+            <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Net Position</div>
+            <div style="font-size:32px;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums;">+$22,260</div>
+            <div style="font-size:11px;color:var(--green);margin-top:4px;">↑ 49% margin · On track</div>
           </div>
         </div>
 
-        <div class="fin-import">
-          <div class="fim-hdr">
-            <div class="fim-title">Import Club Data</div>
-            <div style="display:flex;gap:8px;"><button class="btn-ghost">Preview Import</button><button class="btn-primary">Commit Staged</button></div>
+        <div class="db-grid">
+          <!-- Dues Collection -->
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>Dues Collection</span><span class="db-section-link" onclick="">Detail →</span></div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+              <div style="background:var(--black);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+                <div style="font-size:18px;font-weight:900;color:var(--green);">$41,360</div>
+                <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;">Collected</div>
+              </div>
+              <div style="background:var(--black);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:10px;text-align:center;">
+                <div style="font-size:18px;font-weight:900;color:var(--yellow);">$3,840</div>
+                <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;">Outstanding</div>
+              </div>
+              <div style="background:var(--black);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px;text-align:center;">
+                <div style="font-size:18px;font-weight:900;color:var(--red);">$1,200</div>
+                <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;">Overdue 30d+</div>
+              </div>
+            </div>
+            <table class="fin-table">
+              <thead><tr><th>Team</th><th class="r">Collected</th><th class="r">Outstanding</th><th class="r">Rate</th></tr></thead>
+              <tbody>
+                <tr><td class="name">U17 Girls A</td><td class="amt pos">$12,600</td><td class="amt neg">$900</td><td class="r" style="color:var(--green);">93%</td></tr>
+                <tr><td class="name">U15 Girls</td><td class="amt pos">$11,700</td><td class="amt neu">$300</td><td class="r" style="color:var(--green);">97%</td></tr>
+                <tr><td class="name">U19 Girls</td><td class="amt pos">$11,700</td><td class="amt neg">$1,200</td><td class="r" style="color:var(--yellow);">91%</td></tr>
+                <tr><td class="name">Other teams</td><td class="amt pos">$5,360</td><td class="amt neg">$1,440</td><td class="r" style="color:var(--yellow);">79%</td></tr>
+              </tbody>
+            </table>
           </div>
-          <div class="fim-stats">
-            <div class="fim-stat"><div class="fim-stat-val">47</div><div class="fim-stat-lbl">Total Rows</div></div>
-            <div class="fim-stat"><div class="fim-stat-val g">44</div><div class="fim-stat-lbl">Valid</div></div>
-            <div class="fim-stat"><div class="fim-stat-val y">02</div><div class="fim-stat-lbl">Warnings</div></div>
-            <div class="fim-stat"><div class="fim-stat-val r">01</div><div class="fim-stat-lbl">Errors</div></div>
+
+          <!-- Budget Overview -->
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>Budget vs. Actuals</span><span class="db-section-link">Full report →</span></div>
+            <table class="fin-table">
+              <thead><tr><th>Category</th><th class="r">Budget</th><th class="r">Spent</th><th class="r">Remaining</th></tr></thead>
+              <tbody>
+                <tr><td class="name">Field Rentals</td><td class="amt neu">$9,600</td><td class="amt neu">$6,400</td><td class="amt pos">$3,200</td></tr>
+                <tr><td class="name">Tournament Fees</td><td class="amt neu">$7,200</td><td class="amt neu">$5,400</td><td class="amt pos">$1,800</td></tr>
+                <tr><td class="name">Equipment & Kits</td><td class="amt neu">$12,000</td><td class="amt neu">$8,520</td><td class="amt pos">$3,480</td></tr>
+                <tr><td class="name">Coaching / Staff</td><td class="amt neu">$14,400</td><td class="amt neu">$1,800</td><td class="amt pos">$12,600</td></tr>
+                <tr><td class="name">Travel & Lodging</td><td class="amt neu">$6,000</td><td class="amt neu">$0</td><td class="amt pos">$6,000</td></tr>
+                <tr><td class="name">Camps & Clinics</td><td class="amt neu">$2,400</td><td class="amt neg">$820</td><td class="amt pos">$1,580</td></tr>
+                <tr class="total-row"><td>Total</td><td class="amt neu">$51,600</td><td class="amt neu">$22,940</td><td class="amt pos">$28,660</td></tr>
+              </tbody>
+            </table>
           </div>
-          <table class="fin-table">
-            <thead><tr><th>#</th><th>Athlete</th><th>Guardian Email</th><th>Team</th><th class="r">Status</th></tr></thead>
-            <tbody>
-              <tr><td>1</td><td class="name">Mia Rodriguez</td><td>mia.r@gmail.com</td><td>U17 Girls A</td><td style="text-align:right;"><span class="badge badge-w" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">VALID</span></td></tr>
-              <tr><td>2</td><td class="name">Kai Tanaka</td><td>ktanaka@yahoo.com</td><td>U15 Girls</td><td style="text-align:right;"><span class="badge badge-w" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">VALID</span></td></tr>
-              <tr><td>3</td><td class="name">Jordan Lee</td><td style="color:var(--yellow);">missing</td><td>U13 Boys</td><td style="text-align:right;"><span class="badge badge-yellow">WARN</span></td></tr>
-              <tr><td>4</td><td class="name">Alex Chen</td><td>alex.c@gmail.com</td><td>U17 Boys</td><td style="text-align:right;"><span class="badge badge-w" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">VALID</span></td></tr>
-              <tr><td>5</td><td class="name" style="color:var(--red);">—</td><td style="color:var(--red);">duplicate entry</td><td>U15 Boys</td><td style="text-align:right;"><span class="badge badge-overdue">ERROR</span></td></tr>
-            </tbody>
-          </table>
+
+          <!-- P&L by Month -->
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>P&L by Month</span><span style="font-size:10px;color:var(--muted);">2026 YTD</span></div>
+            <table class="fin-table">
+              <thead><tr><th>Month</th><th class="r">Revenue</th><th class="r">Expenses</th><th class="r">Net</th></tr></thead>
+              <tbody>
+                <tr><td>January</td><td class="amt pos">$12,400</td><td class="amt neu">$3,200</td><td class="amt pos">+$9,200</td></tr>
+                <tr><td>February</td><td class="amt pos">$11,800</td><td class="amt neu">$5,800</td><td class="amt pos">+$6,000</td></tr>
+                <tr><td>March</td><td class="amt pos">$9,600</td><td class="amt neu">$7,400</td><td class="amt pos">+$2,200</td></tr>
+                <tr><td>April</td><td class="amt pos">$7,560</td><td class="amt neu">$6,540</td><td class="amt pos">+$1,020</td></tr>
+                <tr style="opacity:.5;"><td>May (proj.)</td><td class="amt pos">$2,880</td><td class="amt neu">$3,200</td><td class="amt neg">−$320</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Recent Transactions -->
+          <div class="card" style="padding:16px;margin:0;">
+            <div class="db-section-hdr"><span>Recent Transactions</span><span class="db-section-link">View all →</span></div>
+            <table class="fin-table">
+              <thead><tr><th>Date</th><th>Description</th><th class="r">Amount</th></tr></thead>
+              <tbody>
+                <tr><td>Apr 28</td><td class="name">Spring dues — Kai Tanaka</td><td class="amt pos">+$450</td></tr>
+                <tr><td>Apr 27</td><td class="name">Field rental — Jordan Valley</td><td class="amt neg">−$800</td></tr>
+                <tr><td>Apr 26</td><td class="name">Spring dues — 8 athletes</td><td class="amt pos">+$3,600</td></tr>
+                <tr><td>Apr 24</td><td class="name">Tournament — State Cup reg.</td><td class="amt neg">−$600</td></tr>
+                <tr><td>Apr 22</td><td class="name">Kit order — U17 Girls A</td><td class="amt neg">−$1,260</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- CONNECTIONS VIEW -->
+      <div class="athletes-view" id="fin-connections-view">
+        <div class="athletes-back" onclick="document.getElementById('fin-dashboard-view').classList.add('active');document.getElementById('fin-connections-view').classList.remove('active')">‹ Back to Finance Dashboard</div>
+        <div class="page-header" style="border-bottom:none;padding-bottom:0;">
+          <div><div class="page-title">Connections</div><div class="page-subtitle">Connected financial tools and data imports.</div></div>
+          <div class="page-actions"><button class="btn-ghost">⚙ Settings</button></div>
+        </div>
+        <div class="panel-scroll">
+          <div class="fin-insights-bar">
+            <div class="fib-dot"></div>
+            <span class="fib-label">AVANTI – Financial Insights</span>
+            <span class="fib-text">3 outstanding dues · Stripe balance $4,280 · Last payout Apr 22 · QuickBooks, Stripe, PayPal connected</span>
+            <div class="fib-actions"><button class="fib-btn warn">⚠ Dues Reminder</button><button class="fib-btn ghost">✎ Summarize</button></div>
+          </div>
+          <div class="fin-tools-grid">
+            <div class="fin-tool-card"><div class="ftc-hdr"><div class="ftc-left"><div class="ftc-logo qb">QB</div><div><div class="ftc-name">QuickBooks</div><div class="ftc-sub">Accounting &amp; Invoicing</div></div></div><span class="ftc-badge connected">● CONNECTED</span></div><div class="ftc-rows"><div class="ftc-row"><span class="ftc-row-lbl">Outstanding invoices</span><span class="ftc-row-val">3</span></div><div class="ftc-row"><span class="ftc-row-lbl">Total receivable</span><span class="ftc-row-val pos">$1,240</span></div></div><button class="ftc-open-btn">Open QuickBooks ↗</button></div>
+            <div class="fin-tool-card"><div class="ftc-hdr"><div class="ftc-left"><div class="ftc-logo stripe">S</div><div><div class="ftc-name">Stripe</div><div class="ftc-sub">Payments &amp; Payouts</div></div></div><span class="ftc-badge connected">● CONNECTED</span></div><div class="ftc-rows"><div class="ftc-row"><span class="ftc-row-lbl">Available balance</span><span class="ftc-row-val pos">$4,280</span></div><div class="ftc-row"><span class="ftc-row-lbl">Last payout</span><span class="ftc-row-val">Apr 22</span></div></div><button class="ftc-open-btn">Open Stripe ↗</button></div>
+            <div class="fin-tool-card"><div class="ftc-hdr"><div class="ftc-left"><div class="ftc-logo paypal">P</div><div><div class="ftc-name">PayPal</div><div class="ftc-sub">Online Payments</div></div></div><span class="ftc-badge connected">● CONNECTED</span></div><div class="ftc-rows"><div class="ftc-row"><span class="ftc-row-lbl">Merchant status</span><span class="ftc-row-val pos">Authorized</span></div><div class="ftc-row"><span class="ftc-row-lbl">Connected</span><span class="ftc-row-val">Apr 25, 2026</span></div></div><button class="ftc-open-btn">Open PayPal ↗</button></div>
+            <div class="fin-tool-card"><div class="ftc-hdr"><div class="ftc-left"><div class="ftc-logo venmo">V</div><div><div class="ftc-name">Venmo Business</div><div class="ftc-sub">Dashboard Shortcut</div></div></div><span class="ftc-badge shortcut">SHORTCUT</span></div><div class="ftc-rows"><div class="ftc-row"><span class="ftc-row-lbl">Profile</span><span class="ftc-row-val pos">@vaifcnorth</span></div></div><button class="ftc-open-btn">Open Venmo ↗</button></div>
+          </div>
+          <div class="fin-import">
+            <div class="fim-hdr"><div class="fim-title">Import Club Data</div><div style="display:flex;gap:8px;"><button class="btn-ghost">Preview Import</button><button class="btn-primary">Commit Staged</button></div></div>
+            <div class="fim-stats"><div class="fim-stat"><div class="fim-stat-val">47</div><div class="fim-stat-lbl">Total Rows</div></div><div class="fim-stat"><div class="fim-stat-val g">44</div><div class="fim-stat-lbl">Valid</div></div><div class="fim-stat"><div class="fim-stat-val y">02</div><div class="fim-stat-lbl">Warnings</div></div><div class="fim-stat"><div class="fim-stat-val r">01</div><div class="fim-stat-lbl">Errors</div></div></div>
+          </div>
         </div>
       </div>
       <div class="avanti-float" onclick="setPage('avanti')">
