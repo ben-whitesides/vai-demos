@@ -403,6 +403,39 @@
     .comms-input::placeholder { color: var(--muted); }
     .comms-send { background: var(--orange); color: #000; border: none; border-radius: 6px; padding: 6px 14px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
 
+    /* TOURNAMENTS */
+    .tourn-tabs { display: flex; gap: 4px; padding: 16px 24px 0; flex-shrink: 0; border-bottom: 1px solid var(--border); }
+    .tourn-tab { padding: 8px 16px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; margin-bottom: -1px; }
+    .tourn-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+    .tourn-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+    .tc-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+    .tc-t { font-size: 14px; font-weight: 800; color: var(--text); }
+    .tc-d { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .bracket-wrap { background: rgba(255,255,255,.02); border: 1px solid var(--border); border-radius: 8px; padding: 20px; overflow-x: auto; }
+    .bracket { display: flex; gap: 0; align-items: center; min-width: 600px; }
+    .bracket-round { display: flex; flex-direction: column; justify-content: space-around; flex: 1; gap: 8px; }
+    .bracket-round-hdr { font-size: 9px; font-weight: 700; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+    .bracket-match { background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .bracket-team { display: flex; align-items: center; gap: 8px; padding: 7px 10px; font-size: 11px; border-bottom: 1px solid var(--border); }
+    .bracket-team:last-child { border-bottom: none; }
+    .bracket-team.winner { color: var(--text); font-weight: 700; background: rgba(247,148,30,0.06); }
+    .bracket-team.loser { color: var(--muted); }
+    .bracket-team.tbd { color: var(--dim); font-style: italic; }
+    .bt-seed { font-size: 9px; color: var(--dim); min-width: 12px; }
+    .bt-name { flex: 1; }
+    .bt-score { font-size: 11px; font-weight: 700; }
+    .bracket-connector { width: 20px; display: flex; flex-direction: column; align-items: center; }
+    /* LEAGUES */
+    .league-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; }
+    .lg-icon { width: 44px; height: 44px; border-radius: 8px; background: var(--border2); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .lg-body { flex: 1; }
+    .lg-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .lg-meta { font-size: 11px; color: var(--muted); }
+    .lg-teams { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .lg-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .add-league-card { background: transparent; border: 1px dashed var(--border2); border-radius: 10px; padding: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; color: var(--muted); font-size: 12px; font-weight: 600; transition: all .15s; margin-bottom: 12px; }
+    .add-league-card:hover { border-color: var(--orange); color: var(--orange); }
+
     /* MOBILE */
     @media (max-width: 768px) {
       .shell { grid-template-columns: 1fr; }
@@ -489,11 +522,11 @@
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3"/></svg>
       Tournaments
     </a>
-    <a class="nav-item" id="nav-standings" onclick="setPage('tournament')">
+    <a class="nav-item" id="nav-standings" onclick="setPage('standings')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12V8M5 12V5M8 12V7M11 12V3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
       Standings
     </a>
-    <a class="nav-item" id="nav-leagues" onclick="setPage('tournament')">
+    <a class="nav-item" id="nav-leagues" onclick="setPage('leagues')">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M1 7h12M7 1c-2 2-3 4-3 6s1 4 3 6M7 1c2 2 3 4 3 6s-1 4-3 6" stroke="currentColor" stroke-width="1.3"/></svg>
       Leagues
     </a>
@@ -1035,39 +1068,183 @@
     </div>
 
     <!-- ── TOURNAMENTS ── -->
-    <div class="panel" id="panel-tournament">
+    <div class="panel" id="panel-tournament" style="position:relative;">
+      <div class="avanti-strip" style="padding:8px 16px;">
+        <div class="as-dot"></div><span class="as-label">AVANTI</span>
+        <span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span>
+      </div>
       <div class="page-header">
-        <div>
-          <div class="page-title">Tournaments</div>
-          <div class="page-subtitle">Spring 2026 · Division I</div>
+        <div><div class="page-title">Tournaments</div><div class="page-subtitle">UHSGFA · Spring 2026 · 3 active · 2 upcoming</div></div>
+        <div class="page-actions"><button class="btn-ghost">History</button><button class="btn-primary">+ Create Tournament</button></div>
+      </div>
+      <div class="tourn-tabs">
+        <div class="tourn-tab active">Active</div>
+        <div class="tourn-tab">Upcoming</div>
+        <div class="tourn-tab">History</div>
+      </div>
+      <div class="panel-scroll" style="padding-top:20px;">
+        <div class="tourn-card">
+          <div class="tc-top">
+            <div><div class="tc-t">State Cup Qualifier — U17 Girls A</div><div class="tc-d">Jun 14–15, 2026 · Jordan Valley Sports Complex · 8 teams · Single Elimination</div></div>
+            <span class="badge badge-up">Registered</span>
+          </div>
+          <div class="bracket-wrap">
+            <div class="bracket">
+              <div class="bracket-round">
+                <div class="bracket-round-hdr">Quarterfinals · Jun 14</div>
+                <div class="bracket-match"><div class="bracket-team winner"><span class="bt-seed">1</span><span class="bt-name">VAI FC North</span><span class="bt-score" style="color:var(--green)">2</span></div><div class="bracket-team loser"><span class="bt-seed">8</span><span class="bt-name">Westlake FC</span><span class="bt-score">0</span></div></div>
+                <div class="bracket-match"><div class="bracket-team winner"><span class="bt-seed">4</span><span class="bt-name">Salt Lake Storm</span><span class="bt-score" style="color:var(--green)">3</span></div><div class="bracket-team loser"><span class="bt-seed">5</span><span class="bt-name">Northgate SC</span><span class="bt-score">1</span></div></div>
+                <div class="bracket-match"><div class="bracket-team winner"><span class="bt-seed">3</span><span class="bt-name">Highland Rangers</span><span class="bt-score" style="color:var(--green)">1</span></div><div class="bracket-team loser"><span class="bt-seed">6</span><span class="bt-name">Riverton FC</span><span class="bt-score">0</span></div></div>
+                <div class="bracket-match"><div class="bracket-team winner"><span class="bt-seed">2</span><span class="bt-name">Lakewood United</span><span class="bt-score" style="color:var(--green)">2</span></div><div class="bracket-team loser"><span class="bt-seed">7</span><span class="bt-name">Provo United</span><span class="bt-score">1</span></div></div>
+              </div>
+              <div style="width:24px;display:flex;align-items:center;justify-content:center;color:var(--border2);font-size:18px;">›</div>
+              <div class="bracket-round">
+                <div class="bracket-round-hdr">Semifinals · Jun 15</div>
+                <div class="bracket-match" style="margin-top:40px;"><div class="bracket-team winner"><span class="bt-seed"></span><span class="bt-name">VAI FC North</span><span class="bt-score" style="color:var(--green)">2</span></div><div class="bracket-team loser"><span class="bt-seed"></span><span class="bt-name">Salt Lake Storm</span><span class="bt-score">1</span></div></div>
+                <div class="bracket-match" style="margin-top:16px;"><div class="bracket-team tbd"><span class="bt-name">TBD</span></div><div class="bracket-team tbd"><span class="bt-name">TBD</span></div></div>
+              </div>
+              <div style="width:24px;display:flex;align-items:center;justify-content:center;color:var(--border2);font-size:18px;">›</div>
+              <div class="bracket-round">
+                <div class="bracket-round-hdr">Final · Jun 15</div>
+                <div class="bracket-match" style="margin-top:70px;border-color:var(--orange-b);"><div class="bracket-team tbd"><span class="bt-name" style="color:var(--orange)">VAI FC North</span></div><div class="bracket-team tbd"><span class="bt-name">TBD</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tourn-card">
+          <div class="tc-top">
+            <div><div class="tc-t">Spring Invitational — U15 Girls</div><div class="tc-d">May 24–25, 2026 · Multiple Fields · 6 teams · Round Robin + Final</div></div>
+            <span class="badge badge-green" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">In Progress</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+            <div class="bracket-match"><div class="bracket-team winner"><span class="bt-name">VAI FC North</span><span class="bt-score" style="color:var(--green)">W</span></div><div class="bracket-team loser"><span class="bt-name">City Select</span><span class="bt-score">L</span></div></div>
+            <div class="bracket-match"><div class="bracket-team tbd"><span class="bt-name">VAI FC North</span><span class="bt-score">—</span></div><div class="bracket-team tbd"><span class="bt-name">Valley United</span><span class="bt-score">—</span></div></div>
+            <div class="bracket-match"><div class="bracket-team tbd"><span class="bt-name">VAI FC North</span><span class="bt-score">—</span></div><div class="bracket-team tbd"><span class="bt-name">FC Lehi</span><span class="bt-score">—</span></div></div>
+          </div>
+        </div>
+
+        <div class="section-hdr" style="margin-top:8px;"><span class="section-title">Tournament History</span><span class="section-link">View all →</span></div>
+        <div class="card">
+          <div class="game-row"><span class="game-date">Mar 2026</span><span class="game-teams">Spring Kickoff Classic <span class="game-opp">· U17 Girls A</span></span><span class="badge badge-w">🥇 Champion</span></div>
+          <div class="game-row"><span class="game-date">Feb 2026</span><span class="game-teams">President's Cup <span class="game-opp">· U15 Girls</span></span><span class="badge badge-d">🥈 Runner-up</span></div>
+          <div class="game-row"><span class="game-date">Jan 2026</span><span class="game-teams">Winter Classic <span class="game-opp">· U17 Boys</span></span><span class="badge badge-w">🥇 Champion</span></div>
         </div>
       </div>
+      <div class="avanti-float" onclick="setPage('avanti')">
+        <span class="af-label">Ask AVANTI about this page…</span>
+        <div class="af-pill-wrap">
+          <div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div><div class="af-ring active"></div>
+          <div class="af-pill"><div class="af-icon"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L11 10H1L6 1Z" fill="#003d26"/></svg></div><span class="af-text">AVANTI</span><span class="af-dot"></span><span class="af-badge">1</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STANDINGS ── -->
+    <div class="panel" id="panel-standings" style="position:relative;">
+      <div class="avanti-strip" style="padding:8px 16px;"><div class="as-dot"></div><span class="as-label">AVANTI</span><span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span></div>
+      <div class="page-header">
+        <div><div class="page-title">Standings</div><div class="page-subtitle">All active leagues · Spring 2026</div></div>
+        <div class="page-actions"><button class="btn-ghost">Export</button></div>
+      </div>
       <div class="panel-scroll">
-        <div class="section-hdr"><span class="section-title">Division I Standings</span></div>
-        <div class="card">
+        <div class="filter-tabs">
+          <span class="ftab-sm active">U17 Girls A — Premier</span>
+          <span class="ftab-sm">U15 Girls — Div I</span>
+          <span class="ftab-sm">U17 Boys — Premier</span>
+          <span class="ftab-sm">U13 Girls — Div I</span>
+        </div>
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-hdr"><span class="card-title">U17 Girls A · Utah Premier League · Spring 2026</span><span class="badge badge-up">Active</span></div>
           <table class="standings-tbl">
-            <thead>
-              <tr><th>#</th><th>Team</th><th>GP</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>
-            </thead>
+            <thead><tr><th>#</th><th>Team</th><th>GP</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead>
             <tbody>
-              <tr><td class="s-rank">1</td><td class="s-team">Highland Rangers</td><td>10</td><td>8</td><td>1</td><td>1</td><td>+14</td><td class="s-pts">25</td></tr>
-              <tr class="hl"><td class="s-rank">2</td><td class="s-team">VAI FC North ←</td><td>10</td><td>7</td><td>1</td><td>2</td><td>+9</td><td class="s-pts">22</td></tr>
-              <tr><td class="s-rank">3</td><td class="s-team">Lakewood United</td><td>10</td><td>5</td><td>3</td><td>2</td><td>+4</td><td class="s-pts">18</td></tr>
-              <tr><td class="s-rank">4</td><td class="s-team">Metro Athletic</td><td>10</td><td>4</td><td>2</td><td>4</td><td>−2</td><td class="s-pts">14</td></tr>
-              <tr><td class="s-rank">5</td><td class="s-team">Riverside FC</td><td>10</td><td>3</td><td>1</td><td>6</td><td>−8</td><td class="s-pts">10</td></tr>
-              <tr><td class="s-rank">6</td><td class="s-team">Eastside FC</td><td>10</td><td>2</td><td>0</td><td>8</td><td>−17</td><td class="s-pts">6</td></tr>
+              <tr><td class="s-rank">1</td><td class="s-team">Highland Rangers</td><td>10</td><td>8</td><td>1</td><td>1</td><td>24</td><td>10</td><td>+14</td><td class="s-pts">25</td></tr>
+              <tr class="hl"><td class="s-rank">2</td><td class="s-team">VAI FC North ◀</td><td>10</td><td>7</td><td>1</td><td>2</td><td>21</td><td>12</td><td>+9</td><td class="s-pts">22</td></tr>
+              <tr><td class="s-rank">3</td><td class="s-team">Salt Lake Storm</td><td>10</td><td>5</td><td>3</td><td>2</td><td>18</td><td>14</td><td>+4</td><td class="s-pts">18</td></tr>
+              <tr><td class="s-rank">4</td><td class="s-team">Lakewood United</td><td>10</td><td>4</td><td>2</td><td>4</td><td>16</td><td>18</td><td>−2</td><td class="s-pts">14</td></tr>
+              <tr><td class="s-rank">5</td><td class="s-team">Riverside FC</td><td>10</td><td>3</td><td>1</td><td>6</td><td>12</td><td>20</td><td>−8</td><td class="s-pts">10</td></tr>
+              <tr><td class="s-rank">6</td><td class="s-team">Valley United</td><td>10</td><td>2</td><td>0</td><td>8</td><td>8</td><td>25</td><td>−17</td><td class="s-pts">6</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="section-hdr"><span class="section-title">Upcoming Tournament</span></div>
+        <div class="section-hdr"><span class="section-title">Club-Wide Summary</span></div>
         <div class="card">
-          <div class="card-hdr">
-            <span class="card-title">State Cup Qualifier — Jun 14–15</span>
-            <span class="badge badge-up">Registered</span>
+          <div class="game-row"><span class="game-teams" style="font-weight:700;">U17 Girls A</span><span class="game-opp" style="flex:1;padding-left:8px;">Utah Premier League</span><span style="font-size:12px;font-weight:700;color:var(--orange);">2nd / 6</span></div>
+          <div class="game-row"><span class="game-teams" style="font-weight:700;">U15 Girls</span><span class="game-opp" style="flex:1;padding-left:8px;">State Competition League</span><span style="font-size:12px;font-weight:700;color:var(--green);">1st / 8</span></div>
+          <div class="game-row"><span class="game-teams" style="font-weight:700;">U17 Boys</span><span class="game-opp" style="flex:1;padding-left:8px;">Utah Platform League</span><span style="font-size:12px;font-weight:700;color:var(--orange);">3rd / 6</span></div>
+          <div class="game-row"><span class="game-teams" style="font-weight:700;">U13 Girls</span><span class="game-opp" style="flex:1;padding-left:8px;">Division I</span><span style="font-size:12px;font-weight:700;color:var(--green);">1st / 6</span></div>
+          <div class="game-row"><span class="game-teams" style="font-weight:700;">U19 Girls</span><span class="game-opp" style="flex:1;padding-left:8px;">Utah Premier League</span><span style="font-size:12px;font-weight:700;">4th / 8</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LEAGUES ── -->
+    <div class="panel" id="panel-leagues" style="position:relative;">
+      <div class="avanti-strip" style="padding:8px 16px;"><div class="as-dot"></div><span class="as-label">AVANTI</span><span class="as-text">READS · NEVER ACTS WITHOUT YOUR CONFIRMATION</span></div>
+      <div class="page-header">
+        <div><div class="page-title">Leagues</div><div class="page-subtitle">UHSGFA · Connected to 4 leagues · Spring 2026</div></div>
+        <div class="page-actions"><button class="btn-ghost">Browse All</button><button class="btn-primary">+ Add League</button></div>
+      </div>
+      <div class="panel-scroll">
+        <div class="section-hdr"><span class="section-title">Connected Leagues</span><span class="section-link">Manage →</span></div>
+        <div class="league-card">
+          <div class="lg-icon">🏆</div>
+          <div class="lg-body">
+            <div class="lg-name">Utah Premier League</div>
+            <div class="lg-meta">Utah Youth Soccer · USYS Affiliated · Competitive</div>
+            <div class="lg-teams">U17 Girls A, U19 Girls enrolled · Spring 2026 active</div>
           </div>
-          <div class="game-row"><span class="game-date">Jun 14</span><span class="game-teams">Pool A · Round 1 vs Westlake FC</span><span class="game-time">9:00 AM</span></div>
-          <div class="game-row"><span class="game-date">Jun 14</span><span class="game-teams">Pool A · Round 2 vs Northgate SC</span><span class="game-time">1:30 PM</span></div>
-          <div class="game-row"><span class="game-date">Jun 15</span><span class="game-teams">Semifinal (if qualified)</span><span class="game-time">10:00 AM</span></div>
+          <div class="lg-actions"><button class="btn-ghost">View</button><span class="badge badge-green" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">Active</span></div>
+        </div>
+        <div class="league-card">
+          <div class="lg-icon">⚽</div>
+          <div class="lg-body">
+            <div class="lg-name">State Competition League</div>
+            <div class="lg-meta">Utah Youth Soccer · State-sanctioned · All ages</div>
+            <div class="lg-teams">U15 Girls, U13 Girls, U13 Boys enrolled · Spring 2026 active</div>
+          </div>
+          <div class="lg-actions"><button class="btn-ghost">View</button><span class="badge badge-green" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">Active</span></div>
+        </div>
+        <div class="league-card">
+          <div class="lg-icon">🌐</div>
+          <div class="lg-body">
+            <div class="lg-name">Utah Platform League</div>
+            <div class="lg-meta">Utah Youth Soccer · Development pathway</div>
+            <div class="lg-teams">U17 Boys, U15 Boys enrolled · Spring 2026 active</div>
+          </div>
+          <div class="lg-actions"><button class="btn-ghost">View</button><span class="badge badge-green" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">Active</span></div>
+        </div>
+        <div class="league-card">
+          <div class="lg-icon">⭐</div>
+          <div class="lg-body">
+            <div class="lg-name">USYS National League — West</div>
+            <div class="lg-meta">US Youth Soccer · National pathway · Premier only</div>
+            <div class="lg-teams">U17 Girls A eligible · Registration opens Jun 1</div>
+          </div>
+          <div class="lg-actions"><button class="btn-primary">Register</button><span class="badge badge-up">Eligible</span></div>
+        </div>
+        <div class="section-hdr" style="margin-top:8px;"><span class="section-title">Available Leagues</span><span class="section-link">Browse utahyouthsoccer.net →</span></div>
+        <div class="league-card" style="opacity:.6;">
+          <div class="lg-icon">🏅</div>
+          <div class="lg-body">
+            <div class="lg-name">Utah Olympic Development Program</div>
+            <div class="lg-meta">USYS · Elite identification · Tryout required</div>
+            <div class="lg-teams">Not enrolled · Contact state association</div>
+          </div>
+          <div class="lg-actions"><button class="btn-ghost">Info</button></div>
+        </div>
+        <div class="league-card" style="opacity:.6;">
+          <div class="lg-icon">🎽</div>
+          <div class="lg-body">
+            <div class="lg-name">Recreation Soccer League</div>
+            <div class="lg-meta">Utah Youth Soccer · Recreational · U6–U14</div>
+            <div class="lg-teams">Not enrolled</div>
+          </div>
+          <div class="lg-actions"><button class="btn-ghost">Info</button></div>
+        </div>
+        <div class="add-league-card">
+          <span style="font-size:18px;">+</span> Connect a new league
         </div>
       </div>
     </div>
