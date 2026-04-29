@@ -269,6 +269,38 @@
     .af-badge { position: absolute; top: -4px; right: -4px; width: 18px; height: 18px; border-radius: 50%; background: var(--orange); color: #000; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black); }
     .af-label { font-size: 12px; color: var(--text2); background: var(--card); border: 1px solid var(--border); border-radius: 100px; padding: 6px 14px; white-space: nowrap; }
 
+    /* ROSTER */
+    .roster-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+    .rs-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .rs-lbl { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+    .rs-val { font-size: 24px; font-weight: 800; }
+    .rs-val.g { color: var(--green); } .rs-val.y { color: var(--yellow); } .rs-val.r { color: var(--red); } .rs-val.w { color: var(--text); }
+    .roster-search { display: flex; gap: 8px; margin-bottom: 20px; }
+    .r-input { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 12px; color: var(--text); outline: none; font-family: inherit; }
+    .r-input::placeholder { color: var(--muted); }
+    .r-select { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text2); font-family: inherit; outline: none; cursor: pointer; }
+    .flagged-bar { background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.2); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; }
+    .flagged-hdr { font-size: 10px; font-weight: 700; color: var(--red); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .flagged-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .flagged-chip { display: flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 11px; }
+    .flagged-chip .sdot { width: 7px; height: 7px; }
+    .flagged-name { color: var(--text); font-weight: 600; }
+    .flagged-team { color: var(--muted); }
+    .team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .team-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; cursor: pointer; transition: border-color .15s; }
+    .team-card:hover { border-color: var(--border2); }
+    .tc-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+    .tc-name { font-size: 13px; font-weight: 800; color: var(--text); }
+    .tc-div { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .tc-count { font-size: 11px; font-weight: 700; color: var(--muted); }
+    .play-bar-wrap { height: 5px; background: var(--border2); border-radius: 3px; overflow: hidden; display: flex; margin-bottom: 8px; }
+    .pb-g { background: var(--green); } .pb-y { background: var(--yellow); } .pb-r { background: var(--red); }
+    .tc-meta { display: flex; gap: 12px; font-size: 10px; }
+    .tc-stat { color: var(--muted); }
+    .tc-stat span { font-weight: 700; }
+    .tc-stat span.g { color: var(--green); } .tc-stat span.y { color: var(--yellow); } .tc-stat span.r { color: var(--red); }
+    .tc-coach { font-size: 10px; color: var(--muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+
     /* MOBILE */
     @media (max-width: 768px) {
       .shell { grid-template-columns: 1fr; }
@@ -543,7 +575,7 @@
       <div class="page-header">
         <div>
           <div class="page-title">Roster</div>
-          <div class="page-subtitle">VAI FC North · Spring 2026 · 24 players</div>
+          <div class="page-subtitle">UHSGFA · Spring 2026 · 9 teams · 312 athletes</div>
         </div>
         <div class="page-actions">
           <button class="btn-ghost">Export</button>
@@ -551,39 +583,91 @@
         </div>
       </div>
       <div class="panel-scroll">
-        <div class="filter-tabs">
-          <span class="ftab-sm active">All (24)</span>
-          <span class="ftab-sm">Field Players (22)</span>
-          <span class="ftab-sm">Goalkeepers (2)</span>
+        <div class="roster-stats">
+          <div class="rs-card"><div class="rs-lbl">Total Athletes</div><div class="rs-val w">312</div></div>
+          <div class="rs-card"><div class="rs-lbl">GREEN</div><div class="rs-val g">248</div></div>
+          <div class="rs-card"><div class="rs-lbl">YELLOW</div><div class="rs-val y">47</div></div>
+          <div class="rs-card"><div class="rs-lbl">RED</div><div class="rs-val r">17</div></div>
         </div>
-        <div class="card">
-          <div class="card-hdr"><span class="card-title">Forwards</span></div>
-          <div class="player-row"><span class="player-num">9</span><div class="sdot g"></div><span class="player-name">Marcus Rivera</span><span class="player-pos">ST</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
-          <div class="player-row"><span class="player-num">11</span><div class="sdot g"></div><span class="player-name">K. Mensah</span><span class="player-pos">LW</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
-          <div class="player-row"><span class="player-num">7</span><div class="sdot g"></div><span class="player-name">F. Costa</span><span class="player-pos">RW</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+        <div class="roster-search">
+          <input class="r-input" placeholder="Search players by name, number, or team…" type="text">
+          <select class="r-select"><option>All Ages</option><option>U11</option><option>U13</option><option>U15</option><option>U17</option><option>U19</option></select>
+          <select class="r-select"><option>All Status</option><option>GREEN</option><option>YELLOW</option><option>RED</option></select>
         </div>
-        <div class="card">
-          <div class="card-hdr"><span class="card-title">Midfielders</span></div>
-          <div class="player-row"><span class="player-num">10</span><div class="sdot g"></div><span class="player-name">I. Yong</span><span class="player-pos">CM</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
-          <div class="player-row"><span class="player-num">8</span><div class="sdot g"></div><span class="player-name">R. Vega</span><span class="player-pos">CDM</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
-          <div class="player-row"><span class="player-num">6</span><div class="sdot g"></div><span class="player-name">S. Boateng</span><span class="player-pos">CM</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
-          <div class="player-row"><span class="player-num">14</span><div class="sdot y"></div><span class="player-name">D. Hill</span><span class="player-pos">RM</span><span style="flex:1"></span><span class="badge badge-yellow">YELLOW</span></div>
+        <div class="flagged-bar">
+          <div class="flagged-hdr">
+            <div class="sdot r"></div>
+            AVANTI — 17 players need attention this week
+          </div>
+          <div class="flagged-list">
+            <div class="flagged-chip"><div class="sdot r"></div><span class="flagged-name">M. Lopez</span><span class="flagged-team">U17 Girls A</span></div>
+            <div class="flagged-chip"><div class="sdot r"></div><span class="flagged-name">J. Reyes</span><span class="flagged-team">U15 Boys</span></div>
+            <div class="flagged-chip"><div class="sdot r"></div><span class="flagged-name">A. Chen</span><span class="flagged-team">U19 Girls</span></div>
+            <div class="flagged-chip"><div class="sdot y"></div><span class="flagged-name">D. Hill</span><span class="flagged-team">U17 Girls A</span></div>
+            <div class="flagged-chip"><div class="sdot y"></div><span class="flagged-name">T. Brooks</span><span class="flagged-team">U13 Boys</span></div>
+            <div class="flagged-chip"><div class="sdot y"></div><span class="flagged-name">K. Patel</span><span class="flagged-team">U15 Girls</span></div>
+            <div class="flagged-chip" style="color:var(--muted);font-size:10px;">+11 more →</div>
+          </div>
         </div>
-        <div class="card">
-          <div class="card-hdr"><span class="card-title">Defenders</span></div>
-          <div class="player-row"><span class="player-num">3</span><div class="sdot g"></div><span class="player-name">F. Ahmed</span><span class="player-pos">LB</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
-          <div class="player-row"><span class="player-num">5</span><div class="sdot g"></div><span class="player-name">T. Cruz</span><span class="player-pos">CB</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
-          <div class="player-row"><span class="player-num">4</span><div class="sdot g"></div><span class="player-name">J. Park</span><span class="player-pos">CB</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
-          <div class="player-row"><span class="player-num">2</span><div class="sdot r"></div><span class="player-name">M. Lopez</span><span class="player-pos">RB</span><span style="flex:1"></span><span class="badge badge-red">RED</span></div>
-        </div>
-        <div class="card">
-          <div class="card-hdr"><span class="card-title">Goalkeepers</span></div>
-          <div class="player-row"><span class="player-num">1</span><div class="sdot g"></div><span class="player-name">L. Park</span><span class="player-pos">GK</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
-          <div class="player-row"><span class="player-num">22</span><div class="sdot g"></div><span class="player-name">A. Diaz</span><span class="player-pos">GK</span><span style="flex:1"></span><span class="badge badge-green">GREEN</span></div>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="tc-hdr"><div><div class="tc-name">U11 Girls</div><div class="tc-div">Division II · 22 players</div></div><span class="tc-count">22</span></div>
+            <div class="play-bar-wrap"><div class="pb-g" style="width:91%"></div><div class="pb-y" style="width:9%"></div></div>
+            <div class="tc-meta"><span class="tc-stat"><span class="g">20</span> G</span><span class="tc-stat"><span class="y">2</span> Y</span><span class="tc-stat"><span class="r">0</span> R</span></div>
+            <div class="tc-coach">Coach: Sarah Williams</div>
+          </div>
+          <div class="team-card">
+            <div class="tc-hdr"><div><div class="tc-name">U13 Girls</div><div class="tc-div">Division I · 24 players</div></div><span class="tc-count">24</span></div>
+            <div class="play-bar-wrap"><div class="pb-g" style="width:83%"></div><div class="pb-y" style="width:13%"></div><div class="pb-r" style="width:4%"></div></div>
+            <div class="tc-meta"><span class="tc-stat"><span class="g">20</span> G</span><span class="tc-stat"><span class="y">3</span> Y</span><span class="tc-stat"><span class="r">1</span> R</span></div>
+            <div class="tc-coach">Coach: Mike Torres</div>
+          </div>
+          <div class="team-card">
+            <div class="tc-hdr"><div><div class="tc-name">U15 Girls</div><div class="tc-div">Division I · 26 players</div></div><span class="tc-count">26</span></div>
+            <div class="play-bar-wrap"><div class="pb-g" style="width:81%"></div><div class="pb-y" style="width:15%"></div><div class="pb-r" style="width:4%"></div></div>
+            <div class="tc-meta"><span class="tc-stat"><span class="g">21</span> G</span><span class="tc-stat"><span class="y">4</span> Y</span><span class="tc-stat"><span class="r">1</span> R</span></div>
+            <div class="tc-coach">Coach: Dana Park</div>
+          </div>
+          <div class="team-card">
+            <div class="tc-hdr"><div><div class="tc-name">U17 Girls A</div><div class="tc-div">Premier · 28 players</div></div><span class="tc-count">28</span></div>
+            <div class="play-bar-wrap"><div class="pb-g" style="width:75%"></div><div class="pb-y" style="width:18%"></div><div class="pb-r" style="width:7%"></div></div>
+            <div class="tc-meta"><span class="tc-stat"><span class="g">21</span> G</span><span class="tc-stat"><span class="y">5</span> Y</span><span class="tc-stat"><span class="r">2</span> R</span></div>
+            <div class="tc-coach">Coach: James Rivera</div>
+          </div>
+          <div class="team-card">
+            <div class="tc-hdr"><div><div class="tc-name">U17 Girls B</div><div class="tc-div">Division I · 24 players</div></div><span class="tc-count">24</span></div>
+            <div class="play-bar-wrap"><div class="pb-g" style="width:83%"></div><div class="pb-y" style="width:13%"></div><div class="pb-r" style="width:4%"></div></div>
+            <div class="tc-meta"><span class="tc-stat"><span class="g">20</span> G</span><span class="tc-stat"><span class="y">3</span> Y</span><span class="tc-stat"><span class="r">1</span> R</span></div>
+            <div class="tc-coach">Coach: Lisa Chen</div>
+          </div>
+          <div class="team-card">
+            <div class="tc-hdr"><div><div class="tc-name">U19 Girls</div><div class="tc-div">Premier · 26 players</div></div><span class="tc-count">26</span></div>
+            <div class="play-bar-wrap"><div class="pb-g" style="width:77%"></div><div class="pb-y" style="width:15%"></div><div class="pb-r" style="width:8%"></div></div>
+            <div class="tc-meta"><span class="tc-stat"><span class="g">20</span> G</span><span class="tc-stat"><span class="y">4</span> Y</span><span class="tc-stat"><span class="r">2</span> R</span></div>
+            <div class="tc-coach">Coach: Robert Kim</div>
+          </div>
+          <div class="team-card">
+            <div class="tc-hdr"><div><div class="tc-name">U13 Boys</div><div class="tc-div">Division I · 22 players</div></div><span class="tc-count">22</span></div>
+            <div class="play-bar-wrap"><div class="pb-g" style="width:86%"></div><div class="pb-y" style="width:9%"></div><div class="pb-r" style="width:5%"></div></div>
+            <div class="tc-meta"><span class="tc-stat"><span class="g">19</span> G</span><span class="tc-stat"><span class="y">2</span> Y</span><span class="tc-stat"><span class="r">1</span> R</span></div>
+            <div class="tc-coach">Coach: Tom Harris</div>
+          </div>
+          <div class="team-card">
+            <div class="tc-hdr"><div><div class="tc-name">U15 Boys</div><div class="tc-div">Division I · 24 players</div></div><span class="tc-count">24</span></div>
+            <div class="play-bar-wrap"><div class="pb-g" style="width:79%"></div><div class="pb-y" style="width:13%"></div><div class="pb-r" style="width:8%"></div></div>
+            <div class="tc-meta"><span class="tc-stat"><span class="g">19</span> G</span><span class="tc-stat"><span class="y">3</span> Y</span><span class="tc-stat"><span class="r">2</span> R</span></div>
+            <div class="tc-coach">Coach: Alex Nguyen</div>
+          </div>
+          <div class="team-card">
+            <div class="tc-hdr"><div><div class="tc-name">U17 Boys</div><div class="tc-div">Premier · 22 players</div></div><span class="tc-count">22</span></div>
+            <div class="play-bar-wrap"><div class="pb-g" style="width:77%"></div><div class="pb-y" style="width:14%"></div><div class="pb-r" style="width:9%"></div></div>
+            <div class="tc-meta"><span class="tc-stat"><span class="g">17</span> G</span><span class="tc-stat"><span class="y">3</span> Y</span><span class="tc-stat"><span class="r">2</span> R</span></div>
+            <div class="tc-coach">Coach: Carlos Vega</div>
+          </div>
         </div>
       </div>
       <div class="avanti-float" onclick="setPage('avanti')">
-        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">1</span></div>
+        <div class="af-bubble"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 14H1L8 1Z" fill="#000"/></svg><span class="af-badge">3</span></div>
         <span class="af-label">Ask AVANTI about this page…</span>
       </div>
     </div>
