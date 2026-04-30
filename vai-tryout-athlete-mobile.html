@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Tryout Athlete Flow (Mobile)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --vai-orange:#f7941e; --vai-green:#34d399;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --red:#FF6B6B; --yellow:#FBBF24; --blue:#5577DD;
+  --font-oswald:'Oswald',Impact,Arial Black,sans-serif;
+  --font-dm:'DM Sans',Arial,Helvetica,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-full:9999px;
+}
+body {
+  background:var(--void-black); font-family:var(--font-dm); min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; padding:40px 16px 72px;
+  color:var(--gray-primary); -webkit-font-smoothing:antialiased;
+}
+body::before {
+  content:''; position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 30%, rgba(247,148,30,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 80% 70%, rgba(52,211,153,0.04) 0%, transparent 70%);
+  pointer-events:none; z-index:0;
+}
+.page-title { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:4px; text-align:center; position:relative; z-index:1; }
+.page-sub { font-size:11px; color:var(--gray-disabled); margin-bottom:12px; text-align:center; position:relative; z-index:1; }
+.page-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(247,148,30,0.08); border:1px solid rgba(247,148,30,0.2); border-radius:var(--r-full); padding:4px 14px; font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.06em; color:var(--vai-orange); margin-bottom:36px; position:relative; z-index:1; }
+.phones-row { display:flex; gap:28px; align-items:flex-start; justify-content:center; flex-wrap:nowrap; position:relative; z-index:1; }
+.phone-wrap { display:flex; flex-direction:column; align-items:center; gap:10px; }
+.phone-label { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gray-disabled); text-align:center; }
+.phone { width:375px; background:var(--void-black); border-radius:44px; border:1.5px solid var(--gray-subtle); box-shadow:0 0 0 1px #0c0c10, 0 32px 80px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden; position:relative; flex-shrink:0; }
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 22px 8px; background:var(--void-black); font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
+.app-header { background:var(--void-black); padding:10px 18px 12px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.vai-wordmark { font-family:var(--font-oswald); font-size:18px; font-weight:700; letter-spacing:0.05em; color:var(--gray-primary); }
+.tier-bubble { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; font-family:var(--font-dm); font-size:12px; font-weight:900; color:#000; flex-shrink:0; }
+.a-dot { width:6px; height:6px; border-radius:50%; background:var(--vai-green); animation:pulse 2s ease-in-out infinite; flex-shrink:0; }
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.5)} 50%{opacity:0.7;box-shadow:0 0 0 5px rgba(52,211,153,0)} }
+.hdr-icons { display:flex; gap:12px; align-items:center; margin-left:auto; }
+.hdr-icon { width:20px; height:20px; display:flex; align-items:center; justify-content:center; position:relative; }
+.hdr-icon svg { width:18px; height:18px; stroke:var(--gray-secondary); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.notif-dot { position:absolute; top:-2px; right:-2px; width:7px; height:7px; border-radius:50%; background:var(--red); border:1px solid var(--void-black); }
+.avanti-strip { background:rgba(52,211,153,0.04); border-bottom:1px solid rgba(52,211,153,0.12); padding:9px 18px; display:flex; align-items:center; gap:6px; }
+.strip-lbl { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--vai-green); }
+.strip-msg { font-family:var(--font-dm); font-size:12px; color:var(--gray-body); flex:1; }
+.scroll-body { background:var(--void-black); overflow-y:auto; scrollbar-width:none; }
+.scroll-body::-webkit-scrollbar { display:none; }
+.bottom-nav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:8px 4px 20px; flex-shrink:0; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:4px 0; }
+.ni-icon { width:24px; height:24px; display:flex; align-items:center; justify-content:center; }
+.ni-icon svg { width:22px; height:22px; stroke:var(--gray-disabled); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ni-lbl { font-family:var(--font-dm); font-size:10px; font-weight:500; color:var(--gray-disabled); }
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+.av-pill { background:var(--vai-green); border-radius:20px; padding:6px 11px; display:flex; align-items:center; justify-content:center; }
+.av-pill span { font-family:var(--font-dm); font-size:11px; font-weight:800; color:#000; }
+
+/* Section */
+.section-hdr { padding:12px 16px 4px; font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-disabled); }
+
+/* Card */
+.card { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); margin:0 14px 10px; padding:16px; }
+
+/* Status timeline */
+.timeline { display:flex; flex-direction:column; gap:0; padding:4px 0; }
+.tl-row { display:flex; align-items:flex-start; gap:12px; }
+.tl-left { display:flex; flex-direction:column; align-items:center; width:16px; flex-shrink:0; }
+.tl-dot { width:14px; height:14px; border-radius:50%; border:2px solid; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:8px; }
+.tl-dot.done { background:rgba(52,211,153,0.15); border-color:var(--vai-green); color:var(--vai-green); }
+.tl-dot.active { background:rgba(247,148,30,0.15); border-color:var(--vai-orange); animation:pulse-o 1.5s ease-in-out infinite; }
+@keyframes pulse-o { 0%,100%{box-shadow:0 0 0 0 rgba(247,148,30,0.4)} 50%{box-shadow:0 0 0 5px rgba(247,148,30,0)} }
+.tl-dot.pending { background:transparent; border-color:var(--border); }
+.tl-line { width:2px; flex:1; min-height:20px; background:var(--border); margin:2px 0; }
+.tl-line.done { background:rgba(52,211,153,0.3); }
+.tl-content { flex:1; padding-bottom:16px; }
+.tl-label { font-family:var(--font-dm); font-size:12px; font-weight:700; color:var(--gray-primary); margin-bottom:2px; }
+.tl-label.muted { color:var(--gray-disabled); }
+.tl-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-disabled); line-height:1.4; }
+
+/* QR area */
+.qr-area { background:var(--surface-1); border:1px solid var(--border); border-radius:10px; padding:20px; text-align:center; }
+.qr-box { width:100px; height:100px; border-radius:8px; background:white; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; }
+.qr-box svg { width:80px; height:80px; }
+
+/* Offer card */
+.offer-card { background:linear-gradient(135deg,rgba(247,148,30,0.1),rgba(247,148,30,0.04)); border:1px solid rgba(247,148,30,0.35); border-radius:var(--r-lg); margin:0 14px 10px; padding:18px; }
+.offer-score { font-family:var(--font-oswald); font-size:48px; font-weight:700; color:var(--vai-orange); line-height:1; text-align:center; margin-bottom:4px; }
+.offer-rank { font-family:var(--font-mono); font-size:10px; color:var(--gray-disabled); text-align:center; letter-spacing:0.06em; margin-bottom:16px; }
+.offer-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:12px; }
+.offer-row:last-child { border-bottom:none; }
+
+/* PLAY gate */
+.play-gate { background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.25); border-radius:var(--r-lg); margin:0 14px 10px; padding:16px; }
+.play-gate-title { font-family:var(--font-oswald); font-size:14px; font-weight:700; color:var(--red); margin-bottom:6px; }
+
+/* Buttons */
+.btn-primary { width:100%; padding:12px 0; border-radius:var(--r-md); background:var(--vai-orange); border:none; font-family:var(--font-oswald); font-size:14px; font-weight:700; color:#000; cursor:pointer; letter-spacing:0.04em; }
+.btn-ghost { width:100%; padding:10px 0; border-radius:var(--r-md); background:transparent; border:1px solid var(--border); font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-secondary); cursor:pointer; margin-top:8px; }
+.btn-danger { width:100%; padding:10px 0; border-radius:var(--r-md); background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); font-family:var(--font-dm); font-size:12px; font-weight:700; color:var(--red); cursor:pointer; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<div class="page-title">VAI — Tryout Athlete Flow</div>
+<div class="page-sub">Registration · Check-In · Offer Received · PLAY Gate</div>
+<div class="page-tag">
+  <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#f7941e"/></svg>
+  NEW SCREEN — Athlete-Facing · Apr 2026
+</div>
+
+<div class="phones-row">
+
+  <!-- PHONE 1: Tryout Status + Wave Assignment -->
+  <div class="phone-wrap">
+    <div class="phone-label">TY-1 — Tryout Status</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g1)"/><defs><radialGradient id="g1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50) scale(217 130)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="a-dot"></div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="notif-dot"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg">Your wave starts at <strong style="color:var(--vai-orange);">10:30 AM</strong> — arrive by 10:15</span>
+      </div>
+
+      <div class="scroll-body" style="height:612px;">
+
+        <!-- Tryout header card -->
+        <div class="card" style="margin-top:14px;border-color:rgba(247,148,30,0.25);background:linear-gradient(135deg,rgba(247,148,30,0.08),rgba(247,148,30,0.02));">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+            <div>
+              <div style="font-family:var(--font-oswald);font-size:16px;font-weight:700;color:var(--gray-primary);margin-bottom:3px;">UHSGFA Fall Tryouts</div>
+              <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-disabled);">Jordan High Complex · Sat Oct 10, 2026</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;background:rgba(247,148,30,0.1);border:1px solid rgba(247,148,30,0.3);border-radius:var(--r-full);padding:4px 10px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--vai-orange);animation:pulse-o 1.2s ease-in-out infinite;"></div>
+              <span style="font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--vai-orange);">UPCOMING</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div>
+              <div style="font-family:var(--font-mono);font-size:8px;color:var(--gray-disabled);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:2px;">Wave</div>
+              <div style="font-family:var(--font-oswald);font-size:20px;font-weight:700;color:var(--vai-orange);">Wave 2</div>
+              <div style="font-size:10px;color:var(--gray-disabled);">7th Grade · WR / DB</div>
+            </div>
+            <div>
+              <div style="font-family:var(--font-mono);font-size:8px;color:var(--gray-disabled);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:2px;">Time</div>
+              <div style="font-family:var(--font-oswald);font-size:20px;font-weight:700;color:var(--gray-primary);">10:30 AM</div>
+              <div style="font-size:10px;color:var(--gray-disabled);">Arrive by 10:15 AM</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status timeline -->
+        <div class="section-hdr">Your Tryout Progress</div>
+        <div style="padding:8px 16px;">
+          <div class="timeline">
+
+            <div class="tl-row">
+              <div class="tl-left">
+                <div class="tl-dot done">✓</div>
+                <div class="tl-line done"></div>
+              </div>
+              <div class="tl-content">
+                <div class="tl-label">Registered</div>
+                <div class="tl-sub">Oct 5 · PLAY status GREEN · Waiver signed</div>
+              </div>
+            </div>
+
+            <div class="tl-row">
+              <div class="tl-left">
+                <div class="tl-dot done">✓</div>
+                <div class="tl-line done"></div>
+              </div>
+              <div class="tl-content">
+                <div class="tl-label">Wave Assigned</div>
+                <div class="tl-sub">Wave 2 · 10:30 AM · Field 2 · 7th Grade Skill</div>
+              </div>
+            </div>
+
+            <div class="tl-row">
+              <div class="tl-left">
+                <div class="tl-dot active"></div>
+                <div class="tl-line"></div>
+              </div>
+              <div class="tl-content">
+                <div class="tl-label" style="color:var(--vai-orange);">Check-In</div>
+                <div class="tl-sub">Scan QR at Field 2 check-in table · Oct 10</div>
+              </div>
+            </div>
+
+            <div class="tl-row">
+              <div class="tl-left">
+                <div class="tl-dot pending"></div>
+                <div class="tl-line"></div>
+              </div>
+              <div class="tl-content">
+                <div class="tl-label muted">Evaluation</div>
+                <div class="tl-sub">4 coaches scoring · Speed · Routes · IQ · Attitude</div>
+              </div>
+            </div>
+
+            <div class="tl-row">
+              <div class="tl-left">
+                <div class="tl-dot pending"></div>
+              </div>
+              <div class="tl-content" style="padding-bottom:0;">
+                <div class="tl-label muted">Offer Decision</div>
+                <div class="tl-sub">Results within 48 hours. AVANTI will notify you.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- QR check-in -->
+        <div class="section-hdr">Your Check-In QR</div>
+        <div style="padding:0 14px 14px;">
+          <div class="qr-area">
+            <!-- Simple QR placeholder -->
+            <div class="qr-box">
+              <svg viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="21" height="21" fill="white"/>
+                <rect x="1" y="1" width="7" height="7" fill="black"/>
+                <rect x="2" y="2" width="5" height="5" fill="white"/>
+                <rect x="3" y="3" width="3" height="3" fill="black"/>
+                <rect x="13" y="1" width="7" height="7" fill="black"/>
+                <rect x="14" y="2" width="5" height="5" fill="white"/>
+                <rect x="15" y="3" width="3" height="3" fill="black"/>
+                <rect x="1" y="13" width="7" height="7" fill="black"/>
+                <rect x="2" y="14" width="5" height="5" fill="white"/>
+                <rect x="3" y="15" width="3" height="3" fill="black"/>
+                <rect x="9" y="1" width="1" height="1" fill="black"/>
+                <rect x="11" y="1" width="1" height="1" fill="black"/>
+                <rect x="9" y="3" width="3" height="1" fill="black"/>
+                <rect x="9" y="5" width="1" height="3" fill="black"/>
+                <rect x="11" y="5" width="3" height="1" fill="black"/>
+                <rect x="13" y="9" width="1" height="3" fill="black"/>
+                <rect x="15" y="9" width="3" height="1" fill="black"/>
+                <rect x="17" y="11" width="1" height="3" fill="black"/>
+                <rect x="9" y="9" width="5" height="5" fill="black"/>
+                <rect x="10" y="10" width="3" height="3" fill="white"/>
+                <rect x="1" y="9" width="1" height="3" fill="black"/>
+                <rect x="3" y="9" width="3" height="1" fill="black"/>
+                <rect x="5" y="11" width="1" height="3" fill="black"/>
+                <rect x="1" y="13" width="1" height="1" fill="black"/>
+                <rect x="9" y="15" width="5" height="1" fill="black"/>
+                <rect x="9" y="17" width="1" height="3" fill="black"/>
+                <rect x="11" y="17" width="3" height="1" fill="black"/>
+                <rect x="15" y="15" width="3" height="1" fill="black"/>
+                <rect x="17" y="17" width="3" height="3" fill="black"/>
+              </svg>
+            </div>
+            <div style="font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--gray-primary);margin-bottom:3px;">LENA MORALES · #7</div>
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);">Wave 2 · Oct 10 · 10:30 AM</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni"><div class="ni-icon"><div class="av-pill"><span>AVANTI</span></div></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 2: Offer Received -->
+  <div class="phone-wrap">
+    <div class="phone-label">TY-2 — Offer Received</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g2)"/><defs><radialGradient id="g2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50) scale(217 130)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="a-dot"></div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="notif-dot" style="background:var(--vai-orange);"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="avanti-strip" style="background:rgba(247,148,30,0.07);border-bottom-color:rgba(247,148,30,0.2);">
+        <div class="a-dot" style="width:5px;height:5px;background:var(--vai-orange);"></div>
+        <span class="strip-lbl" style="color:var(--vai-orange);">NEW OFFER</span>
+        <span class="strip-msg" style="color:var(--gray-primary);font-weight:600;">Jordan High Varsity — respond by Oct 14</span>
+      </div>
+
+      <div class="scroll-body" style="height:612px;">
+
+        <!-- Offer hero -->
+        <div style="padding:16px 14px 0;">
+          <div style="text-align:center;margin-bottom:12px;">
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">AVANTI EVAL SCORE</div>
+            <div class="offer-score">88</div>
+            <div class="offer-rank">Ranked #3 of 42 athletes evaluated · Wave 2</div>
+          </div>
+        </div>
+
+        <!-- Offer card -->
+        <div class="offer-card">
+          <div style="font-family:var(--font-oswald);font-size:16px;font-weight:700;color:var(--vai-orange);margin-bottom:14px;">🏈 Offer Extended</div>
+          <div class="offer-row">
+            <span style="color:var(--gray-disabled);">Team</span>
+            <span style="font-weight:700;color:var(--gray-primary);">Jordan High Varsity</span>
+          </div>
+          <div class="offer-row">
+            <span style="color:var(--gray-disabled);">Position</span>
+            <span style="font-weight:700;color:var(--gray-primary);">Wide Receiver / DB</span>
+          </div>
+          <div class="offer-row">
+            <span style="color:var(--gray-disabled);">Season</span>
+            <span style="font-weight:700;color:var(--gray-primary);">Fall 2026</span>
+          </div>
+          <div class="offer-row">
+            <span style="color:var(--gray-disabled);">Offer Type</span>
+            <span style="font-weight:700;color:var(--vai-green);">Varsity Roster Spot</span>
+          </div>
+          <div class="offer-row">
+            <span style="color:var(--gray-disabled);">Respond By</span>
+            <span style="font-weight:700;color:var(--yellow);">Oct 14, 2026</span>
+          </div>
+        </div>
+
+        <!-- AVANTI recommendation -->
+        <div style="margin:0 14px 10px;background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.2);border-radius:var(--r-lg);padding:14px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+            <div class="a-dot" style="width:5px;height:5px;"></div>
+            <span style="font-family:var(--font-mono);font-size:9px;color:var(--vai-green);letter-spacing:0.08em;text-transform:uppercase;">AVANTI Insight</span>
+          </div>
+          <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-body);line-height:1.5;">
+            Score of 88 puts you in the top 10% of your wave. Coach Mitchell flagged your route discipline as a standout. Accepting secures a Varsity spot — rare for a 7th grader.
+          </div>
+        </div>
+
+        <!-- Accept / Decline / Waitlist -->
+        <div style="padding:0 14px 20px;">
+          <button class="btn-primary">Accept Offer</button>
+          <button class="btn-ghost">Request More Info</button>
+          <button class="btn-danger">Decline Offer</button>
+        </div>
+
+      </div>
+
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni"><div class="ni-icon"><div class="av-pill"><span>AVANTI</span></div></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 3: PLAY Blocked State -->
+  <div class="phone-wrap">
+    <div class="phone-label">TY-3 — PLAY Blocked</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g3)"/><defs><radialGradient id="g3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50) scale(217 130)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="a-dot" style="background:var(--red);"></div>
+        <div class="tier-bubble" style="background:var(--vai-orange);">F</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="notif-dot"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="avanti-strip" style="background:rgba(239,68,68,0.05);border-bottom-color:rgba(239,68,68,0.2);">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;"></div>
+        <span class="strip-lbl" style="color:var(--red);">PLAY BLOCKED</span>
+        <span class="strip-msg">1 action needed to unlock tryout registration</span>
+      </div>
+
+      <div class="scroll-body" style="height:612px;">
+
+        <!-- Tryout card (blocked) -->
+        <div class="card" style="margin-top:14px;opacity:0.5;">
+          <div style="font-family:var(--font-oswald);font-size:16px;font-weight:700;color:var(--gray-primary);margin-bottom:3px;">UHSGFA Fall Tryouts</div>
+          <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-disabled);">Jordan High Complex · Sat Oct 10, 2026</div>
+          <div style="margin-top:10px;display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:7px;">
+            <span style="font-size:14px;">🔒</span>
+            <span style="font-family:var(--font-dm);font-size:12px;color:var(--red);font-weight:600;">Registration blocked by PLAY status</span>
+          </div>
+        </div>
+
+        <!-- PLAY gate explanation -->
+        <div class="play-gate">
+          <div class="play-gate-title">● PLAY Status: RED</div>
+          <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-body);margin-bottom:14px;line-height:1.5;">
+            Your guardian authorization form is missing. This is required before you can register for any tryout, camp, or game.
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:7px;">
+              <span style="font-size:12px;">✗</span>
+              <span style="font-family:var(--font-dm);font-size:12px;color:var(--red);">Guardian Authorization · Missing</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.15);border-radius:7px;">
+              <span style="font-size:12px;color:var(--vai-green);">✓</span>
+              <span style="font-family:var(--font-dm);font-size:12px;color:var(--gray-body);">Waiver Signed</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.15);border-radius:7px;">
+              <span style="font-size:12px;color:var(--vai-green);">✓</span>
+              <span style="font-family:var(--font-dm);font-size:12px;color:var(--gray-body);">Medical Release · On File</span>
+            </div>
+          </div>
+
+          <!-- AVANTI note -->
+          <div style="background:rgba(239,68,68,0.04);border-left:2px solid rgba(239,68,68,0.4);padding:8px 10px;border-radius:0 6px 6px 0;margin-bottom:14px;">
+            <div style="font-family:var(--font-mono);font-size:8px;color:var(--red);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:3px;">AVANTI</div>
+            <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-body);font-style:italic;line-height:1.45;">Tryout registration closes in 3 days. Your guardian needs to complete one form — AVANTI can send them a direct link now.</div>
+          </div>
+
+          <button class="btn-primary" style="background:var(--red);color:#fff;font-family:var(--font-dm);font-size:13px;font-weight:700;letter-spacing:0;">Send Link to Guardian →</button>
+          <button class="btn-ghost">View PLAY Status Details</button>
+        </div>
+
+        <!-- Deadline warning -->
+        <div style="margin:0 14px 14px;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:var(--r-lg);padding:14px;display:flex;gap:10px;align-items:flex-start;">
+          <span style="font-size:18px;flex-shrink:0;">⏱</span>
+          <div>
+            <div style="font-family:var(--font-dm);font-size:12px;font-weight:700;color:var(--yellow);margin-bottom:3px;">Registration closes Oct 7</div>
+            <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-disabled);line-height:1.4;">PLAY must be GREEN before you can register. Complete guardian auth now to avoid missing the window.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-nav">
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni"><div class="ni-icon"><div class="av-pill"><span>AVANTI</span></div></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
