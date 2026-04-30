@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Fan Feed Mobile (Live Game Experience)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --vai-orange:#f7941e; --vai-green:#34d399;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --red:#FF6B6B; --yellow:#FBBF24; --blue:#5577DD;
+  --font-oswald:'Oswald',Impact,Arial Black,sans-serif;
+  --font-dm:'DM Sans',Arial,Helvetica,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-full:9999px;
+}
+body {
+  background:var(--void-black);
+  font-family:var(--font-dm);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:40px 16px 72px;
+  color:var(--gray-primary);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Ambient glow */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 30%, rgba(247,148,30,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 80% 70%, rgba(52,211,153,0.04) 0%, transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.page-title {
+  font-family:var(--font-oswald);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--gray-disabled);
+  margin-bottom:4px;
+  text-align:center;
+  position:relative;
+  z-index:1;
+}
+.page-sub {
+  font-size:11px;
+  color:var(--gray-disabled);
+  margin-bottom:12px;
+  text-align:center;
+  position:relative;
+  z-index:1;
+}
+.page-tag {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(247,148,30,0.08);
+  border:1px solid rgba(247,148,30,0.2);
+  border-radius:var(--r-full);
+  padding:4px 14px;
+  font-family:var(--font-mono);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:0.06em;
+  color:var(--vai-orange);
+  margin-bottom:36px;
+  position:relative;
+  z-index:1;
+}
+
+.phones-row {
+  display:flex;
+  gap:28px;
+  align-items:flex-start;
+  justify-content:center;
+  flex-wrap:nowrap;
+  position:relative;
+  z-index:1;
+}
+.phone-wrap {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+.phone-label {
+  font-family:var(--font-oswald);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--gray-disabled);
+  text-align:center;
+}
+
+/* ── Phone frame ── */
+.phone {
+  width:375px;
+  background:var(--void-black);
+  border-radius:44px;
+  border:1.5px solid var(--gray-subtle);
+  box-shadow:
+    0 0 0 1px #0c0c10,
+    0 32px 80px rgba(0,0,0,0.95),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  overflow:hidden;
+  position:relative;
+  flex-shrink:0;
+}
+
+/* Status bar */
+.status-bar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 22px 8px;
+  background:var(--void-black);
+  font-family:var(--font-dm);
+  font-size:12px;
+  font-weight:600;
+  color:var(--gray-primary);
+}
+
+/* App header */
+.app-header {
+  background:var(--void-black);
+  padding:10px 18px 12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border-bottom:1px solid var(--border);
+}
+.vai-wordmark {
+  font-family:var(--font-oswald);
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:0.05em;
+  color:var(--gray-primary);
+}
+.tier-bubble {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  font-family:var(--font-dm);
+  font-size:12px;
+  font-weight:900;
+  color:#000;
+  flex-shrink:0;
+}
+.a-dot {
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--vai-green);
+  animation:pulse 2s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes pulse {
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.5)}
+  50%{opacity:0.7;box-shadow:0 0 0 5px rgba(52,211,153,0)}
+}
+.live-dot {
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:var(--vai-orange);
+  animation:pulse-o 1.2s ease-in-out infinite;
+}
+@keyframes pulse-o {
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(247,148,30,0.6)}
+  50%{opacity:0.8;box-shadow:0 0 0 4px rgba(247,148,30,0)}
+}
+.hdr-icons {
+  display:flex;
+  gap:12px;
+  align-items:center;
+  margin-left:auto;
+}
+.hdr-icon {
+  width:20px;
+  height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.hdr-icon svg {
+  width:18px;
+  height:18px;
+  stroke:var(--gray-secondary);
+  stroke-width:1.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  fill:none;
+}
+.notif-dot {
+  position:absolute;
+  top:-2px;
+  right:-2px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--red);
+  border:1px solid var(--void-black);
+}
+
+/* AVANTI strip */
+.avanti-strip {
+  background:rgba(52,211,153,0.04);
+  border-bottom:1px solid rgba(52,211,153,0.12);
+  padding:9px 18px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.strip-lbl {
+  font-family:var(--font-mono);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--vai-green);
+}
+.strip-msg {
+  font-family:var(--font-dm);
+  font-size:12px;
+  color:var(--gray-body);
+  flex:1;
+}
+.strip-chip {
+  padding:4px 10px;
+  border-radius:var(--r-full);
+  background:rgba(247,148,30,0.1);
+  border:1px solid rgba(247,148,30,0.3);
+  font-family:var(--font-dm);
+  font-size:11px;
+  font-weight:600;
+  color:var(--vai-orange);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+
+/* ── SCOREBOARD BANNER ── */
+.score-banner {
+  background:linear-gradient(180deg,#0e0e12 0%,rgba(247,148,30,0.05) 100%);
+  border-bottom:1px solid rgba(247,148,30,0.25);
+  padding:14px 18px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.score-banner-top {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.live-pill {
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:rgba(247,148,30,0.12);
+  border:1px solid rgba(247,148,30,0.35);
+  border-radius:var(--r-full);
+  padding:3px 10px;
+  font-family:var(--font-mono);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.04em;
+  color:var(--vai-orange);
+}
+.score-clock {
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--gray-secondary);
+}
+.score-row {
+  display:flex;
+  align-items:center;
+  gap:0;
+}
+.score-team-block {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.score-team-block.right { align-items:flex-end; }
+.score-team-name {
+  font-family:var(--font-dm);
+  font-size:11px;
+  font-weight:600;
+  color:var(--gray-secondary);
+}
+.score-num {
+  font-family:var(--font-oswald);
+  font-size:40px;
+  font-weight:700;
+  color:var(--vai-orange);
+  line-height:1;
+}
+.score-sep {
+  font-family:var(--font-mono);
+  font-size:16px;
+  color:var(--gray-subtle);
+  padding:0 12px;
+  margin-top:12px;
+}
+.score-actions {
+  display:flex;
+  gap:6px;
+  align-items:center;
+  justify-content:flex-end;
+}
+.score-action-btn {
+  padding:4px 12px;
+  border-radius:var(--r-full);
+  font-family:var(--font-dm);
+  font-size:11px;
+  font-weight:600;
+  border:1px solid;
+  cursor:pointer;
+}
+.sab-primary { background:var(--vai-orange); border-color:var(--vai-orange); color:#000; }
+.sab-ghost { background:transparent; border-color:var(--gray-subtle); color:var(--gray-secondary); }
+
+/* Feed tabs */
+.feed-tabs {
+  display:flex;
+  border-bottom:1px solid var(--border);
+  background:var(--void-black);
+}
+.feed-tab {
+  flex:1;
+  padding:10px 0;
+  text-align:center;
+  font-family:var(--font-dm);
+  font-size:12px;
+  font-weight:600;
+  color:var(--gray-disabled);
+  border-bottom:2px solid transparent;
+  cursor:pointer;
+}
+.feed-tab.active {
+  color:var(--vai-orange);
+  border-bottom-color:var(--vai-orange);
+}
+
+/* Scroll body */
+.scroll-body {
+  background:var(--void-black);
+  overflow-y:auto;
+  scrollbar-width:none;
+}
+.scroll-body::-webkit-scrollbar { display:none; }
+
+/* ── FAN FEED ── */
+.feed-body {
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  padding:0;
+}
+
+/* AVANTI auto-post */
+.avanti-post {
+  margin:10px 14px;
+  background:rgba(52,211,153,0.04);
+  border:1px solid rgba(52,211,153,0.18);
+  border-radius:var(--r-lg);
+  padding:10px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.avanti-post-hdr {
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.avanti-badge {
+  font-family:var(--font-mono);
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:0.08em;
+  color:var(--vai-green);
+  text-transform:uppercase;
+}
+.avanti-post-time {
+  font-family:var(--font-mono);
+  font-size:9px;
+  color:var(--gray-disabled);
+  margin-left:auto;
+}
+.avanti-post-text {
+  font-family:var(--font-dm);
+  font-size:12px;
+  color:var(--gray-body);
+  line-height:1.45;
+}
+.avanti-post-highlight {
+  background:rgba(247,148,30,0.08);
+  border-left:2px solid var(--vai-orange);
+  padding:6px 8px;
+  border-radius:0 var(--r-sm) var(--r-sm) 0;
+  font-family:var(--font-dm);
+  font-size:11px;
+  font-weight:600;
+  color:var(--vai-orange);
+}
+
+/* Comment row */
+.comment-row {
+  padding:10px 14px;
+  border-bottom:1px solid rgba(30,30,38,0.6);
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.comment-meta {
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.avatar-circle {
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font-oswald);
+  font-size:11px;
+  font-weight:700;
+  flex-shrink:0;
+  color:#000;
+}
+.comment-author {
+  font-family:var(--font-dm);
+  font-size:12px;
+  font-weight:600;
+  color:var(--gray-primary);
+}
+.comment-role {
+  font-family:var(--font-mono);
+  font-size:9px;
+  color:var(--gray-disabled);
+  letter-spacing:0.04em;
+}
+.comment-time {
+  font-family:var(--font-mono);
+  font-size:9px;
+  color:var(--gray-disabled);
+  margin-left:auto;
+}
+.comment-text {
+  font-family:var(--font-dm);
+  font-size:13px;
+  color:var(--gray-body);
+  line-height:1.45;
+  padding-left:36px;
+}
+.comment-actions {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding-left:36px;
+}
+.ca-btn {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-family:var(--font-dm);
+  font-size:11px;
+  color:var(--gray-disabled);
+  cursor:pointer;
+}
+.ca-btn.liked { color:var(--red); }
+.ca-btn svg {
+  width:14px;
+  height:14px;
+  stroke:currentColor;
+  stroke-width:1.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  fill:none;
+}
+.ca-btn.liked svg { fill:var(--red); }
+
+/* Video clip card */
+.clip-card {
+  margin:2px 14px 8px 50px;
+  background:var(--card-dark);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  padding:0;
+  overflow:hidden;
+  position:relative;
+}
+.clip-thumb {
+  height:80px;
+  background:linear-gradient(135deg,#141418 0%,#1a1a20 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.clip-play {
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:rgba(247,148,30,0.9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.clip-play svg {
+  width:16px;
+  height:16px;
+  fill:#000;
+  stroke:none;
+}
+.clip-meta {
+  padding:6px 10px;
+  font-family:var(--font-dm);
+  font-size:10px;
+  color:var(--gray-secondary);
+}
+.clip-label {
+  background:rgba(247,148,30,0.1);
+  border:1px solid rgba(247,148,30,0.3);
+  border-radius:var(--r-sm);
+  padding:1px 6px;
+  font-family:var(--font-mono);
+  font-size:9px;
+  color:var(--vai-orange);
+  display:inline;
+  margin-right:6px;
+}
+
+/* Emoji reaction bar */
+.reaction-bar {
+  display:flex;
+  gap:4px;
+  flex-wrap:wrap;
+  padding:0 14px 10px 50px;
+}
+.emoji-chip {
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  background:var(--surface-1);
+  border:1px solid var(--border);
+  border-radius:var(--r-full);
+  padding:3px 8px;
+  font-size:13px;
+  cursor:pointer;
+}
+.emoji-chip.mine {
+  background:rgba(247,148,30,0.1);
+  border-color:rgba(247,148,30,0.35);
+}
+.emoji-count {
+  font-family:var(--font-mono);
+  font-size:10px;
+  color:var(--gray-secondary);
+}
+.emoji-chip.mine .emoji-count { color:var(--vai-orange); }
+
+/* Comment input */
+.comment-input-bar {
+  background:var(--card-dark);
+  border-top:1px solid var(--border);
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.input-field {
+  flex:1;
+  background:var(--surface-1);
+  border:1px solid var(--border);
+  border-radius:var(--r-full);
+  padding:8px 14px;
+  font-family:var(--font-dm);
+  font-size:12px;
+  color:var(--gray-body);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.input-placeholder { color:var(--gray-disabled); }
+.input-emoji { font-size:15px; }
+.send-btn {
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:var(--vai-orange);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.send-btn svg {
+  width:16px;
+  height:16px;
+  stroke:#000;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  fill:none;
+}
+.clip-btn {
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:var(--surface-1);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.clip-btn svg {
+  width:15px;
+  height:15px;
+  stroke:var(--gray-secondary);
+  stroke-width:1.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  fill:none;
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  background:var(--card-dark);
+  border-top:1px solid var(--border);
+  display:flex;
+  padding:8px 4px 20px;
+  flex-shrink:0;
+}
+.ni {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  padding:4px 0;
+}
+.ni-icon {
+  width:24px;
+  height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ni-icon svg {
+  width:22px;
+  height:22px;
+  stroke:var(--gray-disabled);
+  stroke-width:1.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  fill:none;
+}
+.ni-lbl {
+  font-family:var(--font-dm);
+  font-size:10px;
+  font-weight:500;
+  color:var(--gray-disabled);
+}
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+/* AVANTI pill in nav */
+.av-pill {
+  background:var(--vai-green);
+  border-radius:20px;
+  padding:6px 11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.av-pill span {
+  font-family:var(--font-dm);
+  font-size:11px;
+  font-weight:800;
+  color:#000;
+  letter-spacing:0.02em;
+}
+
+/* ── SCOUT OVERLAY (Phone 3) ── */
+.scout-overlay {
+  background:rgba(6,6,8,0.75);
+  backdrop-filter:blur(2px);
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  z-index:10;
+}
+.scout-sheet {
+  background:var(--card-dark);
+  border-top:1px solid rgba(52,211,153,0.25);
+  border-radius:20px 20px 0 0;
+  padding:0 0 20px;
+}
+.sheet-handle {
+  display:flex;
+  justify-content:center;
+  padding:10px 0 6px;
+}
+.handle-bar {
+  width:36px;
+  height:4px;
+  border-radius:2px;
+  background:var(--gray-subtle);
+}
+.sheet-header {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 16px 12px;
+  border-bottom:1px solid var(--border);
+}
+.sheet-title {
+  font-family:var(--font-oswald);
+  font-size:16px;
+  font-weight:700;
+  color:var(--gray-primary);
+}
+.sheet-tag {
+  padding:3px 10px;
+  border-radius:var(--r-full);
+  background:rgba(52,211,153,0.1);
+  border:1px solid rgba(52,211,153,0.3);
+  font-family:var(--font-mono);
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:0.06em;
+  color:var(--vai-green);
+  text-transform:uppercase;
+}
+.sheet-close {
+  margin-left:auto;
+  font-family:var(--font-dm);
+  font-size:13px;
+  color:var(--gray-disabled);
+}
+.scout-cards {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:12px 14px;
+}
+.scout-card {
+  background:var(--surface-1);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:11px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.scout-card-top {
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.school-circle {
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:var(--elevated);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font-oswald);
+  font-size:10px;
+  font-weight:700;
+  color:var(--gray-secondary);
+  flex-shrink:0;
+}
+.scout-school {
+  font-family:var(--font-dm);
+  font-size:12px;
+  font-weight:600;
+  color:var(--gray-primary);
+}
+.scout-div {
+  font-family:var(--font-mono);
+  font-size:9px;
+  color:var(--gray-disabled);
+  letter-spacing:0.04em;
+}
+.scout-interest {
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 8px;
+  border-radius:var(--r-full);
+  font-family:var(--font-mono);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  margin-left:auto;
+}
+.interest-high {
+  background:rgba(52,211,153,0.1);
+  border:1px solid rgba(52,211,153,0.3);
+  color:var(--vai-green);
+}
+.interest-med {
+  background:rgba(247,148,30,0.1);
+  border:1px solid rgba(247,148,30,0.3);
+  color:var(--vai-orange);
+}
+.scout-avanti-note {
+  padding:6px 8px;
+  background:rgba(52,211,153,0.04);
+  border-left:2px solid rgba(52,211,153,0.4);
+  border-radius:0 var(--r-sm) var(--r-sm) 0;
+  font-family:var(--font-dm);
+  font-size:11px;
+  color:var(--gray-secondary);
+  font-style:italic;
+}
+.sheet-cta {
+  margin:4px 14px 0;
+  background:var(--vai-orange);
+  border:none;
+  border-radius:var(--r-md);
+  padding:12px;
+  font-family:var(--font-oswald);
+  font-size:14px;
+  font-weight:700;
+  color:#000;
+  text-align:center;
+  letter-spacing:0.04em;
+  cursor:pointer;
+}
+
+/* Section header */
+.section-hdr {
+  padding:10px 14px 4px;
+  font-family:var(--font-mono);
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--gray-disabled);
+}
+
+/* Divider */
+.feed-divider {
+  height:1px;
+  background:var(--border);
+  margin:4px 0;
+}
+
+/* New comments badge */
+.new-badge {
+  margin:8px auto;
+  width:fit-content;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:rgba(52,211,153,0.1);
+  border:1px solid rgba(52,211,153,0.25);
+  border-radius:var(--r-full);
+  padding:4px 12px;
+  font-family:var(--font-dm);
+  font-size:11px;
+  font-weight:600;
+  color:var(--vai-green);
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="page-title">VAI — Fan Feed Mobile</div>
+<div class="page-sub">Live Game Experience · Feed Tab · AVANTI Scout Intel</div>
+<div class="page-tag">
+  <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#f7941e"/></svg>
+  NEW SCREEN — Mobile Design · Apr 2026
+</div>
+
+<div class="phones-row">
+
+  <!-- ──────────── PHONE 1: Live Fan Feed ──────────── -->
+  <div class="phone-wrap">
+    <div class="phone-label">FF-1 — Live Fan Feed</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span style="font-size:13px;">••• WiFi ···</span>
+      </div>
+
+      <!-- Header -->
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wm1)"/>
+          <defs><radialGradient id="wm1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50) scale(217 130)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs>
+        </svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="a-dot"></div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;">
+            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <div class="notif-dot"></div>
+          </div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+
+      <!-- AVANTI strip -->
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg"><strong style="color:var(--vai-orange);">2 scouts watching</strong> — share this game</span>
+        <span class="strip-chip">Scout Intel</span>
+      </div>
+
+      <!-- Scoreboard -->
+      <div class="score-banner">
+        <div class="score-banner-top">
+          <div class="live-pill"><div class="live-dot"></div> LIVE</div>
+          <div class="score-clock">Q2 · 4:32 remaining</div>
+          <div class="score-actions">
+            <div class="score-action-btn sab-ghost">📊 Stats</div>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="score-team-block">
+            <div class="score-team-name">Jordan High</div>
+            <div class="score-num">14</div>
+          </div>
+          <div class="score-sep">—</div>
+          <div class="score-team-block right">
+            <div class="score-team-name">Skyline HS</div>
+            <div class="score-num" style="color:var(--gray-secondary);font-size:36px;">7</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feed tabs -->
+      <div class="feed-tabs">
+        <div class="feed-tab active">Fan Feed</div>
+        <div class="feed-tab">Event Log</div>
+      </div>
+
+      <!-- Feed scroll -->
+      <div class="scroll-body" style="height:382px;">
+        <div class="feed-body">
+
+          <!-- AVANTI auto-post -->
+          <div class="avanti-post">
+            <div class="avanti-post-hdr">
+              <div class="a-dot" style="width:5px;height:5px;"></div>
+              <span class="avanti-badge">AVANTI Highlight</span>
+              <span class="avanti-post-time">Just now</span>
+            </div>
+            <div class="avanti-post-highlight">⚡ TD — Marcus Williams · 42-yard rush · Q2 4:32</div>
+            <div class="avanti-post-text">Marcus just broke 3 tackles. That's his 2nd score today. Utah State scout confirmed in the stands.</div>
+          </div>
+
+          <!-- New comments badge -->
+          <div class="new-badge">↑ 8 new comments</div>
+
+          <!-- Comment: Parent -->
+          <div class="comment-row">
+            <div class="comment-meta">
+              <div class="avatar-circle" style="background:#f7941e;">SW</div>
+              <div>
+                <div class="comment-author">Sarah Williams</div>
+                <div class="comment-role">Parent · #23</div>
+              </div>
+              <div class="comment-time">Just now</div>
+            </div>
+            <div class="comment-text">THAT BOY IS UNSTOPPABLE 🔥🔥 Let's go Marcus!!!</div>
+            <div class="reaction-bar">
+              <div class="emoji-chip mine">🔥 <span class="emoji-count">24</span></div>
+              <div class="emoji-chip">❤️ <span class="emoji-count">18</span></div>
+              <div class="emoji-chip">👏 <span class="emoji-count">11</span></div>
+            </div>
+            <div class="comment-actions">
+              <div class="ca-btn liked">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                47
+              </div>
+              <div class="ca-btn">
+                <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Reply
+              </div>
+            </div>
+          </div>
+
+          <!-- Comment with video clip -->
+          <div class="comment-row">
+            <div class="comment-meta">
+              <div class="avatar-circle" style="background:#5577DD;">DJ</div>
+              <div>
+                <div class="comment-author">Darius Jackson</div>
+                <div class="comment-role">Parent · #12</div>
+              </div>
+              <div class="comment-time">1m ago</div>
+            </div>
+            <div class="comment-text">Got the whole play on video 📹</div>
+            <div class="clip-card">
+              <div class="clip-thumb">
+                <div class="clip-play">
+                  <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+              </div>
+              <div class="clip-meta">
+                <span class="clip-label">CLIP</span>
+                Marcus TD run · 0:18
+              </div>
+            </div>
+            <div class="comment-actions">
+              <div class="ca-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                31
+              </div>
+              <div class="ca-btn">
+                <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Reply
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Comment input -->
+      <div class="comment-input-bar">
+        <div class="clip-btn">
+          <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </div>
+        <div class="input-field">
+          <span class="input-placeholder">Add to the feed...</span>
+          <span class="input-emoji">😊</span>
+        </div>
+        <div class="send-btn">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+
+      <!-- Bottom nav -->
+      <div class="bottom-nav">
+        <div class="ni">
+          <div class="ni-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div class="ni-lbl">Home</div>
+        </div>
+        <div class="ni active">
+          <div class="ni-icon">
+            <svg width="22" height="22" viewBox="0 0 139 167" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/>
+            </svg>
+          </div>
+          <div class="ni-lbl">Feed</div>
+        </div>
+        <div class="ni">
+          <div class="ni-icon">
+            <div class="av-pill"><span>AVANTI</span></div>
+          </div>
+          <div class="ni-lbl" style="color:var(--vai-green);"></div>
+        </div>
+        <div class="ni">
+          <div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+          <div class="ni-lbl">Wallet</div>
+        </div>
+        <div class="ni">
+          <div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="ni-lbl">Me</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── PHONE 2: Full Emoji / Comment Detail ──────────── -->
+  <div class="phone-wrap">
+    <div class="phone-label">FF-2 — React + Score Entry</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span style="font-size:13px;">••• WiFi ···</span>
+      </div>
+
+      <!-- Header -->
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wm2)"/>
+          <defs><radialGradient id="wm2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50) scale(217 130)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs>
+        </svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="a-dot"></div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+
+      <!-- Score banner compact -->
+      <div class="score-banner" style="padding:10px 18px;">
+        <div class="score-banner-top">
+          <div class="live-pill"><div class="live-dot"></div> LIVE · Q3</div>
+          <div class="score-clock">Jordan 21 — Skyline 14</div>
+          <div class="score-actions">
+            <div class="score-action-btn sab-primary" style="font-size:10px;padding:3px 10px;">Full View</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feed tabs -->
+      <div class="feed-tabs">
+        <div class="feed-tab active">Fan Feed</div>
+        <div class="feed-tab">Event Log</div>
+      </div>
+
+      <!-- Feed scroll -->
+      <div class="scroll-body" style="height:428px;">
+        <div class="feed-body">
+
+          <!-- Section label -->
+          <div class="section-hdr">Live Comments · 142 total</div>
+
+          <!-- Comment 1 — with full emoji picker open beneath -->
+          <div class="comment-row">
+            <div class="comment-meta">
+              <div class="avatar-circle" style="background:#FBBF24;">RJ</div>
+              <div>
+                <div class="comment-author">Coach Rivera</div>
+                <div class="comment-role">Coach · Jordan High</div>
+              </div>
+              <div class="comment-time">2m ago</div>
+            </div>
+            <div class="comment-text">Execution on that last drive was textbook. These kids put in the work all season.</div>
+            <!-- Full emoji reaction row -->
+            <div class="reaction-bar">
+              <div class="emoji-chip mine">🏈 <span class="emoji-count">38</span></div>
+              <div class="emoji-chip">🔥 <span class="emoji-count">29</span></div>
+              <div class="emoji-chip">👊 <span class="emoji-count">17</span></div>
+              <div class="emoji-chip">❤️ <span class="emoji-count">14</span></div>
+              <div class="emoji-chip">😤 <span class="emoji-count">6</span></div>
+              <div class="emoji-chip" style="background:var(--surface-1);border-color:var(--border);padding:3px 8px;">
+                <span style="font-size:11px;color:var(--gray-secondary);">+ Add</span>
+              </div>
+            </div>
+            <div class="comment-actions">
+              <div class="ca-btn liked">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                62
+              </div>
+              <div class="ca-btn">
+                <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                5 Replies
+              </div>
+            </div>
+          </div>
+
+          <!-- AVANTI post -->
+          <div class="avanti-post" style="margin:6px 14px;">
+            <div class="avanti-post-hdr">
+              <div class="a-dot" style="width:5px;height:5px;"></div>
+              <span class="avanti-badge">AVANTI · Game Recap Update</span>
+              <span class="avanti-post-time">Q3 Start</span>
+            </div>
+            <div class="avanti-post-text">First-half stats: Marcus W. — 86 rush yds, 2 TD. Tyler M. — 4/6 passing, 1 TD. Jordan leads time-of-possession 18:42 to 9:18.</div>
+          </div>
+
+          <!-- Score entry tile (Admin/AD approved parent sees this) -->
+          <div style="margin:8px 14px; background:var(--surface-1); border:1px solid rgba(247,148,30,0.25); border-radius:var(--r-lg); padding:12px;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <span style="font-family:var(--font-mono);font-size:9px;color:var(--vai-orange);letter-spacing:0.08em;text-transform:uppercase;">Score Entry</span>
+              <span style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);letter-spacing:0.04em;">AD · Club Admin · Approved Parent</span>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+              <div style="padding:6px 12px;border-radius:var(--r-full);background:var(--vai-orange);font-family:var(--font-dm);font-size:12px;font-weight:700;color:#000;cursor:pointer;">+ TD Jordan</div>
+              <div style="padding:6px 12px;border-radius:var(--r-full);background:var(--surface-1);border:1px solid var(--border);font-family:var(--font-dm);font-size:12px;font-weight:600;color:var(--gray-secondary);cursor:pointer;">+ TD Skyline</div>
+              <div style="padding:6px 12px;border-radius:var(--r-full);background:var(--surface-1);border:1px solid var(--border);font-family:var(--font-dm);font-size:12px;font-weight:600;color:var(--gray-secondary);cursor:pointer;">Safety</div>
+              <div style="padding:6px 12px;border-radius:var(--r-full);background:var(--surface-1);border:1px solid var(--border);font-family:var(--font-dm);font-size:12px;font-weight:600;color:var(--gray-secondary);cursor:pointer;">FG</div>
+            </div>
+            <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-disabled);">Last entry: Q3 TD — Marcus Williams · 4:32</div>
+          </div>
+
+          <!-- Comment 2 -->
+          <div class="comment-row">
+            <div class="comment-meta">
+              <div class="avatar-circle" style="background:#5577DD;">MT</div>
+              <div>
+                <div class="comment-author">Marcus's Mom</div>
+                <div class="comment-role">Parent · #23</div>
+              </div>
+              <div class="comment-time">4m ago</div>
+            </div>
+            <div class="comment-text">That kid has been grinding since 5am every morning. So proud 😭❤️</div>
+            <div class="comment-actions">
+              <div class="ca-btn">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                88
+              </div>
+              <div class="ca-btn">
+                <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Reply
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Comment input -->
+      <div class="comment-input-bar">
+        <div class="clip-btn">
+          <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </div>
+        <div class="input-field">
+          <span class="input-placeholder">Add to the feed...</span>
+          <span class="input-emoji">😊</span>
+        </div>
+        <div class="send-btn">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+
+      <!-- Bottom nav -->
+      <div class="bottom-nav">
+        <div class="ni">
+          <div class="ni-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div class="ni-lbl">Home</div>
+        </div>
+        <div class="ni active">
+          <div class="ni-icon">
+            <svg width="22" height="22" viewBox="0 0 139 167" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/>
+            </svg>
+          </div>
+          <div class="ni-lbl">Feed</div>
+        </div>
+        <div class="ni">
+          <div class="ni-icon">
+            <div class="av-pill"><span>AVANTI</span></div>
+          </div>
+          <div class="ni-lbl" style="color:var(--vai-green);"></div>
+        </div>
+        <div class="ni">
+          <div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+          <div class="ni-lbl">Wallet</div>
+        </div>
+        <div class="ni">
+          <div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="ni-lbl">Me</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────── PHONE 3: AVANTI Scout Intel Sheet ──────────── -->
+  <div class="phone-wrap">
+    <div class="phone-label">FF-3 — AVANTI Scout Intel</div>
+    <div class="phone" style="position:relative;">
+      <div class="status-bar">
+        <span>9:41</span>
+        <span style="font-size:13px;">••• WiFi ···</span>
+      </div>
+
+      <!-- Header -->
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wm3)"/>
+          <defs><radialGradient id="wm3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50) scale(217 130)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs>
+        </svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="a-dot"></div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;">
+            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <div class="notif-dot"></div>
+          </div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+
+      <!-- AVANTI strip — pulsing -->
+      <div class="avanti-strip" style="background:rgba(52,211,153,0.07);border-bottom-color:rgba(52,211,153,0.2);">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg" style="color:var(--vai-green);font-weight:600;">Scout Intel active for this game</span>
+      </div>
+
+      <!-- Score compact -->
+      <div class="score-banner" style="padding:10px 18px;">
+        <div class="score-banner-top">
+          <div class="live-pill"><div class="live-dot"></div> LIVE · Q3</div>
+          <div class="score-clock">Jordan 21 — Skyline 14</div>
+        </div>
+      </div>
+
+      <!-- Feed tabs (dimmed — sheet active) -->
+      <div class="feed-tabs" style="opacity:0.4;">
+        <div class="feed-tab active">Fan Feed</div>
+        <div class="feed-tab">Event Log</div>
+      </div>
+
+      <!-- Fan feed (dimmed) -->
+      <div class="scroll-body" style="height:200px;opacity:0.3;">
+        <div class="comment-row">
+          <div class="comment-meta">
+            <div class="avatar-circle" style="background:#f7941e;">SW</div>
+            <div><div class="comment-author">Sarah Williams</div></div>
+            <div class="comment-time">Just now</div>
+          </div>
+          <div class="comment-text">THAT BOY IS UNSTOPPABLE 🔥🔥</div>
+        </div>
+        <div class="comment-row">
+          <div class="comment-meta">
+            <div class="avatar-circle" style="background:#5577DD;">DJ</div>
+            <div><div class="comment-author">Darius Jackson</div></div>
+            <div class="comment-time">1m ago</div>
+          </div>
+          <div class="comment-text">Got the whole play on video 📹</div>
+        </div>
+      </div>
+
+      <!-- AVANTI Scout Sheet overlaid -->
+      <div class="scout-overlay">
+        <div class="scout-sheet">
+          <div class="sheet-handle"><div class="handle-bar"></div></div>
+          <div class="sheet-header">
+            <div class="a-dot"></div>
+            <div class="sheet-title">Scout Intel</div>
+            <div class="sheet-tag">2 scouts watching</div>
+            <div class="sheet-close">✕</div>
+          </div>
+
+          <div class="scout-cards">
+            <!-- Scout card 1 -->
+            <div class="scout-card" style="border-color:rgba(52,211,153,0.2);">
+              <div class="scout-card-top">
+                <div class="school-circle" style="color:var(--vai-green);border-color:rgba(52,211,153,0.3);">USU</div>
+                <div>
+                  <div class="scout-school">Utah State University</div>
+                  <div class="scout-div">NCAA · D-I · Mountain West</div>
+                </div>
+                <div class="scout-interest interest-high">High Interest</div>
+              </div>
+              <div class="scout-avanti-note">"Scout filmed Marcus's last two possessions. Following his VAI profile."</div>
+            </div>
+
+            <!-- Scout card 2 -->
+            <div class="scout-card">
+              <div class="scout-card-top">
+                <div class="school-circle">SUU</div>
+                <div>
+                  <div class="scout-school">Southern Utah Univ.</div>
+                  <div class="scout-div">NCAA · D-I · WAC</div>
+                </div>
+                <div class="scout-interest interest-med">Watching</div>
+              </div>
+              <div class="scout-avanti-note">"Early evaluation. Watching #23 and #7. No contact made yet."</div>
+            </div>
+
+            <!-- AVANTI recommendation -->
+            <div style="background:rgba(247,148,30,0.06);border:1px solid rgba(247,148,30,0.2);border-radius:var(--r-lg);padding:10px 12px;">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+                <div class="a-dot" style="width:5px;height:5px;"></div>
+                <span style="font-family:var(--font-mono);font-size:9px;color:var(--vai-orange);letter-spacing:0.08em;text-transform:uppercase;">AVANTI Recommends</span>
+              </div>
+              <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-body);line-height:1.45;">Share Marcus's VAI profile with the Utah State scout — they're watching but haven't made contact yet. Best window: right after this game.</div>
+              <div style="margin-top:8px;display:flex;gap:6px;">
+                <div style="flex:1;background:var(--vai-orange);border-radius:var(--r-md);padding:8px;text-align:center;font-family:var(--font-oswald);font-size:13px;font-weight:700;color:#000;cursor:pointer;">Share Profile</div>
+                <div style="padding:8px 12px;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-md);font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);cursor:pointer;">Later</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sheet-cta" style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);color:var(--vai-green);font-family:var(--font-oswald);font-size:13px;letter-spacing:0.05em;">
+            View Full Recruiting Dashboard →
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom nav -->
+      <div class="bottom-nav">
+        <div class="ni">
+          <div class="ni-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div class="ni-lbl">Home</div>
+        </div>
+        <div class="ni active">
+          <div class="ni-icon">
+            <svg width="22" height="22" viewBox="0 0 139 167" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/>
+            </svg>
+          </div>
+          <div class="ni-lbl">Feed</div>
+        </div>
+        <div class="ni">
+          <div class="ni-icon">
+            <div class="av-pill"><span>AVANTI</span></div>
+          </div>
+          <div class="ni-lbl" style="color:var(--vai-green);"></div>
+        </div>
+        <div class="ni">
+          <div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+          <div class="ni-lbl">Wallet</div>
+        </div>
+        <div class="ni">
+          <div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="ni-lbl">Me</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /phones-row -->
+
+</body>
+</html>
