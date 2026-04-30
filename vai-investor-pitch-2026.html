@@ -63,6 +63,37 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
   .slide { height: 100vh; page-break-after: always; scroll-snap-align: none; }
   .nav { display: none; }
 }
+
+@media (max-width: 768px) {
+  .nav { display: none; }
+  .deck { scroll-snap-type: y mandatory; }
+  .slide { height: auto; min-height: 100vh; scroll-snap-align: start; overflow: visible; }
+
+  /* Mobile padding */
+  #s1, #s2, #s3, #s4, #s5, #s6, #s7 { padding: 48px 24px 60px; justify-content: flex-start; padding-top: 60px; }
+
+  /* Grid → single column on mobile */
+  [style*="grid-template-columns: repeat(4"] { grid-template-columns: repeat(2,1fr) !important; }
+  [style*="grid-template-columns: repeat(3"] { grid-template-columns: 1fr !important; }
+  [style*="grid-template-columns: repeat(5"] { grid-template-columns: repeat(2,1fr) !important; }
+  [style*="grid-template-columns: 1fr 1fr"]   { grid-template-columns: 1fr !important; }
+  [style*="grid-template-columns: 1fr 320px"] { grid-template-columns: 1fr !important; }
+  [style*="grid-template-columns: 1fr 300px"] { grid-template-columns: 1fr !important; }
+
+  /* Font scaling */
+  .eyebrow { font-size: 9px; }
+  [style*="font-size:76px"] { font-size: 52px !important; }
+  [style*="font-size:72px"] { font-size: 48px !important; }
+  [style*="font-size:58px"] { font-size: 40px !important; }
+  [style*="font-size:44px"] { font-size: 30px !important; }
+
+  /* Slide numbers */
+  .slide-num { bottom: 18px; right: 24px; }
+
+  /* Cover adjustments */
+  #s1 [style*="font-size:76px"] { margin-bottom: 8px; }
+  #s1 [style*="margin-bottom:56px"] { margin-bottom: 32px !important; }
+}
 </style>
 </head>
 <body>
