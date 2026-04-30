@@ -49,8 +49,11 @@ html, body { height:100%; overflow:hidden; background:var(--void); color:var(--t
   font-size:12px; color:var(--text2); cursor:pointer;
   border-left:2px solid transparent; transition:all .12s;
 }
+.nav-item svg { flex-shrink:0; opacity:0.6; }
 .nav-item:hover { color:var(--text); background:rgba(255,255,255,.025); }
+.nav-item:hover svg { opacity:0.9; }
 .nav-item.active { color:var(--text); background:rgba(247,148,30,.07); border-left-color:var(--orange); font-weight:600; }
+.nav-item.active svg { opacity:1; color:var(--orange); }
 .nav-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
 .nav-badge { margin-left:auto; font-size:8px; font-weight:800; background:var(--orange); color:#000; padding:1px 5px; border-radius:10px; }
 
@@ -239,23 +242,7 @@ html, body { height:100%; overflow:hidden; background:var(--void); color:var(--t
 .dv-av-text { font-size:12px; color:var(--body); line-height:1.5; }
 .dv-actions { padding:14px 18px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
 
-/* ─── AVANTI FLOATING BUBBLE ─── */
-.avanti-bubble {
-  position:fixed; bottom:24px; right:24px; z-index:50;
-  width:52px; height:52px; border-radius:50%;
-  background:var(--green); cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  box-shadow:0 4px 24px rgba(52,211,153,.4);
-  transition:transform .15s, box-shadow .15s;
-}
-.avanti-bubble:hover { transform:scale(1.08); box-shadow:0 6px 32px rgba(52,211,153,.55); }
-.avanti-bubble svg { width:22px; height:22px; }
-.bubble-badge {
-  position:absolute; top:-4px; right:-4px;
-  width:18px; height:18px; border-radius:50%; background:var(--orange);
-  border:2px solid var(--void); display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-m); font-size:9px; font-weight:800; color:#000;
-}
+/* AVANTI pill handled inline */
 
 /* Demo controls */
 .demo-bar { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:60; display:flex; gap:8px; background:rgba(6,6,8,.9); border:1px solid var(--border); border-radius:10px; padding:8px 14px; backdrop-filter:blur(8px); }
@@ -391,21 +378,80 @@ html, body { height:100%; overflow:hidden; background:var(--void); color:var(--t
     </div>
     <div class="sb-nav">
       <div class="nav-label">Club OS</div>
-      <div class="nav-item active"><div class="nav-dot" style="background:var(--orange)"></div>Dashboard</div>
-      <div class="nav-item">Athletes</div>
-      <div class="nav-item">Roster</div>
-      <div class="nav-item">Formation</div>
-      <div class="nav-item">Schedule</div>
-      <div class="nav-item">Comms</div>
-      <div class="nav-item">Compliance</div>
-      <div class="nav-item">Registration</div>
-      <div class="nav-item">Tryouts</div>
-      <div class="nav-item">Camps</div>
-      <div class="nav-item">Recruiting <span class="nav-badge">NEW</span></div>
-      <div class="nav-item">Leagues</div>
-      <div class="nav-item">Tournaments</div>
-      <div class="nav-item">Coaches Corner</div>
-      <div class="nav-item">Finance</div>
+      <div class="nav-item active">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4" r="2.5" stroke="currentColor" strokeWidth="1.3"/><path d="M2 12c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+        Athletes
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 3h12M1 7h12M1 11h12" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+        Roster
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5l5-4 5 4v6" stroke="currentColor" strokeWidth="1.3"/><rect x="5" y="8" width="4" height="3" rx=".5" stroke="currentColor" strokeWidth="1.3"/></svg>
+        Formation
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.3"/><path d="M4 1v3M10 1v3M1 7h12" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+        Schedule
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 2h12v8H8l-3 2V10H1V2Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/></svg>
+        Comms
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L12 3v5c0 2.5-2.5 4.5-5 5C4 13 2 11 2 8V3L7 1Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/></svg>
+        Compliance
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h10v10H2V2Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/><path d="M5 5h4M5 7h4M5 9h2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
+        Registration
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4" r="2.5" stroke="currentColor" strokeWidth="1.3"/><path d="M2 12c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/><path d="M11 7l1.5 1.5L14 7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        Tryouts
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        Recruiting <span class="nav-badge">NEW</span>
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 5v8H1V5L7 1Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/><path d="M5 13V8h4v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        Coaches Corner <span class="nav-badge" style="background:#34d399;">AI</span>
+      </div>
+
+      <div class="nav-label" style="margin-top:4px;">Live Ops</div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1L7 1Z" stroke="currentColor" strokeWidth="1.3"/></svg>
+        Tournaments
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12V8M5 12V5M8 12V7M11 12V3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+        Standings
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.3"/><path d="M1 7h12M7 1c-2 2-3 4-3 6s1 4 3 6M7 1c2 2 3 4 3 6s-1 4-3 6" stroke="currentColor" strokeWidth="1.3"/></svg>
+        Leagues
+      </div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 11H1L7 1Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/><path d="M5 11v2M9 11v2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+        Camps
+      </div>
+
+      <div class="nav-label" style="margin-top:4px;">Finance</div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.3"/><path d="M7 4v6M5 6h4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+        Finance
+      </div>
+
+      <div class="nav-label" style="margin-top:4px;">Account</div>
+      <div class="nav-item">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="2" stroke="currentColor" strokeWidth="1.3"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M9.01 9.01l1.06 1.06M11.07 2.93l-1.06 1.06M4.99 9.01l-1.06 1.06" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>
+        Settings
+      </div>
     </div>
   </div>
 
@@ -664,10 +710,50 @@ html, body { height:100%; overflow:hidden; background:var(--void); color:var(--t
   </div>
 </div>
 
-<!-- AVANTI floating bubble -->
-<div class="avanti-bubble" onclick="alert('AVANTI OS Brain — 3 pending actions queued')">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 9 3-3 3 3"/><path d="M12 6v8"/><path d="M9 18h6"/></svg>
-  <div class="bubble-badge">3</div>
+<!-- AVANTI floating pill (canonical design from AvantiPill.tsx) -->
+<style>
+  @keyframes af-breathe { 0%,100%{opacity:1} 50%{opacity:.3} }
+  @keyframes af-glow {
+    0%,100% { box-shadow: 0 0 0 2px rgba(93,255,195,0.6), 0 0 32px rgba(93,255,195,0.5), 0 0 60px rgba(93,255,195,0.2); }
+    50%      { box-shadow: 0 0 0 2px rgba(93,255,195,0.9), 0 0 48px rgba(93,255,195,0.7), 0 0 90px rgba(93,255,195,0.3); }
+  }
+</style>
+<div id="avanti-pill-wrap" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;will-change:transform;">
+  <!-- Panel (shown when open) -->
+  <div id="avanti-panel" style="display:none;background:#0c0c10;border:1px solid rgba(52,211,153,.25);border-radius:12px;width:300px;padding:16px;margin-bottom:4px;box-shadow:0 8px 32px rgba(0,0,0,.5);">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#34d399;display:inline-block;box-shadow:0 0 6px #34d399;"></span>
+      <span style="font-size:11px;font-weight:800;color:#34d399;letter-spacing:.08em;text-transform:uppercase;font-family:var(--font-m);">AVANTI · Live</span>
+      <button onclick="toggleAvanti()" style="margin-left:auto;background:transparent;border:none;color:var(--muted);font-size:16px;cursor:pointer;line-height:1;">✕</button>
+    </div>
+    <div style="font-size:12px;color:#8888a0;line-height:1.6;margin-bottom:12px;">Ask AVANTI anything about this screen — players, compliance, game strategy, or financial status.</div>
+    <input placeholder="Ask about this screen…" style="width:100%;background:#111116;border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:9px 12px;color:#e8e8ec;font-size:13px;outline:none;font-family:var(--font-d);"/>
+    <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+      <button style="font-size:10px;font-weight:600;padding:4px 10px;border-radius:100px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);color:#34d399;cursor:pointer;font-family:var(--font-d);">Who needs attention?</button>
+      <button style="font-size:10px;font-weight:600;padding:4px 10px;border-radius:100px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);color:#34d399;cursor:pointer;font-family:var(--font-d);">Saturday lineup</button>
+      <button style="font-size:10px;font-weight:600;padding:4px 10px;border-radius:100px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);color:#34d399;cursor:pointer;font-family:var(--font-d);">Outstanding dues</button>
+    </div>
+  </div>
+  <!-- Pill button -->
+  <div id="avanti-pill-outer" style="position:relative;display:flex;align-items:center;justify-content:center;">
+    <button id="avanti-pill-btn" onclick="toggleAvanti()" style="display:flex;align-items:center;gap:8px;background:#5dffc3;border-radius:100px;padding:10px 20px;border:none;cursor:pointer;position:relative;box-shadow:0 0 0 2px rgba(93,255,195,0.4),0 0 16px rgba(93,255,195,0.25);">
+      <div style="width:28px;height:28px;border-radius:50%;background:rgba(0,50,28,0.25);display:flex;align-items:center;justify-content:center;">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="2.5" fill="#001a10" opacity=".8"/>
+          <line x1="8" y1="1" x2="8" y2="4" stroke="#001a10" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="8" y1="12" x2="8" y2="15" stroke="#001a10" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="1" y1="8" x2="4" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="12" y1="8" x2="15" y2="8" stroke="#001a10" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="2.93" y1="2.93" x2="5.05" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+          <line x1="10.95" y1="10.95" x2="13.07" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+          <line x1="13.07" y1="2.93" x2="10.95" y2="5.05" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+          <line x1="5.05" y1="10.95" x2="2.93" y2="13.07" stroke="#001a10" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+        </svg>
+      </div>
+      <span style="font-size:14px;font-weight:900;color:#001a10;letter-spacing:.08em;font-family:var(--font-d);">AVANTI</span>
+      <span style="position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:#F7941E;color:#000;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid #060608;font-family:var(--font-d);">3</span>
+    </button>
+  </div>
 </div>
 
 <!-- Demo controls -->
@@ -808,6 +894,16 @@ function closeDetail() {
   document.querySelectorAll('.action-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('status-view').style.display = '';
   document.getElementById('detail-view').classList.remove('active');
+}
+
+// ── AVANTI PILL TOGGLE ──
+let avantiOpen = false;
+function toggleAvanti() {
+  avantiOpen = !avantiOpen;
+  const panel = document.getElementById('avanti-panel');
+  const btn = document.getElementById('avanti-pill-btn');
+  panel.style.display = avantiOpen ? 'block' : 'none';
+  btn.style.animation = avantiOpen ? 'af-glow 3s ease-in-out infinite' : '';
 }
 
 // ── NEW ALERT SLIDE-IN ──
