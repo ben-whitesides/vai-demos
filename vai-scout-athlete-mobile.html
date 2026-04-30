@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI — Scout Intel · Athlete Recruiting (Mobile)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --vai-orange:#f7941e; --vai-green:#34d399;
+  --void-black:#060608; --card-dark:#0c0c10; --elevated:#141418;
+  --surface-1:#1a1a20; --border:#1e1e26;
+  --gray-subtle:#2a2a35; --gray-disabled:#555568; --gray-secondary:#8888a0;
+  --gray-body:#c8c8d0; --gray-primary:#e8e8ec;
+  --red:#FF6B6B; --yellow:#FBBF24; --blue:#5577DD;
+  --font-oswald:'Oswald',Impact,Arial Black,sans-serif;
+  --font-dm:'DM Sans',Arial,Helvetica,sans-serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-full:9999px;
+}
+body {
+  background:var(--void-black);
+  font-family:var(--font-dm);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:40px 16px 72px;
+  color:var(--gray-primary);
+  -webkit-font-smoothing:antialiased;
+}
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 30%, rgba(247,148,30,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 80% 70%, rgba(52,211,153,0.04) 0%, transparent 70%);
+  pointer-events:none; z-index:0;
+}
+.page-title { font-family:var(--font-oswald); font-size:11px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:4px; text-align:center; position:relative; z-index:1; }
+.page-sub { font-size:11px; color:var(--gray-disabled); margin-bottom:12px; text-align:center; position:relative; z-index:1; }
+.page-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.2); border-radius:var(--r-full); padding:4px 14px; font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.06em; color:var(--vai-green); margin-bottom:36px; position:relative; z-index:1; }
+.phones-row { display:flex; gap:28px; align-items:flex-start; justify-content:center; flex-wrap:nowrap; position:relative; z-index:1; }
+.phone-wrap { display:flex; flex-direction:column; align-items:center; gap:10px; }
+.phone-label { font-family:var(--font-oswald); font-size:10px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gray-disabled); text-align:center; }
+.phone { width:375px; background:var(--void-black); border-radius:44px; border:1.5px solid var(--gray-subtle); box-shadow:0 0 0 1px #0c0c10, 0 32px 80px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.04); overflow:hidden; position:relative; flex-shrink:0; }
+.status-bar { display:flex; justify-content:space-between; align-items:center; padding:14px 22px 8px; background:var(--void-black); font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
+.app-header { background:var(--void-black); padding:10px 18px 12px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.vai-wordmark { font-family:var(--font-oswald); font-size:18px; font-weight:700; letter-spacing:0.05em; color:var(--gray-primary); }
+.tier-bubble { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; font-family:var(--font-dm); font-size:12px; font-weight:900; color:#000; flex-shrink:0; }
+.a-dot { width:6px; height:6px; border-radius:50%; background:var(--vai-green); animation:pulse 2s ease-in-out infinite; flex-shrink:0; }
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,0.5)} 50%{opacity:0.7;box-shadow:0 0 0 5px rgba(52,211,153,0)} }
+.hdr-icons { display:flex; gap:12px; align-items:center; margin-left:auto; }
+.hdr-icon { width:20px; height:20px; display:flex; align-items:center; justify-content:center; position:relative; }
+.hdr-icon svg { width:18px; height:18px; stroke:var(--gray-secondary); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.notif-dot { position:absolute; top:-2px; right:-2px; width:7px; height:7px; border-radius:50%; background:var(--red); border:1px solid var(--void-black); }
+.avanti-strip { background:rgba(52,211,153,0.04); border-bottom:1px solid rgba(52,211,153,0.12); padding:9px 18px; display:flex; align-items:center; gap:6px; }
+.strip-lbl { font-family:var(--font-mono); font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--vai-green); }
+.strip-msg { font-family:var(--font-dm); font-size:12px; color:var(--gray-body); flex:1; }
+.strip-chip { padding:4px 10px; border-radius:var(--r-full); background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); font-family:var(--font-dm); font-size:11px; font-weight:600; color:var(--vai-orange); white-space:nowrap; flex-shrink:0; }
+.scroll-body { background:var(--void-black); overflow-y:auto; scrollbar-width:none; }
+.scroll-body::-webkit-scrollbar { display:none; }
+
+/* Tab bar */
+.tab-bar { display:flex; border-bottom:1px solid var(--border); background:var(--void-black); }
+.tab { flex:1; padding:10px 0; text-align:center; font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-disabled); border-bottom:2px solid transparent; cursor:pointer; }
+.tab.active { color:var(--vai-orange); border-bottom-color:var(--vai-orange); }
+
+/* Metric row */
+.metric-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:12px 14px; }
+.metric-card { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:10px 12px; }
+.metric-label { font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-disabled); margin-bottom:4px; }
+.metric-val { font-family:var(--font-oswald); font-size:22px; font-weight:700; line-height:1; }
+
+/* School card */
+.school-card { margin:0 14px 10px; background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px; }
+.school-card.high { border-color:rgba(52,211,153,0.25); }
+.school-card.watching { border-color:rgba(247,148,30,0.2); }
+.school-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.school-logo { width:40px; height:40px; border-radius:10px; background:var(--elevated); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:var(--font-oswald); font-size:13px; font-weight:700; color:var(--gray-secondary); flex-shrink:0; }
+.school-name { font-family:var(--font-dm); font-size:13px; font-weight:700; color:var(--gray-primary); }
+.school-div { font-family:var(--font-mono); font-size:9px; color:var(--gray-disabled); letter-spacing:0.04em; margin-top:1px; }
+.interest-badge { margin-left:auto; padding:3px 10px; border-radius:var(--r-full); font-family:var(--font-mono); font-size:9px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; flex-shrink:0; }
+.interest-high { background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); color:var(--vai-green); }
+.interest-watching { background:rgba(247,148,30,0.1); border:1px solid rgba(247,148,30,0.3); color:var(--vai-orange); }
+.avanti-note { background:rgba(52,211,153,0.04); border-left:2px solid rgba(52,211,153,0.4); padding:7px 10px; border-radius:0 var(--r-sm) var(--r-sm) 0; font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); font-style:italic; margin-bottom:10px; line-height:1.45; }
+.school-stats { display:flex; gap:16px; }
+.school-stat { }
+.school-stat-label { font-family:var(--font-mono); font-size:8px; color:var(--gray-disabled); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:2px; }
+.school-stat-val { font-family:var(--font-dm); font-size:12px; font-weight:700; color:var(--gray-body); }
+.contact-btn { width:100%; margin-top:12px; padding:10px 0; border-radius:var(--r-md); background:var(--vai-orange); border:none; font-family:var(--font-oswald); font-size:13px; font-weight:700; color:#000; cursor:pointer; letter-spacing:0.04em; }
+.contact-btn.ghost { background:transparent; border:1px solid var(--border); color:var(--gray-secondary); font-family:var(--font-dm); font-size:12px; font-weight:600; font-style:normal; letter-spacing:0; }
+
+/* Section header */
+.section-hdr { padding:12px 14px 4px; font-family:var(--font-mono); font-size:9px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-disabled); }
+
+/* Activity row */
+.activity-row { display:flex; align-items:flex-start; gap:10px; padding:10px 14px; border-bottom:1px solid rgba(30,30,38,0.6); }
+.act-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+.act-text { font-family:var(--font-dm); font-size:12px; color:var(--gray-body); line-height:1.4; flex:1; }
+.act-time { font-family:var(--font-mono); font-size:9px; color:var(--gray-disabled); white-space:nowrap; }
+
+/* Profile strength */
+.profile-section { padding:12px 14px; }
+.strength-bar-wrap { background:var(--card-dark); border:1px solid var(--border); border-radius:var(--r-lg); padding:14px; margin-bottom:10px; }
+.strength-label { font-family:var(--font-dm); font-size:12px; font-weight:700; color:var(--gray-primary); margin-bottom:3px; }
+.strength-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-disabled); margin-bottom:10px; }
+.strength-bar { height:6px; border-radius:3px; background:var(--border); overflow:hidden; margin-bottom:6px; }
+.strength-fill { height:100%; border-radius:3px; }
+.checklist-row { display:flex; align-items:center; gap:8px; padding:6px 0; }
+.check-icon { width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; flex-shrink:0; }
+.check-done { background:rgba(52,211,153,0.15); color:var(--vai-green); }
+.check-todo { background:rgba(85,119,221,0.1); color:var(--blue); border:1px solid rgba(85,119,221,0.3); }
+.check-text { font-family:var(--font-dm); font-size:11px; color:var(--gray-body); }
+
+/* Bottom nav */
+.bottom-nav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:8px 4px 20px; flex-shrink:0; }
+.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:4px 0; }
+.ni-icon { width:24px; height:24px; display:flex; align-items:center; justify-content:center; }
+.ni-icon svg { width:22px; height:22px; stroke:var(--gray-disabled); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+.ni-lbl { font-family:var(--font-dm); font-size:10px; font-weight:500; color:var(--gray-disabled); }
+.ni.active .ni-icon svg { stroke:var(--vai-orange); }
+.ni.active .ni-lbl { color:var(--vai-orange); }
+.av-pill { background:var(--vai-green); border-radius:20px; padding:6px 11px; display:flex; align-items:center; justify-content:center; }
+.av-pill span { font-family:var(--font-dm); font-size:11px; font-weight:800; color:#000; }
+</style>
+</head>
+<body>
+
+<div class="page-title">VAI — Scout Intel Mobile</div>
+<div class="page-sub">Athlete Recruiting Dashboard · Feed Tab</div>
+<div class="page-tag">
+  <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#34d399"/></svg>
+  NEW SCREEN — Athlete-Facing · Apr 2026
+</div>
+
+<div class="phones-row">
+
+  <!-- PHONE 1: Scout Activity Feed -->
+  <div class="phone-wrap">
+    <div class="phone-label">SR-1 — Schools Watching</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g1)"/><defs><radialGradient id="g1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50) scale(217 130)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="a-dot"></div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="notif-dot"></div></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg"><strong style="color:var(--vai-orange);">2 scouts watched your game</strong> yesterday</span>
+        <span class="strip-chip">Details</span>
+      </div>
+
+      <!-- Tab bar -->
+      <div class="tab-bar">
+        <div class="tab active">Schools</div>
+        <div class="tab">Activity</div>
+        <div class="tab">Profile</div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="metric-row">
+        <div class="metric-card">
+          <div class="metric-label">Schools Watching</div>
+          <div class="metric-val" style="color:var(--vai-orange);">4</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Profile Views</div>
+          <div class="metric-val" style="color:var(--vai-green);">18</div>
+          <div style="font-size:10px;color:var(--gray-disabled);margin-top:2px;">last 30 days</div>
+        </div>
+      </div>
+
+      <div class="scroll-body" style="height:422px;">
+
+        <div class="section-hdr">High Interest</div>
+
+        <!-- School card: High Interest -->
+        <div class="school-card high">
+          <div class="school-top">
+            <div class="school-logo" style="color:var(--vai-green);border-color:rgba(52,211,153,0.3);">USU</div>
+            <div>
+              <div class="school-name">Utah State University</div>
+              <div class="school-div">NCAA · D-I · Mountain West</div>
+            </div>
+            <div class="interest-badge interest-high">High Interest</div>
+          </div>
+          <div class="avanti-note">"Scout filmed your last two possessions Saturday. Following your VAI profile since April 12."</div>
+          <div class="school-stats">
+            <div class="school-stat"><div class="school-stat-label">Views</div><div class="school-stat-val">6</div></div>
+            <div class="school-stat"><div class="school-stat-label">Last Active</div><div class="school-stat-val">Today</div></div>
+            <div class="school-stat"><div class="school-stat-label">Since</div><div class="school-stat-val">Apr 12</div></div>
+          </div>
+          <button class="contact-btn">Share Profile with Scout →</button>
+        </div>
+
+        <div class="section-hdr">Watching</div>
+
+        <!-- School card: Watching -->
+        <div class="school-card watching">
+          <div class="school-top">
+            <div class="school-logo">SUU</div>
+            <div>
+              <div class="school-name">Southern Utah Univ.</div>
+              <div class="school-div">NCAA · D-I · WAC</div>
+            </div>
+            <div class="interest-badge interest-watching">Watching</div>
+          </div>
+          <div class="avanti-note">"Early evaluation. Viewed profile 3 times. No direct contact yet."</div>
+          <div class="school-stats">
+            <div class="school-stat"><div class="school-stat-label">Views</div><div class="school-stat-val">3</div></div>
+            <div class="school-stat"><div class="school-stat-label">Last Active</div><div class="school-stat-val">Yesterday</div></div>
+            <div class="school-stat"><div class="school-stat-label">Since</div><div class="school-stat-val">Apr 20</div></div>
+          </div>
+          <button class="contact-btn" style="background:rgba(247,148,30,0.1);border:1px solid rgba(247,148,30,0.3);color:var(--vai-orange);font-family:var(--font-dm);font-size:12px;font-weight:600;letter-spacing:0;">Send Introduction →</button>
+        </div>
+
+        <!-- School card: Early -->
+        <div class="school-card">
+          <div class="school-top">
+            <div class="school-logo" style="font-size:10px;">DIXIE</div>
+            <div>
+              <div class="school-name">Dixie State Univ.</div>
+              <div class="school-div">NCAA · D-II · Rocky Mountain</div>
+            </div>
+            <div class="interest-badge" style="background:rgba(85,119,221,0.1);border:1px solid rgba(85,119,221,0.3);color:var(--blue);">Early Look</div>
+          </div>
+          <div class="avanti-note">"Viewed your stats tab twice. AVANTI recommends adding a highlight reel to increase engagement."</div>
+          <div class="school-stats">
+            <div class="school-stat"><div class="school-stat-label">Views</div><div class="school-stat-val">2</div></div>
+            <div class="school-stat"><div class="school-stat-label">Last Active</div><div class="school-stat-val">Apr 27</div></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni active"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni"><div class="ni-icon"><div class="av-pill"><span>AVANTI</span></div></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 2: Scout Activity Tab -->
+  <div class="phone-wrap">
+    <div class="phone-label">SR-2 — Scout Activity Log</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g2)"/><defs><radialGradient id="g2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50) scale(217 130)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="a-dot"></div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+
+      <div class="avanti-strip" style="background:rgba(247,148,30,0.05);border-bottom-color:rgba(247,148,30,0.2);">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg" style="color:var(--vai-orange);font-weight:600;">Best window to reach Utah State is right now</span>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab">Schools</div>
+        <div class="tab active">Activity</div>
+        <div class="tab">Profile</div>
+      </div>
+
+      <div class="scroll-body" style="height:530px;">
+        <div class="section-hdr">Scout Activity — Last 30 Days</div>
+
+        <div class="activity-row">
+          <div class="act-dot" style="background:var(--vai-green);"></div>
+          <div class="act-text"><strong style="color:var(--gray-primary);">Utah State</strong> scout filmed your game — Q2 + Q3 touchdowns captured</div>
+          <div class="act-time">Today</div>
+        </div>
+        <div class="activity-row">
+          <div class="act-dot" style="background:var(--vai-green);"></div>
+          <div class="act-text"><strong style="color:var(--gray-primary);">Utah State</strong> followed your VAI profile</div>
+          <div class="act-time">Today</div>
+        </div>
+        <div class="activity-row">
+          <div class="act-dot" style="background:var(--vai-orange);"></div>
+          <div class="act-text"><strong style="color:var(--gray-primary);">Southern Utah</strong> viewed your Stats tab</div>
+          <div class="act-time">Yesterday</div>
+        </div>
+        <div class="activity-row">
+          <div class="act-dot" style="background:var(--vai-orange);"></div>
+          <div class="act-text"><strong style="color:var(--gray-primary);">3 scouts</strong> attended the Spring Invitational — your game was on Field 2</div>
+          <div class="act-time">Apr 26</div>
+        </div>
+        <div class="activity-row">
+          <div class="act-dot" style="background:var(--blue);"></div>
+          <div class="act-text"><strong style="color:var(--gray-primary);">Dixie State</strong> viewed your profile for the second time</div>
+          <div class="act-time">Apr 27</div>
+        </div>
+        <div class="activity-row">
+          <div class="act-dot" style="background:var(--vai-orange);"></div>
+          <div class="act-text"><strong style="color:var(--gray-primary);">Southern Utah</strong> viewed your Stats tab for the first time</div>
+          <div class="act-time">Apr 24</div>
+        </div>
+        <div class="activity-row">
+          <div class="act-dot" style="background:var(--vai-green);"></div>
+          <div class="act-text"><strong style="color:var(--gray-primary);">Utah State</strong> first viewed your profile after the Apr 12 game</div>
+          <div class="act-time">Apr 12</div>
+        </div>
+        <div class="activity-row">
+          <div class="act-dot" style="background:var(--gray-disabled);"></div>
+          <div class="act-text"><strong style="color:var(--gray-primary);">2 programs</strong> viewed your Highlights tab after the Jordan High tournament post</div>
+          <div class="act-time">Apr 5</div>
+        </div>
+
+        <!-- AVANTI recommendation card -->
+        <div style="margin:12px 14px;background:rgba(247,148,30,0.06);border:1px solid rgba(247,148,30,0.2);border-radius:12px;padding:14px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+            <div class="a-dot" style="width:5px;height:5px;"></div>
+            <span style="font-family:var(--font-mono);font-size:9px;color:var(--vai-orange);letter-spacing:0.08em;text-transform:uppercase;">AVANTI Recommends</span>
+          </div>
+          <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-body);line-height:1.5;margin-bottom:10px;">Utah State's window is open right now — their scout filmed you today. Share your profile directly while interest is highest. AVANTI drafts the introduction for you.</div>
+          <button style="width:100%;padding:10px 0;border-radius:8px;background:var(--vai-orange);border:none;font-family:var(--font-oswald);font-size:13px;font-weight:700;color:#000;cursor:pointer;letter-spacing:0.04em;">Draft Introduction with AVANTI</button>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni active"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni"><div class="ni-icon"><div class="av-pill"><span>AVANTI</span></div></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONE 3: Profile Strength -->
+  <div class="phone-wrap">
+    <div class="phone-label">SR-3 — Recruiting Profile</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#g3)"/><defs><radialGradient id="g3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50) scale(217 130)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="a-dot"></div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+
+      <div class="avanti-strip">
+        <div class="a-dot" style="width:5px;height:5px;"></div>
+        <span class="strip-lbl">AVANTI</span>
+        <span class="strip-msg">Add a highlight reel to unlock <strong style="color:var(--vai-orange);">2 more schools</strong></span>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab">Schools</div>
+        <div class="tab">Activity</div>
+        <div class="tab active">Profile</div>
+      </div>
+
+      <div class="scroll-body" style="height:530px;">
+        <div class="profile-section">
+
+          <!-- Profile strength -->
+          <div class="strength-bar-wrap">
+            <div class="strength-label">Recruiting Profile Strength</div>
+            <div class="strength-sub">72% — Strong. 3 items left to maximize reach.</div>
+            <div class="strength-bar"><div class="strength-fill" style="width:72%;background:linear-gradient(90deg,var(--vai-orange),#fbbf24);"></div></div>
+
+            <div class="checklist-row"><div class="check-icon check-done">✓</div><div class="check-text">GPA + Class Year added</div></div>
+            <div class="checklist-row"><div class="check-icon check-done">✓</div><div class="check-text">Stats tab complete (season + career)</div></div>
+            <div class="checklist-row"><div class="check-icon check-done">✓</div><div class="check-text">PLAY status GREEN — all docs verified</div></div>
+            <div class="checklist-row"><div class="check-icon check-done">✓</div><div class="check-text">Position + physical info confirmed</div></div>
+            <div class="checklist-row"><div class="check-icon check-todo">+</div><div class="check-text" style="color:var(--blue);">Add highlight reel video — <strong>biggest unlock</strong></div></div>
+            <div class="checklist-row"><div class="check-icon check-todo">+</div><div class="check-text" style="color:var(--blue);">Connect academic transcript</div></div>
+            <div class="checklist-row"><div class="check-icon check-todo">+</div><div class="check-text" style="color:var(--blue);">Add coach recommendation letter</div></div>
+          </div>
+
+          <!-- What scouts see -->
+          <div style="background:var(--card-dark);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;">
+            <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-disabled);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;">What Scouts See On Your Profile</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div style="background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:10px;">
+                <div style="font-family:var(--font-mono);font-size:8px;color:var(--vai-green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;">Rush Yards</div>
+                <div style="font-family:var(--font-oswald);font-size:22px;font-weight:700;color:var(--vai-green);">342</div>
+                <div style="font-size:10px;color:var(--gray-disabled);">Season total</div>
+              </div>
+              <div style="background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:10px;">
+                <div style="font-family:var(--font-mono);font-size:8px;color:var(--vai-green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;">Touchdowns</div>
+                <div style="font-family:var(--font-oswald);font-size:22px;font-weight:700;color:var(--vai-green);">4</div>
+                <div style="font-size:10px;color:var(--gray-disabled);">Season total</div>
+              </div>
+              <div style="background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:10px;">
+                <div style="font-family:var(--font-mono);font-size:8px;color:var(--vai-green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;">Avg/Carry</div>
+                <div style="font-family:var(--font-oswald);font-size:22px;font-weight:700;color:var(--vai-green);">8.2</div>
+                <div style="font-size:10px;color:var(--gray-disabled);">Yards</div>
+              </div>
+              <div style="background:rgba(247,148,30,0.07);border:1px solid rgba(247,148,30,0.2);border-radius:8px;padding:10px;">
+                <div style="font-family:var(--font-mono);font-size:8px;color:var(--vai-orange);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;">PLAY Status</div>
+                <div style="font-family:var(--font-oswald);font-size:22px;font-weight:700;color:var(--vai-green);">GREEN</div>
+                <div style="font-size:10px;color:var(--gray-disabled);">All docs verified</div>
+              </div>
+            </div>
+          </div>
+
+          <button style="width:100%;padding:12px 0;border-radius:10px;background:var(--vai-orange);border:none;font-family:var(--font-oswald);font-size:14px;font-weight:700;color:#000;cursor:pointer;letter-spacing:0.04em;margin-bottom:8px;">Upload Highlight Reel</button>
+          <button style="width:100%;padding:10px 0;border-radius:10px;background:transparent;border:1px solid var(--border);font-family:var(--font-dm);font-size:12px;font-weight:600;color:var(--gray-secondary);cursor:pointer;">Share Profile Link</button>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni active"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni"><div class="ni-icon"><div class="av-pill"><span>AVANTI</span></div></div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
