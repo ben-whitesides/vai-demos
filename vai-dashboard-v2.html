@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAME OS — Dashboard v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --orange:#f7941e; --green:#34d399; --red:#ef4444; --yellow:#fbbf24; --blue:#5577dd;
+  --void:#060608; --sidebar:#08080c; --card:#0c0c10; --card2:#111116;
+  --elevated:#141418; --surface:#1a1a20;
+  --border:#1e1e26; --border2:#2a2a35;
+  --muted:#555568; --text2:#8888a0; --body:#c8c8d0; --text:#e8e8ec;
+  --orange-d:rgba(247,148,30,.07); --orange-b:rgba(247,148,30,.22);
+  --green-d:rgba(52,211,153,.07); --green-b:rgba(52,211,153,.18);
+  --red-d:rgba(239,68,68,.07); --red-b:rgba(239,68,68,.22);
+  --yellow-d:rgba(251,191,36,.07); --yellow-b:rgba(251,191,36,.22);
+  --font-o:'Oswald',Impact,sans-serif;
+  --font-d:'DM Sans',Arial,sans-serif;
+  --font-m:'JetBrains Mono',monospace;
+}
+html, body { height:100%; overflow:hidden; background:var(--void); color:var(--text); font-family:var(--font-d); -webkit-font-smoothing:antialiased; }
+
+/* ─── SHELL ─── */
+.shell { display:flex; height:100vh; }
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width:220px; flex-shrink:0; background:var(--sidebar);
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.sb-brand { padding:14px 14px 12px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+.brand-text { font-family:var(--font-o); font-size:15px; font-weight:700; letter-spacing:0.04em; }
+.brand-text span { color:var(--orange); }
+.sb-user { padding:10px 14px; border-bottom:1px solid var(--border); }
+.user-name { font-size:12px; font-weight:700; color:var(--text); margin-bottom:3px; }
+.user-badge { display:inline-block; font-family:var(--font-m); font-size:8px; font-weight:700; padding:2px 6px; border-radius:3px; background:var(--orange-d); color:var(--orange); border:1px solid var(--orange-b); letter-spacing:0.06em; text-transform:uppercase; }
+.sb-org { padding:9px 14px; border-bottom:1px solid var(--border); }
+.org-name { font-size:11px; font-weight:700; color:var(--text); }
+.org-meta { font-size:10px; color:var(--muted); margin-top:1px; }
+.sb-nav { flex:1; overflow-y:auto; padding:8px 0; }
+.nav-label { font-size:9px; font-weight:700; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; padding:8px 14px 4px; }
+.nav-item {
+  display:flex; align-items:center; gap:8px; padding:6px 14px;
+  font-size:12px; color:var(--text2); cursor:pointer;
+  border-left:2px solid transparent; transition:all .12s;
+}
+.nav-item:hover { color:var(--text); background:rgba(255,255,255,.025); }
+.nav-item.active { color:var(--text); background:rgba(247,148,30,.07); border-left-color:var(--orange); font-weight:600; }
+.nav-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+.nav-badge { margin-left:auto; font-size:8px; font-weight:800; background:var(--orange); color:#000; padding:1px 5px; border-radius:10px; }
+
+/* ─── MAIN ─── */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+
+/* AVANTI mode bar */
+.avanti-bar {
+  background:rgba(52,211,153,.03); border-bottom:1px solid rgba(52,211,153,.1);
+  padding:6px 20px; display:flex; align-items:center; gap:8px; flex-shrink:0;
+}
+.av-dot { width:6px; height:6px; border-radius:50%; background:var(--green); flex-shrink:0; }
+.av-dot.pulse { animation:glow 2s ease-in-out infinite; }
+@keyframes glow { 0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)} 50%{box-shadow:0 0 0 5px rgba(52,211,153,0)} }
+.av-lbl { font-family:var(--font-m); font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--green); }
+.av-mode { padding:2px 8px; border-radius:100px; font-family:var(--font-m); font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+.av-mode.review { background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.3); color:var(--yellow); }
+.av-mode.auto   { background:rgba(52,211,153,.1);  border:1px solid rgba(52,211,153,.3);  color:var(--green); }
+.av-settings { margin-left:auto; font-size:11px; color:var(--muted); cursor:pointer; }
+
+/* ─── HEADER ─── */
+.hdr {
+  padding:12px 20px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:12px; flex-shrink:0;
+}
+.hdr-title { font-family:var(--font-o); font-size:22px; font-weight:700; color:var(--text); letter-spacing:.02em; }
+.hdr-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+
+/* Command palette */
+.cmd-palette {
+  margin-left:auto; display:flex; align-items:center; gap:6px;
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:6px 12px; cursor:pointer; transition:border-color .15s;
+}
+.cmd-palette:hover { border-color:var(--orange-b); }
+.cmd-icon { color:var(--muted); font-size:13px; }
+.cmd-text { font-size:11px; color:var(--text2); }
+.cmd-key { font-family:var(--font-m); font-size:9px; padding:1px 5px; background:var(--surface); border:1px solid var(--border2); border-radius:3px; color:var(--muted); }
+.widgets-btn { padding:6px 14px; border-radius:7px; background:transparent; border:1px solid var(--border); font-family:var(--font-d); font-size:11px; font-weight:600; color:var(--text2); cursor:pointer; white-space:nowrap; flex-shrink:0; }
+
+/* ─── BROADCAST BAR (carousel) ─── */
+.broadcast-bar {
+  background:linear-gradient(90deg,rgba(6,6,8,1) 0%,rgba(247,148,30,.05) 40%,rgba(247,148,30,.05) 60%,rgba(6,6,8,1) 100%);
+  border-bottom:1px solid rgba(247,148,30,.18);
+  padding:0 20px; display:flex; align-items:center; gap:0; flex-shrink:0; height:46px;
+}
+.bc-arrow {
+  width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+  border-radius:6px; cursor:pointer; color:var(--text2); font-size:16px; flex-shrink:0;
+  background:transparent; border:1px solid var(--border); transition:all .12s; user-select:none;
+}
+.bc-arrow:hover { border-color:var(--orange-b); color:var(--orange); }
+.bc-arrow.disabled { opacity:0.25; cursor:default; pointer-events:none; }
+.bc-viewport { flex:1; overflow:hidden; margin:0 10px; }
+.bc-track { display:flex; gap:10px; transition:transform .3s ease; }
+.bc-game {
+  display:flex; align-items:center; gap:10px; padding:6px 14px;
+  background:rgba(247,148,30,.06); border:1px solid rgba(247,148,30,.2);
+  border-radius:7px; flex:0 0 calc(33.333% - 7px); min-width:0;
+}
+.bc-live { display:flex; align-items:center; gap:4px; flex-shrink:0; }
+.bc-live-dot { width:5px; height:5px; border-radius:50%; background:var(--orange); animation:pulse-o 1.2s ease-in-out infinite; }
+@keyframes pulse-o { 0%,100%{box-shadow:0 0 0 0 rgba(247,148,30,.7)} 50%{box-shadow:0 0 0 4px rgba(247,148,30,0)} }
+.bc-live-lbl { font-family:var(--font-m); font-size:9px; font-weight:700; color:var(--orange); letter-spacing:.06em; }
+.bc-scores { font-family:var(--font-m); font-size:13px; font-weight:700; color:var(--text); }
+.bc-scores .winning { color:var(--orange); }
+.bc-scores .sep { color:var(--muted); margin:0 3px; }
+.bc-meta { font-family:var(--font-m); font-size:9px; color:var(--muted); margin-left:auto; flex-shrink:0; }
+.bc-pager { display:flex; gap:4px; align-items:center; margin-left:10px; }
+.bc-pip { width:5px; height:5px; border-radius:50%; background:var(--border2); cursor:pointer; transition:background .15s; }
+.bc-pip.active { background:var(--orange); }
+
+/* ─── KPI STRIP ─── */
+.kpi-strip { display:grid; grid-template-columns:repeat(6,1fr); gap:0; border-bottom:1px solid var(--border); flex-shrink:0; }
+.kpi-cell { background:var(--card); padding:10px 16px; border-right:1px solid var(--border); }
+.kpi-cell:last-child { border-right:none; }
+.kpi-lbl { font-family:var(--font-m); font-size:8px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.kpi-val { font-family:var(--font-o); font-size:20px; font-weight:700; line-height:1; }
+.kpi-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+
+/* ─── CONTENT GRID ─── */
+.content-grid { flex:1; display:grid; grid-template-columns:1.15fr 1fr; overflow:hidden; }
+
+/* ─── LEFT COL: ACTION QUEUE ─── */
+.left-col { overflow-y:auto; padding:16px 18px; position:relative; }
+
+.col-header { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+.col-title { font-family:var(--font-m); font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+.col-badge { padding:2px 7px; border-radius:3px; font-family:var(--font-m); font-size:9px; font-weight:800; }
+.badge-red { background:var(--red-d); color:var(--red); border:1px solid var(--red-b); }
+.badge-yellow { background:var(--yellow-d); color:var(--yellow); border:1px solid var(--yellow-b); }
+.badge-green { background:var(--green-d); color:var(--green); border:1px solid var(--green-b); }
+.col-resolved { margin-left:auto; font-size:11px; color:var(--green); font-weight:600; }
+
+/* New alert pill */
+.new-alert-pill {
+  display:none; align-items:center; gap:8px;
+  background:rgba(247,148,30,.1); border:1px solid rgba(247,148,30,.3);
+  border-radius:8px; padding:8px 12px; margin-bottom:10px; cursor:pointer;
+  animation:slideIn .3s ease;
+}
+.new-alert-pill.visible { display:flex; }
+@keyframes slideIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+.nap-dot { width:6px; height:6px; border-radius:50%; background:var(--orange); }
+.nap-text { font-size:12px; font-weight:600; color:var(--orange); flex:1; }
+.nap-accept { font-size:11px; font-weight:700; color:#000; background:var(--orange); padding:3px 10px; border-radius:5px; border:none; cursor:pointer; font-family:var(--font-d); }
+
+/* Action cards */
+.action-card {
+  border-radius:9px; margin-bottom:8px; cursor:pointer;
+  transition:border-color .15s, transform .1s; position:relative;
+  border:1px solid var(--border); background:var(--card);
+}
+.action-card:hover { transform:translateX(2px); }
+.action-card.selected { border-color:var(--orange-b) !important; background:rgba(247,148,30,.04); }
+
+/* P1 — visually heavier */
+.action-card.p1 {
+  border-left:4px solid var(--red); padding:14px 14px 14px 12px;
+}
+.action-card.p1 .ac-title { font-size:14px; }
+.action-card.p1 .ac-type { font-size:10px; }
+
+/* P2 — normal */
+.action-card.p2 { border-left:3px solid var(--yellow); padding:11px 13px 11px 11px; }
+.action-card.p2 .ac-title { font-size:13px; }
+
+/* Info / clear */
+.action-card.info { border-left:2px solid var(--green); padding:10px 13px 10px 12px; opacity:.85; }
+.action-card.info .ac-title { font-size:12px; }
+
+.ac-top { display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+.ac-type { font-family:var(--font-m); font-weight:700; padding:2px 6px; border-radius:3px; letter-spacing:.06em; text-transform:uppercase; }
+.p1 .ac-type { background:var(--red-d); color:var(--red); border:1px solid var(--red-b); }
+.p2 .ac-type { background:var(--yellow-d); color:var(--yellow); border:1px solid var(--yellow-b); }
+.info .ac-type { background:var(--green-d); color:var(--green); border:1px solid var(--green-b); }
+.ac-meta { font-size:10px; color:var(--muted); }
+.ac-time { margin-left:auto; font-family:var(--font-m); font-size:9px; color:var(--muted); }
+.ac-title { font-weight:700; color:var(--text); margin-bottom:4px; line-height:1.3; }
+.ac-avanti { background:rgba(52,211,153,.05); border:1px solid rgba(52,211,153,.12); border-radius:5px; padding:6px 9px; font-size:11px; color:var(--body); margin-bottom:8px; line-height:1.45; }
+.ac-avanti::before { content:'AVANTI · '; font-family:var(--font-m); font-size:8px; color:var(--green); font-weight:700; letter-spacing:.07em; }
+.ac-btns { display:flex; gap:6px; }
+.btn-primary { padding:5px 13px; border-radius:6px; background:var(--orange); border:none; font-family:var(--font-d); font-size:11px; font-weight:700; color:#000; cursor:pointer; }
+.btn-ghost { padding:5px 11px; border-radius:6px; background:transparent; border:1px solid var(--border); font-family:var(--font-d); font-size:11px; font-weight:600; color:var(--text2); cursor:pointer; }
+.btn-green { padding:5px 13px; border-radius:6px; background:var(--green); border:none; font-family:var(--font-d); font-size:11px; font-weight:700; color:#000; cursor:pointer; }
+
+/* Resolved section */
+.resolved-section { margin-top:6px; }
+.resolved-items { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:10px 12px; }
+.resolved-item { font-size:11px; color:var(--muted); padding:3px 0; border-bottom:1px solid var(--border); }
+.resolved-item:last-child { border:none; }
+.resolved-item::before { content:'✓ '; color:var(--green); font-weight:700; }
+
+/* ─── RIGHT COL: STATUS / DETAIL PANEL ─── */
+.right-col { border-left:1px solid var(--border); background:rgba(255,255,255,.006); overflow-y:auto; display:flex; flex-direction:column; }
+
+/* Status view (default) */
+.status-view { padding:16px 18px; flex:1; }
+.status-card { background:var(--card); border:1px solid var(--border); border-radius:9px; padding:14px; margin-bottom:10px; }
+.sc-hdr { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.sc-title { font-size:12px; font-weight:700; color:var(--text); }
+.sc-link { font-size:11px; color:var(--orange); cursor:pointer; }
+.sc-row { display:flex; align-items:center; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--border); font-size:12px; }
+.sc-row:last-child { border:none; }
+.play-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.pct-bar { height:4px; border-radius:2px; background:var(--border); overflow:hidden; margin-top:3px; }
+.pct-fill { height:100%; border-radius:2px; }
+
+/* Detail panel */
+.detail-view { padding:0; flex:1; display:none; flex-direction:column; }
+.detail-view.active { display:flex; }
+.dv-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; }
+.dv-type { font-family:var(--font-m); font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; padding:2px 7px; border-radius:3px; margin-bottom:6px; display:inline-block; }
+.p1 .dv-type, .dv-type.red { background:var(--red-d); color:var(--red); border:1px solid var(--red-b); }
+.p2 .dv-type, .dv-type.yellow { background:var(--yellow-d); color:var(--yellow); border:1px solid var(--yellow-b); }
+.dv-title { font-size:15px; font-weight:800; color:var(--text); line-height:1.3; }
+.dv-close { background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer; line-height:1; padding:0; margin-left:10px; flex-shrink:0; }
+.dv-close:hover { color:var(--text); }
+.dv-body { padding:14px 18px; flex:1; overflow-y:auto; }
+.dv-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:12px; }
+.dv-row:last-child { border:none; }
+.dv-label { color:var(--muted); }
+.dv-val { font-weight:700; color:var(--text); }
+.dv-avanti { background:rgba(52,211,153,.05); border:1px solid rgba(52,211,153,.15); border-radius:8px; padding:12px; margin:12px 0; }
+.dv-av-label { font-family:var(--font-m); font-size:9px; color:var(--green); font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin-bottom:5px; }
+.dv-av-text { font-size:12px; color:var(--body); line-height:1.5; }
+.dv-actions { padding:14px 18px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
+
+/* ─── AVANTI FLOATING BUBBLE ─── */
+.avanti-bubble {
+  position:fixed; bottom:24px; right:24px; z-index:50;
+  width:52px; height:52px; border-radius:50%;
+  background:var(--green); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 24px rgba(52,211,153,.4);
+  transition:transform .15s, box-shadow .15s;
+}
+.avanti-bubble:hover { transform:scale(1.08); box-shadow:0 6px 32px rgba(52,211,153,.55); }
+.avanti-bubble svg { width:22px; height:22px; }
+.bubble-badge {
+  position:absolute; top:-4px; right:-4px;
+  width:18px; height:18px; border-radius:50%; background:var(--orange);
+  border:2px solid var(--void); display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-m); font-size:9px; font-weight:800; color:#000;
+}
+
+/* Demo controls */
+.demo-bar { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:60; display:flex; gap:8px; background:rgba(6,6,8,.9); border:1px solid var(--border); border-radius:10px; padding:8px 14px; backdrop-filter:blur(8px); }
+.demo-btn { padding:5px 12px; border-radius:6px; background:var(--surface); border:1px solid var(--border); font-family:var(--font-d); font-size:11px; font-weight:600; color:var(--text2); cursor:pointer; }
+.demo-btn:hover { border-color:var(--orange-b); color:var(--orange); }
+.demo-label { font-family:var(--font-m); font-size:9px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; display:flex; align-items:center; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-brand">
+      <svg width="12" height="15" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/></svg>
+      <div class="brand-text"><span>GAME</span> OS</div>
+    </div>
+    <div class="sb-user">
+      <div class="user-name">Ben Whitesides</div>
+      <div class="user-badge">Super Admin</div>
+    </div>
+    <div class="sb-org">
+      <div class="org-name">UHSGFA Flag Football</div>
+      <div class="org-meta">Fall 2026 · 8 teams · 172 athletes</div>
+    </div>
+    <div class="sb-nav">
+      <div class="nav-label">Club OS</div>
+      <div class="nav-item active"><div class="nav-dot" style="background:var(--orange)"></div>Dashboard</div>
+      <div class="nav-item">Athletes</div>
+      <div class="nav-item">Roster</div>
+      <div class="nav-item">Formation</div>
+      <div class="nav-item">Schedule</div>
+      <div class="nav-item">Comms</div>
+      <div class="nav-item">Compliance</div>
+      <div class="nav-item">Registration</div>
+      <div class="nav-item">Tryouts</div>
+      <div class="nav-item">Camps</div>
+      <div class="nav-item">Recruiting <span class="nav-badge">NEW</span></div>
+      <div class="nav-item">Leagues</div>
+      <div class="nav-item">Tournaments</div>
+      <div class="nav-item">Coaches Corner</div>
+      <div class="nav-item">Finance</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- AVANTI bar -->
+    <div class="avanti-bar">
+      <div class="av-dot pulse"></div>
+      <span class="av-lbl">AVANTI</span>
+      <span class="av-mode review">REVIEW MODE</span>
+      <span class="av-settings">⚙ Settings</span>
+    </div>
+
+    <!-- Header: clean title + cmd palette + widgets -->
+    <div class="hdr">
+      <div>
+        <div class="hdr-title">Dashboard</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px;">UHSGFA Flag Football · Fall 2026 · League command center</div>
+      </div>
+      <!-- Command palette -->
+      <div class="cmd-palette" onclick="alert('Search: athlete name, team, or action type...')">
+        <span class="cmd-icon">⌕</span>
+        <span class="cmd-text">Search athletes, teams, actions...</span>
+        <span class="cmd-key">⌘K</span>
+      </div>
+      <button class="widgets-btn">⊞ Widgets</button>
+    </div>
+
+    <!-- BROADCAST BAR: live score carousel -->
+    <div class="broadcast-bar">
+      <button class="bc-arrow" id="bc-prev" onclick="carouselPrev()">‹</button>
+      <div class="bc-viewport">
+        <div class="bc-track" id="bc-track">
+          <!-- Page 1 of games -->
+          <div class="bc-game">
+            <div class="bc-live"><div class="bc-live-dot"></div><span class="bc-live-lbl">LIVE</span></div>
+            <div class="bc-scores">JHV <span class="winning">14</span><span class="sep">—</span>7 SHS</div>
+            <div class="bc-meta">Q2 · 4:32</div>
+          </div>
+          <div class="bc-game">
+            <div class="bc-live"><div class="bc-live-dot"></div><span class="bc-live-lbl">LIVE</span></div>
+            <div class="bc-scores">JHJ <span class="winning">21</span><span class="sep">—</span>0 HER</div>
+            <div class="bc-meta">Q3 · 2:11</div>
+          </div>
+          <div class="bc-game">
+            <div class="bc-live"><div class="bc-live-dot"></div><span class="bc-live-lbl">LIVE</span></div>
+            <div class="bc-scores">SKV <span class="winning">7</span><span class="sep">—</span>7 MCR</div>
+            <div class="bc-meta">Q2 · 1:45</div>
+          </div>
+          <!-- Page 2 of games -->
+          <div class="bc-game">
+            <div class="bc-live"><div class="bc-live-dot"></div><span class="bc-live-lbl">LIVE</span></div>
+            <div class="bc-scores">SKJ <span class="winning">14</span><span class="sep">—</span>6 MCJ</div>
+            <div class="bc-meta">Q4 · 0:48</div>
+          </div>
+          <div class="bc-game">
+            <div class="bc-live"><div class="bc-live-dot"></div><span class="bc-live-lbl">LIVE</span></div>
+            <div class="bc-scores">HEV <span class="winning">28</span><span class="sep">—</span>14 OGV</div>
+            <div class="bc-meta">Q3 · 6:22</div>
+          </div>
+          <div class="bc-game">
+            <div class="bc-live"><div class="bc-live-dot"></div><span class="bc-live-lbl">LIVE</span></div>
+            <div class="bc-scores">OGJ <span class="winning">0</span><span class="sep">—</span>0 HEJ</div>
+            <div class="bc-meta">Q1 · 11:58</div>
+          </div>
+        </div>
+      </div>
+      <div class="bc-pager" id="bc-pager">
+        <div class="bc-pip active" onclick="carouselGo(0)"></div>
+        <div class="bc-pip" onclick="carouselGo(1)"></div>
+      </div>
+      <button class="bc-arrow" id="bc-next" onclick="carouselNext()">›</button>
+    </div>
+
+    <!-- KPI strip -->
+    <div class="kpi-strip">
+      <div class="kpi-cell"><div class="kpi-lbl">Players</div><div class="kpi-val" style="color:var(--text)">172</div><div class="kpi-sub">158 active · 14 pending</div></div>
+      <div class="kpi-cell"><div class="kpi-lbl">Teams</div><div class="kpi-val" style="color:var(--text)">8</div><div class="kpi-sub">4 Varsity · 4 JV</div></div>
+      <div class="kpi-cell"><div class="kpi-lbl">PLAY Index</div><div class="kpi-val" style="color:var(--green)">81%</div><div class="kpi-sub">↑ 2.4% this week</div></div>
+      <div class="kpi-cell"><div class="kpi-lbl">Reg. Collected</div><div class="kpi-val" style="color:var(--text)">$21,800</div><div class="kpi-sub">$2,600 outstanding</div></div>
+      <div class="kpi-cell"><div class="kpi-lbl">Waivers</div><div class="kpi-val" style="color:var(--orange)">158/172</div><div class="kpi-sub">14 unsigned</div></div>
+      <div class="kpi-cell"><div class="kpi-lbl">Exceptions</div><div class="kpi-val" style="color:var(--red)">2</div><div class="kpi-sub">Need input today</div></div>
+    </div>
+
+    <!-- Content grid: left = action queue, right = status/detail -->
+    <div class="content-grid">
+
+      <!-- LEFT: Action queue -->
+      <div class="left-col">
+        <div class="col-header">
+          <span class="col-title">Needs Action</span>
+          <span class="col-badge badge-red">1 urgent</span>
+          <span class="col-badge badge-yellow">2 confirm</span>
+          <span class="col-resolved">✓ 14 resolved by AVANTI</span>
+        </div>
+
+        <!-- New alert slide-in pill (hidden by default, shown via demo) -->
+        <div class="new-alert-pill" id="new-alert-pill" onclick="acceptNewAlert()">
+          <div class="nap-dot"></div>
+          <span class="nap-text">1 new AVANTI alert — Mountain Crest waiver expiry</span>
+          <button class="nap-accept">Accept</button>
+        </div>
+
+        <!-- P1: Urgent -->
+        <div class="action-card p1" id="card-1" onclick="selectCard(1)">
+          <div class="ac-top">
+            <span class="ac-type">URGENT</span>
+            <span class="ac-meta">Mia Rodriguez · Jordan High Varsity</span>
+            <span class="ac-time">Now</span>
+          </div>
+          <div class="ac-title">Payment 4 days overdue — PLAY blocked Saturday</div>
+          <div class="ac-avanti">Medical form expired + payment outstanding. Game in 3 days. Override requires admin approval and logged reason.</div>
+          <div class="ac-btns">
+            <button class="btn-primary" onclick="event.stopPropagation()">Notify Family</button>
+            <button class="btn-ghost" onclick="event.stopPropagation()">Override</button>
+            <button class="btn-ghost" onclick="event.stopPropagation()">Defer</button>
+          </div>
+        </div>
+
+        <!-- P2: Override request -->
+        <div class="action-card p2" id="card-2" onclick="selectCard(2)">
+          <div class="ac-top">
+            <span class="ac-type">OVERRIDE REQ</span>
+            <span class="ac-meta">Coach Diaz · Jordan High JV</span>
+            <span class="ac-time">2h ago</span>
+          </div>
+          <div class="ac-title">Coach Diaz requesting RED override — Jordan Lee</div>
+          <div class="ac-avanti">Medical form expired 3 days ago. Parent notified twice — no response. Override requires admin approval and logged reason.</div>
+          <div class="ac-btns">
+            <button class="btn-primary" onclick="event.stopPropagation()">Approve Override</button>
+            <button class="btn-ghost" onclick="event.stopPropagation()">Deny</button>
+          </div>
+        </div>
+
+        <!-- P2: Registration -->
+        <div class="action-card p2" id="card-3" onclick="selectCard(3)">
+          <div class="ac-top">
+            <span class="ac-type">CONFIRM</span>
+            <span class="ac-meta">14 athletes · Fall Registration</span>
+            <span class="ac-time">12:00 PM</span>
+          </div>
+          <div class="ac-title">14 athletes overdue — $2,600 outstanding</div>
+          <div class="ac-avanti">Batch reminder drafted and ready to send. No override needed — payment only. 7-day overdue threshold crossed.</div>
+          <div class="ac-btns">
+            <button class="btn-primary" onclick="event.stopPropagation()">Send Reminder</button>
+            <button class="btn-ghost" onclick="event.stopPropagation()">View List</button>
+          </div>
+        </div>
+
+        <!-- Info: clear -->
+        <div class="action-card info" id="card-4" onclick="selectCard(4)">
+          <div class="ac-top">
+            <span class="ac-type">ALL CLEAR</span>
+            <span class="ac-meta">Schedule · Saturday</span>
+            <span class="ac-time">Today</span>
+          </div>
+          <div class="ac-title">Saturday home games across 4 teams — 81% GREEN</div>
+          <div class="ac-avanti">No action needed. Depth charts updated. Sub list ready for 3 YELLOW athletes. Game plan sent to Coach Diaz.</div>
+          <div class="ac-btns">
+            <button class="btn-ghost" onclick="event.stopPropagation()">View Schedule</button>
+          </div>
+        </div>
+
+        <!-- Resolved -->
+        <div class="resolved-section">
+          <div class="col-header" style="margin-bottom:8px;"><span class="col-title">Resolved Today</span><span class="col-badge badge-green">14</span></div>
+          <div class="resolved-items">
+            <div class="resolved-item">Travel waiver renewal sent — Mountain Crest · 2:15 PM</div>
+            <div class="resolved-item">Eli Young PLAY Status restored to GREEN · 1:45 PM</div>
+            <div class="resolved-item">Registration reminder batch sent — 14 families · 12:00 PM</div>
+            <div class="resolved-item">Bracket conflict resolved — Fall Classic · 11:20 AM</div>
+            <div class="resolved-item">Depth chart updated — Jordan High Varsity · 10:22 AM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Status view (default) / Detail panel (on card select) -->
+      <div class="right-col">
+
+        <!-- DEFAULT STATUS VIEW -->
+        <div class="status-view" id="status-view">
+          <div class="col-header" style="margin-bottom:12px;"><span class="col-title">Status Overview</span></div>
+
+          <!-- Team PLAY health -->
+          <div class="status-card">
+            <div class="sc-hdr"><span class="sc-title">PLAY Health — All Teams</span><span class="sc-link" onclick="window.location='/compliance'">Compliance →</span></div>
+            <div class="sc-row">
+              <div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--green)"></div><span>Jordan High Varsity</span></div>
+              <div style="text-align:right;"><span style="font-family:var(--font-m);font-size:11px;font-weight:700;color:var(--green)">91%</span><div class="pct-bar" style="width:80px;"><div class="pct-fill" style="width:91%;background:var(--green)"></div></div></div>
+            </div>
+            <div class="sc-row">
+              <div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--yellow)"></div><span>Jordan High JV</span></div>
+              <div style="text-align:right;"><span style="font-family:var(--font-m);font-size:11px;font-weight:700;color:var(--yellow)">83%</span><div class="pct-bar" style="width:80px;"><div class="pct-fill" style="width:83%;background:var(--yellow)"></div></div></div>
+            </div>
+            <div class="sc-row">
+              <div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--green)"></div><span>Skyline HS Varsity</span></div>
+              <div style="text-align:right;"><span style="font-family:var(--font-m);font-size:11px;font-weight:700;color:var(--green)">88%</span><div class="pct-bar" style="width:80px;"><div class="pct-fill" style="width:88%;background:var(--green)"></div></div></div>
+            </div>
+            <div class="sc-row">
+              <div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--red)"></div><span>Mountain Crest Var.</span></div>
+              <div style="text-align:right;"><span style="font-family:var(--font-m);font-size:11px;font-weight:700;color:var(--red)">71%</span><div class="pct-bar" style="width:80px;"><div class="pct-fill" style="width:71%;background:var(--red)"></div></div></div>
+            </div>
+          </div>
+
+          <!-- This week -->
+          <div class="status-card">
+            <div class="sc-hdr"><span class="sc-title">This Week</span><span class="sc-link">Schedule →</span></div>
+            <div class="sc-row"><span style="color:var(--muted)">Today 4:30 PM</span><span style="font-weight:600">Practice — All Teams</span></div>
+            <div class="sc-row"><span style="color:var(--muted)">Thu 4:30 PM</span><span style="font-weight:600">Route Clinic · Varsity</span></div>
+            <div class="sc-row">
+              <div style="display:flex;align-items:center;gap:5px;"><div class="bc-live-dot"></div><span style="color:var(--orange);font-weight:700">Sat 9 AM</span></div>
+              <span style="font-weight:600">6 games · UHSGFA</span>
+            </div>
+          </div>
+
+          <!-- League standings -->
+          <div class="status-card">
+            <div class="sc-hdr"><span class="sc-title">League Standings</span><span class="sc-link">Full →</span></div>
+            <div class="sc-row"><span style="color:var(--yellow);font-weight:800">#1</span><span>Herriman HS</span><span style="font-family:var(--font-m);font-size:11px;color:var(--green)">4–0</span></div>
+            <div class="sc-row"><span style="color:var(--orange);font-weight:800">#2</span><span style="color:var(--orange);font-weight:700">Jordan High ▶</span><span style="font-family:var(--font-m);font-size:11px;color:var(--green)">3–1</span></div>
+            <div class="sc-row"><span style="color:var(--muted);font-weight:700">#3</span><span>Mountain Crest</span><span style="font-family:var(--font-m);font-size:11px;color:var(--text2)">2–2</span></div>
+            <div class="sc-row"><span style="color:var(--muted);font-weight:700">#4</span><span>Skyline HS</span><span style="font-family:var(--font-m);font-size:11px;color:var(--red)">1–3</span></div>
+          </div>
+
+          <!-- Waivers -->
+          <div class="status-card">
+            <div class="sc-hdr"><span class="sc-title">Waivers</span><span class="sc-link">Compliance →</span></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+              <div style="flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="width:92%;height:100%;background:linear-gradient(90deg,var(--green),#2dd4a0);border-radius:4px;"></div></div>
+              <span style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--orange)">158/172</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted)">14 unsigned · AVANTI reminder drafted and ready</div>
+          </div>
+        </div>
+
+        <!-- DETAIL PANEL (shown when card selected) -->
+        <div class="detail-view" id="detail-view">
+          <div class="dv-header" id="dv-header">
+            <div>
+              <div class="dv-type" id="dv-type">URGENT</div>
+              <div class="dv-title" id="dv-title">Detail title</div>
+            </div>
+            <button class="dv-close" onclick="closeDetail()">✕</button>
+          </div>
+          <div class="dv-body" id="dv-body">
+            <!-- populated by JS -->
+          </div>
+          <div class="dv-actions" id="dv-actions">
+            <!-- populated by JS -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AVANTI floating bubble -->
+<div class="avanti-bubble" onclick="alert('AVANTI OS Brain — 3 pending actions queued')">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 9 3-3 3 3"/><path d="M12 6v8"/><path d="M9 18h6"/></svg>
+  <div class="bubble-badge">3</div>
+</div>
+
+<!-- Demo controls -->
+<div class="demo-bar">
+  <span class="demo-label">Try it →</span>
+  <button class="demo-btn" onclick="showNewAlert()">+ New Alert slide-in</button>
+  <button class="demo-btn" onclick="carouselNext()">Carousel next page</button>
+  <button class="demo-btn" onclick="selectCard(1)">Select P1 card</button>
+  <button class="demo-btn" onclick="closeDetail()">Reset detail panel</button>
+</div>
+
+<script>
+// ── CAROUSEL ──
+const GAMES_PER_PAGE = 3;
+let page = 0;
+const totalPages = 2;
+
+function updateCarousel() {
+  const track = document.getElementById('bc-track');
+  const pct = page * (100 / totalPages);
+  track.style.transform = `translateX(-${page * (100 / totalPages * GAMES_PER_PAGE / GAMES_PER_PAGE)}%)`;
+
+  // Using pixel offset: each game is 33.333% of viewport width
+  // Actually calculate based on game width
+  const viewport = document.querySelector('.bc-viewport');
+  const gameWidth = viewport.offsetWidth / GAMES_PER_PAGE + 10; // gap
+  track.style.transform = `translateX(-${page * (viewport.offsetWidth + 10)}px)`;
+
+  document.querySelectorAll('.bc-pip').forEach((p, i) => p.classList.toggle('active', i === page));
+  document.getElementById('bc-prev').classList.toggle('disabled', page === 0);
+  document.getElementById('bc-next').classList.toggle('disabled', page === totalPages - 1);
+}
+function carouselNext() { if (page < totalPages - 1) { page++; updateCarousel(); } }
+function carouselPrev() { if (page > 0) { page--; updateCarousel(); } }
+function carouselGo(p) { page = p; updateCarousel(); }
+updateCarousel();
+
+// ── CARD DETAIL ──
+const cardData = {
+  1: {
+    type: 'URGENT', typeClass: 'red',
+    title: 'Mia Rodriguez — Payment 4 days overdue. PLAY blocked Saturday.',
+    rows: [
+      { l: 'Athlete', v: 'Mia Rodriguez' },
+      { l: 'Team', v: 'Jordan High Varsity' },
+      { l: 'PLAY Status', v: '🔴 RED — Blocked', warn: true },
+      { l: 'Payment Due', v: '$95.00 — 4 days overdue' },
+      { l: 'Medical Form', v: 'Expired 3 days ago' },
+      { l: 'Parent Notified', v: 'Twice — no response' },
+      { l: 'Next Game', v: 'Saturday 9:00 AM — 3 days' },
+    ],
+    avanti: 'Override requires admin approval and a logged reason. If no response from family by tomorrow, recommend placing on waitlist and activating first substitute. Sub ready: D. Torres (PLAY GREEN).',
+    btns: [
+      { label: 'Notify Family', primary: true },
+      { label: 'Approve Override', primary: false },
+      { label: 'Activate Sub', primary: false },
+    ]
+  },
+  2: {
+    type: 'OVERRIDE REQ', typeClass: 'yellow',
+    title: 'Coach Diaz requesting RED override — Jordan Lee (Jordan High JV)',
+    rows: [
+      { l: 'Requested by', v: 'Coach Diaz' },
+      { l: 'Athlete', v: 'Jordan Lee' },
+      { l: 'Team', v: 'Jordan High JV' },
+      { l: 'PLAY Status', v: '🔴 RED — Medical form expired' },
+      { l: 'Days Overdue', v: '3 days' },
+      { l: 'Parent Contact', v: 'Notified Oct 21 + Oct 22' },
+      { l: 'Raised', v: '2 hours ago' },
+    ],
+    avanti: 'Medical form expired — coach wants to play this athlete Saturday. Override would waive the medical requirement temporarily. Log the reason and get admin signature. Risk: liability exposure without signed form.',
+    btns: [
+      { label: 'Approve Override', primary: true },
+      { label: 'Deny', primary: false },
+    ]
+  },
+  3: {
+    type: 'CONFIRM', typeClass: 'yellow',
+    title: '14 athletes overdue on Fall registration — $2,600 outstanding',
+    rows: [
+      { l: 'Athletes affected', v: '14' },
+      { l: 'Total outstanding', v: '$2,600.00' },
+      { l: 'Avg per athlete', v: '$185.71' },
+      { l: 'Days overdue', v: '7+ days' },
+      { l: 'Previous reminders', v: '1 sent (Oct 16)' },
+      { l: 'AVANTI action', v: 'Batch reminder drafted' },
+    ],
+    avanti: 'Batch reminder drafted and ready to send to 14 families. This will trigger individually addressed emails with payment link and deadline. No override needed — payment only. Estimated collection rate after reminder: 78% (based on prior periods).',
+    btns: [
+      { label: 'Send Reminder Batch', primary: true },
+      { label: 'View Full List', primary: false },
+    ]
+  },
+  4: {
+    type: 'ALL CLEAR', typeClass: 'green',
+    title: 'Saturday home games across 4 teams — 81% GREEN',
+    rows: [
+      { l: 'Games scheduled', v: '6 total (3 Varsity, 3 JV)' },
+      { l: 'Team PLAY status', v: '81% GREEN overall' },
+      { l: 'Athletes flagged', v: '3 YELLOW — sub list ready' },
+      { l: 'Depth charts', v: 'Updated and sent to coaches' },
+      { l: 'Game plan', v: 'Sent to Coach Diaz' },
+      { l: 'AVANTI status', v: 'No action required' },
+    ],
+    avanti: 'All preparations complete. Depth chart adjusted for 3 YELLOW athletes. Sub list activated. Coach Diaz confirmed receipt of game plan. Saturday is a go.',
+    btns: [
+      { label: 'View Full Schedule', primary: false },
+    ]
+  }
+};
+
+function selectCard(id) {
+  // Deselect all
+  document.querySelectorAll('.action-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('card-' + id).classList.add('selected');
+
+  const d = cardData[id];
+  document.getElementById('dv-type').textContent = d.type;
+  document.getElementById('dv-type').className = 'dv-type ' + d.typeClass;
+  document.getElementById('dv-title').textContent = d.title;
+
+  const body = document.getElementById('dv-body');
+  body.innerHTML = d.rows.map(r =>
+    `<div class="dv-row"><span class="dv-label">${r.l}</span><span class="dv-val" style="${r.warn ? 'color:var(--red)' : ''}">${r.v}</span></div>`
+  ).join('') +
+  `<div class="dv-avanti"><div class="dv-av-label">AVANTI Assessment</div><div class="dv-av-text">${d.avanti}</div></div>`;
+
+  document.getElementById('dv-actions').innerHTML = d.btns.map(b =>
+    `<button class="${b.primary ? 'btn-primary' : 'btn-ghost'}" style="width:100%;padding:10px 0;font-size:12px;">${b.label}</button>`
+  ).join('');
+
+  // Show detail panel
+  document.getElementById('status-view').style.display = 'none';
+  document.getElementById('detail-view').classList.add('active');
+}
+
+function closeDetail() {
+  document.querySelectorAll('.action-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('status-view').style.display = '';
+  document.getElementById('detail-view').classList.remove('active');
+}
+
+// ── NEW ALERT SLIDE-IN ──
+function showNewAlert() {
+  const pill = document.getElementById('new-alert-pill');
+  pill.classList.add('visible');
+}
+function acceptNewAlert() {
+  const pill = document.getElementById('new-alert-pill');
+  pill.style.opacity = '0';
+  pill.style.transform = 'translateY(-8px)';
+  pill.style.transition = 'all .3s';
+  setTimeout(() => { pill.classList.remove('visible'); pill.style.opacity = ''; pill.style.transform = ''; pill.style.transition = ''; }, 300);
+}
+</script>
+</body>
+</html>
