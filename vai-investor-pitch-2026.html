@@ -44,7 +44,6 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
   overflow: hidden;
 }
 
-/* Nav dots */
 .nav {
   position: fixed;
   right: 28px;
@@ -65,7 +64,6 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
 }
 .nav-dot.active { background: var(--orange); transform: scale(1.4); }
 
-/* Slide number */
 .slide-num {
   position: absolute;
   bottom: 28px;
@@ -76,127 +74,41 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
   letter-spacing: 0.1em;
 }
 
-/* Orange accent line top */
 .accent-top {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 2px;
   background: linear-gradient(90deg, var(--orange) 0%, transparent 60%);
 }
 
-/* ── Wingmark SVG ── */
-.wingmark { display: inline-block; }
-
-/* ── Typography ── */
 .eyebrow {
   font-size: 10px;
   font-weight: 800;
   color: var(--orange);
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  margin-bottom: 14px;
-}
-.h1 { font-size: 64px; font-weight: 900; color: var(--text); line-height: 1; }
-.h2 { font-size: 42px; font-weight: 900; color: var(--text); line-height: 1.1; }
-.h3 { font-size: 22px; font-weight: 800; color: var(--text); }
-.body { font-size: 15px; color: var(--text2); line-height: 1.6; }
-.small { font-size: 12px; color: var(--muted); }
-
-/* ── Cards ── */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-}
-.card-orange {
-  background: rgba(247,148,30,0.06);
-  border: 1px solid var(--orange-b);
-  border-radius: 12px;
-  padding: 24px;
-}
-.card-green {
-  background: var(--green-d);
-  border: 1px solid var(--green-b);
-  border-radius: 12px;
-  padding: 24px;
+  margin-bottom: 12px;
 }
 
-/* ── Stat cards ── */
-.stat { text-align: center; }
-.stat-val { font-size: 48px; font-weight: 900; line-height: 1; }
-.stat-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 6px; }
-.stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+.card-o { background: rgba(247,148,30,0.06); border: 1px solid var(--orange-b); border-radius: 12px; padding: 22px; }
+.card-g { background: var(--green-d); border: 1px solid var(--green-b); border-radius: 12px; padding: 22px; }
 
-/* ── Badge ── */
 .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 3px 10px;
-  border-radius: 100px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 100px;
+  letter-spacing: 0.06em; text-transform: uppercase;
 }
-.badge-orange { background: var(--orange-d); color: var(--orange); border: 1px solid var(--orange-b); }
-.badge-green  { background: var(--green-d);  color: var(--green);  border: 1px solid var(--green-b); }
+.badge-o { background: var(--orange-d); color: var(--orange); border: 1px solid var(--orange-b); }
+.badge-g { background: var(--green-d);  color: var(--green);  border: 1px solid var(--green-b); }
 
-/* ── Divider ── */
-.divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-
-/* ── Progress bar ── */
-.bar-bg { height: 5px; background: var(--border2); border-radius: 3px; overflow: hidden; }
+.bar-bg  { height: 5px; background: var(--border2); border-radius: 3px; overflow: hidden; }
 .bar-fill { height: 100%; background: var(--orange); border-radius: 3px; }
 
-/* ─────────────────────────────────────────────── */
-/* SLIDE 1 — COVER */
-/* ─────────────────────────────────────────────── */
-#s1 { justify-content: center; align-items: flex-start; padding: 80px 100px; }
-#s1 .bg-grid {
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(255,255,255,0.025) 50px),
-                    repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(255,255,255,0.025) 50px);
-  pointer-events: none;
+.row-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 9px;
 }
-#s1 .glow {
-  position: absolute;
-  top: -200px;
-  left: -100px;
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(247,148,30,0.06) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* ─────────────────────────────────────────────── */
-/* SLIDE 2 — OPPORTUNITY */
-/* ─────────────────────────────────────────────── */
-#s2 { padding: 60px 100px; justify-content: center; }
-
-/* ─────────────────────────────────────────────── */
-/* SLIDE 3 — PRODUCT */
-/* ─────────────────────────────────────────────── */
-#s3 { padding: 60px 100px; justify-content: center; }
-
-/* ─────────────────────────────────────────────── */
-/* SLIDE 4 — REVENUE */
-/* ─────────────────────────────────────────────── */
-#s4 { padding: 60px 100px; justify-content: center; }
-
-/* ─────────────────────────────────────────────── */
-/* SLIDE 5 — AFFILIATE */
-/* ─────────────────────────────────────────────── */
-#s5 { padding: 60px 100px; justify-content: center; }
-
-/* ─────────────────────────────────────────────── */
-/* SLIDE 6 — THE ASK */
-/* ─────────────────────────────────────────────── */
-#s6 { padding: 60px 100px; justify-content: center; }
 
 @media print {
   .deck { overflow: visible; height: auto; }
@@ -207,49 +119,46 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
 </head>
 <body>
 
-<!-- Nav dots -->
 <div class="nav" id="navDots"></div>
 
 <div class="deck" id="deck">
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SLIDE 1 — COVER                                 -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="slide" id="s1">
-  <div class="bg-grid"></div>
-  <div class="glow"></div>
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 1 — COVER                                -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="slide" id="s1" style="justify-content:center;align-items:flex-start;padding:80px 100px">
+  <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.022) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.022) 50px);pointer-events:none"></div>
+  <div style="position:absolute;top:-200px;left:-100px;width:700px;height:700px;background:radial-gradient(circle,rgba(247,148,30,0.06) 0%,transparent 70%);pointer-events:none"></div>
   <div class="accent-top"></div>
 
-  <!-- Wingmark -->
   <svg width="72" height="86" viewBox="0 0 139 167" fill="none" style="margin-bottom:32px">
-    <path fill-rule="evenodd" clip-rule="evenodd"
-      d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z"
-      fill="#F7941E"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#F7941E"/>
   </svg>
 
-  <div style="font-size:72px;font-weight:900;color:#fff;line-height:1;margin-bottom:8px">
+  <div style="font-size:76px;font-weight:900;color:#fff;line-height:1;margin-bottom:10px">
     <span style="color:var(--orange)">VAI</span>
   </div>
-  <div style="font-size:24px;font-weight:700;color:var(--text2);margin-bottom:48px;letter-spacing:0.01em">
-    AI-Powered Youth Sports Infrastructure
+
+  <div style="font-size:22px;font-weight:600;color:var(--text2);margin-bottom:16px;max-width:560px;line-height:1.4">
+    The operating system youth sports doesn't have yet.
   </div>
 
-  <div style="display:flex;gap:12px;margin-bottom:56px">
-    <span class="badge badge-orange">AVANTI — AI Automation</span>
-    <span class="badge badge-green">GAME OS — Club Platform</span>
-    <span class="badge" style="background:rgba(129,140,248,0.1);color:#818cf8;border:1px solid rgba(129,140,248,0.25)">VAI App — Athlete Ecosystem</span>
+  <div style="font-size:14px;color:var(--muted);margin-bottom:48px;max-width:500px;line-height:1.6">
+    Compliance, recruiting, registration, live scoring, and AI automation — one platform. Revenue live since March 2026.
   </div>
 
-  <hr class="divider" style="width:400px;margin:0 0 40px 0">
-
-  <div style="display:flex;align-items:center;gap:24px">
-    <div>
-      <div style="font-size:16px;font-weight:800;color:var(--text)">Ben Whitesides</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px">Founder &amp; CEO</div>
-    </div>
+  <div style="display:flex;gap:10px;margin-bottom:56px">
+    <span class="badge badge-o">AVANTI — AI Automation</span>
+    <span class="badge badge-g">GAME OS — Club Platform</span>
+    <span class="badge" style="background:rgba(129,140,248,0.1);color:#818cf8;border:1px solid rgba(129,140,248,0.25)">VAI App — Athlete Network</span>
   </div>
 
-  <div style="position:absolute;bottom:48px;left:100px;font-size:11px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase">
+  <div style="border-top:1px solid var(--border);padding-top:32px;width:400px">
+    <div style="font-size:15px;font-weight:800;color:var(--text)">Ben Whitesides</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:3px">Founder &amp; CEO</div>
+  </div>
+
+  <div style="position:absolute;bottom:48px;left:100px;font-size:10px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase">
     Confidential Investor Presentation · 2026
   </div>
 
@@ -257,56 +166,56 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
 </div>
 
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SLIDE 2 — THE OPPORTUNITY                       -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="slide" id="s2">
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 2 — THE OPPORTUNITY                      -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="slide" id="s2" style="padding:60px 100px;justify-content:center">
   <div class="accent-top"></div>
 
   <div class="eyebrow">The Opportunity</div>
-  <div class="h2" style="margin-bottom:10px">Youth sports is a <span style="color:var(--orange)">$19.8B market</span><br>with no operating system.</div>
-  <div class="body" style="max-width:640px;margin-bottom:48px">
-    40 million youth athletes. Thousands of clubs. Every one of them runs on spreadsheets, disconnected apps, and manual admin. There is no unified platform that owns compliance, payments, recruiting, and scheduling in one place — until now.
+  <div style="font-size:44px;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:10px">
+    A <span style="color:var(--orange)">$19.8B market</span> still running<br>on spreadsheets.
+  </div>
+  <div style="font-size:15px;color:var(--text2);max-width:640px;margin-bottom:40px;line-height:1.7">
+    Every youth sports club runs the same broken stack. Spreadsheets for compliance. Text messages for registration. Manual processes for everything else. Club directors spend 12+ hours a week on admin that shouldn't exist. No platform owns the operating layer.
+    <strong style="color:var(--text)"> VAI does.</strong>
   </div>
 
-  <!-- 3 stat cards -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px">
-    <div class="card stat">
-      <div class="stat-val" style="color:var(--orange)">$19.8B</div>
-      <div class="stat-label">US Youth Sports Market</div>
-      <div class="stat-sub">Growing 8% annually</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px">
+    <div class="card" style="text-align:center">
+      <div style="font-size:46px;font-weight:900;color:var(--orange);line-height:1">$19.8B</div>
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:8px">US Youth Sports Market</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Growing 8% annually</div>
     </div>
-    <div class="card stat">
-      <div class="stat-val" style="color:var(--green)">45M+</div>
-      <div class="stat-label">Youth Athletes</div>
-      <div class="stat-sub">Active in organized US sports</div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:46px;font-weight:900;color:var(--green);line-height:1">45M+</div>
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:8px">Youth Athletes</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Active in organized US sports</div>
     </div>
-    <div class="card stat">
-      <div class="stat-val" style="color:var(--yellow)">12+ hrs</div>
-      <div class="stat-label">Admin Per Week</div>
-      <div class="stat-sub">Wasted per club director</div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:46px;font-weight:900;color:var(--yellow);line-height:1">12+</div>
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:8px">Hours Wasted Weekly</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Per club director, on admin alone</div>
     </div>
   </div>
 
-  <!-- Problem vs solution -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
     <div class="card" style="border-color:rgba(239,68,68,0.2)">
-      <div style="font-size:10px;font-weight:800;color:#ef4444;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">❌ The Problem</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        {['Fragmented tools — no single source of truth', 'Compliance done manually by overworked staff', 'Recruiting is scattered across DMs and spreadsheets', 'No visibility into what AVANTI can handle vs. what needs human judgment'].map(t => `
-          <div style="font-size:13px;color:var(--text2);display:flex;gap:8px;align-items:flex-start">
-            <span style="color:#ef4444;flex-shrink:0;margin-top:2px">·</span>${t}
-          </div>
-        `).join('')}
+      <div style="font-size:10px;font-weight:800;color:#ef4444;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px">❌ The Problem</div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--text2)"><span style="color:#ef4444;flex-shrink:0;margin-top:2px">·</span>No single source of truth — every tool is a silo</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--text2)"><span style="color:#ef4444;flex-shrink:0;margin-top:2px">·</span>Compliance is manual work disguised as admin</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--text2)"><span style="color:#ef4444;flex-shrink:0;margin-top:2px">·</span>Recruiting happens in DMs and spreadsheets, not a system</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--text2)"><span style="color:#ef4444;flex-shrink:0;margin-top:2px">·</span>Staff can't tell what needs them and what doesn't</div>
       </div>
     </div>
-    <div class="card-green">
-      <div style="font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">✓ The VAI Solution</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="font-size:13px;color:var(--text2);display:flex;gap:8px"><span style="color:var(--green);flex-shrink:0">✓</span>One platform — athlete app + club OS + AI engine</div>
-        <div style="font-size:13px;color:var(--text2);display:flex;gap:8px"><span style="color:var(--green);flex-shrink:0">✓</span>AVANTI handles 97% of decisions automatically</div>
-        <div style="font-size:13px;color:var(--text2);display:flex;gap:8px"><span style="color:var(--green);flex-shrink:0">✓</span>Built-in recruiting with verified athlete profiles</div>
-        <div style="font-size:13px;color:var(--text2);display:flex;gap:8px"><span style="color:var(--green);flex-shrink:0">✓</span>Only escalates exceptions that need human judgment</div>
+    <div class="card-g">
+      <div style="font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px">✓ The VAI Answer</div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--text2)"><span style="color:var(--green);flex-shrink:0">✓</span>One platform — athlete app, club OS, AI engine</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--text2)"><span style="color:var(--green);flex-shrink:0">✓</span>AVANTI resolves 97% of decisions automatically — with proof</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--text2)"><span style="color:var(--green);flex-shrink:0">✓</span>Verified athlete profiles built for college coaches and clubs</div>
+        <div style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--text2)"><span style="color:var(--green);flex-shrink:0">✓</span>Staff sees exceptions only. AVANTI handles everything else.</div>
       </div>
     </div>
   </div>
@@ -315,88 +224,94 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
 </div>
 
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SLIDE 3 — PRODUCT                               -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="slide" id="s3">
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 3 — PRODUCT                              -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="slide" id="s3" style="padding:60px 100px;justify-content:center">
   <div class="accent-top"></div>
 
   <div class="eyebrow">The Platform</div>
-  <div class="h2" style="margin-bottom:8px">Three layers. <span style="color:var(--orange)">One ecosystem.</span></div>
-  <div class="body" style="margin-bottom:40px;max-width:600px">VAI is not a single product — it's an integrated stack that compounds in value the deeper a club, athlete, or organization goes.</div>
+  <div style="font-size:44px;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:8px">
+    One platform. <span style="color:var(--orange)">Three compounding layers.</span>
+  </div>
+  <div style="font-size:15px;color:var(--text2);max-width:600px;margin-bottom:36px;line-height:1.6">
+    Each layer makes the others more powerful. Athletes drive clubs. Clubs drive leagues. AVANTI makes all of it run.
+  </div>
 
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px">
 
-    <!-- VAI App -->
-    <div class="card" style="border-color:rgba(129,140,248,0.2)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-        <div style="width:36px;height:36px;border-radius:9px;background:rgba(129,140,248,0.1);border:1px solid rgba(129,140,248,0.25);display:flex;align-items:center;justify-content:center">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="#818cf8" stroke-width="1.5"/><path d="M2 16c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="#818cf8" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <div class="card" style="border-color:rgba(129,140,248,0.22)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(129,140,248,0.1);border:1px solid rgba(129,140,248,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#818cf8" stroke-width="1.4"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#818cf8" stroke-width="1.4" stroke-linecap="round"/></svg>
         </div>
         <div>
           <div style="font-size:14px;font-weight:800;color:#fff">VAI App</div>
-          <div style="font-size:10px;color:var(--muted)">Athlete Ecosystem</div>
+          <div style="font-size:10px;color:var(--muted)">Athlete Network</div>
         </div>
       </div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:16px">The athlete's digital passport. Performance data, recruiting profiles, PLAY Status, wearables sync, and peer-to-peer network — all in one mobile app.</div>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font-size:11px;color:var(--muted);display:flex;gap:6px"><span style="color:#818cf8">▸</span>Verified athlete profiles + VAI Passport</div>
-        <div style="font-size:11px;color:var(--muted);display:flex;gap:6px"><span style="color:#818cf8">▸</span>College recruiting + AVANTI CONNECT</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:14px">
+        Every athlete needs a verified digital identity. VAI App is the profile college coaches, clubs, and leagues actually trust. Performance data, PLAY Status, and recruiting — built in, not bolted on.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div style="font-size:11px;color:var(--muted);display:flex;gap:6px"><span style="color:#818cf8">▸</span>Verified profiles + VAI Passport</div>
+        <div style="font-size:11px;color:var(--muted);display:flex;gap:6px"><span style="color:#818cf8">▸</span>College recruiting via AVANTI CONNECT</div>
         <div style="font-size:11px;color:var(--muted);display:flex;gap:6px"><span style="color:#818cf8">▸</span>Wearables + performance tracking</div>
-        <div style="font-size:11px;color:var(--muted);display:flex;gap:6px"><span style="color:#818cf8">▸</span>Peer-to-peer affiliate distribution</div>
+        <div style="font-size:11px;color:var(--muted);display:flex;gap:6px"><span style="color:#818cf8">▸</span>Peer-to-peer distribution built in</div>
       </div>
     </div>
 
-    <!-- GAME OS -->
-    <div class="card-orange">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-        <div style="width:36px;height:36px;border-radius:9px;background:rgba(247,148,30,0.12);border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="#F7941E"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="#F7941E"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="#F7941E"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="#F7941E"/></svg>
+    <div class="card-o">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:34px;height:34px;border-radius:8px;background:rgba(247,148,30,0.12);border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="#F7941E"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="#F7941E"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="#F7941E"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="#F7941E"/></svg>
         </div>
         <div>
           <div style="font-size:14px;font-weight:800;color:#fff">GAME OS</div>
           <div style="font-size:10px;color:var(--muted)">Club Operating System</div>
         </div>
       </div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:16px">The operating system clubs actually run on. Compliance, registration, scheduling, finance, tryouts, tournaments, recruiting, and live scoring — all in one command center.</div>
-      <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:14px">
+        Clubs run on five disconnected tools. GAME OS replaces them. Compliance, registration, scheduling, finance, and live scoring in one command center. AVANTI handles the decisions. Staff handles the exceptions.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
         <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--orange)">▸</span>PLAY Status compliance engine</div>
-        <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--orange)">▸</span>Registration + waivers + payments</div>
-        <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--orange)">▸</span>Live scoring + fan feed</div>
+        <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--orange)">▸</span>Registration, waivers, payments</div>
+        <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--orange)">▸</span>Live scoring + parent fan feed</div>
         <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--orange)">▸</span>College scout event tracking</div>
       </div>
     </div>
 
-    <!-- AVANTI -->
-    <div class="card-green">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-        <div style="width:36px;height:36px;border-radius:9px;background:var(--green-d);border:1px solid var(--green-b);display:flex;align-items:center;justify-content:center">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L16 14H2L9 2Z" fill="#34d399"/></svg>
+    <div class="card-g">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:34px;height:34px;border-radius:8px;background:var(--green-d);border:1px solid var(--green-b);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L14.5 13H1.5L8 1.5Z" fill="#34d399"/></svg>
         </div>
         <div>
           <div style="font-size:14px;font-weight:800;color:#fff">AVANTI</div>
           <div style="font-size:10px;color:var(--muted)">AI Automation Engine</div>
         </div>
       </div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:16px">The intelligence layer. AVANTI handles compliance, reminders, eligibility, scheduling conflicts, and recruiting analysis — escalating only true judgment calls to staff.</div>
-      <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:14px">
+        97% of club decisions are routine. AVANTI makes them automatically, with a full audit trail. Staff sees only the 3% that needs human judgment. That's the product.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
         <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--green)">▸</span>97% of exceptions resolved automatically</div>
-        <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--green)">▸</span>3 automation modes: Full / Review / Insights</div>
-        <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--green)">▸</span>Append-only audit trail — every decision provable</div>
+        <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--green)">▸</span>3 modes: Automated / Review / Insights</div>
+        <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--green)">▸</span>Append-only audit trail. Every decision provable.</div>
         <div style="font-size:11px;color:var(--text2);display:flex;gap:6px"><span style="color:var(--green)">▸</span>Policy-compliant by design</div>
       </div>
     </div>
   </div>
 
-  <!-- Bottom claim -->
-  <div style="background:rgba(52,211,153,0.05);border:1px solid var(--green-b);border-radius:10px;padding:16px 24px;display:flex;align-items:center;justify-content:space-between">
+  <div style="background:rgba(52,211,153,0.04);border:1px solid var(--green-b);border-radius:10px;padding:14px 22px;display:flex;align-items:center;justify-content:space-between">
     <div>
-      <div style="font-size:14px;font-weight:700;color:var(--text)">Built live. Revenue generating. Deployed at vaigameos.com.</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:3px">Subscriptions launched end of March 2026 — recurring revenue is live.</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text)">Built live. Revenue generating. Deployed at vaigameos.com.</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:3px">Subscriptions launched end of March 2026 — recurring revenue is live.</div>
     </div>
-    <div style="display:flex;gap:8px">
-      <span class="badge badge-green">Revenue Live</span>
-      <span class="badge badge-orange">Live Product</span>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <span class="badge badge-g">Revenue Live</span>
+      <span class="badge badge-o">Live Product</span>
     </div>
   </div>
 
@@ -404,78 +319,80 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
 </div>
 
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SLIDE 4 — REVENUE MODEL                         -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="slide" id="s4">
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 4 — REVENUE MODEL                        -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="slide" id="s4" style="padding:60px 100px;justify-content:center">
   <div class="accent-top"></div>
 
   <div class="eyebrow">Revenue Model</div>
-  <div class="h2" style="margin-bottom:8px">Subscription-first. <span style="color:var(--orange)">Multi-tier.</span></div>
-  <div class="body" style="margin-bottom:36px;max-width:600px">Revenue compounds as athletes grow into clubs, clubs grow into leagues, and leagues stack enterprise seats — all recurring.</div>
+  <div style="font-size:44px;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:8px">
+    Recurring at every level. <span style="color:var(--orange)">Compounding by design.</span>
+  </div>
+  <div style="font-size:14px;color:var(--text2);max-width:600px;margin-bottom:32px;line-height:1.6">
+    Athletes grow into clubs. Clubs grow into leagues. Every tier adds recurring revenue. The deeper the relationship, the higher the margin.
+  </div>
 
-  <!-- Pricing table -->
-  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:32px">
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px">
 
     <div class="card" style="text-align:center">
-      <div style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Basic</div>
-      <div style="font-size:28px;font-weight:900;color:var(--text);margin-bottom:4px">Free</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:14px">Individual athlete</div>
-      <hr class="divider" style="margin:0 0 12px">
-      <div style="font-size:11px;color:var(--muted);line-height:1.7">Profile<br>PLAY Status<br>Schedule</div>
+      <div style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Basic</div>
+      <div style="font-size:26px;font-weight:900;color:var(--text);margin-bottom:3px">Free</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px">Individual athlete</div>
+      <hr style="border:none;border-top:1px solid var(--border);margin-bottom:10px">
+      <div style="font-size:11px;color:var(--muted);line-height:1.8">Profile<br>PLAY Status<br>Schedule</div>
     </div>
 
     <div class="card" style="text-align:center;border-color:rgba(129,140,248,0.25);background:rgba(129,140,248,0.05)">
-      <div style="font-size:10px;font-weight:800;color:#818cf8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">VAI+</div>
-      <div style="font-size:28px;font-weight:900;color:#fff;margin-bottom:4px">$19.95</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:14px">per month</div>
-      <hr class="divider" style="margin:0 0 12px">
-      <div style="font-size:11px;color:var(--text2);line-height:1.7">Full recruiting<br>AVANTI insights<br>Wearables sync</div>
+      <div style="font-size:10px;font-weight:800;color:#818cf8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">VAI+</div>
+      <div style="font-size:26px;font-weight:900;color:#fff;margin-bottom:3px">$19.95</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px">per month</div>
+      <hr style="border:none;border-top:1px solid var(--border);margin-bottom:10px">
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">Full recruiting<br>AVANTI insights<br>Wearables sync</div>
     </div>
 
     <div class="card" style="text-align:center;border-color:var(--orange-b);background:rgba(247,148,30,0.06)">
-      <div style="font-size:10px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Mentor</div>
-      <div style="font-size:28px;font-weight:900;color:var(--orange);margin-bottom:4px">$99.95</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:14px">per month</div>
-      <hr class="divider" style="margin:0 0 12px">
-      <div style="font-size:11px;color:var(--text2);line-height:1.7">1-on-1 mentoring<br>Advanced analytics<br>Priority AVANTI</div>
+      <div style="font-size:10px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Mentor</div>
+      <div style="font-size:26px;font-weight:900;color:var(--orange);margin-bottom:3px">$99.95</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px">per month</div>
+      <hr style="border:none;border-top:1px solid rgba(247,148,30,0.2);margin-bottom:10px">
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">1-on-1 mentoring<br>Advanced analytics<br>Priority AVANTI</div>
     </div>
 
     <div class="card" style="text-align:center">
-      <div style="font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Club</div>
-      <div style="font-size:28px;font-weight:900;color:var(--text);margin-bottom:4px">$299</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:14px">per month · up to 1K</div>
-      <hr class="divider" style="margin:0 0 12px">
-      <div style="font-size:11px;color:var(--text2);line-height:1.7">Full GAME OS<br>AVANTI automation<br>Org-wide compliance</div>
+      <div style="font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Club</div>
+      <div style="font-size:26px;font-weight:900;color:var(--text);margin-bottom:3px">$299</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px">/ month · up to 1K</div>
+      <hr style="border:none;border-top:1px solid var(--border);margin-bottom:10px">
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">Full GAME OS<br>AVANTI automation<br>Org-wide compliance</div>
     </div>
 
     <div class="card" style="text-align:center">
-      <div style="font-size:10px;font-weight:800;color:var(--yellow);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Enterprise</div>
-      <div style="font-size:28px;font-weight:900;color:var(--text);margin-bottom:4px">$599</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:14px">per month · 1K+</div>
-      <hr class="divider" style="margin:0 0 12px">
-      <div style="font-size:11px;color:var(--text2);line-height:1.7">Multi-org<br>Custom policy engine<br>League-wide AVANTI</div>
+      <div style="font-size:10px;font-weight:800;color:var(--yellow);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Enterprise</div>
+      <div style="font-size:26px;font-weight:900;color:var(--text);margin-bottom:3px">$599</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px">/ month · 1K+</div>
+      <hr style="border:none;border-top:1px solid var(--border);margin-bottom:10px">
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">Multi-org<br>Custom policy engine<br>League-wide AVANTI</div>
     </div>
 
   </div>
 
-  <!-- ARR math -->
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
     <div class="card">
-      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">10 Clubs · Year 1</div>
-      <div style="font-size:28px;font-weight:900;color:var(--orange)">$35.9K</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">ARR from clubs alone</div>
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">10 Clubs — Year 1</div>
+      <div style="font-size:26px;font-weight:900;color:var(--orange)">$35.9K</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">ARR from club subscriptions</div>
       <div class="bar-bg" style="margin-top:10px"><div class="bar-fill" style="width:10%"></div></div>
     </div>
     <div class="card">
-      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">100 Clubs · Year 2</div>
-      <div style="font-size:28px;font-weight:900;color:var(--orange)">$359K</div>
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">100 Clubs — Year 2</div>
+      <div style="font-size:26px;font-weight:900;color:var(--orange)">$359K</div>
       <div style="font-size:11px;color:var(--muted);margin-top:4px">ARR + affiliate multiplier</div>
       <div class="bar-bg" style="margin-top:10px"><div class="bar-fill" style="width:40%"></div></div>
     </div>
     <div class="card">
-      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">500 Clubs · Year 3</div>
-      <div style="font-size:28px;font-weight:900;color:var(--green)">$1.8M+</div>
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">500 Clubs — Year 3</div>
+      <div style="font-size:26px;font-weight:900;color:var(--green)">$1.8M+</div>
       <div style="font-size:11px;color:var(--muted);margin-top:4px">ARR with athlete tier blend</div>
       <div class="bar-bg" style="margin-top:10px"><div class="bar-fill" style="width:80%;background:var(--green)"></div></div>
     </div>
@@ -485,53 +402,68 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
 </div>
 
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SLIDE 5 — AFFILIATE ENGINE                      -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="slide" id="s5">
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 5 — AFFILIATE ENGINE                     -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="slide" id="s5" style="padding:60px 100px;justify-content:center">
   <div class="accent-top"></div>
 
   <div class="eyebrow">Distribution Engine</div>
-  <div class="h2" style="margin-bottom:8px">The affiliate network <span style="color:var(--orange)">does the selling.</span></div>
-  <div class="body" style="margin-bottom:36px;max-width:640px">VAI's 5-level recursive affiliate program turns every athlete, parent, and coach into a revenue-generating partner. No sales team required at scale.</div>
+  <div style="font-size:44px;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:8px">
+    VAI doesn't need a sales team. <span style="color:var(--orange)">The network does it.</span>
+  </div>
+  <div style="font-size:14px;color:var(--text2);max-width:640px;margin-bottom:32px;line-height:1.6">
+    Every athlete who refers another becomes a partner. Five levels deep. Recurring for the life of every subscription. The deeper the network grows, the faster the flywheel spins.
+  </div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
 
-    <!-- Level cascade -->
     <div>
-      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px">5-Level Recurring Commission</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        {[
-          ['Level 1', '25%', 'Direct referral — highest earner'],
-          ['Level 2', '10%', 'Their network compounds yours'],
-          ['Level 3', '5%',  'Third-degree reach'],
-          ['Level 4', '3%',  'Deep network passive income'],
-          ['Level 5', '2%',  'Breadth at scale'],
-        ].map(([level, pct, desc], i) => `
-          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px">
-            <div style="width:28px;height:28px;border-radius:7px;background:rgba(247,148,30,${0.15 - i*0.025});border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              <span style="font-size:9px;font-weight:800;color:var(--orange)">${level.replace('Level ','L')}</span>
-            </div>
-            <div style="flex:1">
-              <div style="font-size:12px;font-weight:700;color:var(--text)">${level}</div>
-              <div style="font-size:10px;color:var(--muted)">${desc}</div>
-            </div>
-            <div style="font-size:20px;font-weight:900;color:var(--orange)">${pct}</div>
-          </div>
-        `).join('')}
+      <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px">5-Level Recurring Commission</div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px">
+          <div style="width:28px;height:28px;border-radius:7px;background:rgba(247,148,30,0.16);border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:800;color:var(--orange)">L1</span></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--text)">Level 1</div><div style="font-size:10px;color:var(--muted)">Direct referral — highest earner</div></div>
+          <div style="font-size:20px;font-weight:900;color:var(--orange)">25%</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px">
+          <div style="width:28px;height:28px;border-radius:7px;background:rgba(247,148,30,0.12);border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:800;color:var(--orange)">L2</span></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--text)">Level 2</div><div style="font-size:10px;color:var(--muted)">Their network compounds yours</div></div>
+          <div style="font-size:20px;font-weight:900;color:var(--orange)">10%</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px">
+          <div style="width:28px;height:28px;border-radius:7px;background:rgba(247,148,30,0.09);border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:800;color:var(--orange)">L3</span></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--text)">Level 3</div><div style="font-size:10px;color:var(--muted)">Third-degree reach</div></div>
+          <div style="font-size:20px;font-weight:900;color:var(--orange)">5%</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px">
+          <div style="width:28px;height:28px;border-radius:7px;background:rgba(247,148,30,0.06);border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:800;color:var(--orange)">L4</span></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--text)">Level 4</div><div style="font-size:10px;color:var(--muted)">Deep network passive income</div></div>
+          <div style="font-size:20px;font-weight:900;color:var(--orange)">3%</div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px">
+          <div style="width:28px;height:28px;border-radius:7px;background:rgba(247,148,30,0.04);border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:9px;font-weight:800;color:var(--orange)">L5</span></div>
+          <div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--text)">Level 5</div><div style="font-size:10px;color:var(--muted)">Breadth at scale</div></div>
+          <div style="font-size:20px;font-weight:900;color:var(--orange)">2%</div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Right side details -->
     <div style="display:flex;flex-direction:column;gap:14px">
 
-      <div class="card-orange">
-        <div style="font-size:10px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">Two Audiences. One Engine.</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px">
-          <strong style="color:var(--text)">Youth athletes</strong> — product hook. Peer-to-peer sharing, team invites, and recruiting status drive organic adoption.
+      <div class="card-o">
+        <div style="font-size:10px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px">Two Audiences. One Flywheel.</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:8px">
+          <strong style="color:var(--text)">Youth athletes</strong> join for the product. They stay for the recruiting edge.
         </div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.6">
-          <strong style="color:var(--text)">Adults with audiences</strong> — income hook. Coaches, trainers, and influencers earn recurring commissions while growing their network.
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">
+          <strong style="color:var(--text)">Adults with audiences</strong> — coaches, trainers, influencers — earn 25% recurring commissions. A coach with 500 followers who earns every month doesn't stop sharing.
         </div>
       </div>
 
@@ -540,21 +472,21 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
         <div style="display:flex;flex-direction:column;gap:8px">
           <div style="display:flex;justify-content:space-between;font-size:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             <span style="color:var(--text2)">VAI+ referred price</span>
-            <span style="font-weight:800;color:var(--green)">$9.95/mo <span style="color:var(--muted);font-weight:400">(50% off)</span></span>
+            <span style="font-weight:800;color:var(--green)">$9.95/mo <span style="color:var(--muted);font-weight:400;font-size:11px">(50% off)</span></span>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">
             <span style="color:var(--text2)">Mentor referred price</span>
-            <span style="font-weight:800;color:var(--green)">$49.97/mo <span style="color:var(--muted);font-weight:400">(50% off)</span></span>
+            <span style="font-weight:800;color:var(--green)">$49.97/mo <span style="color:var(--muted);font-weight:400;font-size:11px">(50% off)</span></span>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:12px">
             <span style="color:var(--text2)">Club / Enterprise</span>
-            <span style="font-weight:800;color:var(--orange)">25% commission only</span>
+            <span style="font-weight:800;color:var(--orange)">25% recurring commission</span>
           </div>
         </div>
       </div>
 
-      <div class="card-green" style="padding:14px 18px">
-        <div style="font-size:12px;font-weight:700;color:var(--text)">Affiliate link format: <code style="color:var(--green);background:rgba(52,211,153,0.1);padding:2px 7px;border-radius:4px;font-size:11px">vai.app/share/HANDLE</code></div>
+      <div class="card-g" style="padding:12px 16px">
+        <div style="font-size:12px;font-weight:700;color:var(--text)">Affiliate link: <code style="color:var(--green);background:rgba(52,211,153,0.1);padding:2px 8px;border-radius:4px;font-size:11px">vai.app/share/HANDLE</code></div>
         <div style="font-size:11px;color:var(--muted);margin-top:5px">Unique per affiliate. Tracked across all 5 levels. Recurring for life of subscription.</div>
       </div>
 
@@ -565,100 +497,94 @@ html, body { height: 100%; background: var(--bg); font-family: -apple-system, Bl
 </div>
 
 
-<!-- ═══════════════════════════════════════════════ -->
-<!-- SLIDE 6 — THE ASK                               -->
-<!-- ═══════════════════════════════════════════════ -->
-<div class="slide" id="s6">
+<!-- ══════════════════════════════════════════════ -->
+<!-- SLIDE 6 — THE ASK                              -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="slide" id="s6" style="padding:60px 100px;justify-content:center">
   <div class="accent-top"></div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;height:100%;padding:10px 0">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center">
 
-    <!-- Left -->
     <div>
       <div class="eyebrow">The Investment</div>
-      <div style="font-size:56px;font-weight:900;color:var(--text);line-height:1;margin-bottom:6px">
-        $100K<span style="color:var(--muted);font-size:32px"> – </span>$200K
+
+      <div style="font-size:58px;font-weight:900;color:var(--text);line-height:1;margin-bottom:8px">
+        $100K<span style="color:var(--muted);font-size:34px"> – </span>$200K
       </div>
-      <div style="font-size:14px;color:var(--text2);font-weight:600;margin-bottom:6px">Preferred Units in VAI</div>
-      <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(247,148,30,0.1);border:1px solid var(--orange-b);border-radius:8px;margin-bottom:28px">
-        <span style="font-size:12px;color:var(--muted)">VAI Company Valuation:</span>
-        <span style="font-size:16px;font-weight:900;color:var(--orange)">$40,000,000</span>
+      <div style="font-size:14px;font-weight:600;color:var(--text2);margin-bottom:10px">Preferred Units in VAI</div>
+
+      <div style="display:inline-flex;align-items:center;gap:10px;padding:7px 16px;background:rgba(247,148,30,0.09);border:1px solid var(--orange-b);border-radius:8px;margin-bottom:20px">
+        <span style="font-size:12px;color:var(--muted)">VAI Company Valuation</span>
+        <span style="font-size:18px;font-weight:900;color:var(--orange)">$40,000,000</span>
       </div>
 
-      <!-- Traction callout -->
-      <div style="padding:10px 14px;background:var(--green-d);border:1px solid var(--green-b);border-radius:8px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+      <div style="padding:10px 14px;background:var(--green-d);border:1px solid var(--green-b);border-radius:8px;margin-bottom:18px;display:flex;align-items:center;gap:10px">
         <span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;box-shadow:0 0 6px var(--green);flex-shrink:0"></span>
         <div>
           <div style="font-size:12px;font-weight:800;color:var(--green)">Revenue Live — March 2026</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:1px">Subscriptions launched end of March. Recurring revenue is generating now.</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Subscriptions launched. Recurring revenue is generating now.</div>
         </div>
       </div>
 
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px">
-        <div style="padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:9px;display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:13px;color:var(--text2)">Structure</span>
-          <span style="font-size:13px;font-weight:700;color:var(--text)">Preferred Units</span>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:24px">
+        <div class="row-item"><span style="font-size:13px;color:var(--text2)">Structure</span><span style="font-size:13px;font-weight:700;color:var(--text)">Preferred Units</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(247,148,30,0.06);border:1px solid var(--orange-b);border-radius:9px">
+          <span style="font-size:13px;color:var(--text2)">VAI Pre-money Valuation</span><span style="font-size:13px;font-weight:800;color:var(--orange)">$40,000,000</span>
         </div>
-        <div style="padding:12px 16px;background:rgba(247,148,30,0.06);border:1px solid var(--orange-b);border-radius:9px;display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:13px;color:var(--text2)">VAI Pre-money Valuation</span>
-          <span style="font-size:13px;font-weight:800;color:var(--orange)">$40,000,000</span>
-        </div>
-        <div style="padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:9px;display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:13px;color:var(--text2)">Round size</span>
-          <span style="font-size:13px;font-weight:700;color:var(--text)">$100K – $200K</span>
-        </div>
-        <div style="padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:9px;display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:13px;color:var(--text2)">Min. check size</span>
-          <span style="font-size:13px;font-weight:700;color:var(--text)">$25,000</span>
-        </div>
+        <div class="row-item"><span style="font-size:13px;color:var(--text2)">Round size</span><span style="font-size:13px;font-weight:700;color:var(--text)">$100K – $200K</span></div>
+        <div class="row-item"><span style="font-size:13px;color:var(--text2)">Min. check size</span><span style="font-size:13px;font-weight:700;color:var(--text)">$25,000</span></div>
       </div>
 
-      <!-- Leadership -->
-      <div style="padding:16px;background:rgba(247,148,30,0.05);border:1px solid var(--orange-b);border-radius:10px;display:flex;align-items:center;gap:14px">
-        <div style="width:44px;height:44px;border-radius:10px;background:var(--orange-d);border:2px solid var(--orange-b);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <svg width="22" height="26" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#F7941E"/></svg>
+      <div style="padding:14px;background:rgba(247,148,30,0.05);border:1px solid var(--orange-b);border-radius:10px;display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:9px;background:var(--orange-d);border:2px solid var(--orange-b);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="18" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#F7941E"/></svg>
         </div>
         <div>
-          <div style="font-size:15px;font-weight:800;color:var(--text)">Ben Whitesides</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Founder &amp; CEO · Builder of VAI, GAME OS, and AVANTI</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text)">Ben Whitesides</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Founder &amp; CEO</div>
         </div>
       </div>
     </div>
 
-    <!-- Right -->
     <div>
-      <div style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px">Use of Proceeds</div>
+      <div style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px">Use of Proceeds</div>
 
-      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
             <div style="font-size:13px;font-weight:700;color:var(--text)">Product &amp; Engineering</div>
-            <span style="font-size:12px;font-weight:900;color:var(--orange)">50%</span>
+            <span style="font-size:13px;font-weight:900;color:var(--orange)">50%</span>
           </div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5">AVANTI OS Brain, Wallet integration, wearables platform, native mobile build</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6">AVANTI OS Brain, Wallet integration, wearables platform, native mobile build</div>
           <div class="bar-bg" style="margin-top:10px"><div class="bar-fill" style="width:50%"></div></div>
         </div>
+
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
             <div style="font-size:13px;font-weight:700;color:var(--text)">Go-to-Market &amp; Affiliate Activation</div>
-            <span style="font-size:12px;font-weight:900;color:var(--orange)">30%</span>
+            <span style="font-size:13px;font-weight:900;color:var(--orange)">30%</span>
           </div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5">Affiliate engine launch, sports association partnerships, league onboarding</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6">Affiliate engine launch, sports association partnerships, league onboarding</div>
           <div class="bar-bg" style="margin-top:10px"><div class="bar-fill" style="width:30%"></div></div>
         </div>
+
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
             <div style="font-size:13px;font-weight:700;color:var(--text)">Operations &amp; Runway</div>
-            <span style="font-size:12px;font-weight:900;color:var(--orange)">20%</span>
+            <span style="font-size:13px;font-weight:900;color:var(--orange)">20%</span>
           </div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.5">Compliance, legal, infrastructure, and 12-month operating runway</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6">Compliance, legal, infrastructure, and 12-month operating runway</div>
           <div class="bar-bg" style="margin-top:10px"><div class="bar-fill" style="width:20%"></div></div>
         </div>
+
       </div>
 
-      <div class="card-green" style="padding:14px 18px">
+      <div class="card-g" style="padding:14px 18px">
         <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Why Now</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.6">The platform is live and generating recurring subscription revenue since March 2026. This round is not a bet on an idea — it's fuel for a system that's already running, with product built, athletes using it, and clubs paying.</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">
+          The platform is live. Subscriptions launched March 2026 — revenue is generating now. This is not a bet on an idea. <strong style="color:var(--text)">It's capital for a system that already runs.</strong> Product built. Athletes onboarded. Clubs paying.
+        </div>
       </div>
     </div>
 
@@ -675,24 +601,18 @@ const deck = document.getElementById('deck');
 const navDots = document.getElementById('navDots');
 let current = 0;
 
-// Build dots
 slides.forEach((_, i) => {
   const dot = document.createElement('div');
   dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
-  dot.addEventListener('click', () => {
-    slides[i].scrollIntoView({ behavior: 'smooth' });
-  });
+  dot.addEventListener('click', () => slides[i].scrollIntoView({ behavior: 'smooth' }));
   navDots.appendChild(dot);
 });
 
-// Update active dot on scroll
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const idx = Array.from(slides).indexOf(entry.target);
-      document.querySelectorAll('.nav-dot').forEach((d, i) => {
-        d.classList.toggle('active', i === idx);
-      });
+      document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
       current = idx;
     }
   });
@@ -700,16 +620,9 @@ const observer = new IntersectionObserver((entries) => {
 
 slides.forEach(s => observer.observe(s));
 
-// Keyboard nav
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-    const next = Math.min(current + 1, slides.length - 1);
-    slides[next].scrollIntoView({ behavior: 'smooth' });
-  }
-  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-    const prev = Math.max(current - 1, 0);
-    slides[prev].scrollIntoView({ behavior: 'smooth' });
-  }
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') slides[Math.min(current + 1, slides.length - 1)].scrollIntoView({ behavior: 'smooth' });
+  if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  slides[Math.max(current - 1, 0)].scrollIntoView({ behavior: 'smooth' });
 });
 </script>
 </body>
