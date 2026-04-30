@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAME OS — Dashboard Layout Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --orange:#f7941e; --green:#34d399; --red:#ef4444; --yellow:#fbbf24; --blue:#5577dd;
+  --void:#060608; --sidebar:#0a0a0e; --card:#0c0c10; --card2:#111116;
+  --elevated:#141418; --surface:#1a1a20;
+  --border:#1e1e26; --border2:#2a2a35;
+  --muted:#555568; --text2:#8888a0; --body:#c8c8d0; --text:#e8e8ec;
+  --orange-d:rgba(247,148,30,.08); --orange-b:rgba(247,148,30,.25);
+  --green-d:rgba(52,211,153,.07); --green-b:rgba(52,211,153,.2);
+  --red-d:rgba(239,68,68,.07); --red-b:rgba(239,68,68,.2);
+  --yellow-d:rgba(251,191,36,.07); --yellow-b:rgba(251,191,36,.2);
+  --font-o:'Oswald',Impact,sans-serif; --font-d:'DM Sans',Arial,sans-serif; --font-m:'JetBrains Mono',monospace;
+  --sidebar-w:220px;
+}
+html,body { height:100%; background:var(--void); color:var(--text); font-family:var(--font-d); -webkit-font-smoothing:antialiased; }
+
+/* ── CONCEPT SWITCHER ── */
+.concept-bar {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:#000; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:4px; padding:8px 16px;
+}
+.concept-btn {
+  padding:6px 16px; border-radius:6px; border:1px solid var(--border);
+  font-family:var(--font-d); font-size:12px; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--text2); transition:all .15s;
+}
+.concept-btn.active { background:var(--orange); border-color:var(--orange); color:#000; }
+.concept-label {
+  margin-left:auto; font-family:var(--font-m); font-size:10px;
+  color:var(--muted); letter-spacing:0.08em; text-transform:uppercase;
+}
+
+/* ── SHELL ── */
+.shell { display:flex; height:100vh; padding-top:44px; }
+
+/* Sidebar */
+.sidebar {
+  width:var(--sidebar-w); background:var(--sidebar); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; flex-shrink:0; overflow:hidden;
+}
+.sidebar-brand { padding:16px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+.brand-icon { display:flex; align-items:center; gap:6px; }
+.brand-text { font-family:var(--font-o); font-size:16px; font-weight:700; letter-spacing:0.04em; }
+.brand-text span { color:var(--orange); }
+.sidebar-user { padding:12px 14px; border-bottom:1px solid var(--border); }
+.user-name { font-size:12px; font-weight:700; color:var(--text); margin-bottom:3px; }
+.user-badge { display:inline-block; font-family:var(--font-m); font-size:9px; font-weight:600; padding:2px 7px; border-radius:3px; background:var(--orange-d); color:var(--orange); border:1px solid var(--orange-b); letter-spacing:0.06em; }
+.org-selector { padding:10px 14px; border-bottom:1px solid var(--border); }
+.org-name { font-size:11px; font-weight:700; color:var(--text); }
+.org-meta { font-size:10px; color:var(--muted); margin-top:1px; }
+.nav-section { padding:10px 0 4px; }
+.nav-label { font-size:9px; font-weight:700; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; padding:0 14px 6px; }
+.nav-item {
+  display:flex; align-items:center; gap:8px; padding:6px 14px;
+  font-size:12px; color:var(--text2); cursor:pointer; border-radius:0;
+  border-left:2px solid transparent; transition:all .12s;
+}
+.nav-item:hover { color:var(--text); background:rgba(255,255,255,.03); }
+.nav-item.active { color:var(--text); background:rgba(247,148,30,.08); border-left-color:var(--orange); font-weight:600; }
+.nav-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.nav-badge { margin-left:auto; font-size:9px; font-weight:800; background:var(--orange); color:#000; padding:1px 5px; border-radius:10px; }
+
+/* Main area */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+/* AVANTI topbar */
+.avanti-bar {
+  background:rgba(52,211,153,.04); border-bottom:1px solid rgba(52,211,153,.12);
+  padding:6px 20px; display:flex; align-items:center; gap:8px; flex-shrink:0;
+}
+.av-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:glow 2s ease-in-out infinite; }
+@keyframes glow { 0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)} 50%{box-shadow:0 0 0 4px rgba(52,211,153,0)} }
+.av-label { font-family:var(--font-m); font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--green); }
+.av-mode { padding:2px 8px; border-radius:var(--r-full,100px); background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.3); font-family:var(--font-m); font-size:9px; font-weight:700; color:var(--yellow); letter-spacing:0.06em; }
+.av-mode.auto { background:rgba(52,211,153,.1); border-color:rgba(52,211,153,.3); color:var(--green); }
+.settings-link { margin-left:auto; font-size:11px; color:var(--muted); cursor:pointer; }
+
+/* Content scroll */
+.content { flex:1; overflow-y:auto; }
+
+/* ─── CONCEPT A: COMMAND GRID ─── */
+.ca-header {
+  padding:14px 24px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:16px; flex-shrink:0; background:var(--void);
+}
+.ca-title-block { }
+.ca-title { font-family:var(--font-o); font-size:22px; font-weight:700; color:var(--text); letter-spacing:0.02em; }
+.ca-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+.ca-live-strip { display:flex; gap:8px; margin-left:auto; align-items:center; }
+.live-chip {
+  display:flex; align-items:center; gap:6px; padding:5px 12px;
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+}
+.live-dot { width:6px; height:6px; border-radius:50%; background:var(--orange); animation:glow-o 1.2s ease-in-out infinite; }
+@keyframes glow-o { 0%,100%{box-shadow:0 0 0 0 rgba(247,148,30,.6)} 50%{box-shadow:0 0 0 4px rgba(247,148,30,0)} }
+.live-scores { font-family:var(--font-m); font-size:11px; font-weight:600; color:var(--text); }
+.live-scores .score { color:var(--orange); font-weight:800; }
+.live-scores .sep { color:var(--muted); margin:0 2px; }
+.customize-btn { padding:6px 14px; border-radius:7px; background:transparent; border:1px solid var(--border); font-family:var(--font-d); font-size:11px; font-weight:600; color:var(--text2); cursor:pointer; }
+
+/* KPI strip */
+.kpi-strip {
+  display:grid; grid-template-columns:repeat(6,1fr); gap:1px;
+  background:var(--border); border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.kpi-cell {
+  background:var(--card); padding:12px 16px;
+}
+.kpi-label { font-family:var(--font-m); font-size:8px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.kpi-val { font-family:var(--font-o); font-size:22px; font-weight:700; line-height:1; }
+.kpi-sub { font-size:10px; color:var(--muted); margin-top:3px; }
+
+/* 2-col grid */
+.ca-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:0; flex:1; overflow:hidden; }
+.ca-col { overflow-y:auto; padding:18px 20px; }
+.ca-col + .ca-col { border-left:1px solid var(--border); background:rgba(255,255,255,.008); }
+
+/* Section titles */
+.sec-title {
+  font-family:var(--font-m); font-size:9px; font-weight:700; letter-spacing:0.12em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.sec-badge {
+  padding:2px 7px; border-radius:4px; font-size:9px; font-weight:800;
+  background:rgba(239,68,68,.15); color:var(--red); border:1px solid var(--red-b);
+}
+.sec-badge.yellow { background:var(--yellow-d); color:var(--yellow); border-color:var(--yellow-b); }
+.sec-badge.green { background:var(--green-d); color:var(--green); border-color:var(--green-b); }
+
+/* Action card */
+.action-card {
+  background:var(--card); border:1px solid var(--border); border-radius:9px;
+  padding:13px 14px; margin-bottom:8px;
+}
+.action-card.urgent { border-color:rgba(239,68,68,.35); border-left:3px solid var(--red); }
+.action-card.confirm { border-color:rgba(251,191,36,.3); border-left:3px solid var(--yellow); }
+.action-card.clear { border-color:rgba(52,211,153,.2); border-left:3px solid var(--green); }
+.ac-top { display:flex; align-items:flex-start; gap:8px; margin-bottom:6px; }
+.ac-type { font-family:var(--font-m); font-size:9px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:2px 6px; border-radius:3px; flex-shrink:0; }
+.ac-type.urgent { background:var(--red-d); color:var(--red); border:1px solid var(--red-b); }
+.ac-type.confirm { background:var(--yellow-d); color:var(--yellow); border:1px solid var(--yellow-b); }
+.ac-type.clear { background:var(--green-d); color:var(--green); border:1px solid var(--green-b); }
+.ac-meta { font-size:10px; color:var(--muted); }
+.ac-title { font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.ac-avanti { background:rgba(52,211,153,.05); border:1px solid rgba(52,211,153,.15); border-radius:5px; padding:6px 9px; font-size:11px; color:var(--body); margin-bottom:8px; }
+.ac-avanti::before { content:'AVANTI · '; font-family:var(--font-m); font-size:9px; color:var(--green); font-weight:700; letter-spacing:0.06em; }
+.ac-btns { display:flex; gap:6px; }
+.btn-primary { padding:5px 14px; border-radius:6px; background:var(--orange); border:none; font-family:var(--font-d); font-size:11px; font-weight:700; color:#000; cursor:pointer; }
+.btn-ghost { padding:5px 12px; border-radius:6px; background:transparent; border:1px solid var(--border); font-family:var(--font-d); font-size:11px; font-weight:600; color:var(--text2); cursor:pointer; }
+.btn-green { padding:5px 14px; border-radius:6px; background:var(--green); border:none; font-family:var(--font-d); font-size:11px; font-weight:700; color:#000; cursor:pointer; }
+
+/* Status card (right col) */
+.status-card { background:var(--card); border:1px solid var(--border); border-radius:9px; padding:14px; margin-bottom:8px; }
+.sc-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.sc-title { font-size:12px; font-weight:700; color:var(--text); }
+.sc-link { font-size:11px; color:var(--orange); cursor:pointer; }
+.sc-row { display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); font-size:12px; }
+.sc-row:last-child { border:none; }
+.play-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+/* ─── CONCEPT B: BROADCAST BAR ─── */
+.cb-header {
+  padding:12px 24px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+}
+.cb-title { font-family:var(--font-o); font-size:22px; font-weight:700; color:var(--text); }
+.cb-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+.cb-actions { display:flex; gap:8px; align-items:center; }
+
+/* Broadcast bar */
+.broadcast-bar {
+  background:linear-gradient(90deg,#0e0e14 0%,rgba(247,148,30,.06) 50%,#0e0e14 100%);
+  border-bottom:1px solid rgba(247,148,30,.2); padding:8px 24px;
+  display:flex; align-items:center; gap:20px; flex-shrink:0;
+  overflow-x:auto;
+}
+.broadcast-bar::-webkit-scrollbar { display:none; }
+.broadcast-badge { display:flex; align-items:center; gap:6px; padding:4px 12px; background:rgba(247,148,30,.08); border:1px solid rgba(247,148,30,.2); border-radius:6px; white-space:nowrap; }
+.bb-live { display:flex; align-items:center; gap:4px; font-family:var(--font-m); font-size:9px; font-weight:700; color:var(--orange); letter-spacing:0.08em; }
+.bb-score { font-family:var(--font-o); font-size:16px; font-weight:700; color:var(--text); }
+.bb-score .s { color:var(--orange); }
+.bb-score .dim { color:var(--muted); }
+.bb-clock { font-family:var(--font-m); font-size:10px; color:var(--muted); }
+.broadcast-sep { color:var(--border2); font-size:20px; }
+.broadcast-stat { display:flex; flex-direction:column; align-items:center; gap:1px; }
+.bs-val { font-family:var(--font-o); font-size:14px; font-weight:700; color:var(--text); }
+.bs-label { font-family:var(--font-m); font-size:8px; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; }
+.bc-customize { margin-left:auto; flex-shrink:0; padding:4px 12px; border-radius:5px; background:transparent; border:1px solid var(--border); font-family:var(--font-d); font-size:10px; font-weight:600; color:var(--text2); cursor:pointer; white-space:nowrap; }
+
+/* 3-col below broadcast */
+.cb-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; flex:1; overflow:hidden; }
+.cb-col { overflow-y:auto; padding:16px; }
+.cb-col + .cb-col { border-left:1px solid var(--border); }
+
+/* ─── CONCEPT C: PRIORITY INBOX ─── */
+.cc-header {
+  padding:12px 24px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:14px; flex-shrink:0;
+}
+.cc-title { font-family:var(--font-o); font-size:22px; font-weight:700; color:var(--text); margin-right:auto; }
+.cc-date { font-family:var(--font-m); font-size:10px; color:var(--muted); letter-spacing:0.06em; }
+
+/* KPI sidebar + inbox layout */
+.cc-layout { display:flex; flex:1; overflow:hidden; }
+.cc-kpi-sidebar {
+  width:200px; flex-shrink:0; background:var(--card); border-right:1px solid var(--border);
+  overflow-y:auto; padding:14px 12px;
+}
+.cc-kpi-item { padding:10px 0; border-bottom:1px solid var(--border); }
+.cc-kpi-item:last-child { border:none; }
+.cc-kpi-label { font-family:var(--font-m); font-size:8px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+.cc-kpi-val { font-family:var(--font-o); font-size:20px; font-weight:700; line-height:1; }
+.cc-kpi-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+
+/* Inbox */
+.cc-inbox { flex:1; overflow-y:auto; }
+.inbox-header { padding:12px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; background:var(--card); position:sticky; top:0; z-index:2; }
+.inbox-title { font-family:var(--font-m); font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text); }
+.inbox-count { font-family:var(--font-m); font-size:9px; font-weight:800; padding:2px 7px; border-radius:3px; background:var(--red-d); color:var(--red); border:1px solid var(--red-b); }
+.inbox-count.yellow { background:var(--yellow-d); color:var(--yellow); border-color:var(--yellow-b); }
+.inbox-count.green { background:var(--green-d); color:var(--green); border-color:var(--green-b); }
+.inbox-resolved { margin-left:auto; font-size:11px; color:var(--green); font-weight:600; }
+
+/* Inbox item */
+.inbox-item {
+  display:flex; align-items:flex-start; gap:12px; padding:14px 20px;
+  border-bottom:1px solid var(--border); cursor:pointer; transition:background .1s;
+}
+.inbox-item:hover { background:rgba(255,255,255,.02); }
+.inbox-item.p1 { border-left:3px solid var(--red); }
+.inbox-item.p2 { border-left:3px solid var(--yellow); }
+.inbox-item.p3 { border-left:3px solid var(--green); }
+.ii-priority { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-m); font-size:10px; font-weight:800; flex-shrink:0; }
+.p1 .ii-priority { background:var(--red-d); color:var(--red); border:1px solid var(--red-b); }
+.p2 .ii-priority { background:var(--yellow-d); color:var(--yellow); border:1px solid var(--yellow-b); }
+.p3 .ii-priority { background:var(--green-d); color:var(--green); border:1px solid var(--green-b); }
+.ii-body { flex:1; }
+.ii-meta { font-size:10px; color:var(--muted); margin-bottom:3px; }
+.ii-title { font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.ii-avanti { font-size:11px; color:var(--text2); line-height:1.4; }
+.ii-actions { display:flex; gap:6px; margin-top:8px; }
+.ii-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; }
+.ii-time { font-family:var(--font-m); font-size:9px; color:var(--muted); }
+
+/* Live games section in inbox */
+.inbox-live { padding:12px 20px; border-bottom:1px solid var(--border); display:flex; gap:10px; align-items:center; }
+.inbox-live-label { font-family:var(--font-m); font-size:9px; font-weight:700; color:var(--orange); letter-spacing:0.08em; text-transform:uppercase; flex-shrink:0; }
+.live-game-pill { display:flex; align-items:center; gap:6px; padding:5px 12px; background:var(--card2); border:1px solid rgba(247,148,30,.2); border-radius:6px; }
+.lgp-score { font-family:var(--font-m); font-size:12px; font-weight:700; }
+.lgp-score .s { color:var(--orange); }
+.lgp-clock { font-family:var(--font-m); font-size:9px; color:var(--muted); }
+
+/* Show/hide concepts */
+.concept { display:none; height:calc(100vh - 44px); flex-direction:column; }
+.concept.active { display:flex; }
+</style>
+</head>
+<body>
+
+<!-- Concept Switcher -->
+<div class="concept-bar">
+  <button class="concept-btn active" onclick="switchConcept('a')">A — Command Grid</button>
+  <button class="concept-btn" onclick="switchConcept('b')">B — Broadcast Bar</button>
+  <button class="concept-btn" onclick="switchConcept('c')">C — Priority Inbox</button>
+  <span class="concept-label" id="concept-desc">Left = actions to take · Right = status + schedule</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     CONCEPT A — COMMAND GRID
+     KPI strip locked to top. 2-col: Actions | Status.
+     Live scores in header (small, clean).
+══════════════════════════════════════════════════ -->
+<div class="concept active" id="concept-a">
+  <div class="shell">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-brand"><div class="brand-icon"><svg width="12" height="15" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/></svg><div class="brand-text"><span>GAME</span> OS</div></div></div>
+      <div class="sidebar-user"><div class="user-name">Ben Whitesides</div><div class="user-badge">SUPER ADMIN</div></div>
+      <div class="org-selector"><div class="org-name">UHSGFA Flag Football</div><div class="org-meta">Fall 2026 · 8 teams · 172 athletes</div></div>
+      <div class="nav-section"><div class="nav-label">Club OS</div>
+        <div class="nav-item active"><div class="nav-dot" style="background:var(--orange)"></div>Dashboard</div>
+        <div class="nav-item">Athletes</div><div class="nav-item">Roster</div><div class="nav-item">Formation</div>
+        <div class="nav-item">Schedule</div><div class="nav-item">Comms</div>
+        <div class="nav-item">Compliance</div><div class="nav-item">Registration</div>
+        <div class="nav-item">Tryouts</div><div class="nav-item">Recruiting <span class="nav-badge">NEW</span></div>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="avanti-bar">
+        <div class="av-dot"></div>
+        <span class="av-label">AVANTI</span>
+        <span class="av-mode">REVIEW MODE</span>
+        <span class="settings-link">⚙ Settings</span>
+      </div>
+
+      <!-- Header: clean title + small live chips + one button -->
+      <div class="ca-header">
+        <div class="ca-title-block">
+          <div class="ca-title">Dashboard</div>
+          <div class="ca-sub">UHSGFA Flag Football · Fall 2026 · League command center</div>
+        </div>
+        <!-- Live scores: right-aligned, compact -->
+        <div class="ca-live-strip">
+          <div class="live-chip">
+            <div class="live-dot"></div>
+            <div class="live-scores">JHV <span class="score">14</span><span class="sep">—</span><span class="score" style="color:var(--muted)">7</span> SHS · <span style="color:var(--muted)">Q2 4:32</span></div>
+          </div>
+          <div class="live-chip">
+            <div class="live-dot"></div>
+            <div class="live-scores">JHJ <span class="score">21</span><span class="sep">—</span><span class="score" style="color:var(--muted)">0</span> HER · <span style="color:var(--muted)">Q3 2:11</span></div>
+          </div>
+          <button class="customize-btn">⊞ Widgets</button>
+        </div>
+      </div>
+
+      <!-- KPI strip: always visible, compact -->
+      <div class="kpi-strip">
+        <div class="kpi-cell"><div class="kpi-label">Players</div><div class="kpi-val" style="color:var(--text)">172</div><div class="kpi-sub">158 active · 14 pending</div></div>
+        <div class="kpi-cell"><div class="kpi-label">Teams</div><div class="kpi-val" style="color:var(--text)">8</div><div class="kpi-sub">4 Varsity · 4 JV</div></div>
+        <div class="kpi-cell"><div class="kpi-label">PLAY Index</div><div class="kpi-val" style="color:var(--green)">81%</div><div class="kpi-sub">↑ 2.4% this week</div></div>
+        <div class="kpi-cell"><div class="kpi-label">Reg. Collected</div><div class="kpi-val" style="color:var(--text)">$21,800</div><div class="kpi-sub">$2,600 outstanding</div></div>
+        <div class="kpi-cell"><div class="kpi-label">Waivers</div><div class="kpi-val" style="color:var(--orange)">158/172</div><div class="kpi-sub">14 unsigned</div></div>
+        <div class="kpi-cell"><div class="kpi-label">Exceptions</div><div class="kpi-val" style="color:var(--red)">2</div><div class="kpi-sub">Need input today</div></div>
+      </div>
+
+      <!-- 2-col grid -->
+      <div class="ca-grid">
+        <!-- LEFT: Everything that needs action -->
+        <div class="ca-col">
+          <div class="sec-title">Needs Action <span class="sec-badge">2 urgent</span></div>
+
+          <div class="action-card urgent">
+            <div class="ac-top">
+              <span class="ac-type urgent">URGENT</span>
+              <span class="ac-meta">AVANTI · Mia Rodriguez · Jordan High Varsity</span>
+            </div>
+            <div class="ac-title">Mia Rodriguez — payment 4 days overdue. PLAY blocked Saturday.</div>
+            <div class="ac-avanti">Medical form expired + payment outstanding. Override requires admin approval and logged reason. Game in 3 days.</div>
+            <div class="ac-btns">
+              <button class="btn-primary">Notify Family</button>
+              <button class="btn-ghost">Override</button>
+              <button class="btn-ghost">Defer</button>
+            </div>
+          </div>
+
+          <div class="action-card confirm">
+            <div class="ac-top">
+              <span class="ac-type confirm">CONFIRM</span>
+              <span class="ac-meta">AVANTI · 14 athletes · Fall Registration</span>
+            </div>
+            <div class="ac-title">14 athletes overdue on Fall registration — total $2,600 outstanding.</div>
+            <div class="ac-avanti">Families notified once. Ready to send batch reminder now. No override needed — payment only.</div>
+            <div class="ac-btns">
+              <button class="btn-primary">Send Reminder</button>
+              <button class="btn-ghost">View List</button>
+            </div>
+          </div>
+
+          <div class="action-card confirm">
+            <div class="ac-top">
+              <span class="ac-type confirm">OVERRIDE REQ</span>
+              <span class="ac-meta">Coach Diaz · Jordan High JV · 2h ago</span>
+            </div>
+            <div class="ac-title">Coach Diaz requesting RED override — Jordan Lee</div>
+            <div class="ac-avanti">Medical form expired 3 days ago. Parent notified twice. Override requires admin approval and logged reason.</div>
+            <div class="ac-btns">
+              <button class="btn-primary">Approve Override</button>
+              <button class="btn-ghost">Deny</button>
+            </div>
+          </div>
+
+          <div class="action-card clear">
+            <div class="ac-top">
+              <span class="ac-type clear">CLEAR</span>
+              <span class="ac-meta">AVANTI · Schedule</span>
+            </div>
+            <div class="ac-title">Saturday home games across 4 teams. 81% of players GREEN.</div>
+            <div class="ac-avanti">No action needed. Depth charts prepared. Sub list ready for 3 YELLOW athletes.</div>
+            <div class="ac-btns">
+              <button class="btn-ghost">View Schedule</button>
+            </div>
+          </div>
+
+          <div class="sec-title" style="margin-top:6px;">Recently Resolved <span class="sec-badge green">14 by AVANTI today</span></div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:11px;color:var(--muted);">
+            Travel waiver renewal · Eli Young PLAY restore · 12 dues reminders sent · Bracket conflict resolved
+          </div>
+        </div>
+
+        <!-- RIGHT: Status + Schedule -->
+        <div class="ca-col">
+          <div class="sec-title">Team Health</div>
+          <div class="status-card">
+            <div class="sc-header"><span class="sc-title">PLAY Status by Team</span><span class="sc-link">View All →</span></div>
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--green)"></div>Jordan High Varsity</div><span style="font-family:var(--font-m);font-size:11px;color:var(--green);font-weight:700;">91% GREEN</span></div>
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--yellow)"></div>Jordan High JV</div><span style="font-family:var(--font-m);font-size:11px;color:var(--yellow);font-weight:700;">83% GREEN</span></div>
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--green)"></div>Skyline HS Varsity</div><span style="font-family:var(--font-m);font-size:11px;color:var(--green);font-weight:700;">88% GREEN</span></div>
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--red)"></div>Mountain Crest Var.</div><span style="font-family:var(--font-m);font-size:11px;color:var(--red);font-weight:700;">71% GREEN</span></div>
+          </div>
+
+          <div class="sec-title" style="margin-top:4px;">This Week</div>
+          <div class="status-card">
+            <div class="sc-header"><span class="sc-title">Schedule</span><span class="sc-link">Full Schedule →</span></div>
+            <div class="sc-row"><span style="color:var(--muted)">Today 4:30 PM</span><span style="font-weight:600;color:var(--text)">Practice — All Teams</span></div>
+            <div class="sc-row"><span style="color:var(--muted)">Thu 4:30 PM</span><span style="font-weight:600;color:var(--text)">Route Clinic — Varsity</span></div>
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:5px;"><div class="live-dot"></div><span style="color:var(--orange);font-weight:700;">Sat 9 AM</span></div><span style="font-weight:600;color:var(--text)">4 games · UHSGFA</span></div>
+          </div>
+
+          <div class="sec-title" style="margin-top:4px;">League Standings</div>
+          <div class="status-card">
+            <div class="sc-header"><span class="sc-title">UHSGFA Fall League</span><span class="sc-link">Full Standings →</span></div>
+            <div class="sc-row"><span style="color:var(--yellow);font-weight:800;">#1</span><span style="color:var(--text);font-weight:600;">Herriman HS</span><span style="font-family:var(--font-m);font-size:11px;color:var(--green);">4–0</span></div>
+            <div class="sc-row"><span style="color:var(--orange);font-weight:800;">#2</span><span style="color:var(--orange);font-weight:700;">Jordan High ▶</span><span style="font-family:var(--font-m);font-size:11px;color:var(--green);">3–1</span></div>
+            <div class="sc-row"><span style="color:var(--muted);font-weight:700;">#3</span><span style="color:var(--text);">Mountain Crest</span><span style="font-family:var(--font-m);font-size:11px;color:var(--text2);">2–2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     CONCEPT B — BROADCAST BAR
+     Pinned live-game bar separates scores from content.
+     3-col below: Alerts | Schedule+Health | Activity
+══════════════════════════════════════════════════ -->
+<div class="concept" id="concept-b">
+  <div class="shell">
+    <div class="sidebar">
+      <div class="sidebar-brand"><div class="brand-icon"><svg width="12" height="15" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/></svg><div class="brand-text"><span>GAME</span> OS</div></div></div>
+      <div class="sidebar-user"><div class="user-name">Ben Whitesides</div><div class="user-badge">SUPER ADMIN</div></div>
+      <div class="org-selector"><div class="org-name">UHSGFA Flag Football</div><div class="org-meta">Fall 2026 · 8 teams · 172 athletes</div></div>
+      <div class="nav-section"><div class="nav-label">Club OS</div>
+        <div class="nav-item active"><div class="nav-dot" style="background:var(--orange)"></div>Dashboard</div>
+        <div class="nav-item">Athletes</div><div class="nav-item">Roster</div><div class="nav-item">Formation</div>
+        <div class="nav-item">Schedule</div><div class="nav-item">Comms</div>
+        <div class="nav-item">Compliance</div><div class="nav-item">Registration</div>
+        <div class="nav-item">Tryouts</div><div class="nav-item">Recruiting <span class="nav-badge">NEW</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="avanti-bar">
+        <div class="av-dot"></div><span class="av-label">AVANTI</span>
+        <span class="av-mode">REVIEW MODE</span>
+        <span class="settings-link">⚙ Settings</span>
+      </div>
+
+      <!-- Clean header: title only -->
+      <div class="cb-header">
+        <div><div class="cb-title">Dashboard</div><div class="cb-sub">UHSGFA Flag Football · Fall 2026 · League command center</div></div>
+        <div class="cb-actions">
+          <button class="customize-btn">⊞ Customize Widgets</button>
+        </div>
+      </div>
+
+      <!-- BROADCAST BAR: dedicated lane for live data + top KPIs -->
+      <div class="broadcast-bar">
+        <div class="broadcast-badge">
+          <div class="bb-live"><div class="live-dot"></div>LIVE</div>
+          <div class="bb-score">JHV <span class="s">14</span> — <span class="dim">7</span> SHS</div>
+          <div class="bb-clock">Q2 · 4:32</div>
+        </div>
+        <div class="broadcast-badge">
+          <div class="bb-live"><div class="live-dot"></div>LIVE</div>
+          <div class="bb-score">JHJ <span class="s">21</span> — <span class="dim">0</span> HER</div>
+          <div class="bb-clock">Q3 · 2:11</div>
+        </div>
+        <div class="broadcast-sep">|</div>
+        <div class="broadcast-stat"><div class="bs-val" style="color:var(--text)">172</div><div class="bs-label">Players</div></div>
+        <div class="broadcast-stat"><div class="bs-val" style="color:var(--green)">81%</div><div class="bs-label">PLAY Index</div></div>
+        <div class="broadcast-stat"><div class="bs-val" style="color:var(--orange)">$21.8K</div><div class="bs-label">Collected</div></div>
+        <div class="broadcast-stat"><div class="bs-val" style="color:var(--red)">2</div><div class="bs-label">Exceptions</div></div>
+        <div class="broadcast-stat"><div class="bs-val" style="color:var(--yellow)">158/172</div><div class="bs-label">Waivers</div></div>
+        <button class="bc-customize">⊞ Widgets</button>
+      </div>
+
+      <!-- 3-col content -->
+      <div class="cb-grid" style="flex:1;">
+        <!-- Col 1: Alerts -->
+        <div class="cb-col">
+          <div class="sec-title">AVANTI Queue <span class="sec-badge">2 urgent</span></div>
+          <div class="action-card urgent" style="margin-bottom:8px;">
+            <div class="ac-top"><span class="ac-type urgent">URGENT</span><span class="ac-meta">Mia Rodriguez</span></div>
+            <div class="ac-title">Payment 4 days overdue. PLAY blocked Saturday.</div>
+            <div class="ac-avanti">Medical form expired + payment outstanding. Game in 3 days.</div>
+            <div class="ac-btns"><button class="btn-primary">Notify</button><button class="btn-ghost">Override</button></div>
+          </div>
+          <div class="action-card confirm">
+            <div class="ac-top"><span class="ac-type confirm">CONFIRM</span><span class="ac-meta">14 athletes</span></div>
+            <div class="ac-title">$2,600 outstanding on Fall registration.</div>
+            <div class="ac-avanti">Batch reminder ready to send. 14 families, 7-day overdue.</div>
+            <div class="ac-btns"><button class="btn-primary">Send Reminder</button><button class="btn-ghost">View</button></div>
+          </div>
+          <div class="action-card confirm" style="margin-top:8px;">
+            <div class="ac-top"><span class="ac-type confirm">OVERRIDE</span><span class="ac-meta">Coach Diaz · JV · 2h ago</span></div>
+            <div class="ac-title">RED override request — Jordan Lee</div>
+            <div class="ac-avanti">Medical form expired 3 days ago. Parent notified twice.</div>
+            <div class="ac-btns"><button class="btn-primary">Approve</button><button class="btn-ghost">Deny</button></div>
+          </div>
+        </div>
+
+        <!-- Col 2: Schedule + Health -->
+        <div class="cb-col">
+          <div class="sec-title">Team PLAY Health</div>
+          <div class="status-card">
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--green)"></div>Jordan High Varsity</div><span style="font-family:var(--font-m);font-size:11px;color:var(--green);">91% GREEN</span></div>
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--yellow)"></div>Jordan High JV</div><span style="font-family:var(--font-m);font-size:11px;color:var(--yellow);">83% GREEN</span></div>
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--green)"></div>Skyline HS</div><span style="font-family:var(--font-m);font-size:11px;color:var(--green);">88% GREEN</span></div>
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:7px;"><div class="play-dot" style="background:var(--red)"></div>Mountain Crest</div><span style="font-family:var(--font-m);font-size:11px;color:var(--red);">71% GREEN</span></div>
+          </div>
+          <div class="sec-title" style="margin-top:8px;">This Week</div>
+          <div class="status-card">
+            <div class="sc-row"><span style="color:var(--muted)">Today</span><span style="font-weight:600;">Practice — All Teams</span></div>
+            <div class="sc-row"><span style="color:var(--muted)">Thu</span><span style="font-weight:600;">Route Clinic · Varsity</span></div>
+            <div class="sc-row"><div style="display:flex;align-items:center;gap:5px;"><div class="live-dot"></div><span style="color:var(--orange);font-weight:700;">Sat 9 AM</span></div><span style="font-weight:600;">4 games · UHSGFA</span></div>
+          </div>
+          <div class="sec-title" style="margin-top:8px;">Waivers</div>
+          <div class="status-card">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 0;">
+              <div style="flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden;"><div style="width:92%;height:100%;background:linear-gradient(90deg,var(--green),#2dd4a0);border-radius:4px;"></div></div>
+              <span style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--orange);">158/172</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);">14 unsigned — AVANTI reminder drafted</div>
+          </div>
+        </div>
+
+        <!-- Col 3: Activity feed -->
+        <div class="cb-col">
+          <div class="sec-title">Recent Activity <span class="sec-badge green">14 resolved today</span></div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            {['2:15 PM · AVANTI · Waiver reminder sent · 14 families','1:45 PM · AVANTI · Bracket conflict resolved · Fall Classic','12:00 PM · AVANTI · Registration reminder · 14 athletes','11:30 AM · Admin · Override approved · Eli Young','10:22 AM · AVANTI · Depth chart updated · Jordan High Varsity'].map((t,i) => `
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:11px;color:var(--body);">${t}</div>`).join('')}
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:11px;color:var(--body);margin-bottom:6px;">2:15 PM · AVANTI · Waiver reminder sent · 14 families</div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:11px;color:var(--body);margin-bottom:6px;">1:45 PM · AVANTI · Bracket conflict resolved · Fall Classic</div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:11px;color:var(--body);margin-bottom:6px;">12:00 PM · AVANTI · Registration reminder batch sent</div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:11px;color:var(--body);margin-bottom:6px;">11:30 AM · Admin · Override approved · Eli Young</div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:7px;padding:9px 11px;font-size:11px;color:var(--body);margin-bottom:6px;">10:22 AM · AVANTI · Depth chart updated · Jordan High</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     CONCEPT C — PRIORITY INBOX
+     KPI sidebar (always visible). Main = prioritized
+     inbox of everything needing attention — live games
+     appear as a pinned strip inside the inbox.
+══════════════════════════════════════════════════ -->
+<div class="concept" id="concept-c">
+  <div class="shell">
+    <div class="sidebar">
+      <div class="sidebar-brand"><div class="brand-icon"><svg width="12" height="15" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#f7941e"/></svg><div class="brand-text"><span>GAME</span> OS</div></div></div>
+      <div class="sidebar-user"><div class="user-name">Ben Whitesides</div><div class="user-badge">SUPER ADMIN</div></div>
+      <div class="org-selector"><div class="org-name">UHSGFA Flag Football</div><div class="org-meta">Fall 2026 · 8 teams · 172 athletes</div></div>
+      <div class="nav-section"><div class="nav-label">Club OS</div>
+        <div class="nav-item active"><div class="nav-dot" style="background:var(--orange)"></div>Dashboard</div>
+        <div class="nav-item">Athletes</div><div class="nav-item">Roster</div><div class="nav-item">Formation</div>
+        <div class="nav-item">Schedule</div><div class="nav-item">Comms</div>
+        <div class="nav-item">Compliance</div><div class="nav-item">Registration</div>
+        <div class="nav-item">Tryouts</div><div class="nav-item">Recruiting <span class="nav-badge">NEW</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="avanti-bar">
+        <div class="av-dot"></div><span class="av-label">AVANTI</span>
+        <span class="av-mode auto">AUTOMATED</span>
+        <span class="settings-link">⚙ Settings</span>
+      </div>
+
+      <!-- Minimal header -->
+      <div class="cc-header">
+        <div>
+          <div class="cc-title">Dashboard</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:1px;">UHSGFA Flag Football · Thu Apr 30</div>
+        </div>
+        <span class="cc-date">4 items need you · 14 resolved by AVANTI</span>
+        <button class="customize-btn">⊞ Widgets</button>
+      </div>
+
+      <!-- KPI sidebar + inbox -->
+      <div class="cc-layout">
+        <!-- Compact KPI sidebar -->
+        <div class="cc-kpi-sidebar">
+          <div style="font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">At a Glance</div>
+
+          <div class="cc-kpi-item"><div class="cc-kpi-label">Players</div><div class="cc-kpi-val" style="color:var(--text)">172</div><div class="cc-kpi-sub">158 active</div></div>
+          <div class="cc-kpi-item"><div class="cc-kpi-label">Teams</div><div class="cc-kpi-val" style="color:var(--text)">8</div><div class="cc-kpi-sub">4V · 4JV</div></div>
+          <div class="cc-kpi-item"><div class="cc-kpi-label">PLAY Index</div><div class="cc-kpi-val" style="color:var(--green)">81%</div><div class="cc-kpi-sub">↑ 2.4% week</div></div>
+          <div class="cc-kpi-item"><div class="cc-kpi-label">Collected</div><div class="cc-kpi-val" style="color:var(--text);font-size:16px;">$21.8K</div><div class="cc-kpi-sub">$2.6K out</div></div>
+          <div class="cc-kpi-item"><div class="cc-kpi-label">Waivers</div><div class="cc-kpi-val" style="color:var(--orange);font-size:16px;">158/172</div><div class="cc-kpi-sub">14 pending</div></div>
+          <div class="cc-kpi-item"><div class="cc-kpi-label">Standings</div><div class="cc-kpi-val" style="color:var(--orange);font-size:16px;">#2</div><div class="cc-kpi-sub">Jordan High</div></div>
+          <div class="cc-kpi-item"><div class="cc-kpi-label">Next Game</div><div class="cc-kpi-val" style="color:var(--text);font-size:14px;">Sat 9AM</div><div class="cc-kpi-sub">4 games scheduled</div></div>
+
+          <div style="margin-top:10px;padding:10px;background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.15);border-radius:7px;">
+            <div style="font-family:var(--font-m);font-size:8px;color:var(--green);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">AVANTI Today</div>
+            <div style="font-size:10px;color:var(--body);line-height:1.4;">14 items resolved automatically. 4 need your decision.</div>
+          </div>
+        </div>
+
+        <!-- Priority inbox -->
+        <div class="cc-inbox">
+          <!-- Live games pinned strip -->
+          <div class="inbox-live">
+            <span class="inbox-live-label">● LIVE NOW</span>
+            <div class="live-game-pill">
+              <div class="live-dot"></div>
+              <div class="lgp-score">JHV <span class="s">14</span> — 7 SHS</div>
+              <div class="lgp-clock">Q2 · 4:32</div>
+            </div>
+            <div class="live-game-pill">
+              <div class="live-dot"></div>
+              <div class="lgp-score">JHJ <span class="s">21</span> — 0 HER</div>
+              <div class="lgp-clock">Q3 · 2:11</div>
+            </div>
+          </div>
+
+          <div class="inbox-header">
+            <span class="inbox-title">Today's Queue</span>
+            <span class="inbox-count">P1 × 1</span>
+            <span class="inbox-count yellow">P2 × 2</span>
+            <span class="inbox-count green">Info × 1</span>
+            <span class="inbox-resolved">✓ 14 resolved by AVANTI</span>
+          </div>
+
+          <!-- P1 -->
+          <div class="inbox-item p1">
+            <div class="ii-priority">P1</div>
+            <div class="ii-body">
+              <div class="ii-meta">AVANTI · Mia Rodriguez · Jordan High Varsity</div>
+              <div class="ii-title">Payment 4 days overdue — PLAY blocked Saturday</div>
+              <div class="ii-avanti">Medical form expired + payment outstanding. Game in 3 days. Override requires admin approval and logged reason.</div>
+              <div class="ii-actions">
+                <button class="btn-primary">Notify Family</button>
+                <button class="btn-ghost">Approve Override</button>
+                <button class="btn-ghost">Defer</button>
+              </div>
+            </div>
+            <div class="ii-right"><span class="ii-time">Now</span><span class="ac-type urgent">URGENT</span></div>
+          </div>
+
+          <!-- P2 -->
+          <div class="inbox-item p2">
+            <div class="ii-priority">P2</div>
+            <div class="ii-body">
+              <div class="ii-meta">AVANTI · Coach Diaz · Jordan High JV · 2h ago</div>
+              <div class="ii-title">RED override request — Jordan Lee</div>
+              <div class="ii-avanti">Medical form expired 3 days ago. Parent notified twice — no response. Override requires admin approval.</div>
+              <div class="ii-actions">
+                <button class="btn-primary">Approve Override</button>
+                <button class="btn-ghost">Deny</button>
+              </div>
+            </div>
+            <div class="ii-right"><span class="ii-time">2h ago</span><span class="ac-type confirm">OVERRIDE</span></div>
+          </div>
+
+          <div class="inbox-item p2">
+            <div class="ii-priority">P2</div>
+            <div class="ii-body">
+              <div class="ii-meta">AVANTI · 14 athletes · Fall Registration</div>
+              <div class="ii-title">$2,600 outstanding — 14 athletes overdue</div>
+              <div class="ii-avanti">Batch reminder drafted. Ready to send. No override needed.</div>
+              <div class="ii-actions">
+                <button class="btn-primary">Send Reminder</button>
+                <button class="btn-ghost">View List</button>
+              </div>
+            </div>
+            <div class="ii-right"><span class="ii-time">12:00 PM</span><span class="ac-type confirm">CONFIRM</span></div>
+          </div>
+
+          <!-- Info -->
+          <div class="inbox-item p3">
+            <div class="ii-priority" style="background:var(--green-d);color:var(--green);border:1px solid var(--green-b);">i</div>
+            <div class="ii-body">
+              <div class="ii-meta">AVANTI · Schedule · Saturday</div>
+              <div class="ii-title">Saturday home games across 4 teams — 81% GREEN</div>
+              <div class="ii-avanti">No action needed. Depth charts updated. Sub list ready for 3 YELLOW athletes.</div>
+              <div class="ii-actions">
+                <button class="btn-ghost">View Schedule</button>
+              </div>
+            </div>
+            <div class="ii-right"><span class="ii-time">Today</span><span class="ac-type clear">CLEAR</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const descs = {
+  a: 'KPI strip locked top · Left = all actions · Right = status + schedule',
+  b: 'Broadcast bar owns live scores + KPIs · 3-col below: Alerts | Health | Activity',
+  c: 'KPI sidebar always visible · Inbox = one prioritized list by urgency · Live scores pinned'
+};
+function switchConcept(id) {
+  document.querySelectorAll('.concept').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.concept-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('concept-' + id).classList.add('active');
+  document.querySelectorAll('.concept-btn')[{a:0,b:1,c:2}[id]].classList.add('active');
+  document.getElementById('concept-desc').textContent = descs[id];
+}
+</script>
+</body>
+</html>
