@@ -267,6 +267,108 @@ html, body { height:100%; overflow:hidden; background:var(--void); color:var(--t
 ::-webkit-scrollbar { width:4px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+/* ─── TABLET (768px–1199px) ─── */
+@media (max-width:1199px) {
+  /* Collapse sidebar to icon rail */
+  .sidebar { width:52px; }
+  .sb-brand .brand-text, .sb-user, .sb-org { display:none; }
+  .sb-brand { justify-content:center; padding:14px 0; }
+  .nav-item { justify-content:center; padding:10px 0; }
+  .nav-item span:not(.nav-dot) { display:none; }
+  .nav-badge { display:none; }
+  .nav-dot { width:7px; height:7px; }
+  /* 2-col grid stays but tighter */
+  .content-grid { grid-template-columns:1fr 1fr; }
+  /* KPI strip: 3 per row */
+  .kpi-strip { grid-template-columns:repeat(3,1fr); }
+  .kpi-cell:nth-child(3) { border-right:none; }
+  .kpi-cell:nth-child(4) { border-top:1px solid var(--border); }
+  .kpi-cell:nth-child(6) { border-right:none; }
+  /* Cmd palette shrinks */
+  .cmd-text { display:none; }
+  .cmd-palette { padding:6px 10px; }
+  /* Broadcast: 2 games visible */
+  .bc-game { flex:0 0 calc(50% - 5px); }
+  /* Demo bar hidden on tablet/mobile */
+  .demo-bar { display:none; }
+}
+
+/* ─── MOBILE (≤767px) ─── */
+@media (max-width:767px) {
+  html, body { overflow:auto; }
+  .shell { flex-direction:column; height:auto; min-height:100vh; }
+
+  /* Mobile top nav bar replaces sidebar */
+  .sidebar {
+    width:100%; height:auto; flex-direction:row;
+    border-right:none; border-bottom:1px solid var(--border);
+    align-items:center; padding:0; overflow-x:auto;
+  }
+  .sb-brand { border-bottom:none; padding:10px 14px; flex-shrink:0; }
+  .sb-brand .brand-text { display:flex; }
+  .sb-user, .sb-org { display:none; }
+  .sb-nav { display:flex; flex-direction:row; padding:0; overflow-x:auto; flex:1; }
+  .sb-nav::-webkit-scrollbar { display:none; }
+  .nav-label { display:none; }
+  .nav-item {
+    flex-direction:column; gap:2px; padding:8px 12px; font-size:10px;
+    border-left:none; border-bottom:2px solid transparent; white-space:nowrap;
+    flex-shrink:0;
+  }
+  .nav-item.active { border-left:none; border-bottom-color:var(--orange); background:transparent; }
+  .nav-dot { display:none; }
+  .nav-badge { margin-left:0; }
+
+  /* Main: full width, scroll */
+  .main { overflow:auto; }
+
+  /* AVANTI bar */
+  .avanti-bar { padding:5px 14px; }
+
+  /* Header */
+  .hdr { padding:10px 14px; flex-wrap:wrap; gap:8px; }
+  .hdr-title { font-size:18px; }
+  .cmd-palette { display:none; }
+  .widgets-btn { font-size:10px; padding:5px 10px; }
+
+  /* Broadcast bar: 1 game visible, swipe */
+  .broadcast-bar { padding:0 10px; height:44px; }
+  .bc-game { flex:0 0 100%; }
+  .bc-viewport { margin:0 8px; }
+
+  /* KPI: 2 per row */
+  .kpi-strip { grid-template-columns:1fr 1fr; }
+  .kpi-cell { padding:10px 12px; border-right:1px solid var(--border); }
+  .kpi-cell:nth-child(2) { border-right:none; }
+  .kpi-cell:nth-child(4) { border-right:none; }
+  .kpi-cell:nth-child(6) { border-right:none; }
+  .kpi-val { font-size:18px; }
+
+  /* Content: single column stack */
+  .content-grid { grid-template-columns:1fr; overflow:visible; }
+  .left-col { padding:14px; }
+  .right-col {
+    border-left:none; border-top:1px solid var(--border);
+    display:block; overflow:visible;
+  }
+  .status-view { padding:14px; }
+  .detail-view { padding:0; }
+  .detail-view.active { display:block; }
+
+  /* Detail panel: full width on mobile */
+  .dv-body { padding:12px 14px; }
+  .dv-actions { padding:12px 14px; }
+
+  /* AVANTI bubble: smaller on mobile */
+  .avanti-bubble { width:44px; height:44px; bottom:16px; right:16px; }
+  .bubble-badge { width:16px; height:16px; font-size:8px; }
+
+  /* Cards: slightly more compact */
+  .action-card.p1 { padding:12px 12px 12px 10px; }
+  .ac-title { font-size:13px !important; }
+}
+
 </style>
 </head>
 <body>
