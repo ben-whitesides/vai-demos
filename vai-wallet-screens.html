@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAI — Wallet Screens (F1)</title>
+<title>VAI — Wallet Screens</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -144,6 +144,49 @@ body { background:var(--void-black); font-family:var(--font-dm); min-height:100v
 .cta-btn { display:block; width:calc(100% - 32px); margin:10px 16px 0; padding:14px; background:var(--vai-orange); border:none; border-radius:var(--r-md); font-family:var(--font-oswald); font-size:15px; font-weight:700; letter-spacing:0.06em; color:#000; text-align:center; cursor:pointer; }
 .cta-outline { background:transparent; border:1px solid var(--gray-subtle); color:var(--gray-secondary); font-family:var(--font-dm); font-size:13px; font-weight:500; padding:11px; }
 
+/* Step progress indicator */
+.step-indicator { padding:10px 18px 8px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+.step-lbl { font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color:var(--vai-orange); flex-shrink:0; }
+.step-bars { display:flex; gap:4px; flex:1; }
+.step-bar { flex:1; height:3px; border-radius:999px; background:var(--gray-subtle); }
+.step-bar.done { background:var(--vai-orange); }
+.step-bar.complete { background:var(--vai-green); }
+
+/* Provider list */
+.provider-row { display:flex; align-items:center; gap:12px; padding:13px 16px; border-bottom:1px solid var(--border); cursor:pointer; }
+.provider-icon { width:38px; height:38px; border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; font-family:var(--font-oswald); font-size:15px; font-weight:700; color:#fff; flex-shrink:0; }
+.provider-info { flex:1; min-width:0; }
+.provider-name { font-family:var(--font-dm); font-size:13px; font-weight:600; color:var(--gray-primary); display:flex; align-items:center; gap:6px; }
+.provider-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); margin-top:2px; }
+.pb-popular { font-family:var(--font-mono); font-size:9px; font-weight:700; padding:2px 6px; border-radius:var(--r-sm); background:rgba(247,148,30,0.15); border:1px solid rgba(247,148,30,0.35); color:var(--vai-orange); }
+.pb-advisor { font-family:var(--font-mono); font-size:9px; font-weight:700; padding:2px 6px; border-radius:var(--r-sm); background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.3); color:var(--vai-green); }
+
+/* Permission rows */
+.perm-section-lbl { font-family:var(--font-mono); font-size:9px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-disabled); padding:10px 16px 4px; }
+.perm-row { display:flex; align-items:flex-start; gap:8px; padding:8px 16px; border-bottom:1px solid var(--border); }
+.perm-name { flex:1; }
+.perm-main { font-family:var(--font-dm); font-size:12px; color:var(--gray-body); }
+.perm-sub-txt { font-family:var(--font-dm); font-size:10px; color:var(--gray-secondary); margin-top:2px; }
+.pb-read { font-family:var(--font-mono); font-size:9px; font-weight:700; padding:2px 7px; border-radius:var(--r-sm); background:rgba(85,119,221,0.1); border:1px solid rgba(85,119,221,0.3); color:var(--blue); white-space:nowrap; flex-shrink:0; margin-top:1px; }
+.no-row { display:flex; align-items:center; gap:8px; padding:7px 16px; }
+.no-icon { color:var(--red); font-size:13px; flex-shrink:0; }
+.no-name { font-family:var(--font-dm); font-size:12px; color:var(--gray-secondary); }
+.toggle-row { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--card-dark); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.toggle-lbl { font-family:var(--font-dm); font-size:12px; font-weight:600; color:var(--gray-primary); }
+.toggle-track { width:44px; height:24px; border-radius:999px; background:var(--vai-green); position:relative; flex-shrink:0; }
+.toggle-thumb { position:absolute; top:3px; right:3px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.4); }
+
+/* Connect entry */
+.connect-pill { display:inline-flex; align-items:center; gap:5px; background:rgba(247,148,30,0.08); border:1px solid rgba(247,148,30,0.25); border-radius:999px; padding:4px 10px; font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color:var(--vai-orange); }
+.read-item { display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
+.read-check { color:var(--vai-green); font-size:16px; flex-shrink:0; margin-top:1px; }
+.read-label { font-family:var(--font-dm); font-size:13px; font-weight:600; color:var(--gray-primary); }
+.read-sub { font-family:var(--font-dm); font-size:11px; color:var(--gray-secondary); margin-top:2px; line-height:1.4; }
+
+/* Success screen */
+.success-check { width:64px; height:64px; border-radius:50%; background:rgba(52,211,153,0.1); border:2px solid rgba(52,211,153,0.3); display:flex; align-items:center; justify-content:center; margin:24px auto 16px; }
+.insight-card-w { margin:10px 16px 0; background:rgba(52,211,153,0.04); border:1px solid rgba(52,211,153,0.2); border-radius:var(--r-md); padding:12px 14px; }
+
 /* Bottom nav */
 .bottom-nav { background:var(--card-dark); border-top:1px solid var(--border); display:flex; padding:8px 4px 20px; flex-shrink:0; }
 .ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:4px 0; }
@@ -159,7 +202,7 @@ body { background:var(--void-black); font-family:var(--font-dm); min-height:100v
 <body>
 
 <div class="page-title">VAI — Wallet</div>
-<div class="page-sub">Screen 1: Balance + Transactions &nbsp;·&nbsp; Screen 2: Affiliate Earnings &nbsp;·&nbsp; Screen 3: Cashout / Payout</div>
+<div class="page-sub">W1 Balance · W2 Affiliate · W3 Cashout · W4 Connect Entry · W5 Pick Provider · W6 Permissions · W7 Connected</div>
 
 <div class="phones-row">
 
@@ -454,9 +497,291 @@ body { background:var(--void-black); font-family:var(--font-dm); min-height:100v
     </div>
   </div>
 
-</div><!-- /phones-row -->
+</div><!-- /phones-row row 1 -->
 
-<div style="text-align:center;margin-top:8px;font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);letter-spacing:0.08em;">VAI Wallet · W1 Balance + Transactions · W2 Affiliate Earnings · W3 Cashout / Payout · PR3</div>
+<!-- ── Row 2: Wallet — Account Connections Flow ─────────────────── -->
+<div style="margin-top:36px;margin-bottom:8px;text-align:center;">
+  <div class="page-title">Wallet — Account Connections</div>
+  <div class="page-sub">W4 Connect Entry · W5 Pick Provider · W6 Stripe Permissions · W7 Connected</div>
+</div>
+
+<div class="phones-row">
+
+  <!-- W4: Connect Entry -->
+  <div class="phone-wrap">
+    <div class="phone-label">W4 — Connect Accounts</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wv4)"/><defs><radialGradient id="wv4" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="scroll-body" style="height:628px;">
+        <!-- Connect hero card -->
+        <div style="margin:14px 16px 0;background:var(--card-dark);border:1px solid rgba(247,148,30,0.2);border-radius:var(--r-lg);padding:18px 16px;">
+          <div style="margin-bottom:14px;"><span class="connect-pill"><span class="a-dot" style="width:5px;height:5px;"></span>AVANTI · WALLET</span></div>
+          <div style="font-family:var(--font-oswald);font-size:22px;font-weight:700;letter-spacing:0.04em;color:var(--gray-primary);margin-bottom:8px;line-height:1.2;">CONNECT YOUR<br>ACCOUNTS</div>
+          <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);line-height:1.6;margin-bottom:4px;">AVANTI surfaces insights from your data — read only. We never move money or post on your behalf.</div>
+        </div>
+
+        <!-- What AVANTI reads -->
+        <div class="section-hdr" style="margin-top:6px;"><div class="section-lbl">What AVANTI Reads</div></div>
+        <div style="padding:0 16px;">
+          <div class="read-item">
+            <div class="read-check">✓</div>
+            <div><div class="read-label">Balances &amp; receivables</div><div class="read-sub">Captures live balance and overdue amounts clearly</div></div>
+          </div>
+          <div class="read-item">
+            <div class="read-check">✓</div>
+            <div><div class="read-label">Recent transactions</div><div class="read-sub">Categorize income and trackable payouts</div></div>
+          </div>
+          <div class="read-item">
+            <div class="read-check">✓</div>
+            <div><div class="read-label">Outstanding dues</div><div class="read-sub">Helps payments to activate accounts</div></div>
+          </div>
+          <div class="read-item">
+            <div class="read-check">✓</div>
+            <div><div class="read-label">Tax-relevant activity</div><div class="read-sub">1099 prep · categories tagging</div></div>
+          </div>
+        </div>
+
+        <!-- Footer disclaimer -->
+        <div style="margin:14px 16px 0;background:var(--surface-1);border:1px solid var(--border);border-radius:var(--r-md);padding:10px 14px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--gray-secondary)" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--gray-disabled);">Read-only access</span></div>
+          <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-secondary);line-height:1.5;">Review any time from Wallet → Connections. Revoke access instantly.</div>
+        </div>
+
+        <button class="cta-btn" style="margin-top:14px;">Connect an Account</button>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W5: Pick a Provider -->
+  <div class="phone-wrap">
+    <div class="phone-label">W5 — Pick a Provider</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wv5)"/><defs><radialGradient id="wv5" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <!-- Step indicator -->
+      <div class="step-indicator">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        <span class="step-lbl">STEP 1 OF 3</span>
+        <div class="step-bars"><div class="step-bar done"></div><div class="step-bar"></div><div class="step-bar"></div></div>
+      </div>
+      <div class="scroll-body" style="height:570px;">
+        <div style="padding:18px 16px 10px;">
+          <div style="font-family:var(--font-oswald);font-size:22px;font-weight:700;color:var(--gray-primary);margin-bottom:6px;">Pick a provider</div>
+          <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-secondary);line-height:1.6;">You can connect more later. Each opens a secure OAuth flow with the provider.</div>
+        </div>
+
+        <!-- Provider list -->
+        <div style="background:var(--card-dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+          <div class="provider-row">
+            <div class="provider-icon" style="background:linear-gradient(135deg,#635BFF,#4B44CC);">S</div>
+            <div class="provider-info">
+              <div class="provider-name">Stripe <span class="pb-popular">POPULAR</span></div>
+              <div class="provider-sub">Payments · Payouts · Receivables</div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="provider-row">
+            <div class="provider-icon" style="background:linear-gradient(135deg,#003087,#009CDE);">P</div>
+            <div class="provider-info">
+              <div class="provider-name">PayPal</div>
+              <div class="provider-sub">Inbound payments · All receivables</div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="provider-row">
+            <div class="provider-icon" style="background:linear-gradient(135deg,#2CA01C,#1A7010);font-size:12px;">QB</div>
+            <div class="provider-info">
+              <div class="provider-name">QuickBooks</div>
+              <div class="provider-sub">Bookkeeping · Transactions</div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="provider-row">
+            <div class="provider-icon" style="background:linear-gradient(135deg,#008CFF,#005DBD);">V</div>
+            <div class="provider-info">
+              <div class="provider-name">Venmo Business <span class="pb-advisor">ADVISOR</span></div>
+              <div class="provider-sub">Restricted service only</div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div style="padding:12px 16px;font-family:var(--font-mono);font-size:9px;letter-spacing:0.06em;color:var(--gray-disabled);">DOC TYPE II · BASE-LEVEL ENCRYPTION</div>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W6: Stripe Permissions -->
+  <div class="phone-wrap">
+    <div class="phone-label">W6 — Stripe Permissions</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wv6)"/><defs><radialGradient id="wv6" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="step-indicator">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        <span class="step-lbl">STEP 2 OF 3</span>
+        <div class="step-bars"><div class="step-bar done"></div><div class="step-bar done"></div><div class="step-bar"></div></div>
+      </div>
+      <div class="scroll-body" style="height:570px;">
+        <!-- Stripe header -->
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);">
+          <div style="width:38px;height:38px;border-radius:var(--r-md);background:linear-gradient(135deg,#635BFF,#4B44CC);display:flex;align-items:center;justify-content:center;font-family:var(--font-oswald);font-size:15px;font-weight:700;color:#fff;flex-shrink:0;">S</div>
+          <div>
+            <div style="font-family:var(--font-oswald);font-size:16px;font-weight:700;color:var(--gray-primary);">Stripe Permissions</div>
+            <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-secondary);margin-top:2px;">Review what AVANTI will read</div>
+          </div>
+        </div>
+
+        <!-- Read access -->
+        <div class="perm-section-lbl">Read Access</div>
+        <div style="background:var(--card-dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+          <div class="perm-row">
+            <div class="perm-name"><div class="perm-main">Account balances</div><div class="perm-sub-txt">Exc. 24-hrs min</div></div>
+            <span class="pb-read">READ</span>
+          </div>
+          <div class="perm-row">
+            <div class="perm-name"><div class="perm-main">Charges &amp; payouts</div><div class="perm-sub-txt">Exc. 24-hrs min</div></div>
+            <span class="pb-read">READ</span>
+          </div>
+          <div class="perm-row">
+            <div class="perm-name"><div class="perm-main">Customer + product metadata</div><div class="perm-sub-txt">For categorization</div></div>
+            <span class="pb-read">READ</span>
+          </div>
+          <div class="perm-row" style="border-bottom:none;">
+            <div class="perm-name"><div class="perm-main">Refunds &amp; disputes</div><div class="perm-sub-txt">Read-only</div></div>
+            <span class="pb-read">READ</span>
+          </div>
+        </div>
+
+        <!-- No write -->
+        <div class="perm-section-lbl" style="margin-top:4px;">No Write — Do Not</div>
+        <div style="background:var(--card-dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+          <div class="no-row" style="border-bottom:1px solid var(--border);"><div class="no-icon">✕</div><div class="no-name">Move money or initiate transfers</div></div>
+          <div class="no-row" style="border-bottom:1px solid var(--border);"><div class="no-icon">✕</div><div class="no-name">Refund or void charges</div></div>
+          <div class="no-row" style="border-bottom:1px solid var(--border);"><div class="no-icon">✕</div><div class="no-name">Create new products or prices</div></div>
+          <div class="no-row"><div class="no-icon">✕</div><div class="no-name">Post on your behalf</div></div>
+        </div>
+
+        <!-- Toggle -->
+        <div class="toggle-row" style="margin-top:10px;">
+          <div>
+            <div class="toggle-lbl">Allow AVANTI to use this data</div>
+            <div style="font-family:var(--font-dm);font-size:11px;color:var(--gray-secondary);margin-top:2px;">Surface insights and reminders. Off = alerts only.</div>
+          </div>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
+
+        <button class="cta-btn" style="margin-top:12px;">Connect Stripe</button>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- W7: Connected — First AVANTI Insight -->
+  <div class="phone-wrap">
+    <div class="phone-label">W7 — Connected</div>
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span style="font-size:13px;">••• WiFi ···</span></div>
+      <div class="app-header">
+        <svg width="14" height="18" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="url(#wv7)"/><defs><radialGradient id="wv7" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(50.1563) scale(217.22 129.671)"><stop stop-color="#FFB800"/><stop offset="0.5" stop-color="#FCAC0A"/><stop offset="1" stop-color="#F7941E"/></radialGradient></defs></svg>
+        <div class="vai-wordmark">VAI</div>
+        <div class="tier-bubble" style="background:var(--vai-green);">+</div>
+        <div class="hdr-icons">
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div class="hdr-icon"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        </div>
+      </div>
+      <div class="step-indicator">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--vai-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span class="step-lbl" style="color:var(--vai-green);">STEP 3 OF 3</span>
+        <div class="step-bars"><div class="step-bar complete"></div><div class="step-bar complete"></div><div class="step-bar complete"></div></div>
+      </div>
+      <div class="scroll-body" style="height:570px;">
+        <!-- Success check -->
+        <div class="success-check">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--vai-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+
+        <div style="text-align:center;padding:0 24px;">
+          <div style="font-family:var(--font-oswald);font-size:22px;font-weight:700;letter-spacing:0.04em;color:var(--gray-primary);margin-bottom:8px;">STRIPE CONNECTED</div>
+          <div style="font-family:var(--font-dm);font-size:13px;color:var(--gray-secondary);line-height:1.6;">AVANTI is now reading your Stripe data. Insights will appear in your Home strip and feed.</div>
+        </div>
+
+        <!-- First AVANTI insight -->
+        <div class="insight-card-w" style="margin-top:20px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+            <div class="a-dot" style="width:5px;height:5px;"></div>
+            <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.08em;color:var(--vai-green);">FIRST AVANTI INSIGHT</span>
+          </div>
+          <div style="font-family:var(--font-oswald);font-size:15px;font-weight:700;color:var(--gray-primary);margin-bottom:4px;">$4,280 available · Last payout 3 days ago</div>
+          <div style="font-family:var(--font-dm);font-size:12px;color:var(--gray-body);line-height:1.5;">You have payout-eligible funds. Want me to schedule a weekly auto-payout to Chase +4421?</div>
+        </div>
+
+        <button class="cta-btn" style="margin-top:16px;">Connect Another Provider</button>
+        <button class="cta-btn cta-outline" style="display:block;width:calc(100% - 32px);margin:8px 16px 0;text-align:center;border-radius:var(--r-md);">Open Wallet</button>
+      </div>
+      <div class="bottom-nav">
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="ni-lbl">Home</div></div>
+        <div class="ni"><div class="ni-icon"><svg width="22" height="22" viewBox="0 0 139 167" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M76.7198 45.6928L139.172 0V42.8823L76.7771 88.4275V166.78L0 88.4693V9.19721L70.3013 78.9054L76.7198 87.4319V45.6928Z" fill="#555568"/></svg></div><div class="ni-lbl">Feed</div></div>
+        <div class="ni av"><div class="av-pill"><span>AVANTI</span></div></div>
+        <div class="ni active"><div class="ni-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="ni-lbl">Wallet</div></div>
+        <div class="ni"><div class="ni-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="ni-lbl">Me</div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /phones-row row 2 -->
+
+<div style="text-align:center;margin-top:8px;font-family:var(--font-mono);font-size:10px;color:var(--gray-disabled);letter-spacing:0.08em;">VAI Wallet · W1–W3 Core · W4–W7 Account Connections Flow</div>
 
 </body>
 </html>
