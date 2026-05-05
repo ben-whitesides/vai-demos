@@ -2938,4 +2938,46 @@ Do these coexist or does Phase 4 refactor the Gameday payment components?
 
 ---
 
+## Appendix F — Badinho's Build Checklist
+
+> Clean reference for mobile implementation. Answer F1–F7 above before starting Screen 5 (Send Money). Everything else can be built in parallel.
+
+### Screen Mockups
+
+All 7 screens are live: https://ben-whitesides.github.io/vai-demos/vai-wallet-screens.html
+
+| Screen | Label | What it is |
+|--------|-------|-----------|
+| W1 | Wallet Home | Balance card, transaction list, filter chips |
+| W2 | Affiliate Earnings | Earn summary, referral link, tier breakdown |
+| W3 | Cashout / Payout | Bank selection, amount input, payout confirm |
+| W4 | Connect Accounts | Entry screen — what AVANTI reads (read-only explainer) |
+| W5 | Pick a Provider | Stripe / PayPal / QuickBooks / Venmo (Step 1 of 3) |
+| W6 | Stripe Permissions | Read access list, no-write list, consent toggle (Step 2 of 3) |
+| W7 | Connected | Success state + first AVANTI insight (Step 3 of 3) |
+
+### Phase 1 — Badinho Builds (Unblock Now)
+
+- [ ] **W1** — Wallet Home: balance card (`GET /v1/wallet/summary`), transaction list (`GET /v1/wallet/transactions`), filter chips (All / Due / Received / Pending / Paid out)
+- [ ] **W2** — Affiliate Earnings: affiliate stats, referral link copy/share, commission tier bars, active referral list
+- [ ] **W3** — Cashout / Payout: linked bank display, amount input, fee breakdown, `POST /v1/wallet/cashout`, payout history
+- [ ] **W4–W7** — Account Connections flow: Connect entry → Pick provider → Stripe OAuth permissions review → Connected success state
+- [ ] **Answer F1–F7** (Appendix E) before starting W5 Send Money build — flag each to Ben as you hit it during build
+
+### Phase 2 — Deferred (Do Not Block Phase 1)
+
+- [ ] **Send Money (Screen 5 / W5)** — Two-tap send, PaymentSheet, split wallet+card, `POST /v1/wallet/send`. Start after F1–F5 answered.
+- [ ] **1099-NEC / W-9 collection flow** — When a user's cumulative PayPal/Venmo payouts approach $600/year, surface a W-9 collection screen before the next cashout. Backend: Francis tracks cumulative per-rail totals. Mobile: simple form (legal name, SSN/EIN, address) + confirmation. **Deferred:** very few users will hit the $600 threshold at launch given current IRS reporting rules — do not block Phase 1 shipping. Flag to Ben when first user approaches threshold.
+- [ ] **Progress bar** — Wallet balance milestone toward next payout tier
+- [ ] **Wallet Settings** — Auto-cashout toggle, notification preferences, linked accounts management
+
+### Notes for Badinho
+
+- The `wallet_commission_engine_active` feature flag controls shadow vs. production mode. Francis manages this flag — do NOT assume the engine is live until Francis confirms.
+- All wallet API calls require Auth0 Bearer token. Verify your Axios interceptor auto-refreshes on 401 (see F5).
+- Stripe SDK: use `StripeProvider` at app root. `initPaymentSheet` + `presentPaymentSheet` for card flows. See §5.6 for full integration pattern.
+- No Wallet bottom tab yet — entry via Hamburger → Wallet. See F1 for navigation decision.
+
+---
+
 *End of spec. This document is the single source of truth for the VAI Wallet system architecture. All implementation questions should reference this spec first.*
