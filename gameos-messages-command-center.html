@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GAME OS — Messages Command Center · Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --vai-bg: #060608;
+  --vai-card: #0c0c10;
+  --vai-elevated: #141418;
+  --vai-surface: #1a1a20;
+  --vai-border: #1e1e26;
+  --vai-border-soft: #15151c;
+  --vai-orange: #F7941E;
+  --vai-orange-d: rgba(247,148,30,0.12);
+  --vai-orange-b: rgba(247,148,30,0.4);
+  --vai-green: #34D399;
+  --vai-green-d: rgba(52,211,153,0.10);
+  --vai-green-b: rgba(52,211,153,0.35);
+  --vai-text-strong: #F5F0EB;
+  --vai-text-body: #C8C8D0;
+  --vai-text-muted: #8888A0;
+  --vai-text-faint: #4d4d60;
+  --vai-yellow: #FBBF24;
+  --vai-red: #FF6B6B;
+  --vai-blue: #5577DD;
+  --vai-purple: #a78bfa;
+  --font-headline: 'Oswald', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--vai-bg); color: var(--vai-text-strong); font-family: var(--font-body); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+/* Top mockup label bar */
+.mockup-banner {
+  background: linear-gradient(90deg, rgba(247,148,30,0.08), rgba(52,211,153,0.05));
+  border-bottom: 1px solid var(--vai-border);
+  padding: 8px 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vai-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.mockup-banner strong { color: var(--vai-orange); }
+.mockup-banner .role { color: var(--vai-green); }
+
+/* Top app bar */
+.appbar {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px 0 16px;
+  border-bottom: 1px solid var(--vai-border);
+  background: var(--vai-bg);
+}
+.appbar-left { display: flex; align-items: center; gap: 12px; }
+.avanti-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(52,211,153,0.06);
+  border: 1px solid rgba(52,211,153,0.18);
+}
+.avanti-dot {
+  width: 8px; height: 8px; border-radius: 999px;
+  background: var(--vai-green);
+  box-shadow: 0 0 8px rgba(52,211,153,0.6);
+}
+.avanti-strip .label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--vai-green);
+  text-transform: uppercase;
+}
+.avanti-strip .pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--vai-yellow);
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(251,191,36,0.08);
+  border: 1px solid rgba(251,191,36,0.25);
+  text-transform: uppercase;
+}
+.appbar-right { display: flex; align-items: center; gap: 16px; }
+.icon-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--vai-border);
+  background: var(--vai-card);
+  color: var(--vai-text-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+}
+.icon-btn .badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  background: var(--vai-red);
+  color: white;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 8px;
+  border: 1px solid var(--vai-bg);
+}
+
+/* Main shell layout */
+.shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  height: calc(100vh - 90px);
+  background: var(--vai-bg);
+}
+
+/* Left nav (GAME OS shell) */
+.nav {
+  border-right: 1px solid var(--vai-border);
+  background: var(--vai-bg);
+  display: flex;
+  flex-direction: column;
+  padding: 18px 14px 14px;
+  overflow-y: auto;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-headline);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vai-text-strong);
+  margin-bottom: 22px;
+}
+.nav-brand svg { color: var(--vai-orange); }
+.nav-user {
+  margin-bottom: 18px;
+}
+.nav-user .name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--vai-text-strong);
+}
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 3px 8px;
+  background: var(--vai-orange-d);
+  border: 1px solid var(--vai-orange-b);
+  border-radius: 999px;
+  color: var(--vai-orange);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.nav-user .role-sub {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--vai-text-muted);
+}
+.org-switcher {
+  margin-bottom: 18px;
+  padding: 10px 12px;
+  background: var(--vai-card);
+  border: 1px solid var(--vai-border);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+}
+.org-switcher .lbl { font-size: 13px; font-weight: 700; color: var(--vai-text-strong); }
+.org-switcher .meta { font-size: 11px; color: var(--vai-text-muted); margin-top: 2px; }
+.org-switcher .caret { color: var(--vai-text-muted); }
+.nav-section {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--vai-text-faint);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 10px 8px 6px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  font-size: 13px;
+  color: var(--vai-text-body);
+  cursor: pointer;
+  margin-bottom: 1px;
+}
+.nav-item:hover { background: var(--vai-card); }
+.nav-item.active {
+  background: rgba(52,211,153,0.08);
+  border: 1px solid rgba(52,211,153,0.25);
+  color: var(--vai-green);
+  font-weight: 700;
+}
+.nav-item .ico { width: 16px; font-size: 14px; opacity: 0.8; }
+.nav-item .right {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.tag-new {
+  background: rgba(247,148,30,0.12);
+  border: 1px solid rgba(247,148,30,0.3);
+  color: var(--vai-orange);
+}
+.tag-ai {
+  background: rgba(167,139,250,0.12);
+  border: 1px solid rgba(167,139,250,0.3);
+  color: var(--vai-purple);
+}
+.tag-live {
+  background: rgba(255,107,107,0.12);
+  border: 1px solid rgba(255,107,107,0.3);
+  color: var(--vai-red);
+}
+
+/* Page content area */
+.page {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  overflow: hidden;
+}
+
+/* Tab strip across page */
+.tabstrip {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 24px 0;
+  border-bottom: 1px solid var(--vai-border);
+  background: var(--vai-bg);
+}
+.tab {
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-bottom: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--vai-text-muted);
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: -1px;
+  background: transparent;
+}
+.tab.active {
+  background: var(--vai-card);
+  border: 1px solid var(--vai-border);
+  border-bottom: 1px solid var(--vai-card);
+  color: var(--vai-text-strong);
+}
+.tab .badge {
+  background: var(--vai-orange);
+  color: #000;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+.tab.admin-only::before {
+  content: '★';
+  color: var(--vai-orange);
+  font-size: 10px;
+}
+.tab .new-pill {
+  background: rgba(247,148,30,0.12);
+  border: 1px solid rgba(247,148,30,0.3);
+  color: var(--vai-orange);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Channel column (middle) */
+.channels {
+  background: var(--vai-card);
+  border-right: 1px solid var(--vai-border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.channels-header {
+  padding: 16px 14px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.channels-search {
+  flex: 1;
+  position: relative;
+}
+.channels-search input {
+  width: 100%;
+  background: var(--vai-bg);
+  border: 1px solid var(--vai-border);
+  border-radius: 8px;
+  padding: 8px 10px 8px 32px;
+  color: var(--vai-text-strong);
+  font-family: var(--font-body);
+  font-size: 12px;
+  outline: none;
+}
+.channels-search::before {
+  content: '⌕';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--vai-text-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+.compose-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--vai-orange);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.compose-btn:hover { filter: brightness(1.1); }
+
+.channels-group {
+  padding: 8px 14px 0;
+}
+.channels-group-header {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--vai-text-faint);
+  text-transform: uppercase;
+  padding: 10px 4px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.add-channel-btn {
+  background: transparent;
+  border: 1px solid var(--vai-border);
+  color: var(--vai-orange);
+  font-size: 11px;
+  font-weight: 800;
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+}
+.add-channel-btn:hover { background: rgba(247,148,30,0.08); }
+
+.channel-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--vai-text-body);
+  cursor: pointer;
+  margin-bottom: 1px;
+}
+.channel-item:hover { background: rgba(255,255,255,0.025); }
+.channel-item.active {
+  background: rgba(247,148,30,0.10);
+  color: var(--vai-text-strong);
+}
+.channel-item .icon { color: var(--vai-text-muted); width: 14px; font-size: 13px; }
+.channel-item.active .icon { color: var(--vai-orange); }
+.channel-item .name { flex: 1; }
+.channel-item .badge {
+  background: var(--vai-orange);
+  color: #000;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+/* Active channel column (right) */
+.channel-view {
+  background: var(--vai-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.channel-header {
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--vai-border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.channel-header .title-block { flex: 1; }
+.channel-header .title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--vai-text-strong);
+}
+.channel-header .title .hash { color: var(--vai-text-muted); }
+.channel-header .subtitle {
+  font-size: 12px;
+  color: var(--vai-text-muted);
+  margin-top: 3px;
+}
+.member-pill {
+  padding: 5px 12px;
+  background: var(--vai-orange-d);
+  border: 1px solid var(--vai-orange-b);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--vai-orange);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Messages thread */
+.thread {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.day-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--vai-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  padding: 4px 0;
+}
+.day-divider::before, .day-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--vai-border);
+}
+
+.msg {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.avatar {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #000;
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
+}
+.avatar.coach { background: var(--vai-orange); }
+.avatar.parent { background: #ec4899; color: #fff; }
+.avatar.member { background: #6366f1; color: #fff; }
+.avatar.avanti { background: var(--vai-green); }
+.msg-body { flex: 1; min-width: 0; }
+.msg-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.msg-head .author {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--vai-text-strong);
+}
+.msg-head .author.avanti {
+  color: var(--vai-green);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+}
+.msg-head .time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--vai-text-faint);
+}
+.msg-text {
+  font-size: 13px;
+  color: var(--vai-text-body);
+  line-height: 1.55;
+}
+
+.insight-card {
+  background: rgba(52,211,153,0.06);
+  border: 1px solid rgba(52,211,153,0.22);
+  border-left: 3px solid var(--vai-green);
+  border-radius: 9px;
+  padding: 10px 14px;
+}
+.insight-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--vai-green);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+/* AVANTI quick action pills */
+.avanti-actions {
+  border-top: 1px solid var(--vai-border);
+  padding: 10px 24px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: rgba(52,211,153,0.02);
+}
+.avanti-actions .lbl {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--vai-green);
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+.action-pill {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(52,211,153,0.25);
+  background: rgba(52,211,153,0.08);
+  color: var(--vai-green);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.action-pill:hover { background: rgba(52,211,153,0.15); }
+
+/* Composer */
+.composer {
+  border-top: 1px solid var(--vai-border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+.composer-input-wrap {
+  flex: 1;
+  background: var(--vai-card);
+  border: 1px solid var(--vai-border);
+  border-radius: 12px;
+  padding: 10px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  min-height: 88px;
+  max-height: 240px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.composer-input-wrap:focus-within {
+  border-color: var(--vai-orange-b);
+  box-shadow: 0 0 0 1px var(--vai-orange-b);
+}
+.composer-input-wrap textarea {
+  flex: 1;
+  width: 100%;
+  resize: none;
+  background: transparent;
+  border: none;
+  color: var(--vai-text-strong);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  outline: none;
+  padding: 0;
+  min-height: 44px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+.composer-input-wrap textarea::placeholder { color: var(--vai-text-muted); }
+.composer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  border-top: 1px solid var(--vai-border-soft);
+  padding-top: 6px;
+}
+.composer-tool {
+  background: transparent;
+  border: none;
+  color: var(--vai-text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 7px;
+  border-radius: 5px;
+  font-family: inherit;
+}
+.composer-tool:hover { background: rgba(255,255,255,0.04); color: var(--vai-text-body); }
+.composer-tool.avanti { color: var(--vai-green); }
+.composer-tool.avanti:hover { background: rgba(52,211,153,0.08); }
+.composer-counter {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--vai-text-faint);
+}
+.composer .send {
+  background: var(--vai-orange);
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  align-self: flex-end;
+  height: 88px;
+  min-width: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.composer .send:disabled { opacity: 0.45; cursor: not-allowed; }
+.composer .send-arrow { font-size: 16px; }
+
+/* Floating AVANTI pill */
+.avanti-floating {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px 11px 14px;
+  background: var(--vai-card);
+  border: 1px solid var(--vai-green-b);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(52,211,153,0.4), 0 0 24px rgba(52,211,153,0.25);
+  z-index: 100;
+}
+.avanti-floating .ico {
+  width: 22px; height: 22px;
+  background: var(--vai-green);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: #000;
+  font-weight: 800;
+  font-size: 11px;
+}
+.avanti-floating .name {
+  font-weight: 800;
+  color: var(--vai-text-strong);
+  font-size: 13px;
+}
+.avanti-floating .count {
+  background: var(--vai-red);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+
+/* Secondary state — Broadcast tab */
+.secondary-state {
+  margin: 40px 24px;
+  padding: 24px;
+  background: var(--vai-card);
+  border: 1px solid var(--vai-border);
+  border-radius: 12px;
+}
+.secondary-state h2 {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  margin: 0 0 6px;
+  color: var(--vai-orange);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.secondary-state .desc {
+  font-size: 12px;
+  color: var(--vai-text-muted);
+  margin-bottom: 16px;
+}
+.broadcast-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 18px;
+}
+.broadcast-channels {
+  border: 1px solid var(--vai-border);
+  border-radius: 9px;
+  padding: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.broadcast-channel-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--vai-text-body);
+}
+.broadcast-channel-row:hover { background: rgba(255,255,255,0.025); }
+.broadcast-channel-row.selected {
+  background: rgba(247,148,30,0.10);
+  color: var(--vai-orange);
+}
+.broadcast-channel-row .check {
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  border: 1px solid var(--vai-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #000;
+}
+.broadcast-channel-row.selected .check {
+  background: var(--vai-orange);
+  border-color: var(--vai-orange);
+}
+.broadcast-channel-row .icon { color: var(--vai-text-muted); }
+.broadcast-channel-row.selected .icon { color: var(--vai-orange); }
+.broadcast-channel-row .name { flex: 1; }
+.broadcast-channel-row .meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--vai-text-muted);
+}
+.broadcast-composer textarea {
+  width: 100%;
+  height: 200px;
+  background: var(--vai-bg);
+  border: 1px solid var(--vai-border);
+  border-radius: 9px;
+  color: var(--vai-text-strong);
+  padding: 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  resize: vertical;
+  outline: none;
+}
+.broadcast-actions {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.broadcast-actions .meta {
+  font-size: 12px;
+  color: var(--vai-text-muted);
+}
+.broadcast-actions .meta strong { color: var(--vai-orange); }
+.broadcast-actions .btn {
+  padding: 10px 18px;
+  background: var(--vai-orange);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* CTA legend at the very bottom for review */
+.cta-legend {
+  margin: 40px 24px 60px;
+  padding: 24px;
+  background: var(--vai-card);
+  border: 1px solid var(--vai-border);
+  border-radius: 12px;
+}
+.cta-legend h2 {
+  font-family: var(--font-headline);
+  font-size: 18px;
+  margin: 0 0 12px;
+  color: var(--vai-text-strong);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.cta-legend .cta-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.cta-legend .cta-table th, .cta-legend .cta-table td {
+  text-align: left;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--vai-border);
+}
+.cta-legend .cta-table th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--vai-text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.cta-legend .cta-table td.cta { font-weight: 700; color: var(--vai-orange); }
+.cta-legend .cta-table td.role { font-family: var(--font-mono); font-size: 11px; }
+.cta-legend .role-admin { color: var(--vai-orange); }
+.cta-legend .role-all { color: var(--vai-green); }
+
+</style>
+</head>
+<body>
+
+<div class="mockup-banner">
+  <span><strong>MOCKUP</strong> · GAME OS Messages Command Center · For review only</span>
+  <span>Acting as <strong>Ben Whitesides</strong> · <span class="role">SUPER ADMIN</span></span>
+</div>
+
+<!-- Top app bar (AVANTI strip + notifications) -->
+<div class="appbar">
+  <div class="appbar-left">
+    <div class="avanti-strip">
+      <span class="avanti-dot"></span>
+      <span class="label">AVANTI</span>
+      <span class="pill">Review Mode</span>
+    </div>
+  </div>
+  <div class="appbar-right">
+    <button class="icon-btn" title="Notifications">🔔<span class="badge">4</span></button>
+    <button class="icon-btn" title="Settings">⚙</button>
+  </div>
+</div>
+
+<div class="shell">
+
+  <!-- Left GAME OS nav -->
+  <aside class="nav">
+    <div class="nav-brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 8l10 6 10-6-10-6zM2 16l10 6 10-6M2 12l10 6 10-6"/></svg>
+      <span>GAME <span style="color: var(--vai-orange);">OS</span></span>
+    </div>
+
+    <div class="nav-user">
+      <div class="name">Ben Whitesides</div>
+      <div class="role-badge">★ Super Admin</div>
+      <div class="role-sub">Platform Administrator</div>
+    </div>
+
+    <div class="org-switcher">
+      <div>
+        <div class="lbl">Next level Athlete LLC</div>
+        <div class="meta">Your organization</div>
+      </div>
+      <span class="caret">▾</span>
+    </div>
+
+    <div class="nav-section">Club OS</div>
+    <div class="nav-item"><span class="ico">⊞</span>Dashboard</div>
+    <div class="nav-item"><span class="ico">👤</span>Athletes</div>
+    <div class="nav-item"><span class="ico">≡</span>Roster</div>
+    <div class="nav-item"><span class="ico">⌂</span>Formation</div>
+    <div class="nav-item"><span class="ico">📅</span>Schedule</div>
+    <div class="nav-item active"><span class="ico">💬</span>Messages</div>
+    <div class="nav-item"><span class="ico">✓</span>Compliance</div>
+    <div class="nav-item"><span class="ico">📝</span>Registration</div>
+    <div class="nav-item"><span class="ico">👥</span>Tryouts</div>
+    <div class="nav-item"><span class="ico">→</span>Recruiting<span class="right tag-new">New</span></div>
+    <div class="nav-item"><span class="ico">⌂</span>Coaches Corner<span class="right tag-ai">AI</span></div>
+
+    <div class="nav-section">Live Ops</div>
+    <div class="nav-item"><span class="ico">●</span>Live Scoring<span class="right tag-live">Live</span></div>
+    <div class="nav-item"><span class="ico">🏆</span>Tournaments</div>
+
+    <div style="flex: 1;"></div>
+    <div class="nav-item" style="border-top: 1px solid var(--vai-border); margin-top: 12px; padding-top: 12px;"><span class="ico">↪</span>Sign Out</div>
+  </aside>
+
+  <!-- Page content with tabs + grid -->
+  <div class="page">
+
+    <!-- Tab strip spans full width -->
+    <div class="tabstrip">
+      <div class="tab active">Team Channels</div>
+      <div class="tab">DMs <span class="badge">3</span></div>
+      <div class="tab admin-only">Broadcast <span class="new-pill">Admin</span></div>
+      <div class="tab admin-only">Sent by AVANTI <span class="badge">7</span></div>
+    </div>
+
+    <!-- Channel list (middle) -->
+    <aside class="channels">
+      <div class="channels-header">
+        <div class="channels-search">
+          <input placeholder="Search channels and people…">
+        </div>
+        <button class="compose-btn" title="Compose new DM">✉</button>
+      </div>
+
+      <div class="channels-group">
+        <div class="channels-group-header">
+          <span>Team Chats</span>
+          <button class="add-channel-btn" title="New team channel (admin only)">+</button>
+        </div>
+        <div class="channel-item active"><span class="icon">#</span><span class="name">Westfield Varsity</span><span class="badge">3</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">Westfield JV</span><span class="badge">1</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">Lakewood HS Varsity</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">Skyline HS JV</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">Highland HS Var.</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">Mountain Crest JV</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">Riverside HS Varsity</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">Riverside HS JV</span></div>
+      </div>
+
+      <div class="channels-group">
+        <div class="channels-group-header"><span>Staff</span></div>
+        <div class="channel-item"><span class="icon">🔒</span><span class="name">Coaches Only</span><span class="badge">2</span></div>
+        <div class="channel-item"><span class="icon">🔒</span><span class="name">Directors</span></div>
+        <div class="channel-item"><span class="icon">🔒</span><span class="name">Admin Staff</span></div>
+      </div>
+
+      <div class="channels-group">
+        <div class="channels-group-header"><span>League-Wide</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">All Teams</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">Announcements</span></div>
+        <div class="channel-item"><span class="icon">#</span><span class="name">Fall 2026 Tryouts</span></div>
+      </div>
+
+      <div class="channels-group">
+        <div class="channels-group-header"><span>Direct Messages</span></div>
+        <div class="channel-item"><span class="icon" style="color: var(--vai-green);">●</span><span class="name">Poppy Livers</span></div>
+        <div class="channel-item"><span class="icon" style="color: var(--vai-green);">●</span><span class="name">Greg Marshall</span><span class="badge">1</span></div>
+        <div class="channel-item"><span class="icon">○</span><span class="name">Jake Coleman</span></div>
+        <div class="channel-item"><span class="icon">○</span><span class="name">Johnny Parker</span></div>
+      </div>
+    </aside>
+
+    <!-- Active channel view -->
+    <section class="channel-view">
+
+      <div class="channel-header">
+        <div class="title-block">
+          <div class="title"><span class="hash">#</span>Westfield Varsity</div>
+          <div class="subtitle">Westfield Flag Football · Fall 2026</div>
+        </div>
+        <button class="member-pill" style="background: var(--vai-orange-d); color: var(--vai-orange); border: 1px solid var(--vai-orange-b); cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px;" title="Open channel settings">22 members <span style="opacity: 0.6;">▾</span></button>
+      </div>
+
+      <div class="thread">
+
+        <div class="day-divider">Today</div>
+
+        <div class="msg">
+          <div class="avatar coach">CD</div>
+          <div class="msg-body">
+            <div class="msg-head"><span class="author">Coach Diaz</span><span class="time">9:14 AM</span></div>
+            <div class="msg-text">Team — Saturday warmup starts at 8:30 AM sharp. Jordan High Field 1. Bring both jerseys.</div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="avatar avanti">AV</div>
+          <div class="msg-body">
+            <div class="msg-head"><span class="author avanti">AVANTI</span><span class="time">9:22 AM</span></div>
+            <div class="insight-card">
+              <div class="insight-tag">AVANTI · Automated insight</div>
+              <div class="msg-text">2 players need attention for Saturday — Mia Rodriguez (RED, S) and I. Yong (YELLOW, CB). Adjusted depth chart sent to Coach Diaz. PLAY status re-checked Friday morning.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="avatar member">SM</div>
+          <div class="msg-body">
+            <div class="msg-head"><span class="author">Sarah M.</span><span class="time">10:01 AM</span></div>
+            <div class="msg-text">Is there a makeup practice for those who missed Tuesday?</div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="avatar coach">CD</div>
+          <div class="msg-body">
+            <div class="msg-head"><span class="author">Coach Diaz</span><span class="time">10:08 AM</span></div>
+            <div class="msg-text">Yes — Thursday 4:30 PM, Field 1. Optional but encouraged before Saturday.</div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="avatar parent">KL</div>
+          <div class="msg-body">
+            <div class="msg-head"><span class="author">Jordan Lee Sr. (parent)</span><span class="time">11:32 AM</span></div>
+            <div class="msg-text">Thanks Coach! Jordan will be there Thursday.</div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="avatar avanti">AV</div>
+          <div class="msg-body">
+            <div class="msg-head"><span class="author avanti">AVANTI</span><span class="time">2:15 PM</span></div>
+            <div class="insight-card">
+              <div class="insight-tag">AVANTI · Automated insight</div>
+              <div class="msg-text">3 waivers still unsigned for Saturday's game. Families: Rodriguez, Boateng, Ahmed. Reminder sent automatically at 12:00 PM.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- AVANTI quick actions -->
+      <div class="avanti-actions">
+        <span class="lbl">AVANTI</span>
+        <button class="action-pill">Draft game reminder</button>
+        <button class="action-pill">Send waiver nudge</button>
+        <button class="action-pill">Announce schedule change</button>
+        <button class="action-pill">Flag RED players</button>
+      </div>
+
+      <!-- Composer -->
+      <div class="composer">
+        <div class="composer-input-wrap">
+          <textarea placeholder="Message #Westfield Varsity… or @ AVANTI to draft" rows="3">Heads up team — we've moved Thursday practice to Field 1 (was Field 2). Same time, 4:30 PM. Bring both jerseys for color drill before the Saturday game. Reply here if you can't make it.</textarea>
+          <div class="composer-toolbar">
+            <button class="composer-tool" title="Attach file">📎</button>
+            <button class="composer-tool" title="Emoji">😊</button>
+            <button class="composer-tool" title="Mention">@</button>
+            <button class="composer-tool avanti" title="@AVANTI to draft">✦ AVANTI</button>
+            <span class="composer-counter">Enter to send · Shift+Enter for newline</span>
+          </div>
+        </div>
+        <button class="send">Send <span class="send-arrow">→</span></button>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<!-- Secondary state: Broadcast tab view -->
+<div class="secondary-state">
+  <h2>★ Broadcast tab (Admin Only) — Alternate view</h2>
+  <div class="desc">When admin clicks the Broadcast tab, the right pane swaps to multi-channel selector + single composer. Server-side fanout sends one message into each selected channel.</div>
+  <div class="broadcast-grid">
+    <div class="broadcast-channels">
+      <div class="channels-group-header" style="padding: 4px 6px 8px;">Select channels to broadcast into</div>
+      <div class="broadcast-channel-row selected">
+        <div class="check">✓</div>
+        <span class="icon">#</span>
+        <span class="name">Westfield Varsity</span>
+        <span class="meta">22</span>
+      </div>
+      <div class="broadcast-channel-row selected">
+        <div class="check">✓</div>
+        <span class="icon">#</span>
+        <span class="name">Westfield JV</span>
+        <span class="meta">19</span>
+      </div>
+      <div class="broadcast-channel-row">
+        <div class="check"></div>
+        <span class="icon">#</span>
+        <span class="name">Lakewood HS Varsity</span>
+        <span class="meta">21</span>
+      </div>
+      <div class="broadcast-channel-row">
+        <div class="check"></div>
+        <span class="icon">#</span>
+        <span class="name">Skyline HS JV</span>
+        <span class="meta">17</span>
+      </div>
+      <div class="broadcast-channel-row selected">
+        <div class="check">✓</div>
+        <span class="icon">#</span>
+        <span class="name">All Teams</span>
+        <span class="meta">172</span>
+      </div>
+      <div class="broadcast-channel-row">
+        <div class="check"></div>
+        <span class="icon">#</span>
+        <span class="name">Announcements</span>
+        <span class="meta">172</span>
+      </div>
+    </div>
+    <div class="broadcast-composer">
+      <textarea placeholder="Type the broadcast message. Same text sent to each selected channel.">Saturday game day update — bring both jerseys, warmup 8:30 AM at Jordan High Field 1. AVANTI will send waiver reminders to outstanding families this morning.</textarea>
+      <div class="broadcast-actions">
+        <span class="meta">Will send to <strong>3 channels</strong> · 213 athletes + parents</span>
+        <button class="btn">Broadcast to 3 channels</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tertiary state: DMs tab view -->
+<div class="secondary-state">
+  <h2>DMs tab — Alternate view</h2>
+  <div class="desc">When user clicks the DMs tab, middle column swaps to a flat list of 1:1 conversations sorted by recent activity. Compose button (envelope+) lives at top. The right pane renders the active DM.</div>
+  <div style="display: grid; grid-template-columns: 320px 1fr; gap: 18px; border: 1px solid var(--vai-border); border-radius: 10px; overflow: hidden; min-height: 480px;">
+    <!-- DM list -->
+    <div style="background: var(--vai-card); border-right: 1px solid var(--vai-border); overflow-y: auto;">
+      <div class="channels-header">
+        <div class="channels-search">
+          <input placeholder="Search channels and people…">
+        </div>
+        <button class="compose-btn" title="Compose new DM">✉</button>
+      </div>
+      <div class="channels-group">
+        <div class="channels-group-header"><span>Pinned</span></div>
+        <div class="channel-item active">
+          <div class="avatar member" style="width: 28px; height: 28px; border-radius: 7px; font-size: 10px;">PL</div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--vai-text-strong);">Poppy Livers</div>
+            <div style="font-size: 11px; color: var(--vai-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">You'll love me for it in the end…</div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 9px; color: var(--vai-text-muted);">Now</span>
+        </div>
+      </div>
+      <div class="channels-group">
+        <div class="channels-group-header"><span>All Conversations</span></div>
+        <div class="channel-item">
+          <div class="avatar coach" style="width: 28px; height: 28px; border-radius: 7px; font-size: 10px;">GM</div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--vai-text-strong);">Greg Marshall</div>
+            <div style="font-size: 11px; color: var(--vai-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Check out AVANTI Connect…</div>
+          </div>
+          <span class="badge">1</span>
+        </div>
+        <div class="channel-item">
+          <div class="avatar member" style="width: 28px; height: 28px; border-radius: 7px; font-size: 10px;">JC</div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--vai-text-strong);">Jake Coleman</div>
+            <div style="font-size: 11px; color: var(--vai-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sick. I've got a 2:30 but if it ends…</div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 9px; color: var(--vai-text-muted);">12m</span>
+        </div>
+        <div class="channel-item">
+          <div class="avatar parent" style="width: 28px; height: 28px; border-radius: 7px; font-size: 10px;">JP</div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--vai-text-strong);">Johnny Parker</div>
+            <div style="font-size: 11px; color: var(--vai-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Thanks for the heads up — sounds good</div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 9px; color: var(--vai-text-muted);">2h</span>
+        </div>
+        <div class="channel-item">
+          <div class="avatar member" style="width: 28px; height: 28px; border-radius: 7px; font-size: 10px;">PK</div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--vai-text-strong);">Parker Kennah</div>
+            <div style="font-size: 11px; color: var(--vai-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Yes — see you Thursday at 4:30</div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 9px; color: var(--vai-text-muted);">Yday</span>
+        </div>
+        <div class="channel-item">
+          <div class="avatar coach" style="width: 28px; height: 28px; border-radius: 7px; font-size: 10px;">CD</div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 13px; font-weight: 700; color: var(--vai-text-strong);">Coach Diaz</div>
+            <div style="font-size: 11px; color: var(--vai-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Locked the depth chart for Saturday</div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 9px; color: var(--vai-text-muted);">Mon</span>
+        </div>
+      </div>
+    </div>
+    <!-- Active DM -->
+    <div style="background: var(--vai-bg); display: flex; flex-direction: column;">
+      <div class="channel-header">
+        <div class="avatar member" style="background: var(--vai-orange); color: #000; font-weight: 800;">PL</div>
+        <div class="title-block" style="margin-left: 12px;">
+          <div class="title" style="gap: 8px;">
+            Poppy Livers
+            <span style="font-family: var(--font-mono); font-size: 10px; color: var(--vai-green); padding: 2px 7px; background: rgba(52,211,153,0.10); border: 1px solid rgba(52,211,153,0.3); border-radius: 999px; letter-spacing: 0.08em; text-transform: uppercase;">Online</span>
+          </div>
+          <div class="subtitle">VAI Builder · @poppylivers</div>
+        </div>
+        <button style="background: transparent; border: 1px solid var(--vai-border); color: var(--vai-text-muted); border-radius: 7px; padding: 6px 11px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit;">View profile</button>
+      </div>
+      <div class="thread">
+        <div class="day-divider">Last Friday</div>
+        <div class="msg">
+          <div class="avatar member" style="background: var(--vai-orange); color: #000;">PL</div>
+          <div class="msg-body">
+            <div class="msg-head"><span class="author">Poppy Livers</span><span class="time">1:39 PM</span></div>
+            <div class="msg-text">Facts my guy 👊</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="avatar member" style="background: var(--vai-orange); color: #000;">PL</div>
+          <div class="msg-body">
+            <div class="msg-head"><span class="author">Poppy Livers</span><span class="time">1:46 PM</span></div>
+            <div class="msg-text">Stay on top of your leads.<br><br>You aren't annoying them, you trying to help them and provide a tool to win!</div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end;">
+          <div style="background: var(--vai-orange); color: #000; padding: 10px 14px; border-radius: 12px 12px 4px 12px; max-width: 70%; font-size: 13px; font-weight: 600;">Love it!</div>
+        </div>
+      </div>
+      <div class="composer">
+        <div class="composer-input-wrap">
+          <textarea placeholder="Message Poppy… or @ AVANTI to draft" rows="2">Appreciate it Poppy. Going to lean into the daily nudge cadence you suggested and report back end of week with conversion numbers.</textarea>
+          <div class="composer-toolbar">
+            <button class="composer-tool" title="Attach file">📎</button>
+            <button class="composer-tool" title="Emoji">😊</button>
+            <button class="composer-tool avanti" title="@AVANTI to draft">✦ AVANTI</button>
+            <span class="composer-counter">Enter to send · Shift+Enter for newline</span>
+          </div>
+        </div>
+        <button class="send">Send <span class="send-arrow">→</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quaternary state: Channel settings side-panel (member pill clicked) -->
+<div class="secondary-state">
+  <h2>Channel Settings — opens when member pill is clicked</h2>
+  <div class="desc">Click the "22 members" pill on the channel header → side-panel slides in over the right column. Role-gated actions: super_admin sees everything, admin sees most, members get view-only + leave.</div>
+  <div style="display: grid; grid-template-columns: 1fr 360px; gap: 18px; border: 1px solid var(--vai-border); border-radius: 10px; overflow: hidden; min-height: 540px;">
+    <!-- Faded chat behind -->
+    <div style="background: var(--vai-bg); opacity: 0.4; padding: 0; display: flex; flex-direction: column; pointer-events: none;">
+      <div class="channel-header">
+        <div class="title-block">
+          <div class="title"><span class="hash">#</span>Westfield Varsity</div>
+          <div class="subtitle">Westfield Flag Football · Fall 2026</div>
+        </div>
+        <span class="member-pill" style="background: var(--vai-orange); color: #000; border-color: var(--vai-orange);">22 members ▾</span>
+      </div>
+      <div style="padding: 24px; color: var(--vai-text-muted); font-size: 13px; text-align: center;">Channel thread (dimmed)</div>
+    </div>
+
+    <!-- Settings side-panel -->
+    <div style="background: var(--vai-card); border-left: 1px solid var(--vai-border); display: flex; flex-direction: column; overflow-y: auto;">
+
+      <div style="padding: 16px 18px; border-bottom: 1px solid var(--vai-border); display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <div style="font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.08em; color: var(--vai-text-muted); text-transform: uppercase;">Channel</div>
+          <div style="font-size: 17px; font-weight: 800; color: var(--vai-text-strong); margin-top: 3px;"># Westfield Varsity</div>
+        </div>
+        <button style="background: transparent; border: none; color: var(--vai-text-muted); font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+
+      <!-- Members section -->
+      <div style="padding: 14px 18px; border-bottom: 1px solid var(--vai-border);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+          <div style="font-family: var(--font-mono); font-size: 10px; color: var(--vai-text-muted); letter-spacing: 0.12em; text-transform: uppercase;">Members · 22</div>
+          <button style="background: var(--vai-orange); color: #000; border: none; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 800; cursor: pointer;">+ Add</button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 7px 0;">
+            <div class="avatar coach" style="width: 30px; height: 30px; border-radius: 7px; font-size: 10px;">CD</div>
+            <div style="flex: 1;">
+              <div style="font-size: 13px; font-weight: 700; color: var(--vai-text-strong);">Coach Diaz</div>
+              <div style="font-size: 11px; color: var(--vai-text-muted); font-family: var(--font-mono);">admin</div>
+            </div>
+            <span style="font-size: 10px; color: var(--vai-green); font-family: var(--font-mono); text-transform: uppercase;">Online</span>
+            <button style="background: transparent; border: none; color: var(--vai-text-muted); font-size: 14px; cursor: pointer;">⋯</button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 7px 0;">
+            <div class="avatar member" style="width: 30px; height: 30px; border-radius: 7px; font-size: 10px;">SM</div>
+            <div style="flex: 1;">
+              <div style="font-size: 13px; font-weight: 700; color: var(--vai-text-strong);">Sarah Mitchell</div>
+              <div style="font-size: 11px; color: var(--vai-text-muted); font-family: var(--font-mono);">parent</div>
+            </div>
+            <button style="background: transparent; border: none; color: var(--vai-text-muted); font-size: 14px; cursor: pointer;">⋯</button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 7px 0;">
+            <div class="avatar parent" style="width: 30px; height: 30px; border-radius: 7px; font-size: 10px;">KL</div>
+            <div style="flex: 1;">
+              <div style="font-size: 13px; font-weight: 700; color: var(--vai-text-strong);">Jordan Lee Sr.</div>
+              <div style="font-size: 11px; color: var(--vai-text-muted); font-family: var(--font-mono);">parent</div>
+            </div>
+            <button style="background: transparent; border: none; color: var(--vai-text-muted); font-size: 14px; cursor: pointer;">⋯</button>
+          </div>
+          <div style="text-align: center; padding: 8px 0;">
+            <button style="background: transparent; border: none; color: var(--vai-orange); font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;">View all 22 members →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Channel info -->
+      <div style="padding: 14px 18px; border-bottom: 1px solid var(--vai-border);">
+        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--vai-text-muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px;">Channel Info</div>
+        <div style="font-size: 13px; color: var(--vai-text-body); margin-bottom: 6px;">
+          <strong>Topic:</strong> Westfield Varsity team comms — Fall 2026 season
+        </div>
+        <div style="font-size: 12px; color: var(--vai-text-muted);">
+          Created Aug 14, 2026 by Coach Diaz · 1,247 messages
+        </div>
+      </div>
+
+      <!-- All-user actions -->
+      <div style="padding: 8px 12px;">
+        <div style="display: flex; flex-direction: column;">
+          <button class="settings-action">🔔  Mute channel</button>
+          <button class="settings-action">📌  Pin to top</button>
+          <button class="settings-action">🔕  Notification level <span style="margin-left: auto; color: var(--vai-text-muted); font-family: var(--font-mono); font-size: 11px;">All messages ›</span></button>
+        </div>
+      </div>
+
+      <!-- Admin actions -->
+      <div style="padding: 8px 12px; border-top: 1px solid var(--vai-border);">
+        <div style="display: flex; align-items: center; gap: 6px; padding: 8px 6px 4px;">
+          <span style="font-family: var(--font-mono); font-size: 10px; color: var(--vai-orange); letter-spacing: 0.12em; text-transform: uppercase;">★ Admin Actions</span>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <button class="settings-action admin">✏️  Rename channel</button>
+          <button class="settings-action admin">📝  Edit topic / description</button>
+          <button class="settings-action admin">👥  Manage members (bulk)</button>
+          <button class="settings-action admin">🛡️  Permissions (post / read / admin)</button>
+          <button class="settings-action admin">📦  Archive channel</button>
+          <button class="settings-action danger">🗑️  Delete channel…</button>
+        </div>
+      </div>
+
+      <!-- Leave -->
+      <div style="margin-top: auto; padding: 12px; border-top: 1px solid var(--vai-border);">
+        <button style="width: 100%; padding: 10px; background: transparent; border: 1px solid var(--vai-border); border-radius: 8px; color: var(--vai-red); font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit;">Leave channel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+.settings-action {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px;
+  border: none;
+  background: transparent;
+  color: var(--vai-text-body);
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  text-align: left;
+  margin-bottom: 1px;
+}
+.settings-action:hover { background: rgba(255,255,255,0.04); color: var(--vai-text-strong); }
+.settings-action.admin:hover { background: rgba(247,148,30,0.08); color: var(--vai-orange); }
+.settings-action.danger { color: var(--vai-red); }
+.settings-action.danger:hover { background: rgba(255,107,107,0.08); }
+</style>
+
+<!-- CTA Legend for review -->
+<div class="cta-legend">
+  <h2>CTAs in this design</h2>
+  <table class="cta-table">
+    <thead><tr><th>CTA</th><th>Location</th><th>Visibility</th></tr></thead>
+    <tbody>
+      <tr><td class="cta">Switch channel / DM</td><td>Click anything in middle column</td><td class="role role-all">All users</td></tr>
+      <tr><td class="cta">Search channels + people</td><td>Top of middle column — typeahead shows matching channels AND users in club network (BFF-scoped to caller's org)</td><td class="role role-all">All users</td></tr>
+      <tr><td class="cta">Compose new DM</td><td>Envelope+ icon top of channel/DM list</td><td class="role role-all">All users</td></tr>
+      <tr><td class="cta">+ New Team Channel</td><td>Plus button next to "Team Chats" group header</td><td class="role role-admin">★ super_admin + admin</td></tr>
+      <tr><td class="cta">Channel Settings</td><td>Click "N members" pill on channel header → side-panel with members list, mute/pin, admin actions (rename, edit topic, manage members, permissions, archive, delete)</td><td class="role role-all">View: all · Admin actions: ★ super_admin + admin</td></tr>
+      <tr><td class="cta">Team Channels tab</td><td>Top tab — group channels view (default)</td><td class="role role-all">All users</td></tr>
+      <tr><td class="cta">DMs tab</td><td>Top tab — flat 1:1 conversation list sorted by recent activity</td><td class="role role-all">All users</td></tr>
+      <tr><td class="cta">Broadcast tab</td><td>Top tab — multi-channel selector + single composer · server-side fanout</td><td class="role role-admin">★ super_admin + admin</td></tr>
+      <tr><td class="cta">Sent by AVANTI tab</td><td>Top tab — audit trail of automated AVANTI sends</td><td class="role role-admin">★ super_admin + admin</td></tr>
+      <tr><td class="cta">AVANTI quick actions</td><td>Pill row above composer</td><td class="role role-all">All (admin gets full set, coach/parent see subset)</td></tr>
+      <tr><td class="cta">@AVANTI in composer</td><td>Type @AVANTI to invoke draft assist</td><td class="role role-all">All users</td></tr>
+      <tr><td class="cta">AVANTI command center</td><td>Floating pill bottom-right with 3-badge</td><td class="role role-all">All users</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Floating AVANTI pill -->
+<div class="avanti-floating">
+  <div class="ico">AV</div>
+  <span class="name">AVANTI</span>
+  <span class="count">3</span>
+</div>
+
+</body>
+</html>
