@@ -92,7 +92,7 @@ const CONCEPTS = [
     owner:"Francis (vai-ai gateway) + Badinho", repos:"vai-ai + vai-mobile", status:"frozen",
     design:null,
     note:"Dual-judge LOCKED (Chat + Cursor converge): Option B (static catalog + deterministic API overlay), chat-only reasoning, Free=$0, single model Haiku 4.5, bounded history (artifacts by ID). BUILD-GATE before scale: Bedrock token/cost/model telemetry + per-tier budgets + drift alert. Economic model on the AVANTI Cost tab." },
-  { id:"mentor-cal", page:"p1", title:"Mentor Calendar Phase 1",
+  { id:"mentor-cal", page:"p2", title:"Mentor Calendar Phase 1",
     owner:"Francis -> Badinho", repos:"vai-api + game-day + vai-mobile", status:"approved",
     design:"vai-mentor-calendar.html",
     note:"Christmas Package, Code Masters PASS. Deploy order: API first (Francis), then web + mobile (Badinho). The findings below came out of recent platform work and apply directly to this PR — treat as required, not optional. Each has a real failure mode.",
@@ -116,10 +116,32 @@ const CONCEPTS = [
     ] },
   { id:"wearables", page:"p1", title:"Wearables Phase 1",
     owner:"Badinho (Francis review)", repos:"vai-mobile-react-native", status:"cleared",
-    design:"VAI Wearables Entry Point _standalone_.html",
-    note:"CLEARED FOR SHIP — dual-audit PASS, version parity confirmed. Sandbox sync scripts in vai-mobile-wearables-sandbox-v53. Ben picks screen variant via EXPO_PUBLIC_WEARABLES_VARIANT (default entry)." },
+    design:"VAI%20Wearables%20Entry%20Point%20_standalone_.html",
+    note:"CLEARED FOR SHIP — dual-audit PASS (Sonnet 9.0/9.2/9.0 + Haiku 9.0/9.1/9.0), tsc 0, version parity confirmed (Expo 53.0.19 / RN 0.79.5 / OneSignal 5.0.4 / Sentry 6.14 / TanStack 5.83). Sandbox: ~/Desktop/vai-mobile-wearables-sandbox-v53/. Est: Badinho ~30 min, Francis ~10 min review.",
+    findings:[
+      {group:"Badinho — sandbox to live merge (from vai-mobile-wearables-sandbox-v53)", items:[
+        "LIVE_REPO=... ./scripts/00_preflight_live_compat.sh — zero failures before proceeding.",
+        "LIVE_REPO=... DRY_RUN=1 ./scripts/01_sync_from_sandbox.sh (preview), then DRY_RUN=0 (apply).",
+        "LIVE_REPO=... ./scripts/04_generate_migration_patch.sh — migration patch for PR review.",
+        "LIVE_REPO=... ./scripts/02_setup_mobile_env.sh — npm install + pod install.",
+        "LIVE_REPO=... ./scripts/06_setup_fonts.sh + download 3 .ttf (Oswald / DM Sans / JetBrains Mono regular); wrap App.tsx with <FontGate>.",
+        "LIVE_REPO=... ./scripts/03_validate_wearables_integration.sh.",
+        "./scripts/12_run_qa_pack.sh + walk scripts/10_mobile_qa_checklist.md on iOS + Android.",
+        "Smoke-test /v1/wearable/* against staging.",
+        "Use ./scripts/07_stage_pr_branch.sh output (pr-staging/PR_BODY.md) verbatim as the PR description.",
+        "Merge to main + EAS build."
+      ]},
+      {group:"Francis — review + backend track", items:[
+        "Review EXECUTIVE_SUMMARY.md in sandbox-v53.",
+        "Confirm vai-api Tasks 1-8 schedule (age-gate middleware, /v1/wearable/* endpoints, scheduled coach bot job). Mobile merge does NOT wait on these; COPPA production-readiness does."
+      ]},
+      {group:"Ben — runtime decision", items:[
+        "Pick screen variant (handoff / entry / variations) any time via EXPO_PUBLIC_WEARABLES_VARIANT (default: entry). No code rewrite needed.",
+        "Rollback if needed: ./scripts/05_rollback_wearables.sh (safe — removes wearables files only)."
+      ]}
+    ] },
   // ---- P2 ----
-  { id:"admin", page:"p2", title:"Admin Portal v2",
+  { id:"admin", page:"p3", title:"Admin Portal v2",
     owner:"Francis", repos:"vai-app-admin", status:"ready",
     design:"vai-admin-portal-v2-extract.html",
     note:"95% ready: PR -> code review -> merge -> deploy to production." },
