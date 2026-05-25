@@ -84,10 +84,18 @@ const PAGES = {
 
 const CONCEPTS = [
   // ---- P1 ----
-  { id:"home", page:"p1", title:"Home Screen + AVANTI button + brand",
+  { id:"home", page:"p1", title:"VAI App Home Screen — BUILD FIRST",
     owner:"Badinho + Francis", repos:"vai-mobile + vai-api", status:"concept",
-    design:"vai-avanti-os-standalone.html",
-    note:"April canonical design. Layout / brand / AVANTI button = BUILD-READY. The per-tile AVANTI decoration stays FROZEN pending cost: banners SIGNAL (deterministic facts/status/CTAs), AVANTI reasons in CHAT only. Free tier = no manual AVANTI, no LLM decoration." },
+    design:"vai-home-app-standalone.html",
+    note:"VAI app Home Screen — build this FIRST, before any GAME OS league designs. AVANTI updates (Connect + Chat, Reply Variants) happen in parallel. Layout / brand / AVANTI button = build-ready. Per-tile AVANTI decoration stays FROZEN pending cost: banners SIGNAL (deterministic facts/status/CTAs), AVANTI reasons in CHAT only; Free = no manual AVANTI, no LLM decoration." },
+  { id:"avanti-connect-chat", page:"p1", title:"AVANTI Connect + Chat (redesign)",
+    owner:"Badinho (Francis gateway)", repos:"vai-mobile + vai-ai", status:"concept",
+    design:"vai-avanti-connect-chat-standalone.html",
+    note:"AVANTI Connect redesign + chat surface — this is where AVANTI reasons and acts (tiles only ROUTE here). Build alongside the Home screen. Structured JSON replies + bounded history (artifacts by ID) per the locked architecture." },
+  { id:"avanti-reply-thinking", page:"p1", title:"AVANTI Reply Variants + Thinking",
+    owner:"Badinho (Francis gateway)", repos:"vai-mobile + vai-ai", status:"concept",
+    design:"vai-avanti-reply-thinking-standalone.html",
+    note:"Structured chat reply variants (meal_cards, macro_breakdown, etc.) + thinking/loading states. Zod-validated typed responses with plain_text fallback; stream light text first, JSON artifact second." },
   { id:"avanti-os", page:"p1", title:"AVANTI OS Brain — architecture (LOCKED)",
     owner:"Francis (vai-ai gateway) + Badinho", repos:"vai-ai + vai-mobile", status:"frozen",
     design:null,
