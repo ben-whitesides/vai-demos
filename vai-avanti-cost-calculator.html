@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVANTI Home Grid Cost Model — As-is vs Suggested (Haiku 4.5)</title>
+<style>
+  :root{
+    --bg:#0b0f14; --panel:#131a22; --panel2:#1a232d; --line:#26323f;
+    --txt:#e6edf3; --muted:#8b9bab; --green:#34d399; --greendim:#1f6f57;
+    --red:#ef4444; --reddim:#7a2b2b; --amber:#f5b455; --accent:#5bc0ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 64px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 6px}
+  .badges{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 14px}
+  .badge{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:12px;color:var(--muted)}
+  .badge b{color:var(--txt)}
+  .badge.green{border-color:var(--greendim);color:var(--green)}
+  .today{background:linear-gradient(180deg,rgba(91,192,255,.10),transparent);border:1px solid var(--accent);border-radius:12px;padding:13px 16px;margin:6px 0 20px;font-size:13px;color:var(--muted)}
+  .today b{color:var(--accent);font-size:18px}
+  .grid{display:grid;grid-template-columns:380px 1fr;gap:18px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 14px}
+  .presets{display:flex;gap:8px;margin-bottom:16px}
+  .presets button{flex:1;background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:9px;padding:9px;font-weight:600;cursor:pointer}
+  .presets button:hover{border-color:var(--green)}
+  .field{margin-bottom:14px}
+  .field label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px}
+  .field label b{color:var(--txt);font-size:13px}
+  input[type=range]{width:100%;accent-color:var(--green)}
+  input[type=number],select{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 9px;font-size:13px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  details{margin-top:6px;border-top:1px solid var(--line);padding-top:12px}
+  summary{cursor:pointer;color:var(--accent);font-size:12px;font-weight:600;margin-bottom:10px}
+  .results{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+  @media(max-width:520px){.results{grid-template-columns:1fr}}
+  .res{border-radius:12px;padding:16px;border:1px solid var(--line)}
+  .res.asis{background:linear-gradient(180deg,rgba(239,68,68,.10),transparent);border-color:var(--reddim)}
+  .res.sug{background:linear-gradient(180deg,rgba(52,211,153,.10),transparent);border-color:var(--greendim)}
+  .res .tag{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .res .big{font-size:30px;font-weight:800;margin:4px 0 2px}
+  .res.asis .big{color:var(--red)} .res.sug .big{color:var(--green)}
+  .res .small{font-size:12px;color:var(--muted)}
+  .verdict{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:14px}
+  .verdict .mult{font-size:26px;font-weight:800;color:var(--amber)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  .bar{height:8px;background:var(--panel2);border-radius:6px;overflow:hidden;margin-top:4px}
+  .bar i{display:block;height:100%}
+  .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:14px 16px;margin-top:18px;font-size:13px;color:var(--muted)}
+  .note b{color:var(--txt)}
+  .note h3{color:var(--txt);font-size:13px;margin:0 0 8px}
+  .note ul{margin:6px 0 0;padding-left:18px} .note li{margin:3px 0}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;color:var(--green);font-size:12px}
+  .disc{color:var(--amber);font-size:12px;margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+  .formula{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted);white-space:pre-wrap;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AVANTI Home Grid — Cost Model</h1>
+  <p class="sub">As-is (per-tile LLM on every open, Free included) vs Suggested (deterministic banners + chat-only reasoning + cached + tier-gated + bounded history). Move the sliders.</p>
+  <div class="badges">
+    <span class="badge green">Model: <b>Claude Haiku 4.5</b> (prod, verified)</span>
+    <span class="badge">$1.00 in / $5.00 out per MTok</span>
+    <span class="badge">Cached input ~$0.10 /MTok (90% off)</span>
+    <span class="badge">Sys prompt 3,428 tok (measured)</span>
+  </div>
+
+  <div class="today">
+    <b id="todayMo">$0</b>/mo &nbsp;—&nbsp; <b style="font-size:13px;color:var(--accent)">Today (actual)</b>:
+    ~86 conversations/mo (LangSmith 7-day), Haiku 4.5, <b style="font-size:13px;color:var(--accent)">no Home Grid LLM decoration built yet</b>.
+    The two columns below are <b style="font-size:13px;color:var(--txt)">projections at scale</b> — what each design <i>would</i> cost once Home Grid ships. We are not adding cost to a feature that isn't live; we are choosing which design to build.
+  </div>
+
+  <div class="grid">
+    <!-- INPUTS -->
+    <div class="card">
+      <h2>Inputs</h2>
+      <div class="presets">
+        <button onclick="setPreset('base')">Base preset</button>
+        <button onclick="setPreset('high')">High preset</button>
+      </div>
+
+      <div class="field">
+        <label><b>Free DAU</b> <span id="freeDauV"></span></label>
+        <input id="freeDau" type="range" min="0" max="50000" step="100">
+      </div>
+      <div class="field">
+        <label><b>VAI+ DAU</b> <span id="plusDauV"></span></label>
+        <input id="plusDau" type="range" min="0" max="20000" step="50">
+      </div>
+      <div class="field">
+        <label><b>Mentor DAU</b> <span id="mentorDauV"></span></label>
+        <input id="mentorDau" type="range" min="0" max="5000" step="10">
+      </div>
+      <div class="field">
+        <label><b>Home opens / user / day</b> <span id="opensV"></span></label>
+        <input id="opens" type="range" min="1" max="10" step="1">
+      </div>
+      <div class="field">
+        <label><b>Total tiles on home</b> <span id="tilesV"></span></label>
+        <input id="tiles" type="range" min="1" max="16" step="1">
+      </div>
+      <div class="field">
+        <label><b>As-is: LLM calls / tile / open</b></label>
+        <select id="calls">
+          <option value="1">1 — strip only</option>
+          <option value="2">2 — strip + action</option>
+          <option value="3" selected>3 — strip + action + summary (risk case)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label><b>Suggested: tiles that get LLM decoration</b> <span id="sugTilesV"></span></label>
+        <input id="sugTiles" type="range" min="0" max="16" step="1">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Banner limitation: the rest are deterministic (0 LLM). Free tier = 0 regardless.</div>
+      </div>
+
+      <details open>
+        <summary>Suggested-architecture levers (caching + history)</summary>
+        <div class="field">
+          <label><b>Decoration cache TTL</b></label>
+          <select id="ttl">
+            <option value="0.25">15 min</option>
+            <option value="1">1 hour</option>
+            <option value="6" selected>6 hours</option>
+            <option value="24">Daily</option>
+          </select>
+        </div>
+        <div class="field">
+          <label><b>Sys-prompt cache hit %</b> <span id="cacheV"></span></label>
+          <input id="cacheHit" type="range" min="0" max="100" step="5" value="80">
+        </div>
+        <div class="row2">
+          <div class="field"><label>As-is chat in/turn (full history)</label><input id="asisChatIn" type="number" value="6000"></div>
+          <div class="field"><label>Suggested chat in/turn (bounded packet)</label><input id="sugChatIn" type="number" value="3500"></div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Token-size assumptions — adjustable</summary>
+        <div class="row3">
+          <div class="field"><label>Sys prompt tok</label><input id="sysTok" type="number" value="3428"></div>
+          <div class="field"><label>Tile ctx in</label><input id="ctxTok" type="number" value="500"></div>
+          <div class="field"><label>Tile out</label><input id="outTok" type="number" value="120"></div>
+        </div>
+        <div class="field">
+          <label><b>Active hours/day</b> <span id="activeV"></span></label>
+          <input id="active" type="range" min="4" max="24" step="1" value="16">
+        </div>
+        <div class="row3">
+          <div class="field"><label>Plus chats/user/mo</label><input id="plusChat" type="number" value="4"></div>
+          <div class="field"><label>Mentor chats/user/mo</label><input id="mentorChat" type="number" value="8"></div>
+          <div class="field"><label>Chat out tok</label><input id="chatOut" type="number" value="800"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Turns/convo</label><input id="turns" type="number" value="4"></div>
+          <div class="field"><label>Free chats</label><input id="freeChat" type="number" value="0" disabled title="Free has no manual AVANTI"></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- RESULTS -->
+    <div>
+      <div class="results">
+        <div class="res asis">
+          <div class="tag">As-is — per-tile LLM, Free included, full-history chat</div>
+          <div class="big" id="asisMo">$0</div>
+          <div class="small" id="asisYr">— /yr</div>
+        </div>
+        <div class="res sug">
+          <div class="tag">Suggested — deterministic + cached + bounded + tier-gated</div>
+          <div class="big" id="sugMo">$0</div>
+          <div class="small" id="sugYr">— /yr · Free = $0 LLM</div>
+        </div>
+      </div>
+
+      <div class="verdict">
+        Suggested is <span class="mult" id="mult">—</span> cheaper at this scale —
+        saving <b id="save">$0</b>/mo (<b id="savePct">0%</b>). Most of the as-is cost is <b id="freeShareTxt">—</b> from Free-tier decoration, which the suggested design removes entirely.
+      </div>
+
+      <div class="card">
+        <h2>Breakdown ($/mo)</h2>
+        <table>
+          <thead><tr><th>Component</th><th class="num">As-is</th><th class="num">Suggested</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div style="margin-top:14px">
+          <div class="small" style="color:var(--muted)">As-is composition (decoration vs chat)</div>
+          <div class="bar"><i id="barAsis" style="background:var(--red);width:0%"></i></div>
+        </div>
+      </div>
+
+      <details class="card" style="margin-top:14px">
+        <summary>Formula (transparent — audit the math)</summary>
+        <div class="formula" id="formula"></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- NOTES / PRODUCT BOUNDARY -->
+  <div class="note">
+    <h3>Suggested architecture = the economic option (Chat + Codex + 3-way analysis converge)</h3>
+    Home Grid can <b>signal and decorate</b>; AVANTI <b>reasoning and actions happen in chat only</b>.
+    <ul>
+      <li><b>Option B</b>: static Home Grid catalog + deterministic API overlay. Banners show facts/status/CTAs — no LLM.</li>
+      <li>Only a few tiles get cached decoration; rename <code>avantiAction</code> &rarr; <code>chatIntent</code> and route reasoning into chat.</li>
+      <li><b>Free = deterministic only</b> — no manual AVANTI, no LLM decoration.</li>
+      <li>Plus/Mentor decoration is <b>TTL-cached + event-driven</b> behind hard token budgets + feature flags.</li>
+      <li><b>History caching</b>: store chat artifacts by ID, send a bounded context packet (~3–4K tok), never re-serialize full JSON every turn.</li>
+    </ul>
+    <h3 style="margin-top:12px">Build-gate before scale (non-negotiable)</h3>
+    <ul>
+      <li><b>Bedrock token/cost telemetry</b> — capture input/output/cache tokens + est. cost per call (LangSmith shows $0 today = instrumentation gap, NOT free).</li>
+      <li>Route/feature tags + tier grouping + per-tier daily dashboards &amp; caps.</li>
+      <li><b>Model governance + alert</b> — log model per call, alert on unexpected model (we caught a silent <code>Haiku 3.5 &rarr; 4.5</code> drift). Server-owned, allow-listed.</li>
+      <li>Cross-surface cache + budgets (mobile + GAME OS share the gateway).</li>
+      <li>Catalog drift guard: generate client catalog types from server schema / versioned <code>/v1/home/context</code>.</li>
+      <li>Deterministic state-mutating CTAs (reminder/schedule/payment) still need approval + idempotency + role gates.</li>
+    </ul>
+    <div class="disc">
+      <b>Accuracy note:</b> Pricing ($1/$5), system-prompt size (3,428 tok), and current volume (~86 convos/mo, ~$1–7/mo real) are <b>verified/measured</b>.
+      Per-call token sizes are <b>modeled assumptions</b> — adjustable above — because Bedrock does not yet report token usage to LangSmith. Trust the <b>ratio</b> between columns more than either absolute number.
+    </div>
+  </div>
+</div>
+
+<script>
+const PRICE_IN = 1.00/1e6, PRICE_OUT = 5.00/1e6, PRICE_CACHED = 0.10/1e6;
+const TODAY_CONVOS = 86; // LangSmith 7-day -> monthly
+const ids = ["freeDau","plusDau","mentorDau","opens","tiles","calls","sugTiles","ttl","cacheHit","asisChatIn","sugChatIn","sysTok","ctxTok","outTok","active","plusChat","mentorChat","chatOut","turns"];
+const $ = id => document.getElementById(id);
+const money = n => "$" + (n>=1000 ? n.toLocaleString(undefined,{maximumFractionDigits:0}) : n.toLocaleString(undefined,{maximumFractionDigits:2}));
+
+function setPreset(p){
+  const v = p==="high"
+    ? {freeDau:10000,plusDau:2500,mentorDau:500,opens:5,tiles:8,sugTiles:2}
+    : {freeDau:1000,plusDau:250,mentorDau:50,opens:2,tiles:4,sugTiles:2};
+  for(const k in v){ $(k).value = v[k]; }
+  compute();
+}
+
+function callCost(sysTok, varIn, outTok, hit){
+  const sysCost = sysTok * (hit*PRICE_CACHED + (1-hit)*PRICE_IN);
+  return sysCost + varIn*PRICE_IN + outTok*PRICE_OUT;
+}
+function convoCost(inTok, outTok, turns, hit){
+  return turns * (inTok*(hit*PRICE_CACHED + (1-hit)*PRICE_IN) + outTok*PRICE_OUT);
+}
+function makeRow(label,a,b,bold){
+  const tr=document.createElement("tr");
+  const c0=document.createElement("td"); c0.textContent=label;
+  const c1=document.createElement("td"); c1.className="num"; c1.textContent=a;
+  const c2=document.createElement("td"); c2.className="num"; c2.textContent=b;
+  if(bold){c0.style.fontWeight="700";c1.style.fontWeight="700";c2.style.fontWeight="700";}
+  tr.append(c0,c1,c2); return tr;
+}
+
+function compute(){
+  const freeDau=+$("freeDau").value, plusDau=+$("plusDau").value, mentorDau=+$("mentorDau").value;
+  const opens=+$("opens").value, tiles=+$("tiles").value, calls=+$("calls").value;
+  let sugTiles=+$("sugTiles").value; if(sugTiles>tiles){sugTiles=tiles; $("sugTiles").value=tiles;}
+  const ttl=+$("ttl").value, cacheHit=+$("cacheHit").value/100;
+  const asisChatIn=+$("asisChatIn").value, sugChatIn=+$("sugChatIn").value;
+  const sysTok=+$("sysTok").value, ctxTok=+$("ctxTok").value, outTok=+$("outTok").value, active=+$("active").value;
+  const plusChat=+$("plusChat").value, mentorChat=+$("mentorChat").value, chatOut=+$("chatOut").value, turns=+$("turns").value;
+
+  $("freeDauV").textContent=freeDau.toLocaleString(); $("plusDauV").textContent=plusDau.toLocaleString();
+  $("mentorDauV").textContent=mentorDau.toLocaleString(); $("opensV").textContent=opens;
+  $("tilesV").textContent=tiles; $("sugTilesV").textContent=sugTiles;
+  $("cacheV").textContent=(cacheHit*100)+"%"; $("activeV").textContent=active+"h";
+
+  const allDau=freeDau+plusDau+mentorDau, paidDau=plusDau+mentorDau;
+  const paidConvos = plusDau*plusChat + mentorDau*mentorChat;
+
+  // TODAY (actual): observed manual chat volume, bounded packet, no decoration
+  const todayMo = TODAY_CONVOS * convoCost(sugChatIn, chatOut, turns, cacheHit);
+
+  // AS-IS: every tile, every open, N calls, Free included + full-history chat
+  const perTileCall = callCost(sysTok, ctxTok, outTok, cacheHit);
+  const asisDecoMo = allDau * opens * 30 * (tiles * calls * perTileCall);
+  const asisChatMo = paidConvos * convoCost(asisChatIn, chatOut, turns, cacheHit);
+  const asisTotal = asisDecoMo + asisChatMo;
+
+  // SUGGESTED: paid only, sugTiles batched into ONE call, TTL-reduced, Free=0 + bounded chat
+  const batchedCall = callCost(sysTok, ctxTok*sugTiles, outTok*sugTiles, cacheHit);
+  const gensPerDay = Math.min(opens, Math.ceil(active/ttl));
+  const sugDecoMo = (sugTiles>0) ? paidDau * gensPerDay * 30 * batchedCall : 0;
+  const sugChatMo = paidConvos * convoCost(sugChatIn, chatOut, turns, cacheHit);
+  const sugTotal = sugDecoMo + sugChatMo;
+
+  $("todayMo").textContent = money(todayMo);
+  $("asisMo").textContent = money(asisTotal); $("asisYr").textContent = money(asisTotal*12)+" /yr";
+  $("sugMo").textContent = money(sugTotal); $("sugYr").textContent = money(sugTotal*12)+" /yr · Free = $0 LLM";
+
+  const mult = sugTotal>0 ? asisTotal/sugTotal : 0;
+  $("mult").textContent = (mult>=1?mult.toFixed(1):"1.0")+"×";
+  $("save").textContent = money(Math.max(0,asisTotal-sugTotal));
+  $("savePct").textContent = asisTotal>0 ? Math.round((1-sugTotal/asisTotal)*100)+"%" : "0%";
+  const freeShare = (allDau>0 && asisTotal>0) ? asisDecoMo*(freeDau/allDau)/asisTotal : 0;
+  $("freeShareTxt").textContent = Math.round(freeShare*100)+"%";
+
+  const tb=$("tbody"); tb.replaceChildren();
+  tb.append(makeRow("Home Grid decoration", money(asisDecoMo), money(sugDecoMo), false));
+  tb.append(makeRow("    ↳ Free-tier share", money(allDau?asisDecoMo*(freeDau/allDau):0), "$0", false));
+  tb.append(makeRow("Manual AVANTI chat", money(asisChatMo), money(sugChatMo), false));
+  tb.append(makeRow("Total / month", money(asisTotal), money(sugTotal), true));
+
+  $("barAsis").style.width = (asisTotal>0?asisDecoMo/asisTotal*100:0)+"%";
+
+  $("formula").textContent =
+`Haiku 4.5: in $1.00/MTok · out $5.00/MTok · cached-in $0.10/MTok
+call = sysTok·(hit·$cached + (1-hit)·$in) + varIn·$in + out·$out
+
+TODAY (actual): ${TODAY_CONVOS} convos/mo × bounded chat = ${money(todayMo)}/mo (no decoration built)
+
+AS-IS:
+  decoration = allDAU(${allDau.toLocaleString()}) × opens(${opens}) × 30 × tiles(${tiles}) × calls(${calls}) × per_tile = ${money(asisDecoMo)}
+  chat (full history ${asisChatIn} in) = ${money(asisChatMo)}
+  total = ${money(asisTotal)}/mo
+
+SUGGESTED:
+  gens/day = min(opens ${opens}, ceil(active ${active}h / TTL ${ttl}h)) = ${gensPerDay}
+  decoration = paidDAU(${paidDau.toLocaleString()}) × gens(${gensPerDay}) × 30 × ONE batched call over ${sugTiles} tiles = ${money(sugDecoMo)}   [Free = $0]
+  chat (bounded ${sugChatIn} in) = ${money(sugChatMo)}
+  total = ${money(sugTotal)}/mo`;
+}
+
+ids.forEach(id => $(id).addEventListener("input", compute));
+setPreset("base");
+</script>
+</body>
+</html>

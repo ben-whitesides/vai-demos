@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAI App — Priority Builds (Badinho &amp; Francis)</title>
+<style>
+  :root{
+    --bg:#0b0f14; --panel:#131a22; --panel2:#1a232d; --line:#26323f;
+    --txt:#e6edf3; --muted:#8b9bab; --green:#34d399; --greendim:#1f6f57;
+    --red:#ef4444; --amber:#f5b455; --accent:#5bc0ff; --purple:#b794f6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  header{position:sticky;top:0;z-index:10;background:rgba(11,15,20,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .hwrap{max-width:1180px;margin:0 auto;padding:14px 20px}
+  h1{font-size:18px;margin:0 0 2px} .tagline{color:var(--muted);font-size:12px;margin:0}
+  nav{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+  nav button{background:var(--panel2);color:var(--muted);border:1px solid var(--line);border-radius:9px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px}
+  nav button.active{background:var(--green);color:#06241a;border-color:var(--green)}
+  nav button:hover:not(.active){border-color:var(--green);color:var(--txt)}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 20px 80px}
+  .pagehead{margin:0 0 16px}
+  .pagehead h2{font-size:20px;margin:0 0 3px} .pagehead p{color:var(--muted);font-size:13px;margin:0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+  .ctop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .ctitle{font-size:16px;font-weight:700;margin:0}
+  .cmeta{color:var(--muted);font-size:12px;margin:3px 0 0}
+  .badge{border-radius:999px;padding:4px 11px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+  .b-concept{background:rgba(91,192,255,.15);color:var(--accent)}
+  .b-approved,.b-cleared{background:rgba(52,211,153,.15);color:var(--green)}
+  .b-ready{background:rgba(245,180,85,.15);color:var(--amber)}
+  .b-queued,.b-backlog{background:rgba(139,155,171,.15);color:var(--muted)}
+  .b-frozen{background:rgba(183,148,246,.15);color:var(--purple)}
+  .cnote{font-size:13px;color:var(--muted);margin:12px 0 0;border-left:3px solid var(--line);padding-left:12px}
+  .cnote b{color:var(--txt)}
+  .frame{width:100%;height:480px;border:1px solid var(--line);border-radius:10px;margin-top:14px;background:#fff}
+  .nodesign{margin-top:14px;padding:18px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:13px;text-align:center}
+  .notes{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+  .notes label{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .noterow{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+  select.status{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 9px;font-size:12px}
+  textarea{width:100%;min-height:64px;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px;font-size:13px;font-family:inherit;resize:vertical}
+  .savebtn{background:var(--green);color:#06241a;border:none;border-radius:8px;padding:7px 14px;font-weight:700;cursor:pointer;font-size:12px;margin-top:8px}
+  .saved{color:var(--green);font-size:11px;margin-left:10px}
+  a.link{color:var(--accent);text-decoration:none;font-size:13px} a.link:hover{text-decoration:underline}
+  .banner{background:linear-gradient(180deg,rgba(245,180,85,.10),transparent);border:1px solid var(--amber);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--muted);margin-bottom:16px}
+  .banner b{color:var(--amber)}
+  footer{color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="hwrap">
+    <h1>VAI App — Priority Builds</h1>
+    <p class="tagline">Owners: Badinho (mobile) &amp; Francis (vai-api). Each page = one priority tier. Update status + notes as you go — saved in your browser.</p>
+    <nav id="nav">
+      <button data-page="p1" class="active">P1 — Priority</button>
+      <button data-page="p2">P2</button>
+      <button data-page="p3">P3 / Backlog</button>
+      <button data-page="cost">AVANTI Cost Model</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="pagehead" id="pagehead"></div>
+  <div id="content"></div>
+  <footer>
+    VAI app track only — GAME OS platform work is tracked separately. Designs render live from the <code>vai-demos</code> library.
+    Notes/status persist in your browser (localStorage); shared sync (Supabase) can be added later.
+  </footer>
+</div>
+
+<script>
+const PAGES = {
+  p1: {title:"P1 — Priority Build", desc:"Ship these first. AVANTI OS Brain architecture is locked (dual-judge) but its Home Grid LLM decoration stays frozen until cost is dialed — see the AVANTI Cost Model tab."},
+  p2: {title:"P2", desc:"Next tier — start once P1 is moving."},
+  p3: {title:"P3 / Backlog", desc:"Lower priority. Live Scoring is an example/backlog item, not a current target."},
+  cost: {title:"AVANTI Cost Model — As-is vs Suggested", desc:"The economic decision tool. Today AVANTI costs ~nothing; this projects what Home Grid would cost as-is vs the suggested architecture."}
+};
+
+const CONCEPTS = [
+  // ---- P1 ----
+  { id:"home", page:"p1", title:"Home Screen + AVANTI button + brand",
+    owner:"Badinho + Francis", repos:"vai-mobile + vai-api", status:"concept",
+    design:"vai-avanti-os-standalone.html",
+    note:"April canonical design. Layout / brand / AVANTI button = BUILD-READY. The per-tile AVANTI decoration stays FROZEN pending cost: banners SIGNAL (deterministic facts/status/CTAs), AVANTI reasons in CHAT only. Free tier = no manual AVANTI, no LLM decoration." },
+  { id:"avanti-os", page:"p1", title:"AVANTI OS Brain — architecture (LOCKED)",
+    owner:"Francis (vai-ai gateway) + Badinho", repos:"vai-ai + vai-mobile", status:"frozen",
+    design:null,
+    note:"Dual-judge LOCKED (Chat + Cursor converge): Option B (static catalog + deterministic API overlay), chat-only reasoning, Free=$0, single model Haiku 4.5, bounded history (artifacts by ID). BUILD-GATE before scale: Bedrock token/cost/model telemetry + per-tier budgets + drift alert. Economic model on the AVANTI Cost tab." },
+  { id:"mentor-cal", page:"p1", title:"Mentor Calendar Phase 1",
+    owner:"Francis -> Badinho", repos:"vai-api + game-day + vai-mobile", status:"approved",
+    design:"vai-mentor-calendar.html",
+    note:"Christmas Package, Code Masters PASS. Deploy API first, then web + mobile. Heads-up failure modes: {id} JSON envelope not bare Guid (PR #565); admin fallthrough auth so a 2nd org admin can edit/cancel; edit-mode pre-fill from raw ISO (not display strings); cancel URL keeps the /events/ segment; isPrivate:true for 1:1 sessions." },
+  { id:"wearables", page:"p1", title:"Wearables Phase 1",
+    owner:"Badinho (Francis review)", repos:"vai-mobile-react-native", status:"cleared",
+    design:"VAI Wearables Entry Point _standalone_.html",
+    note:"CLEARED FOR SHIP — dual-audit PASS, version parity confirmed. Sandbox sync scripts in vai-mobile-wearables-sandbox-v53. Ben picks screen variant via EXPO_PUBLIC_WEARABLES_VARIANT (default entry)." },
+  // ---- P2 ----
+  { id:"admin", page:"p2", title:"Admin Portal v2",
+    owner:"Francis", repos:"vai-app-admin", status:"ready",
+    design:"vai-admin-portal-v2-extract.html",
+    note:"95% ready: PR -> code review -> merge -> deploy to production." },
+  { id:"expo-push", page:"p2", title:"Expo Push Fallback (OneSignal backup)",
+    owner:"Badinho", repos:"vai-mobile", status:"queued",
+    design:null,
+    note:"Priority 2: configure Expo Push, wire fallback logic, test fallback scenario, merge." },
+  // ---- P3 ----
+  { id:"sentry", page:"p3", title:"Sentry Crash Reporting",
+    owner:"Francis", repos:"iOS + Android", status:"queued",
+    design:null,
+    note:"Priority 3: create project, integrate SDK (iOS + Android), configure error filtering, test, merge." },
+  { id:"live-scoring", page:"p3", title:"Live Scoring screen",
+    owner:"TBD", repos:"vai-mobile", status:"backlog",
+    design:null,
+    note:"Backlog / example. Design exists as the 'VAI SCORE PHASE 2' screenshot. Not a current build target." }
+];
+
+const STATUS_LABEL = {concept:"Concept",approved:"Approved",cleared:"Cleared",ready:"95% Ready",queued:"Queued",frozen:"Frozen — pending cost",backlog:"Backlog"};
+const STATUS_OPTS = ["concept","approved","cleared","ready","queued","frozen","backlog","in-build","review","done"];
+
+function el(tag, props, ...kids){
+  const n=document.createElement(tag);
+  if(props) for(const k in props){
+    if(k==="class") n.className=props[k];
+    else if(k==="text") n.textContent=props[k];
+    else n.setAttribute(k,props[k]);
+  }
+  for(const c of kids){ if(c||c===0) n.append(c); }
+  return n;
+}
+const lsGet=(k,d)=>{ try{return localStorage.getItem(k) ?? d;}catch(e){return d;} };
+const lsSet=(k,v)=>{ try{localStorage.setItem(k,v);}catch(e){} };
+
+function badge(status){
+  const s = lsGet("vpb-status-"+arguments[1], status); // override if saved
+  const b = el("span",{class:"badge b-"+ (STATUS_LABEL[s]?s:"concept")});
+  b.textContent = STATUS_LABEL[s] || s;
+  return b;
+}
+
+function buildCard(c){
+  const card = el("div",{class:"card"});
+
+  const savedStatus = lsGet("vpb-status-"+c.id, c.status);
+  const bd = el("span",{class:"badge b-"+(STATUS_LABEL[savedStatus]?savedStatus:"concept"), text: STATUS_LABEL[savedStatus]||savedStatus});
+
+  const top = el("div",{class:"ctop"},
+    el("div",{},
+      el("p",{class:"ctitle",text:c.title}),
+      el("p",{class:"cmeta",text:`${c.owner}  ·  ${c.repos}`})
+    ),
+    bd
+  );
+  card.append(top);
+
+  card.append(el("p",{class:"cnote",text:c.note}));
+
+  if(c.design){
+    const f = el("iframe",{class:"frame", src:c.design, loading:"lazy", title:c.title});
+    card.append(f);
+    card.append(el("a",{class:"link", href:c.design, target:"_blank", text:"Open design full-screen ↗"}));
+  } else {
+    const nd = el("div",{class:"nodesign"});
+    if(c.id==="avanti-os"){
+      const a = el("a",{class:"link", href:"vai-avanti-cost-calculator.html", target:"_blank", text:"Open the AVANTI Cost Model ↗"});
+      nd.append(document.createTextNode("Architecture spec — no single screen. "), a);
+    } else {
+      nd.textContent = "No rendered design yet for this item.";
+    }
+    card.append(nd);
+  }
+
+  // notes + status
+  const notes = el("div",{class:"notes"});
+  const row = el("div",{class:"noterow"});
+  row.append(el("label",{text:"Status:"}));
+  const sel = el("select",{class:"status"});
+  STATUS_OPTS.forEach(o=>{ const op=el("option",{value:o,text:STATUS_LABEL[o]||o}); if(o===savedStatus)op.setAttribute("selected","selected"); sel.append(op); });
+  sel.addEventListener("change",()=>{ lsSet("vpb-status-"+c.id, sel.value); bd.className="badge b-"+(STATUS_LABEL[sel.value]?sel.value:"concept"); bd.textContent=STATUS_LABEL[sel.value]||sel.value; });
+  row.append(sel);
+  notes.append(row);
+
+  notes.append(el("label",{text:"Notes (Badinho / Francis):"}));
+  const ta = el("textarea",{placeholder:"Blockers, questions, status…"});
+  ta.value = lsGet("vpb-note-"+c.id, "");
+  const saved = el("span",{class:"saved",text:""});
+  const lastTs = lsGet("vpb-note-ts-"+c.id,"");
+  if(lastTs) saved.textContent = "last saved "+lastTs;
+  const btn = el("button",{class:"savebtn",text:"Save note"});
+  btn.addEventListener("click",()=>{ lsSet("vpb-note-"+c.id, ta.value); const ts=new Date().toLocaleString(); lsSet("vpb-note-ts-"+c.id, ts); saved.textContent="saved "+ts; });
+  notes.append(ta, el("div",{}, btn, saved));
+  card.append(notes);
+
+  return card;
+}
+
+function buildCostPage(){
+  const wrap = el("div",{});
+  wrap.append(el("div",{class:"banner"},
+    document.createTextNode("Today AVANTI costs ~$1–7/mo (≈86 convos/mo, Haiku 4.5, no Home Grid decoration built). This tool projects "),
+    el("b",{text:"as-is vs suggested at scale"}),
+    document.createTextNode(" — we're choosing a design, not adding cost to a live feature.")
+  ));
+  const f = el("iframe",{class:"frame", src:"vai-avanti-cost-calculator.html", title:"AVANTI Cost Model", style:"height:900px"});
+  wrap.append(f);
+  wrap.append(el("a",{class:"link", href:"vai-avanti-cost-calculator.html", target:"_blank", text:"Open calculator full-screen ↗"}));
+  return wrap;
+}
+
+function render(page){
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active", b.dataset.page===page));
+  const head = document.getElementById("pagehead"); head.replaceChildren();
+  head.append(el("h2",{text:PAGES[page].title}), el("p",{text:PAGES[page].desc}));
+  const content = document.getElementById("content"); content.replaceChildren();
+  if(page==="cost"){ content.append(buildCostPage()); return; }
+  const items = CONCEPTS.filter(c=>c.page===page);
+  if(!items.length){ content.append(el("p",{class:"cmeta",text:"Nothing here yet."})); return; }
+  items.forEach(c=>content.append(buildCard(c)));
+}
+
+document.getElementById("nav").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-page]"); if(!b)return;
+  location.hash = b.dataset.page; render(b.dataset.page);
+});
+const start = (location.hash||"#p1").slice(1);
+render(PAGES[start]?start:"p1");
+</script>
+</body>
+</html>
