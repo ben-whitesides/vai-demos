@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>VAI App — Priority Builds (Badinho &amp; Francis)</title>
 <style>
   :root{
@@ -57,9 +58,9 @@
     <h1>VAI App — Priority Builds</h1>
     <p class="tagline">Owners: Badinho (mobile) &amp; Francis (vai-api). Each page = one priority tier. Update status + notes as you go — saved in your browser.</p>
     <nav id="nav">
-      <button data-page="p1" class="active">P1 — Priority</button>
-      <button data-page="p2">P2</button>
-      <button data-page="p3">P3</button>
+      <button data-page="p1" class="active">P1 — Home + AVANTI</button>
+      <button data-page="p2">P2 — Calendar</button>
+      <button data-page="p3">P3 — Wearables + Infra</button>
       <button data-page="p4">P4 — GAME OS mobile</button>
       <button data-page="cost">AVANTI Cost Model</button>
     </nav>
@@ -77,9 +78,9 @@
 
 <script>
 const PAGES = {
-  p1: {title:"P1 — Priority Build", desc:"Ship these first. AVANTI OS Brain architecture is locked (dual-judge) but its Home Grid LLM decoration stays frozen until cost is dialed — see the AVANTI Cost Model tab."},
-  p2: {title:"P2", desc:"Next tier — start once P1 is moving."},
-  p3: {title:"P3", desc:"Lower-priority builds: Wearables, Admin Portal v2, Sentry. Live Scoring is an example/backlog item."},
+  p1: {title:"P1 — Home + AVANTI", desc:"Build first: VAI app Home, Profile, and the AVANTI chat surface. AVANTI OS Brain architecture is locked (dual-judge); its Home Grid LLM decoration stays frozen until cost is dialed — see the AVANTI Cost Model tab."},
+  p2: {title:"P2 — Calendar", desc:"Mentor Calendar Phase 1 (+ Expo Push fallback). Start once P1 is moving."},
+  p3: {title:"P3 — Wearables + Infra", desc:"Wearables Phase 1, Admin Portal v2, Sentry. Live Scoring is an example/backlog item."},
   p4: {title:"P4 — GAME OS mobile", desc:"GAME OS league designs on the VAI app — comes AFTER the VAI app Home + AVANTI work. Explicitly NOT first."},
   cost: {title:"AVANTI Cost Model — As-is vs Suggested", desc:"The economic decision tool. Today AVANTI costs ~nothing; this projects what Home Grid would cost as-is vs the suggested architecture."}
 };
