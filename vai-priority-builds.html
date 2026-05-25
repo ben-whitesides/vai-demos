@@ -34,6 +34,8 @@
   .b-frozen{background:rgba(183,148,246,.15);color:var(--purple)}
   .cnote{font-size:13px;color:var(--muted);margin:12px 0 0;border-left:3px solid var(--line);padding-left:12px}
   .cnote b{color:var(--txt)}
+  .fgroup{font-size:12px;font-weight:700;color:var(--amber);margin:14px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+  .flist{margin:0 0 6px;padding-left:18px} .flist li{font-size:12.5px;color:var(--muted);margin:5px 0;line-height:1.5}
   .frame{width:100%;height:480px;border:1px solid var(--line);border-radius:10px;margin-top:14px;background:#fff}
   .nodesign{margin-top:14px;padding:18px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:13px;text-align:center}
   .notes{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
@@ -93,7 +95,25 @@ const CONCEPTS = [
   { id:"mentor-cal", page:"p1", title:"Mentor Calendar Phase 1",
     owner:"Francis -> Badinho", repos:"vai-api + game-day + vai-mobile", status:"approved",
     design:"vai-mentor-calendar.html",
-    note:"Christmas Package, Code Masters PASS. Deploy API first, then web + mobile. Heads-up failure modes: {id} JSON envelope not bare Guid (PR #565); admin fallthrough auth so a 2nd org admin can edit/cancel; edit-mode pre-fill from raw ISO (not display strings); cancel URL keeps the /events/ segment; isPrivate:true for 1:1 sessions." },
+    note:"Christmas Package, Code Masters PASS. Deploy order: API first (Francis), then web + mobile (Badinho). The findings below came out of recent platform work and apply directly to this PR — treat as required, not optional. Each has a real failure mode.",
+    findings:[
+      {group:"Backend (Francis) — required", items:[
+        "{id} envelope: POST /v2/management/common/groups and .../scheduled-event must return an { id } JSON envelope, NOT a bare Guid string. Bare-Guid responses can't be parsed reliably across mobile + web and caused a multi-hour outage on another surface (PR #565).",
+        "Admin fallthrough auth: UpdateScheduledEventAsync + CancelEventAsync must fall through from owner-only to UserIsGroupAdminAsync(group.Id, userId) via GetGroupByScheduledEventIdAsync, so a 2nd org admin can edit/cancel a Mentor's session. Without it, multi-admin orgs hit 401s on each other's events (PR #565).",
+        "Discriminated result: any helper that looks up the Mentor's 'upcoming session' must distinguish empty-list vs upstream-error. Conflating them silently marks a cancel 'succeeded' while the session stays active and athletes are never notified."
+      ]},
+      {group:"Mobile (Badinho) — edit + cancel UX", items:[
+        "Edit-mode pre-fill: parse raw startTimeUtc ISO into YYYY-MM-DD (date widget) + HH:MM 24h (time widget). Never feed display strings like 'Sep 12, 2026' or '9:00 AM' — Edit opens with blank fields and the Mentor re-types every value.",
+        "Cancel URL is POST /v1/management/common/events/{eventId}/cancel — keep the /events/ segment. Drop it and the request 404s; the athlete-notification pipeline never fires.",
+        "Private 1:1 sessions: pass isPrivate:true on Group create, or the session shows up in public group search.",
+        "Filter my-groups to Mentor sessions: tag the Group description with a machine prefix like [mentor:session] and filter client-side — avoids needing a new backend filter param."
+      ]},
+      {group:"Already shipped — informational, no action", items:[
+        "Group invitation accept now atomically adds the user to group_users AND enrolls them in the group's current group_events — mobile does NOT need a follow-up enroll call. Caveat: events added AFTER the user joins do not backfill-enroll (Phase 2 work).",
+        "Phase 1 scheduled-event fields are live: maxAttendees, cancelWindowHours, cancelFeePercent, eventContent, avantiSessionId, eventSlug, timezone, locationText.",
+        "groups table has organization_id (migration 103) + archived_at (migration 104). GetMyGroupsAsync filters archived by default; supports ?includeArchived=true."
+      ]}
+    ] },
   { id:"wearables", page:"p1", title:"Wearables Phase 1",
     owner:"Badinho (Francis review)", repos:"vai-mobile-react-native", status:"cleared",
     design:"VAI Wearables Entry Point _standalone_.html",
@@ -157,6 +177,15 @@ function buildCard(c){
   card.append(top);
 
   card.append(el("p",{class:"cnote",text:c.note}));
+
+  if(c.findings){
+    c.findings.forEach(f=>{
+      card.append(el("p",{class:"fgroup",text:f.group}));
+      const ul=el("ul",{class:"flist"});
+      f.items.forEach(it=>ul.append(el("li",{text:it})));
+      card.append(ul);
+    });
+  }
 
   if(c.design){
     const f = el("iframe",{class:"frame", src:c.design, loading:"lazy", title:c.title});
