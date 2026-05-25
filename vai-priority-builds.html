@@ -59,7 +59,8 @@
     <nav id="nav">
       <button data-page="p1" class="active">P1 — Priority</button>
       <button data-page="p2">P2</button>
-      <button data-page="p3">P3 / Backlog</button>
+      <button data-page="p3">P3</button>
+      <button data-page="p4">P4 — GAME OS mobile</button>
       <button data-page="cost">AVANTI Cost Model</button>
     </nav>
   </div>
@@ -78,7 +79,8 @@
 const PAGES = {
   p1: {title:"P1 — Priority Build", desc:"Ship these first. AVANTI OS Brain architecture is locked (dual-judge) but its Home Grid LLM decoration stays frozen until cost is dialed — see the AVANTI Cost Model tab."},
   p2: {title:"P2", desc:"Next tier — start once P1 is moving."},
-  p3: {title:"P3 / Backlog", desc:"Lower priority. Live Scoring is an example/backlog item, not a current target."},
+  p3: {title:"P3", desc:"Lower-priority builds: Wearables, Admin Portal v2, Sentry. Live Scoring is an example/backlog item."},
+  p4: {title:"P4 — GAME OS mobile", desc:"GAME OS league designs on the VAI app — comes AFTER the VAI app Home + AVANTI work. Explicitly NOT first."},
   cost: {title:"AVANTI Cost Model — As-is vs Suggested", desc:"The economic decision tool. Today AVANTI costs ~nothing; this projects what Home Grid would cost as-is vs the suggested architecture."}
 };
 
@@ -122,7 +124,7 @@ const CONCEPTS = [
         "groups table has organization_id (migration 103) + archived_at (migration 104). GetMyGroupsAsync filters archived by default; supports ?includeArchived=true."
       ]}
     ] },
-  { id:"wearables", page:"p1", title:"Wearables Phase 1",
+  { id:"wearables", page:"p3", title:"Wearables Phase 1",
     owner:"Badinho (Francis review)", repos:"vai-mobile-react-native", status:"cleared",
     design:"VAI%20Wearables%20Variations%20_standalone_.html",
     note:"CLEARED FOR SHIP — dual-audit PASS (Sonnet 9.0/9.2/9.0 + Haiku 9.0/9.1/9.0), tsc 0, version parity confirmed (Expo 53.0.19 / RN 0.79.5 / OneSignal 5.0.4 / Sentry 6.14 / TanStack 5.83). Sandbox: ~/Desktop/vai-mobile-wearables-sandbox-v53/. Est: Badinho ~30 min, Francis ~10 min review.",
@@ -165,7 +167,12 @@ const CONCEPTS = [
   { id:"live-scoring", page:"p3", title:"Live Scoring screen",
     owner:"TBD", repos:"vai-mobile", status:"backlog",
     design:null,
-    note:"Backlog / example. Design exists as the 'VAI SCORE PHASE 2' screenshot. Not a current build target." }
+    note:"Backlog / example. Design exists as the 'VAI SCORE PHASE 2' screenshot. Not a current build target." },
+  // ---- P4 ----
+  { id:"game-os-mobile", page:"p4", title:"GAME OS mobile redesign",
+    owner:"Badinho", repos:"vai-mobile", status:"backlog",
+    design:"vai-game-os-mobile-standalone.html",
+    note:"GAME OS league designs on the VAI app. Comes AFTER the VAI app Home + AVANTI build — explicitly not first. Lowest current priority." }
 ];
 
 const STATUS_LABEL = {concept:"Concept",approved:"Approved",cleared:"Cleared",ready:"95% Ready",queued:"Queued",frozen:"Frozen — pending cost",backlog:"Backlog"};
