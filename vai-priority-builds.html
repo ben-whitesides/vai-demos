@@ -37,6 +37,21 @@
   .cnote b{color:var(--txt)}
   .fgroup{font-size:12px;font-weight:700;color:var(--amber);margin:14px 0 4px;text-transform:uppercase;letter-spacing:.04em}
   .flist{margin:0 0 6px;padding-left:18px} .flist li{font-size:12.5px;color:var(--muted);margin:5px 0;line-height:1.5}
+  .cgroup{font-size:11px;font-weight:700;color:var(--amber);margin:16px 0 0;text-transform:uppercase;letter-spacing:.05em}
+  .clprogress{display:flex;align-items:center;gap:10px;margin:7px 0 4px}
+  .clprogress.clcard{margin:16px 0 2px;padding:11px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
+  .pbar{flex:1;height:6px;background:var(--bg);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+  .clprogress.clcard .pbar{height:8px}
+  .pbar i{display:block;height:100%;width:0;background:var(--green);border-radius:99px;transition:width .28s ease}
+  .pcount{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap;min-width:62px;text-align:right}
+  .pcount.done{color:var(--green)}
+  .check{display:flex;gap:11px;align-items:flex-start;margin:0;padding:9px 4px;cursor:pointer;font-size:13px;line-height:1.5;border-top:1px solid rgba(38,50,63,.55);border-radius:6px;transition:background .12s}
+  .check:first-of-type{border-top:none}
+  .check:hover{background:rgba(255,255,255,.02)}
+  .check input{margin-top:2px;width:16px;height:16px;accent-color:var(--green);flex-shrink:0;cursor:pointer}
+  .check .ctext{flex:1;color:var(--muted)}
+  .check.done .ctext{text-decoration:line-through;opacity:.5}
+  .check code,.flist code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:var(--accent);white-space:nowrap}
   .frame{width:100%;height:480px;border:1px solid var(--line);border-radius:10px;margin-top:14px;background:#fff}
   .nodesign{margin-top:14px;padding:18px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:13px;text-align:center}
   .notes{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
@@ -116,7 +131,22 @@ const CONCEPTS = [
     design:"vai-mentor-calendar.html",
     note:"Christmas Package, Code Masters PASS. Deploy order: API first (Francis), then web + mobile (Badinho). The findings below came out of recent platform work and apply directly to this PR — treat as required, not optional. Each has a real failure mode.",
     findings:[
-      {group:"Backend (Francis) — required", items:[
+      {group:"Francis (vai-api) — deploy order: API first", items:[
+        "Create PR from feature/mentor-calendar-phase1 → main",
+        "Run migrations 041 + 057 (dev → staging → prod)",
+        "Deploy via build-and-test workflow",
+        "Run verify-phase1.sh — confirm all 16 tests pass",
+        "Notify Badinho that API is live"
+      ]},
+      {group:"Badinho (vai-game-day + vai-mobile)", items:[
+        "Confirm API deployed (Francis done above)",
+        "Create web PR (vai-game-day → main)",
+        "Create mobile PR (vai-mobile-react-native → dev)",
+        "Deploy web via build-deploy workflow",
+        "Deploy mobile (OTA or EAS build)",
+        "Verify: Mentor sees Notes textarea, event content renders, AVANTI deep link works"
+      ]},
+      {group:"Heads-up — Backend (Francis), required", items:[
         "{id} envelope: POST /v2/management/common/groups and .../scheduled-event must return an { id } JSON envelope, NOT a bare Guid string. Bare-Guid responses can't be parsed reliably across mobile + web and caused a multi-hour outage on another surface (PR #565).",
         "Admin fallthrough auth: UpdateScheduledEventAsync + CancelEventAsync must fall through from owner-only to UserIsGroupAdminAsync(group.Id, userId) via GetGroupByScheduledEventIdAsync, so a 2nd org admin can edit/cancel a Mentor's session. Without it, multi-admin orgs hit 401s on each other's events (PR #565).",
         "Discriminated result: any helper that looks up the Mentor's 'upcoming session' must distinguish empty-list vs upstream-error. Conflating them silently marks a cancel 'succeeded' while the session stays active and athletes are never notified."
@@ -163,16 +193,41 @@ const CONCEPTS = [
   { id:"admin", page:"p3", title:"Admin Portal v2",
     owner:"Francis", repos:"vai-app-admin", status:"ready",
     design:"vai-admin-portal-v2-extract.html",
-    note:"95% ready: PR -> code review -> merge -> deploy to production." },
+    note:"95% ready: PR -> code review -> merge -> deploy to production.",
+    findings:[
+      {group:"Admin Portal v2 (Francis)", items:[
+        "PR created to main",
+        "Code review complete",
+        "Merge to main",
+        "Deploy to production"
+      ]}
+    ] },
   { id:"expo-push", page:"p2", title:"Expo Push Fallback (OneSignal backup)",
     owner:"Badinho", repos:"vai-mobile", status:"queued",
     design:null,
-    note:"Priority 2: configure Expo Push, wire fallback logic, test fallback scenario, merge." },
+    note:"Priority 2: configure Expo Push, wire fallback logic, test fallback scenario, merge.",
+    findings:[
+      {group:"Expo Push Fallback (Badinho)", items:[
+        "Expo Push configured",
+        "Fallback logic wired",
+        "Test fallback scenario",
+        "Merge to main"
+      ]}
+    ] },
   // ---- P3 ----
   { id:"sentry", page:"p3", title:"Sentry Crash Reporting",
     owner:"Francis", repos:"iOS + Android", status:"queued",
     design:null,
-    note:"Priority 3: create project, integrate SDK (iOS + Android), configure error filtering, test, merge." },
+    note:"Priority 3: create project, integrate SDK (iOS + Android), configure error filtering, test, merge.",
+    findings:[
+      {group:"Sentry Crash Reporting (Francis)", items:[
+        "Sentry project created",
+        "SDK integrated (iOS + Android)",
+        "Error filtering configured",
+        "Test crash reporting",
+        "Merge to main"
+      ]}
+    ] },
   { id:"live-scoring", page:"p3", title:"Live Scoring screen",
     owner:"TBD", repos:"vai-mobile", status:"backlog",
     design:null,
@@ -207,6 +262,43 @@ function badge(status){
   return b;
 }
 
+// Render item text with `inline code` as subtle monospace pills (reads as a task, not a terminal command)
+function renderItemText(text){
+  const span=el("span",{class:"ctext"});
+  String(text).split(/(`[^`]+`)/).forEach(seg=>{
+    if(!seg) return;
+    if(seg.length>1 && seg[0]==="`" && seg[seg.length-1]==="`") span.append(el("code",{text:seg.slice(1,-1)}));
+    else span.append(document.createTextNode(seg));
+  });
+  return span;
+}
+
+// Interactive checklist group — checkboxes persist in localStorage (vpb-check-<cardId>-<prefix>-<i>), with a progress bar
+function checklistGroup(cardId, groupName, items, keyPrefix, cardBoxes, cardRefresh){
+  const section = el("div",{});
+  section.append(el("p",{class:"cgroup",text:groupName}));
+  const boxes=[];
+  const bar=el("i",{}); const pc=el("span",{class:"pcount"});
+  const refresh=()=>{
+    const done=boxes.filter(b=>b.checked).length;
+    const pct=items.length?Math.round(done/items.length*100):0;
+    bar.style.width=pct+"%"; pc.textContent=done+" / "+items.length;
+    pc.className="pcount"+(items.length&&done===items.length?" done":"");
+  };
+  section.append(el("div",{class:"clprogress"}, el("div",{class:"pbar"}, bar), pc));
+  items.forEach((it,i)=>{
+    const key="vpb-check-"+cardId+"-"+keyPrefix+"-"+i;
+    const on=lsGet(key,"")==="1";
+    const row=el("label",{class:"check"+(on?" done":"")});
+    const box=el("input",{type:"checkbox"}); box.checked=on; boxes.push(box); if(cardBoxes) cardBoxes.push(box);
+    box.addEventListener("change",()=>{ lsSet(key, box.checked?"1":"0"); row.classList.toggle("done",box.checked); refresh(); if(cardRefresh) cardRefresh(); });
+    row.append(box, renderItemText(it));
+    section.append(row);
+  });
+  refresh();
+  return section;
+}
+
 function buildCard(c){
   const card = el("div",{class:"card"});
 
@@ -224,13 +316,29 @@ function buildCard(c){
 
   card.append(el("p",{class:"cnote",text:c.note}));
 
+  // Per-task build items mirror the Slack "VAI Weekly Priority Checklist" canvas — interactive checkboxes + progress
   if(c.findings){
-    c.findings.forEach(f=>{
-      card.append(el("p",{class:"fgroup",text:f.group}));
-      const ul=el("ul",{class:"flist"});
-      f.items.forEach(it=>ul.append(el("li",{text:it})));
-      card.append(ul);
+    const cardBoxes=[];
+    const cbar=el("i",{}); const cpc=el("span",{class:"pcount"});
+    const cardRefresh=()=>{
+      const tot=cardBoxes.length, done=cardBoxes.filter(b=>b.checked).length, pct=tot?Math.round(done/tot*100):0;
+      cbar.style.width=pct+"%"; cpc.textContent=done+" / "+tot+" done";
+      cpc.className="pcount"+(tot&&done===tot?" done":"");
+    };
+    card.append(el("div",{class:"clprogress clcard"},
+      el("span",{class:"cgroup",style:"margin:0;color:var(--txt)",text:"Checklist"}),
+      el("div",{class:"pbar"}, cbar), cpc));
+    c.findings.forEach((f,gi)=>{
+      if(/informational|no action|already shipped/i.test(f.group)){
+        card.append(el("p",{class:"cgroup",text:f.group}));
+        const ul=el("ul",{class:"flist"});
+        f.items.forEach(it=>ul.append(el("li",{}, renderItemText(it))));
+        card.append(ul);
+      } else {
+        card.append(checklistGroup(c.id, f.group, f.items, "g"+gi, cardBoxes, cardRefresh));
+      }
     });
+    cardRefresh();
   }
 
   if(c.design){
