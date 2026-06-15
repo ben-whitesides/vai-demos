@@ -1,0 +1,2616 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GAME OS Film Room - Noah Whitesides #42</title>
+  <style>
+    :root {
+      --bg: #050607;
+      --panel: #121315;
+      --panel-2: #17191c;
+      --line: #2a2d33;
+      --text: #f5f5f2;
+      --muted: #a8a8b3;
+      --dim: #777783;
+      --gold: #f5a331;
+      --green: #63df9f;
+      --red: #ef5d58;
+      --blue: #76a9ff;
+      --maroon: #752a31;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .app { display: grid; grid-template-columns: 286px 1fr; min-height: 100vh; }
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid var(--line);
+      background: #070809;
+      padding: 28px 20px;
+    }
+
+    .brand { display: flex; gap: 12px; align-items: center; font-weight: 900; letter-spacing: .12em; }
+    .mark {
+      width: 28px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--gold), #f47b20);
+      clip-path: polygon(0 0, 42% 24%, 42% 100%, 0 74%, 0 0, 100% 0, 58% 24%, 58% 100%, 100% 74%, 100% 0);
+    }
+
+    .role { margin-top: 34px; color: var(--muted); font-weight: 700; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      padding: 6px 12px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(245, 163, 49, .45);
+      color: var(--gold);
+      background: rgba(245, 163, 49, .12);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+    }
+
+    nav { margin-top: 30px; }
+    .nav-title { margin: 24px 0 12px; color: #8b8b96; font-size: 12px; font-weight: 900; letter-spacing: .18em; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 46px;
+      padding: 0 10px;
+      border-radius: 8px;
+      color: #81818e;
+      font-weight: 800;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #6c6d77; }
+    .nav-item.active { color: var(--green); background: rgba(64, 196, 128, .13); border: 1px solid rgba(99, 223, 159, .35); }
+    .nav-item.active .dot { background: var(--green); }
+
+    main { min-width: 0; }
+    .topbar {
+      height: 58px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: #08090a;
+    }
+    .status { display: flex; align-items: center; gap: 10px; color: var(--gold); font-size: 12px; font-weight: 900; letter-spacing: .16em; }
+    .status::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px var(--green); }
+
+    .content { max-width: 1620px; margin: 0 auto; padding: 32px; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(360px, .8fr);
+      gap: 24px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(245, 163, 49, .18), transparent 34%),
+        radial-gradient(circle at 78% 28%, rgba(99, 223, 159, .10), transparent 28%),
+        linear-gradient(135deg, rgba(117, 42, 49, .28), rgba(14, 19, 16, .86) 46%, rgba(6, 8, 9, .95));
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: .55;
+      pointer-events: none;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .tag {
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255, 255, 255, .04);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .tag.good { color: var(--green); border-color: rgba(99, 223, 159, .38); background: rgba(99, 223, 159, .1); }
+    .tag.gold { color: var(--gold); border-color: rgba(245, 163, 49, .38); background: rgba(245, 163, 49, .1); }
+    h1 { margin: 0; max-width: 940px; font-size: clamp(34px, 4vw, 64px); line-height: 1.03; letter-spacing: 0; }
+    .sub { max-width: 900px; margin: 18px 0 0; color: #c6c6cc; font-size: 18px; line-height: 1.55; }
+    .mode-switch {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 22px;
+      max-width: 1040px;
+    }
+    .mode-card {
+      position: relative;
+      min-height: 92px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      background: rgba(255, 255, 255, .025);
+      overflow: hidden;
+    }
+    .mode-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--dim);
+    }
+    .mode-card.active {
+      border-color: rgba(99, 223, 159, .48);
+      background: rgba(99, 223, 159, .08);
+    }
+    .mode-card.active::before { background: var(--green); }
+    .mode-card.next::before { background: var(--gold); }
+    .mode-card label {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .mode-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .history-center {
+      margin-top: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 6% 0%, rgba(245, 163, 49, .18), transparent 30%),
+        radial-gradient(circle at 90% 18%, rgba(99, 223, 159, .12), transparent 32%),
+        linear-gradient(135deg, rgba(117, 42, 49, .24), rgba(12, 15, 16, .94) 48%, #0a0b0d);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+    .history-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .history-head h2 { margin: 0; font-size: clamp(34px, 3.2vw, 56px); line-height: 1.02; }
+    .history-head .eyebrow { margin-top: 8px; color: #b5b5be; }
+    .history-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+    .action-btn {
+      min-height: 44px;
+      border: 1px solid rgba(245, 163, 49, .48);
+      border-radius: 7px;
+      background:
+        linear-gradient(180deg, rgba(245, 163, 49, .22), rgba(245, 163, 49, .10));
+      color: var(--gold);
+      padding: 0 15px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .action-btn.primary {
+      border-color: rgba(99, 223, 159, .52);
+      color: #06100b;
+      background: linear-gradient(180deg, #78efb0, #47c981);
+      box-shadow: 0 0 22px rgba(99, 223, 159, .16);
+    }
+    .action-btn.secondary {
+      border-color: rgba(255,255,255,.12);
+      color: #d6d6dc;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+    }
+    .action-btn:hover,
+    .ghost-btn:hover {
+      transform: translateY(-1px);
+    }
+    .history-body {
+      display: grid;
+      grid-template-columns: 232px minmax(430px, 1.08fr) minmax(340px, .92fr);
+      gap: 18px;
+      padding: 22px;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, .018) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+    .filter-rail,
+    .run-list,
+    .run-detail {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(8, 10, 11, .76);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .filter-rail { padding: 12px; display: grid; gap: 8px; align-content: start; }
+    .filter-btn {
+      width: 100%;
+      min-height: 54px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: rgba(255,255,255,.018);
+      color: #b8b8c0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 9px 10px;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+    }
+    .filter-btn strong {
+      display: block;
+      color: inherit;
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+    .filter-btn span { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .filter-btn.active {
+      border-color: rgba(99, 223, 159, .42);
+      background:
+        linear-gradient(90deg, rgba(99, 223, 159, .14), rgba(99, 223, 159, .04));
+      color: var(--green);
+    }
+    .filter-count {
+      justify-self: end;
+      min-width: 28px;
+      min-height: 24px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      color: var(--text);
+      background: rgba(255,255,255,.035);
+      font-size: 11px;
+      font-weight: 950;
+    }
+    .run-list { padding: 12px; display: grid; gap: 12px; max-height: 560px; overflow: auto; }
+    .run-card {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .015));
+      color: var(--text);
+      padding: 15px;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      display: grid;
+      gap: 10px;
+      min-height: 124px;
+      position: relative;
+      overflow: hidden;
+    }
+    .run-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--green);
+      opacity: .75;
+    }
+    .run-card.active,
+    .run-card:hover {
+      border-color: rgba(99, 223, 159, .50);
+      background:
+        radial-gradient(circle at 90% 12%, rgba(99, 223, 159, .10), transparent 30%),
+        rgba(99, 223, 159, .08);
+    }
+    .run-card > * { position: relative; z-index: 1; }
+    .run-card.team::before { background: var(--blue); }
+    .run-card.competition::before { background: var(--gold); }
+    .run-card.game::before { background: var(--gold); }
+    .run-card.review::before { background: var(--red); }
+    .run-card.competition.active,
+    .run-card.competition:hover {
+      border-color: rgba(245, 163, 49, .50);
+      background: rgba(245, 163, 49, .07);
+    }
+    .run-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 12px; }
+    .run-title { display: block; font-size: 16px; font-weight: 950; line-height: 1.15; }
+    .run-sub { color: #9c9ca6; font-size: 12px; font-weight: 850; letter-spacing: .07em; text-transform: uppercase; line-height: 1.35; }
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border: 1px solid rgba(99, 223, 159, .34);
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(99, 223, 159, .08);
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+      justify-self: end;
+    }
+    .status-chip.warn { color: var(--gold); border-color: rgba(245, 163, 49, .38); background: rgba(245, 163, 49, .08); }
+    .status-chip.dim { color: #aaaab4; border-color: var(--line); background: rgba(255,255,255,.03); }
+    .status-chip.bad { color: var(--red); border-color: rgba(239, 93, 88, .38); background: rgba(239, 93, 88, .08); }
+    .run-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .run-metric { border-left: 3px solid var(--green); background: rgba(0,0,0,.22); border-radius: 6px; padding: 9px; }
+    .run-metric label { display: block; color: var(--muted); font-size: 10px; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
+    .run-metric strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 17px;
+      line-height: 1.05;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .retention-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .retention-pill {
+      display: inline-flex;
+      min-height: 24px;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      color: #c9c9d1;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .retention-pill.good { color: var(--green); border-color: rgba(99, 223, 159, .30); background: rgba(99, 223, 159, .07); }
+    .retention-pill.warn { color: var(--gold); border-color: rgba(245, 163, 49, .32); background: rgba(245, 163, 49, .07); }
+    .retention-pill.dim { color: #9b9ba5; }
+    .run-detail {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(99, 223, 159, .10), transparent 34%),
+        rgba(8, 10, 11, .76);
+    }
+    .run-detail h3 { margin: 0; font-size: 30px; line-height: 1.04; }
+    .detail-copy { color: #c8c8d0; line-height: 1.45; margin: 0; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .detail-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .ghost-btn {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
+      color: var(--text);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .ghost-btn:disabled {
+      cursor: default;
+      color: #72727c;
+      border-color: rgba(255,255,255,.06);
+      background: rgba(255,255,255,.018);
+      transform: none;
+    }
+    .ghost-btn.primary {
+      border-color: rgba(99, 223, 159, .42);
+      color: var(--green);
+      background: rgba(99, 223, 159, .08);
+    }
+    .hidden { display: none !important; }
+    .analysis-workspace { margin-top: 24px; }
+    .workspace-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    }
+    .workspace-title {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+    .workspace-title strong { font-size: 16px; font-weight: 950; }
+    .workspace-title span { color: var(--muted); font-size: 12px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+
+    .metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .metric {
+      position: relative;
+      overflow: hidden;
+      min-height: 118px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .012));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+    .metric::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--gold);
+      opacity: .85;
+    }
+    .metric label { display: block; color: #8f8f99; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+    .metric strong { display: block; margin-top: 10px; font-size: 34px; line-height: 1; }
+    .metric span { display: block; margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.35; }
+
+    .grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(390px, .8fr); gap: 24px; margin-top: 24px; align-items: start; }
+    .stack-panel { margin-top: 24px; }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #151619, #101113);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel h2 { margin: 0; font-size: 24px; line-height: 1.05; }
+    .eyebrow { margin-top: 3px; color: #8b8b96; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+    .info {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-weight: 900;
+      cursor: help;
+      flex: 0 0 auto;
+    }
+    .info:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      z-index: 8;
+      right: 0;
+      top: 32px;
+      width: 290px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #0b0c0e;
+      color: #d7d7dc;
+      font-size: 13px;
+      line-height: 1.4;
+      font-weight: 650;
+      letter-spacing: 0;
+    }
+
+    video, img { width: 100%; display: block; background: #000; aspect-ratio: 16 / 9; object-fit: cover; }
+    .media-console {
+      background:
+        radial-gradient(circle at 50% 20%, rgba(99, 223, 159, .08), transparent 34%),
+        #030405;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .media-console video,
+    .media-console img {
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+    }
+    .video-caption {
+      padding: 14px 18px;
+      color: #c3c3ca;
+      border-top: 1px solid var(--line);
+      line-height: 1.45;
+      background: rgba(255, 255, 255, .018);
+    }
+    .football-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      padding: 14px;
+      border-top: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(99, 223, 159, .03) 1px, transparent 1px),
+        #0d0f10;
+      background-size: 44px 44px;
+    }
+    .football-stat {
+      position: relative;
+      overflow: hidden;
+      min-height: 104px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .015));
+    }
+    .football-stat::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--green);
+      opacity: .8;
+    }
+    .football-stat label {
+      display: block;
+      color: #8f8f99;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      line-height: 1.18;
+    }
+    .football-stat strong {
+      display: block;
+      margin-top: 8px;
+      font-size: clamp(22px, 2.1vw, 30px);
+      line-height: 1.02;
+      overflow-wrap: anywhere;
+    }
+    .football-stat span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+
+    .clip-list { padding: 14px; display: grid; gap: 10px; }
+    .clip-row {
+      width: 100%;
+      color: var(--text);
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #101113;
+      padding: 14px;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr) 76px;
+      gap: 12px;
+      align-items: center;
+      font: inherit;
+    }
+    .clip-row:hover, .clip-row.active { border-color: rgba(99, 223, 159, .55); background: rgba(99, 223, 159, .08); }
+    .rank { color: var(--gold); font-size: 19px; font-weight: 950; }
+    .clip-name { font-weight: 900; }
+    .clip-meta { margin-top: 4px; color: #9797a2; font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .score { justify-self: end; color: var(--green); font-size: 25px; font-weight: 950; }
+    .breakdown {
+      grid-column: 1 / -1;
+      display: none;
+      margin-top: 4px;
+      border: 1px solid rgba(99, 223, 159, .28);
+      border-radius: 8px;
+      background: rgba(7, 16, 12, .7);
+      padding: 16px;
+    }
+    .clip-row.active + .breakdown { display: block; }
+    .breakdown-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+    .mini { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: rgba(0, 0, 0, .18); }
+    .mini label { display: block; color: #8f8f99; font-size: 11px; font-weight: 900; letter-spacing: .15em; text-transform: uppercase; }
+    .mini strong { display: block; margin-top: 6px; font-size: 22px; line-height: 1.08; overflow-wrap: anywhere; }
+    .why { margin: 12px 0 0; color: #c8c8ce; line-height: 1.45; }
+
+    .readout {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, .018) 1px, transparent 1px);
+      background-size: 46px 46px;
+    }
+    .callout {
+      position: relative;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--green);
+      border-radius: 8px;
+      padding: 14px 14px 14px 16px;
+      color: #d5d5da;
+      line-height: 1.55;
+      background: rgba(255, 255, 255, .028);
+    }
+    .callout.warn { border-color: var(--gold); }
+    .callout.bad { border-color: var(--red); }
+    .callout b { color: var(--text); display: block; margin-bottom: 4px; }
+
+    .review-list { display: grid; gap: 12px; padding: 14px; }
+    .review-card { border: 1px solid var(--line); border-radius: 8px; padding: 16px; background: #101113; display: grid; grid-template-columns: 72px 1fr 56px; gap: 12px; }
+    .time { color: var(--gold); font-weight: 950; }
+    .review-card b { display: block; }
+    .review-card p { margin: 5px 0 0; color: var(--muted); line-height: 1.4; }
+    .pct { color: var(--green); font-weight: 950; text-align: right; }
+    .football-command {
+      display: grid;
+      gap: 18px;
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(99, 223, 159, .035) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(99, 223, 159, .025) 1px, transparent 1px),
+        #0c0e0f;
+      background-size: 56px 56px;
+    }
+    .top-tracked-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .tracked-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(15, 17, 19, .88);
+      cursor: pointer;
+      color: var(--text);
+      padding: 0;
+      text-align: left;
+      font: inherit;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+    }
+    .tracked-card:hover,
+    .tracked-card.active {
+      border-color: rgba(99, 223, 159, .58);
+      background: rgba(18, 31, 24, .92);
+    }
+    .tracked-card video,
+    .tracked-card img {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-bottom: 1px solid var(--line);
+    }
+    .tracked-body {
+      display: grid;
+      gap: 10px;
+      padding: 13px;
+    }
+    .tracked-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .tracked-rank { color: var(--gold); font-weight: 950; letter-spacing: .08em; }
+    .tracked-score { color: var(--green); font-size: 22px; font-weight: 950; }
+    .tracked-title { font-weight: 950; line-height: 1.15; }
+    .tracked-sub { color: #9c9ca6; font-size: 12px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; line-height: 1.35; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip {
+      display: inline-flex;
+      min-height: 24px;
+      align-items: center;
+      padding: 4px 8px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .035);
+      color: #d7d7dc;
+      font-size: 11px;
+      font-weight: 850;
+    }
+    .selected-scout {
+      display: grid;
+      grid-template-columns: minmax(360px, .72fr) minmax(0, 1.28fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+    .scout-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(245, 163, 49, .16), transparent 34%),
+        linear-gradient(135deg, rgba(117, 42, 49, .30), rgba(12, 15, 16, .94) 62%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+    .scout-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0 18%, rgba(255, 255, 255, .035) 18.4% 18.8%, transparent 19.2% 38%, rgba(255, 255, 255, .035) 38.4% 38.8%, transparent 39.2% 58%, rgba(255, 255, 255, .035) 58.4% 58.8%, transparent 59.2% 78%, rgba(255, 255, 255, .035) 78.4% 78.8%, transparent 79.2%);
+      pointer-events: none;
+    }
+    .scout-card > * { position: relative; z-index: 1; }
+    .scout-card h3 { margin: 0; font-size: 34px; line-height: 1.02; }
+    .scout-card p { margin: 12px 0 0; color: #c7c7ce; line-height: 1.45; }
+    .scout-score {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 16px;
+      margin-top: 18px;
+      padding: 15px;
+      border: 1px solid rgba(99, 223, 159, .28);
+      border-radius: 8px;
+      background: rgba(4, 17, 11, .65);
+    }
+    .scout-score label {
+      display: block;
+      color: #8f8f99;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .scout-score strong {
+      display: block;
+      margin-top: 5px;
+      color: var(--green);
+      font-size: 48px;
+      line-height: .9;
+    }
+    .scout-score span {
+      color: #d6d6dc;
+      font-size: 13px;
+      line-height: 1.35;
+      text-align: right;
+      max-width: 150px;
+    }
+    .scout-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .metric-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .metric-tile {
+      position: relative;
+      min-height: 120px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 15px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .035), rgba(255, 255, 255, .012));
+      overflow: hidden;
+    }
+    .metric-tile::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent, var(--green));
+      opacity: .9;
+    }
+    .metric-tile label {
+      display: block;
+      color: #92929e;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      line-height: 1.15;
+    }
+    .metric-tile strong {
+      display: block;
+      margin-top: 13px;
+      color: var(--text);
+      font-size: 34px;
+      line-height: .95;
+    }
+    .metric-tile span {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+    .metric-tile.gold { --accent: var(--gold); }
+    .metric-tile.blue { --accent: var(--blue); }
+    .metric-tile.red { --accent: var(--red); }
+    .opponent-hero {
+      background:
+        radial-gradient(circle at 10% 10%, rgba(118, 169, 255, .18), transparent 30%),
+        radial-gradient(circle at 82% 18%, rgba(245, 163, 49, .14), transparent 24%),
+        linear-gradient(135deg, rgba(16, 43, 72, .30), rgba(13, 16, 20, .9) 44%, rgba(8, 10, 12, .96));
+    }
+    .setup-shell {
+      display: grid;
+      gap: 18px;
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(118, 169, 255, .03) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(118, 169, 255, .02) 1px, transparent 1px),
+        #0d1012;
+      background-size: 48px 48px;
+    }
+    .setup-summary-card {
+      display: grid;
+      gap: 8px;
+      padding: 16px 18px;
+      border: 1px solid rgba(99, 223, 159, .24);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(99, 223, 159, .10), rgba(255,255,255,.02));
+    }
+    .setup-summary-card strong {
+      font-size: 20px;
+      line-height: 1.1;
+    }
+    .setup-summary-card p {
+      margin: 0;
+      color: #d0d0d7;
+      line-height: 1.45;
+    }
+    .analysis-type-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .analysis-type-card {
+      position: relative;
+      min-height: 120px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(255,255,255,.025);
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      text-align: left;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .analysis-type-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: rgba(255,255,255,.14);
+    }
+    .analysis-type-card.active {
+      border-color: rgba(99, 223, 159, .42);
+      background: linear-gradient(135deg, rgba(99, 223, 159, .12), rgba(255,255,255,.02));
+    }
+    .analysis-type-card.active::before { background: var(--green); }
+    .analysis-type-card strong {
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .analysis-type-card span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .analysis-type-card .mini-badge {
+      justify-self: start;
+      min-height: 22px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      padding: 3px 8px;
+      color: #d7d7dc;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,.035);
+    }
+    .analysis-type-card.active .mini-badge {
+      border-color: rgba(99, 223, 159, .30);
+      color: var(--green);
+      background: rgba(99, 223, 159, .08);
+    }
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .flow-step {
+      position: relative;
+      min-height: 92px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(255,255,255,.02);
+      overflow: hidden;
+    }
+    .flow-step::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: rgba(255,255,255,.12);
+    }
+    .flow-step.active::before { background: var(--green); }
+    .flow-step.next::before { background: var(--gold); }
+    .flow-step strong {
+      display: block;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .flow-step p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .output-pack-shell {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(8,10,11,.7);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .output-pack-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .output-pack-head strong {
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+    .output-pack-head span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+    .expand-pack-btn {
+      min-height: 36px;
+      border: 1px solid rgba(118, 169, 255, .34);
+      border-radius: 999px;
+      background: rgba(118, 169, 255, .08);
+      color: #c4d7ff;
+      padding: 0 12px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .reset-pack-btn {
+      min-height: 36px;
+      border: 1px solid rgba(245, 163, 49, .28);
+      border-radius: 999px;
+      background: rgba(245, 163, 49, .08);
+      color: #f6b85a;
+      padding: 0 12px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .output-pack-body {
+      display: grid;
+      gap: 16px;
+      padding: 16px;
+    }
+    .output-pack-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+    }
+    .output-pack-summary {
+      display: grid;
+      gap: 8px;
+    }
+    .output-pack-summary strong {
+      font-size: 20px;
+      line-height: 1.08;
+    }
+    .output-pack-summary p {
+      margin: 0;
+      color: #d2d2d8;
+      line-height: 1.45;
+    }
+    .output-pack-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .output-pack-meta span {
+      display: inline-flex;
+      min-height: 24px;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.035);
+      padding: 3px 8px;
+      color: #d6d6dc;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .06em;
+    }
+    .output-pack-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .output-pack-grid.collapsed {
+      display: none;
+    }
+    .output-card {
+      position: relative;
+      min-height: 172px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+    }
+    .output-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: rgba(255,255,255,.12);
+    }
+    .output-card.on {
+      border-color: rgba(99, 223, 159, .34);
+      background: linear-gradient(135deg, rgba(99,223,159,.10), rgba(255,255,255,.02));
+    }
+    .output-card.on::before { background: var(--green); }
+    .output-card.off::before { background: rgba(255,255,255,.12); }
+    .output-card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .output-card strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 950;
+      line-height: 1.15;
+    }
+    .output-card p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .output-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .output-card-tags span {
+      display: inline-flex;
+      min-height: 22px;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      padding: 3px 8px;
+      color: #d1d1d8;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 58px;
+      height: 32px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .toggle-switch::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #d3d4da;
+      transition: transform .18s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,.35);
+    }
+    .toggle-switch.on {
+      border-color: rgba(99, 223, 159, .34);
+      background: rgba(99, 223, 159, .14);
+    }
+    .toggle-switch.on::after {
+      transform: translateX(26px);
+      background: var(--green);
+    }
+    .toggle-switch.locked {
+      cursor: default;
+      border-color: rgba(245, 163, 49, .24);
+      background: rgba(245, 163, 49, .09);
+    }
+    .toggle-switch.locked::after {
+      transform: translateX(26px);
+      background: var(--gold);
+    }
+    .avanti-compact {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, .78fr);
+      gap: 16px;
+      align-items: start;
+    }
+    .avanti-compact-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    }
+    .avanti-compact-card strong {
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .avanti-compact-card p {
+      margin: 9px 0 0;
+      color: #d4d4db;
+      line-height: 1.45;
+      font-size: 13px;
+    }
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .prompt-pill {
+      min-height: 42px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 0 12px;
+      text-align: left;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .request-composer {
+      display: grid;
+      gap: 8px;
+    }
+    .request-composer label {
+      color: #8f8f99;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .request-input {
+      min-height: 108px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.025);
+      color: #f0f0f2;
+      padding: 14px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .priority-list {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+    }
+    .priority-card {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px 16px 16px 18px;
+      background: #101113;
+      overflow: hidden;
+    }
+    .priority-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--gold);
+    }
+    .priority-card strong { display: block; font-size: 17px; line-height: 1.15; }
+    .priority-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .priority-card span {
+      display: inline-flex;
+      margin-top: 10px;
+      min-height: 24px;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      padding: 3px 8px;
+      color: #d5d5da;
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .danger-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 14px;
+    }
+    .danger-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    }
+    .danger-card strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.12;
+    }
+    .danger-card label {
+      display: block;
+      margin-top: 6px;
+      color: #9d9daa;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .danger-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .output-board {
+      padding: 18px;
+    }
+    .output-board .metric-board {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @media (max-width: 1050px) {
+      .app { grid-template-columns: 1fr; }
+      aside { display: none; }
+      .hero, .grid { grid-template-columns: 1fr; }
+      .mode-switch { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metric-grid, .breakdown-grid, .metric-board, .football-strip, .top-tracked-grid, .selected-scout, .history-body, .analysis-type-grid, .flow-steps, .output-pack-grid, .prompt-grid, .avanti-compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .selected-scout { grid-template-columns: 1fr; }
+      .run-detail { grid-column: 1 / -1; }
+    }
+    @media (max-width: 640px) {
+      .content { padding: 18px; }
+      .topbar { padding: 0 18px; }
+      .hero { padding: 20px; }
+      .mode-switch { grid-template-columns: 1fr; }
+      .metric-grid, .breakdown-grid, .metric-board, .football-strip, .top-tracked-grid, .selected-scout, .history-body, .history-head, .analysis-type-grid, .flow-steps, .output-pack-grid, .prompt-grid, .avanti-compact { grid-template-columns: 1fr; }
+      .workspace-bar { align-items: stretch; flex-direction: column; }
+      .history-actions { justify-content: stretch; }
+      .action-btn { width: 100%; }
+      .clip-row { grid-template-columns: 44px 1fr 58px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand"><span class="mark"></span><span>GAME OS</span></div>
+      <div class="role">Coach</div>
+      <div class="pill">PROTOTYPE</div>
+      <nav>
+        <div class="nav-title">Club OS</div>
+        <div class="nav-item"><span class="dot"></span>Dashboard</div>
+        <div class="nav-item"><span class="dot"></span>Athletes</div>
+        <div class="nav-item"><span class="dot"></span>Roster</div>
+        <div class="nav-title">Live Ops</div>
+        <div class="nav-item"><span class="dot"></span>Live Scoring</div>
+        <div class="nav-item active"><span class="dot"></span>Film Room</div>
+        <div class="nav-item"><span class="dot"></span>Tournaments</div>
+      </nav>
+    </aside>
+    <main>
+      <div class="topbar">
+        <div class="status">AVANTI FILM ROOM</div>
+        <div class="tag gold">LOCAL ONLY</div>
+      </div>
+
+      <section class="content">
+        <section class="history-center" id="filmCommandCenter">
+          <div class="history-head">
+            <div>
+              <h2>Film Room Command Center</h2>
+              <div class="eyebrow">History, recent runs, and analysis workspaces</div>
+            </div>
+            <div class="history-actions">
+              <button class="action-btn secondary" type="button" id="archiveButton">Archived</button>
+              <button class="action-btn" type="button">Upload Film</button>
+              <button class="action-btn primary" type="button">New Analysis</button>
+            </div>
+          </div>
+          <div class="history-body">
+            <div class="filter-rail" id="analysisFilters"></div>
+            <div class="run-list" id="analysisRuns"></div>
+            <div class="run-detail" id="analysisDetail"></div>
+          </div>
+        </section>
+
+        <div class="analysis-workspace hidden" id="analysisWorkspace">
+          <div class="workspace-bar">
+            <button class="ghost-btn" type="button" id="backToCommand">Back To Film Room</button>
+            <div class="workspace-title">
+              <strong id="workspaceTitle">Noah Whitesides #42</strong>
+              <span id="workspaceSubtitle">Player analysis workspace</span>
+            </div>
+            <button class="ghost-btn primary" type="button" id="workspaceSaveButton">Save Coach Review</button>
+          </div>
+
+          <div id="playerWorkspaceBody">
+          <div class="hero">
+            <div>
+              <div class="tags">
+                <span class="tag gold">Football</span>
+                <span class="tag good">Noah #42 Player Report</span>
+                <span class="tag">Coach Confirm Required</span>
+              </div>
+              <h1>Noah Whitesides #42 film readout.</h1>
+              <p class="sub">
+                This local prototype turns the downloaded game clips into a player-focused board:
+                estimated #42 tracking, rep impact ranking, movement load, burst reads, traffic/contact
+                pressure, and coach-review moments. It is built for feedback, not official stat truth yet.
+              </p>
+              <div class="mode-switch">
+                <div class="mode-card active">
+                  <label>Player</label>
+                  <span>Noah #42 individual report, rep ranking, touches, contact, speed, and development notes.</span>
+                </div>
+                <div class="mode-card next">
+                  <label>Team</label>
+                  <span>Formation shape, unit spacing, pursuit, assignments, team tendencies, and coach review.</span>
+                </div>
+                <div class="mode-card next">
+                  <label>Competition</label>
+                  <span>Opponent film, scout tendencies, weak points, personnel notes, and game-plan prep.</span>
+                </div>
+                <div class="mode-card next">
+                  <label>Game</label>
+                  <span>Full-game moments, momentum swings, top performers, scoring pressure, and recap board.</span>
+                </div>
+              </div>
+            </div>
+            <div class="metric-grid" id="heroMetrics"></div>
+          </div>
+
+        <div class="grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Film Player</h2>
+                <div class="eyebrow">Estimated #42 overlays</div>
+              </div>
+              <span class="info" data-tip="The green box follows the strongest estimated maroon-uniform track in each clip. Because this is youth phone film, a coach should confirm the player lock before treating metrics as official.">?</span>
+            </div>
+            <div class="media-console">
+              <img id="player" alt="Selected Noah Film Room still preview" />
+            </div>
+            <div class="video-caption" id="videoCaption"></div>
+            <div class="football-strip" id="selectedFootballStats"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Coach Readout</h2>
+                <div class="eyebrow">What this tells us now</div>
+              </div>
+            </div>
+            <div class="readout">
+              <div class="callout">
+                <b>Useful on day one</b>
+                Carry/touch reads, tackle/contact windows, pursuit angles, burst moments, and player involvement can be reviewed immediately from uploaded clips.
+              </div>
+              <div class="callout warn">
+                <b>Needs coach confirmation</b>
+                The tracker estimates Noah #42 from a maroon-uniform lock. Jersey OCR and roster validation are Phase 2 before official grading.
+              </div>
+              <div class="callout bad">
+                <b>Not official speed yet</b>
+                Yards and mph are estimates until field calibration converts screen movement into real field distance.
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel" style="margin-top:24px">
+          <div class="panel-head">
+            <div>
+              <h2>Top Tracked Reps</h2>
+              <div class="eyebrow">Three best Noah #42 overlays + football readout</div>
+            </div>
+            <span class="info" data-tip="These cards show the three highest-value tracked reps. Click a tracked clip to swap the main player, update the scouting board, and inspect why it ranked.">?</span>
+          </div>
+          <div class="football-command">
+            <div class="top-tracked-grid" id="topTrackedVideos"></div>
+            <div class="selected-scout">
+              <div class="scout-card" id="scoutCard"></div>
+              <div class="metric-board" id="footballBoard"></div>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Rep Impact Ranking</h2>
+                <div class="eyebrow">Click a rep to see why it ranked there</div>
+              </div>
+              <span class="info" data-tip="Rep Impact blends visible time, movement load, burst read, traffic/contact read, and track confidence. It ranks clips for coach review; it is not an official player grade.">?</span>
+            </div>
+            <div class="clip-list" id="clipList"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Plays To Review</h2>
+                <div class="eyebrow">Highest-value coaching moments</div>
+              </div>
+              <span class="info" data-tip="These are clips where the estimated track showed high movement, burst, or nearby opponent traffic. They should become coach-review events in GAME OS.">?</span>
+            </div>
+            <div class="review-list" id="reviewList"></div>
+          </section>
+        </div>
+        </div>
+
+        <div class="hidden" id="opponentWorkspaceBody">
+          <div class="hero opponent-hero">
+            <div>
+              <div class="tags">
+                <span class="tag gold">Opponent</span>
+                <span class="tag good">Scout Board</span>
+                <span class="tag">Game Plan Required</span>
+              </div>
+              <h1>Opponent analysis should turn film into a game-plan board.</h1>
+              <p class="sub">
+                This view is built for opponent prep: strengths to respect, weak points to attack,
+                personnel alerts, formation/tendency reads, pressure packages, and the clips a staff
+                would actually show the team before kickoff.
+              </p>
+              <div class="mode-switch">
+                <div class="mode-card next">
+                  <label>Player</label>
+                  <span>Use for one-athlete development, touches, speed, contact, and progression notes.</span>
+                </div>
+                <div class="mode-card next">
+                  <label>Team</label>
+                  <span>Use for your own unit spacing, assignments, and system review after a game.</span>
+                </div>
+                <div class="mode-card active">
+                  <label>Competition</label>
+                  <span>Use for opponent tendencies, threat board, weak spots, and prep-week game plan.</span>
+                </div>
+                <div class="mode-card next">
+                  <label>Game</label>
+                  <span>Use for full-game swing moments, momentum, top performers, and recap boards.</span>
+                </div>
+              </div>
+            </div>
+            <div class="metric-grid" id="opponentHeroMetrics"></div>
+          </div>
+
+          <section class="panel stack-panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Analysis Setup</h2>
+                  <div class="eyebrow">Choose the analysis lane, preset outputs, and custom asks</div>
+                </div>
+                <span class="info" data-tip="This is the cleaner setup pattern: pick the analysis type first, keep the report outputs simple with on/off toggles, then let AVANTI handle anything custom after the run is complete.">?</span>
+              </div>
+              <div class="setup-shell">
+                <div class="setup-summary-card" id="analysisSetupSummary"></div>
+                <div class="flow-steps">
+                  <div class="flow-step active">
+                    <strong>1 Select Analysis</strong>
+                    <p>Choose Player, Team, Opponent, Game, or Ref as the main lane for the upload.</p>
+                  </div>
+                  <div class="flow-step next">
+                    <strong>2 Set Outputs</strong>
+                    <p>Open the preset matrix, keep the core outputs, and switch on anything extra the staff wants.</p>
+                  </div>
+                  <div class="flow-step next">
+                    <strong>3 Run Board</strong>
+                    <p>Generate the saved workspace, clips, metrics, and review moments for that analysis type.</p>
+                  </div>
+                  <div class="flow-step next">
+                    <strong>4 Ask AVANTI</strong>
+                    <p>Request anything custom after the run, using the completed analysis rather than raw video only.</p>
+                  </div>
+                </div>
+                <div class="analysis-type-grid" id="analysisTypeGrid"></div>
+                <div class="output-pack-shell">
+                  <div class="output-pack-head">
+                    <div>
+                      <strong>Preset Output Pack</strong>
+                      <span>Finder-style matrix for the saved report sections</span>
+                    </div>
+                    <button class="expand-pack-btn" type="button" id="toggleOutputPack">Expand Output Pack</button>
+                  </div>
+                  <div class="output-pack-body">
+                    <div class="output-pack-toolbar">
+                      <div>
+                        <div class="output-pack-summary" id="outputPackSummary"></div>
+                      </div>
+                      <button class="reset-pack-btn" type="button" id="resetOpponentOutputs">Reset Pack</button>
+                    </div>
+                    <div class="output-pack-grid collapsed" id="outputPackGrid"></div>
+                    <div class="avanti-compact">
+                      <div class="avanti-compact-card">
+                        <strong>Ask AVANTI</strong>
+                        <p>Custom requests should happen after the run is saved. AVANTI should answer from the completed clips, metrics, and coach confirmations instead of rewatching the full video every time.</p>
+                      </div>
+                      <div class="avanti-compact-card">
+                        <strong>Good follow-ups</strong>
+                        <div class="prompt-grid">
+                        <button class="prompt-pill" type="button">Build a tighter red-zone scout brief</button>
+                        <button class="prompt-pill" type="button">Show only the clips worth the team meeting</button>
+                        <button class="prompt-pill" type="button">Compare first-half and second-half pressure looks</button>
+                        <button class="prompt-pill" type="button">Create a ref analysis from penalties and whistle moments</button>
+                      </div>
+                      <div class="request-composer" style="margin-top:12px">
+                        <label>Custom request example</label>
+                        <div class="request-input">"Only show explosive runs off motion", "Score the ref crew's whistle impact", or "Build a player watchlist from this scout."</div>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          <section class="panel stack-panel">
+            <div class="panel-head">
+              <div>
+                <h2>Danger Players</h2>
+                <div class="eyebrow">The opponent names coaches need to know first</div>
+              </div>
+              <span class="info" data-tip="These are the first opponent personnel notes a coach usually wants: usage, where they hurt you, and what the defense or offense must respect.">?</span>
+            </div>
+            <div class="danger-grid" id="opponentDangerPlayers"></div>
+          </section>
+
+          <div class="grid">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Opponent Report Board</h2>
+                  <div class="eyebrow">Live output pack for this scout run</div>
+                </div>
+                <span class="info" data-tip="This board changes when outputs are added or removed. It shows what the final opponent report would contain when a coach saves the run.">?</span>
+              </div>
+              <div class="output-board">
+                <div class="metric-board" id="opponentReportBoard"></div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Plays To Show Team</h2>
+                  <div class="eyebrow">The clips that matter in prep week</div>
+                </div>
+                <span class="info" data-tip="These are not every interesting clip. They are the few opponent moments most worth teaching from before the next game.">?</span>
+              </div>
+              <div class="review-list" id="opponentReviewList"></div>
+            </section>
+          </div>
+
+          <div class="grid">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Scout Priorities</h2>
+                  <div class="eyebrow">Strengths, weaknesses, and tendency reads</div>
+                </div>
+                <span class="info" data-tip="This section should feel like a real coach board: what to respect, what to attack, and what to rep at practice.">?</span>
+              </div>
+              <div class="priority-list" id="opponentPriorityList"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Game Plan Notes</h2>
+                  <div class="eyebrow">What to call out before kickoff</div>
+                </div>
+                <span class="info" data-tip="AVANTI should turn the opponent scout into concise notes for the staff, the install plan, and the team meeting.">?</span>
+              </div>
+              <div class="readout" id="opponentGamePlan"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const heroMetrics = document.querySelector('#heroMetrics');
+    const clipList = document.querySelector('#clipList');
+    const reviewList = document.querySelector('#reviewList');
+    const player = document.querySelector('#player');
+    const videoCaption = document.querySelector('#videoCaption');
+    const footballBoard = document.querySelector('#footballBoard');
+    const selectedFootballStats = document.querySelector('#selectedFootballStats');
+    const topTrackedVideos = document.querySelector('#topTrackedVideos');
+    const scoutCard = document.querySelector('#scoutCard');
+    const analysisFilters = document.querySelector('#analysisFilters');
+    const analysisRuns = document.querySelector('#analysisRuns');
+    const analysisDetail = document.querySelector('#analysisDetail');
+    const filmCommandCenter = document.querySelector('#filmCommandCenter');
+    const analysisWorkspace = document.querySelector('#analysisWorkspace');
+    const archiveButton = document.querySelector('#archiveButton');
+    const backToCommand = document.querySelector('#backToCommand');
+    const workspaceTitle = document.querySelector('#workspaceTitle');
+    const workspaceSubtitle = document.querySelector('#workspaceSubtitle');
+    const workspaceSaveButton = document.querySelector('#workspaceSaveButton');
+    const playerWorkspaceBody = document.querySelector('#playerWorkspaceBody');
+    const opponentWorkspaceBody = document.querySelector('#opponentWorkspaceBody');
+    const opponentHeroMetrics = document.querySelector('#opponentHeroMetrics');
+    const analysisTypeGrid = document.querySelector('#analysisTypeGrid');
+    const analysisSetupSummary = document.querySelector('#analysisSetupSummary');
+    const toggleOutputPack = document.querySelector('#toggleOutputPack');
+    const outputPackSummary = document.querySelector('#outputPackSummary');
+    const outputPackGrid = document.querySelector('#outputPackGrid');
+    const opponentDangerPlayers = document.querySelector('#opponentDangerPlayers');
+    const opponentReportBoard = document.querySelector('#opponentReportBoard');
+    const opponentReviewList = document.querySelector('#opponentReviewList');
+    const opponentPriorityList = document.querySelector('#opponentPriorityList');
+    const opponentGamePlan = document.querySelector('#opponentGamePlan');
+    const resetOpponentOutputs = document.querySelector('#resetOpponentOutputs');
+    let data;
+    let selectedId;
+    let selectedAnalysisFilter = 'recent';
+    let selectedAnalysisRunId = 'noah-player';
+    const defaultOpponentOutputs = [
+      'strength-profile',
+      'weakness-profile',
+      'danger-players',
+      'run-pass-tendency',
+      'pressure-package',
+      'scoring-risk',
+      'clips-to-show',
+      'game-plan'
+    ];
+    let selectedOpponentOutputs = new Set(defaultOpponentOutputs);
+    let selectedAnalysisType = 'opponent';
+    let outputPackExpanded = false;
+
+    const analysisTypes = [
+      {
+        id: 'player',
+        label: 'Player',
+        badge: 'Development',
+        note: 'One athlete, one clean development board.',
+        summaryTitle: 'Player analysis for development and progression',
+        summaryBody: 'Use this when the report should stay centered on one athlete: top reps, movement reads, touches, coach notes, and progression markers.'
+      },
+      {
+        id: 'team',
+        label: 'Team',
+        badge: 'System',
+        note: 'Spacing, assignments, units, and team-wide trends.',
+        summaryTitle: 'Team analysis for your own system and unit performance',
+        summaryBody: 'Use this when the staff wants to review spacing, substitutions, formation shape, team tendencies, and unit-level issues after a game.'
+      },
+      {
+        id: 'opponent',
+        label: 'Opponent',
+        badge: 'Prep week',
+        note: 'Scout tendencies, danger players, and game-plan outputs.',
+        summaryTitle: 'Opponent analysis for prep-week scouting',
+        summaryBody: 'This workspace is previewing Opponent Analysis: danger players, weak points to attack, pressure looks, clips to show the team, and AVANTI-generated prep notes.'
+      },
+      {
+        id: 'game',
+        label: 'Game',
+        badge: 'Recap',
+        note: 'Full-game swing moments, top performers, and recap boards.',
+        summaryTitle: 'Game analysis for one event and its biggest moments',
+        summaryBody: 'Use this when one game should become the report: momentum shifts, impact players, review clips, and phase-by-phase recap.'
+      },
+      {
+        id: 'ref',
+        label: 'Ref',
+        badge: 'Review',
+        note: 'Penalty pattern, whistle impact, and consistency review.',
+        summaryTitle: 'Ref analysis for whistle patterns and penalty review',
+        summaryBody: 'Use this when the staff wants a review board for officiating: penalties called, missed-call candidates, whistle timing, and how those moments influenced the game flow.'
+      }
+    ];
+
+    const opponentScout = {
+      title: 'St. Michael Cardinals scout board',
+      subtitle: 'Opponent analysis | football prep week',
+      heroMetrics: [
+        ['Run Bias', '68%', 'Wide-zone and GT counter show up early and often.'],
+        ['Danger Players', '4', 'Two skill players, one quarterback, one edge defender must be tagged.'],
+        ['Pressure Looks', '5', 'Most pressure stress comes from boundary overload and mugged linebackers.'],
+        ['Must-Show Clips', '8', 'Enough film to teach, not so much that the team tunes out.']
+      ],
+      dangerPlayers: [
+        ['J. Rivas #7', 'Quarterback', 'Extends the play and hits boundary shots when the pocket breaks late.'],
+        ['M. Denton #4', 'Running Back', 'Best burst piece; cutback lane is where the explosives come from.'],
+        ['K. Shaw #11', 'Wide Receiver', 'Top vertical threat and favorite red-zone isolation target.'],
+        ['D. Holmes #44', 'Linebacker', 'Triggers the pressure plan and creates negative plays downhill.']
+      ],
+      priorities: [
+        ['Respect their best thing', 'Outside run tempo', 'They want the defense stretched before the counter comes back inside.', 'Practice fit discipline'],
+        ['Attack their weak point', 'Boundary tackling', 'Perimeter support arrives late when they motion strength away.', 'Screen and crack run plan'],
+        ['Know the tell', 'Trips into pressure', 'They heat up the box more often when trips align to the boundary.', 'Protection alert'],
+        ['Change the picture', 'Force long-yardage', 'Their menu gets thinner when first down stays clean and second down goes behind schedule.', 'Win first down']
+      ],
+      reviewClips: [
+        ['Clip 1', 'Counter from twins', 'Frontside flow opens the backside crease. Show how the overhang gets held.', '96'],
+        ['Clip 2', 'Boundary pressure', 'Pressure comes off the short side and forces a quick throw into traffic.', '93'],
+        ['Clip 3', 'Red-zone fade', 'Favorite scoring answer when the ball is inside the 12.', '91'],
+        ['Clip 4', 'Motion into toss', 'Motion changes force player eyes before the perimeter run hits.', '88']
+      ],
+      gamePlan: [
+        ['What we take away first', 'Make the quarterback hand it off inside and tackle the back before the cutback opens.'],
+        ['What we attack', 'Stress their edge support with quick screens, crack replace runs, and tempo into the boundary.'],
+        ['What the team needs to hear', 'Do not chase eye candy. Motion is there to steal leverage before the real play starts.']
+      ]
+    };
+
+    const opponentOutputLibrary = [
+      { id: 'strength-profile', label: 'Strength profile', description: 'What they do well enough to force respect every drive.', value: 'Outside run + tempo', detail: 'What they do well enough to force respect every drive.', tone: 'gold', group: 'core' },
+      { id: 'weakness-profile', label: 'Weak points to attack', description: 'Where your offense or defense can stress them first.', value: 'Boundary tackle support', detail: 'Where your offense or defense can stress them first.', tone: 'red', group: 'core' },
+      { id: 'danger-players', label: 'Danger players', description: 'The personnel board the team meeting should know cold.', value: '4 alerts', detail: 'The personnel board the team meeting should know cold.', tone: 'blue', group: 'core' },
+      { id: 'run-pass-tendency', label: 'Run / pass tendency', description: 'How often they lean run first before the game flips script.', value: '68 / 32', detail: 'How often they lean run first before the game flips script.', tone: 'gold', group: 'core' },
+      { id: 'pressure-package', label: 'Pressure package', description: 'The blitz and front-change family that shows up most.', value: '5 core looks', detail: 'The blitz and front-change family that shows up most.', tone: 'red', group: 'core' },
+      { id: 'scoring-risk', label: 'Scoring risk area', description: 'Where their favorite finishers and answers appear.', value: 'Inside the 12', detail: 'Where their favorite finishers and answers appear.', tone: 'blue', group: 'core' },
+      { id: 'clips-to-show', label: 'Clips to show team', description: 'Tight teaching tape for walk-through, install, and meeting room.', value: '8 cutups', detail: 'Tight teaching tape for walk-through, install, and meeting room.', tone: 'gold', group: 'core' },
+      { id: 'game-plan', label: 'Game plan notes', description: 'The top calls and reminders the staff wants pinned.', value: '3 headline rules', detail: 'The top calls and reminders the staff wants pinned.', tone: 'blue', group: 'core' },
+      { id: 'formation-menu', label: 'Formation menu', description: 'How they line up most often before their best calls.', value: '11 / 20 / trips', detail: 'How they line up most often before their best calls.', tone: 'blue', group: 'addon' },
+      { id: 'motion-tells', label: 'Motion tells', description: 'Pre-snap movement that changes the odds of what comes next.', value: 'Boundary motion alert', detail: 'Pre-snap movement that changes the odds of what comes next.', tone: 'gold', group: 'addon' },
+      { id: 'sub-rhythm', label: 'Substitution rhythm', description: 'When they rotate and when the defense can match personnel.', value: 'Tempo slows on change', detail: 'When they rotate and when the defense can match personnel.', tone: 'red', group: 'addon' },
+      { id: 'third-down-menu', label: 'Third-down menu', description: 'What the critical down tends to become under stress.', value: 'Quick game + pressure', detail: 'What the critical down tends to become under stress.', tone: 'red', group: 'addon' }
+    ];
+
+    const fmt = new Intl.NumberFormat('en-US');
+    const analysisFilterDefs = [
+      { id: 'recent', label: 'Recent', help: 'Last 30 days' },
+      { id: 'season', label: 'This Season', help: 'Current year' },
+      { id: 'archived', label: 'Archived', help: 'Past seasons' },
+      { id: 'player', label: 'Player', help: 'Individual reports' },
+      { id: 'team', label: 'Team', help: 'Club film' },
+      { id: 'competition', label: 'Competition', help: 'Opponent scout' },
+      { id: 'game', label: 'Game', help: 'Full-game boards' },
+      { id: 'review', label: 'Needs Review', help: 'Coach action' }
+    ];
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedDataset = urlParams.get('dataset');
+    const requestedRunId = urlParams.get('run');
+    const requestedFilter = urlParams.get('filter');
+    const requestedAnalysisType = urlParams.get('analysis');
+    const expandOutputsOnLoad = urlParams.get('expandOutputs') === '1';
+
+    function metric(label, value, detail) {
+      return `<div class="metric"><label>${label}</label><strong>${value}</strong><span>${detail}</span></div>`;
+    }
+
+    function metricMini(label, value) {
+      return `<div class="mini"><label>${label}</label><strong>${value}</strong></div>`;
+    }
+
+    function metricTile(label, value, detail, tone = '') {
+      return `<div class="metric-tile ${tone}"><label>${label}</label><strong>${value}</strong><span>${detail}</span></div>`;
+    }
+
+    function stat(label, value, detail) {
+      return `<div class="football-stat"><label>${label}</label><strong>${value}</strong><span>${detail}</span></div>`;
+    }
+
+    function chip(text) {
+      return `<span class="chip">${text}</span>`;
+    }
+
+    function isAngleLimited(clip) {
+      return clip.football.cameraAngle === 'behind' || clip.football.speedReadStatus === 'Angle limited';
+    }
+
+    function yardageValue(clip) {
+      return clip.football.coachYardageRead || `${clip.football.estimatedYards} yd`;
+    }
+
+    function yardageNumber(clip) {
+      if (clip.football.coachYardageRead) return Number.parseFloat(clip.football.coachYardageRead) || clip.football.estimatedYards;
+      return clip.football.estimatedYards;
+    }
+
+    function yardageDetail(clip) {
+      if (clip.football.coachYardageRead) return 'Coach yardage read; tracker undercounts depth';
+      return 'Estimated from field movement';
+    }
+
+    function speedValue(clip) {
+      if (isAngleLimited(clip)) return 'Review';
+      return `${clip.football.topSpeedMphEstimate} mph`;
+    }
+
+    function speedDetail(clip) {
+      if (isAngleLimited(clip)) return 'Behind angle compresses speed';
+      return 'Pre-calibration speed read';
+    }
+
+    function angleBadge(clip) {
+      if (clip.football.cameraAngle === 'behind') return chip('behind angle');
+      return chip('side view preferred');
+    }
+
+    function runMetric(label, value) {
+      return `<div class="run-metric"><label>${label}</label><strong>${value}</strong></div>`;
+    }
+
+    function buildAnalysisHistory() {
+      const totalYards = data.clips.reduce((sum, clip) => sum + Number(clip.football.estimatedYards || 0), 0).toFixed(0);
+      const topClip = data.clips[0];
+      const topClipShort = topClip.source.replace(/\.[^.]+$/, '');
+      const cleanCount = cleanTrackedClips().length;
+      return [
+        {
+          id: 'noah-player',
+          type: 'player',
+          scope: 'Own Team',
+          title: 'Noah Whitesides #42',
+          subtitle: 'Football player report | Next Level Athlete',
+          status: 'Ready For Coach Review',
+          tone: 'good',
+          date: 'Today',
+          bucket: 'recent',
+          rawAccess: 'Raw film: 7 days left',
+          analyticsRetention: 'Analytics: kept in history',
+          metrics: [
+            ['Clips', data.clips.length],
+            ['Yards Read', `${totalYards} yd`],
+            ['Best Rep', topClipShort]
+          ],
+          detailTitle: 'Player analysis: Noah #42',
+          detail:
+            'This is the current player-specific report. It stores all Noah #42 clips, ranked reps, track confidence, yardage reads, contact windows, speed estimates, and coach-confirm flags in one history record.',
+          next: 'Coach confirms player lock on top reps, then this becomes a saved player development report tied to Noah in Athletes and Roster.',
+          actions: ['Open Player Report', 'Send To Coach Notes']
+        },
+        {
+          id: 'usa-germany-team',
+          type: 'team',
+          scope: 'Own Team',
+          title: 'USA vs Germany team report',
+          subtitle: 'Soccer team analysis | compacted friendly review',
+          status: 'Prototype Ready',
+          tone: 'good',
+          date: 'Today',
+          bucket: 'recent',
+          rawAccess: 'Raw film: source-linked preview',
+          analyticsRetention: 'Analytics: kept in history',
+          metrics: [
+            ['Mode', 'Team'],
+            ['Review Clips', 9],
+            ['Status', 'Tracked']
+          ],
+          detailTitle: 'Team analysis: USA vs Germany',
+          detail:
+            'This team-mode prototype uses the June 6, 2026 USA 1-2 Germany friendly as the compacted game readout: tactical phases, team shape, review moments, player-role lanes, set-piece pressure, and coach-ready tracking notes.',
+          next: 'Use this as the soccer Team Analysis reference before wiring full upload, official event feeds, roster/formation spine, and coach-confirmed player labels.',
+          actions: ['Open Team Report', 'Send To Coach Notes']
+        },
+        {
+          id: 'team-next',
+          type: 'team',
+          scope: 'Own Team',
+          title: 'Next Level Athlete team film',
+          subtitle: 'Team analysis | formations, spacing, unit performance',
+          status: 'Waiting On Team Film',
+          tone: 'warn',
+          date: 'Next',
+          bucket: 'season',
+          rawAccess: 'Raw film: not uploaded',
+          analyticsRetention: 'Analytics: season history',
+          metrics: [
+            ['Mode', 'Team'],
+            ['Roster', 'GAME OS'],
+            ['Output', 'Unit board']
+          ],
+          detailTitle: 'Team analysis command board',
+          detail:
+            'Team mode should use GAME OS roster, formations, schedule, and athlete records to grade spacing, assignments, pursuit, blocking, coverage, substitutions, and unit-level tendencies.',
+          next: 'This becomes the club film history view once a full team game is uploaded.',
+          actions: ['Queue Team Upload', 'View Team Spec']
+        },
+        {
+          id: 'competition-scout',
+          type: 'competition',
+          scope: 'Opponent',
+          title: 'St. Michael Cardinals scout board',
+          subtitle: 'Opponent analysis | strengths, weak points, danger players',
+          status: 'Prototype Ready',
+          tone: 'good',
+          date: 'Today',
+          bucket: 'recent',
+          rawAccess: 'Raw film: opponent upload',
+          analyticsRetention: 'Analytics: scout archive',
+          metrics: [
+            ['Mode', 'Competition'],
+            ['Outputs', selectedOpponentOutputs.size],
+            ['Use', 'Opponent prep']
+          ],
+          detailTitle: 'Opponent analysis: prep-week scout board',
+          detail:
+            'Opponent Analysis lets a coach upload game film or cutups and get a prep board: strengths to respect, weak points to attack, danger players, pressure looks, tendency reads, and clips worth showing the team.',
+          next: 'The output pack should preload by analysis type, then let the coach remove or add sections before saving the final scout report.',
+          actions: ['Open Scout Board', 'Edit Output Pack']
+        },
+        {
+          id: 'nhl-game',
+          type: 'game',
+          scope: 'Demo',
+          title: 'NHL game analysis prototype',
+          subtitle: 'Hockey game board | player impact and puck-control reads',
+          status: 'Prototype Live',
+          tone: 'dim',
+          date: 'Today',
+          bucket: 'recent',
+          rawAccess: 'Raw film: demo asset',
+          analyticsRetention: 'Analytics: demo history',
+          metrics: [
+            ['Sport', 'Hockey'],
+            ['Mode', 'Game'],
+            ['Use', 'Share demo']
+          ],
+          detailTitle: 'Game analysis: hockey demo',
+          detail:
+            'The NHL board proves the same command center can hold full-game analysis: player impact ranking, puck-control moments, annotated clips, and coach-readable metrics.',
+          next: 'Use this as the visual reference for multi-player game analysis across sports.',
+          actions: ['Open Game Board', 'Share Demo Link']
+        },
+        {
+          id: 'vai-performance',
+          type: 'player',
+          scope: 'VAI+',
+          title: 'VAI+ performance lab',
+          subtitle: 'Training analysis | 40 yard, agility, lifting mechanics',
+          status: 'Concept Audit',
+          tone: 'dim',
+          date: 'Planned',
+          bucket: 'season',
+          rawAccess: 'Raw film: VAI+ upload',
+          analyticsRetention: 'Analytics: athlete profile',
+          metrics: [
+            ['Mode', 'Player'],
+            ['Surface', 'VAI App'],
+            ['Output', 'OVR inputs']
+          ],
+          detailTitle: 'Player analysis beyond game film',
+          detail:
+            'The same history pattern can power VAI+ training runs: 40 yard dash, 3 cone, speed drills, bench, squat, and mechanics analysis that feeds a real-life athlete OVR.',
+          next: 'Keep it separate from GAME OS club film but compatible with athlete profile data.',
+          actions: ['Open VAI Plan', 'Add To OVR Model']
+        },
+        {
+          id: 'manual-review',
+          type: 'review',
+          scope: 'Coach Queue',
+          title: `${data.clips.filter(c => c.lockStatus === 'Needs Manual Lock').length} reps need manual lock`,
+          subtitle: 'Quality control | player lock and stat confidence',
+          status: 'Needs Review',
+          tone: 'bad',
+          date: 'Today',
+          bucket: 'recent',
+          rawAccess: 'Raw film: 7 days left',
+          analyticsRetention: 'Analytics: blocked until review',
+          metrics: [
+            ['Review', data.clips.filter(c => c.lockStatus === 'Needs Manual Lock').length],
+            ['Clean', cleanCount],
+            ['Rule', 'Coach lock']
+          ],
+          detailTitle: 'Coach review queue',
+          detail:
+            'Any run with uncertain player lock needs a clear coach review step before speed, yardage, or performance scores become official. This protects trust in the Film Room data.',
+          next: 'Keep this visible in history so coaches know which runs are ready, which are drafts, and which are blocked.',
+          actions: ['Review Locks', 'Open QA Notes']
+        },
+        {
+          id: 'archive-football-2025',
+          type: 'player',
+          scope: 'Own Team',
+          title: 'Noah #42 2025 season report',
+          subtitle: 'Archived player analysis | completed season',
+          status: 'Archived',
+          tone: 'dim',
+          date: '2025',
+          bucket: 'archived',
+          rawAccess: 'Raw film: expired',
+          analyticsRetention: 'Analytics: retained',
+          metrics: [
+            ['Season', '2025'],
+            ['Runs', 18],
+            ['Clips', 64]
+          ],
+          detailTitle: 'Archived player history',
+          detail:
+            'Archived runs keep the intelligence layer: player notes, saved clips, coach tags, impact rankings, and season summaries. Raw full-game video can expire without losing the football development record.',
+          next: 'Use Archive for season review, recruiting packets, parent meetings, and longitudinal player progress.',
+          actions: ['Open Archive', 'Export Summary']
+        },
+        {
+          id: 'archive-scout-2024',
+          type: 'competition',
+          scope: 'Opponent',
+          title: '2024 opponent scout archive',
+          subtitle: 'Archived competition analysis | scout reports',
+          status: 'Archived',
+          tone: 'dim',
+          date: '2024',
+          bucket: 'archived',
+          rawAccess: 'Raw film: expired',
+          analyticsRetention: 'Analytics: retained',
+          metrics: [
+            ['Season', '2024'],
+            ['Scouts', 9],
+            ['Clips', 31]
+          ],
+          detailTitle: 'Archived competition scouting',
+          detail:
+            'Competition archive preserves opponent tendencies, formations, threat boards, weak points, and coach notes while keeping old raw film storage under control.',
+          next: 'Use this when the same opponent appears again or when building next-season prep.',
+          actions: ['Open Scout Archive', 'Compare Opponent']
+        }
+      ];
+    }
+
+    function runMatchesFilter(run, filterId) {
+      if (filterId === 'recent') return run.bucket === 'recent';
+      if (filterId === 'season') return run.bucket === 'recent' || run.bucket === 'season';
+      if (filterId === 'archived') return run.bucket === 'archived';
+      if (filterId === 'review') return run.id === 'manual-review' || run.status.toLowerCase().includes('review');
+      return run.type === filterId;
+    }
+
+    function statusClass(tone) {
+      if (tone === 'warn') return 'warn';
+      if (tone === 'bad') return 'bad';
+      if (tone === 'dim') return 'dim';
+      return '';
+    }
+
+    function workspaceModeForRun(runId) {
+      if (runId === 'competition-scout' || runId === 'archive-scout-2024') return 'opponent';
+      return 'player';
+    }
+
+    function setWorkspaceMode(mode) {
+      const opponent = mode === 'opponent';
+      playerWorkspaceBody.classList.toggle('hidden', opponent);
+      opponentWorkspaceBody.classList.toggle('hidden', !opponent);
+      workspaceSaveButton.textContent = opponent ? 'Save Scout Report' : 'Save Coach Review';
+    }
+
+    function renderOpponentWorkspace() {
+      const currentAnalysisType = analysisTypes.find(type => type.id === selectedAnalysisType) || analysisTypes[2];
+      analysisSetupSummary.innerHTML = `
+        <strong>${currentAnalysisType.summaryTitle}</strong>
+        <p>${currentAnalysisType.summaryBody}</p>
+      `;
+
+      analysisTypeGrid.innerHTML = analysisTypes.map(type => `
+        <button class="analysis-type-card ${type.id === selectedAnalysisType ? 'active' : ''}" type="button" data-analysis-type="${type.id}">
+          <span class="mini-badge">${type.badge}</span>
+          <strong>${type.label}</strong>
+          <span>${type.note}</span>
+        </button>
+      `).join('');
+
+      opponentHeroMetrics.innerHTML = opponentScout.heroMetrics.map(([label, value, detail]) => metric(label, value, detail)).join('');
+
+      opponentDangerPlayers.innerHTML = opponentScout.dangerPlayers.map(([name, role, note]) => `
+        <div class="danger-card">
+          <strong>${name}</strong>
+          <label>${role}</label>
+          <p>${note}</p>
+        </div>
+      `).join('');
+
+      const activeOutputs = opponentOutputLibrary.filter(output => selectedOpponentOutputs.has(output.id));
+      const coreCount = opponentOutputLibrary.filter(output => output.group === 'core').length;
+      const addonCount = opponentOutputLibrary.filter(output => output.group === 'addon').length;
+
+      outputPackSummary.innerHTML = `
+        <strong>${currentAnalysisType.label} mode uses a saved output pack, then AVANTI handles the custom follow-ups.</strong>
+        <p>Open the matrix only when the coach wants to tune the report. Core sections stay on by default, optional sections can be added without cluttering the main page.</p>
+        <div class="output-pack-meta">
+          <span>${activeOutputs.length} sections active</span>
+          <span>${coreCount} core</span>
+          <span>${addonCount} optional</span>
+          <span>${outputPackExpanded ? 'Matrix open' : 'Matrix collapsed'}</span>
+        </div>
+      `;
+
+      toggleOutputPack.textContent = outputPackExpanded ? 'Collapse Output Pack' : 'Expand Output Pack';
+      outputPackGrid.classList.toggle('collapsed', !outputPackExpanded);
+
+      function renderOutputCard(output) {
+        const on = selectedOpponentOutputs.has(output.id);
+        return `
+          <article class="output-card ${on ? 'on' : 'off'}">
+            <div class="output-card-head">
+              <div>
+                <strong>${output.label}</strong>
+                <p>${output.description}</p>
+              </div>
+              <button class="toggle-switch ${on ? 'on' : ''}" type="button" aria-pressed="${on ? 'true' : 'false'}" data-toggle-output="${output.id}" aria-label="${on ? 'Remove' : 'Add'} ${output.label}"></button>
+            </div>
+            <div class="output-pack-meta">
+              <span>${output.group === 'core' ? 'Core output' : 'Optional add-on'}</span>
+              <span>${on ? 'Included in this run' : 'Hidden from report'}</span>
+            </div>
+            <div class="output-card-tags">
+              <span>${output.value}</span>
+              <span>${output.group === 'core' ? 'Recommended' : 'Extra view'}</span>
+            </div>
+          </article>
+        `;
+      }
+
+      outputPackGrid.innerHTML = opponentOutputLibrary.map(renderOutputCard).join('');
+
+      opponentReportBoard.innerHTML = activeOutputs.length ? activeOutputs.map(output => `
+        <div class="metric-tile ${output.tone}">
+          <label>${output.label}</label>
+          <strong>${output.value}</strong>
+          <span>${output.detail}</span>
+        </div>
+      `).join('') : `<div class="callout warn"><b>Board hidden</b> Add at least one output to rebuild the opponent report.</div>`;
+
+      opponentReviewList.innerHTML = opponentScout.reviewClips.map(([slot, title, detail, score]) => `
+        <div class="review-card">
+          <span class="time">${slot}</span>
+          <span>
+            <b>${title}</b>
+            <p>${detail}</p>
+          </span>
+          <span class="pct">${score}</span>
+        </div>
+      `).join('');
+
+      opponentPriorityList.innerHTML = opponentScout.priorities.map(([title, headline, detail, action]) => `
+        <div class="priority-card">
+          <strong>${title}: ${headline}</strong>
+          <p>${detail}</p>
+          <span>${action}</span>
+        </div>
+      `).join('');
+
+      opponentGamePlan.innerHTML = opponentScout.gamePlan.map(([title, detail], index) => `
+        <div class="callout ${index === 1 ? 'warn' : index === 2 ? 'bad' : ''}">
+          <b>${title}</b>
+          ${detail}
+        </div>
+      `).join('');
+
+      analysisTypeGrid.querySelectorAll('[data-analysis-type]').forEach(button => {
+        button.addEventListener('click', () => {
+          selectedAnalysisType = button.dataset.analysisType;
+          renderOpponentWorkspace();
+        });
+      });
+
+      outputPackGrid.querySelectorAll('[data-toggle-output]').forEach(button => {
+        button.addEventListener('click', () => {
+          const outputId = button.dataset.toggleOutput;
+          if (selectedOpponentOutputs.has(outputId)) {
+            selectedOpponentOutputs.delete(outputId);
+          } else {
+            selectedOpponentOutputs.add(outputId);
+          }
+          renderOpponentWorkspace();
+        });
+      });
+
+      renderHistory();
+    }
+
+    function renderAnalysisDetail(run) {
+      const canOpen = run.id === 'noah-player' || run.id === 'usa-germany-team' || run.id === 'competition-scout';
+      analysisDetail.innerHTML = `
+        <div class="tags">
+          <span class="tag ${run.type === 'competition' ? 'gold' : 'good'}">${run.type}</span>
+          <span class="tag">${run.scope}</span>
+        </div>
+        <h3>${run.detailTitle}</h3>
+        <p class="detail-copy">${run.detail}</p>
+        <div class="detail-grid">
+          ${run.metrics.map(([label, value]) => metricMini(label, value)).join('')}
+          ${metricMini('Status', run.status)}
+        </div>
+        <div class="retention-row">
+          <span class="retention-pill ${run.rawAccess.includes('expired') ? 'dim' : run.rawAccess.includes('7 days') ? 'warn' : ''}">${run.rawAccess}</span>
+          <span class="retention-pill good">${run.analyticsRetention}</span>
+        </div>
+        <div class="callout warn">
+          <b>Next coach action</b>
+          ${run.next}
+        </div>
+        <div class="detail-actions">
+          <button class="ghost-btn primary" type="button" ${canOpen ? `data-open-run="${run.id}"` : 'disabled'}>${run.actions[0]}</button>
+          <button class="ghost-btn" type="button">${run.actions[1]}</button>
+        </div>
+      `;
+      const openButton = analysisDetail.querySelector('[data-open-run]');
+      if (openButton) openButton.addEventListener('click', () => openWorkspace(run.id));
+    }
+
+    function openWorkspace(runId) {
+      if (runId === 'usa-germany-team') {
+        window.location.href = 'soccer-team.html';
+        return;
+      }
+      const runs = buildAnalysisHistory();
+      const run = runs.find(item => item.id === runId) || runs[0];
+      selectedAnalysisRunId = run.id;
+      setWorkspaceMode(workspaceModeForRun(run.id));
+      workspaceTitle.textContent = run.title;
+      workspaceSubtitle.textContent = `${run.type} analysis | ${run.scope} | ${run.status}`;
+      if (workspaceModeForRun(run.id) === 'opponent') {
+        renderOpponentWorkspace();
+      }
+      filmCommandCenter.classList.add('hidden');
+      analysisWorkspace.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showCommandCenter() {
+      analysisWorkspace.classList.add('hidden');
+      filmCommandCenter.classList.remove('hidden');
+      renderHistory();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderHistory() {
+      const runs = buildAnalysisHistory();
+      const filtered = runs.filter(run => runMatchesFilter(run, selectedAnalysisFilter));
+      if (!filtered.some(run => run.id === selectedAnalysisRunId)) {
+        selectedAnalysisRunId = filtered[0]?.id || runs[0].id;
+      }
+      const selectedRun = runs.find(run => run.id === selectedAnalysisRunId) || filtered[0] || runs[0];
+
+      analysisFilters.innerHTML = analysisFilterDefs.map(filter => {
+        const count = runs.filter(run => runMatchesFilter(run, filter.id)).length;
+        return `
+          <button class="filter-btn ${filter.id === selectedAnalysisFilter ? 'active' : ''}" type="button" data-filter="${filter.id}">
+            <span>
+              <strong>${filter.label}</strong>
+              <span>${filter.help}</span>
+            </span>
+            <span class="filter-count">${count}</span>
+          </button>
+        `;
+      }).join('');
+
+      analysisRuns.innerHTML = filtered.map(run => `
+        <button class="run-card ${run.type} ${run.id === selectedAnalysisRunId ? 'active' : ''}" type="button" data-run="${run.id}">
+          <div class="run-top">
+            <div>
+              <div class="run-title">${run.title}</div>
+              <div class="run-sub">${run.subtitle}</div>
+            </div>
+            <span class="status-chip ${statusClass(run.tone)}">${run.status}</span>
+          </div>
+          <div class="run-metrics">
+            ${run.metrics.map(([label, value]) => runMetric(label, value)).join('')}
+          </div>
+          <div class="retention-row">
+            <span class="retention-pill ${run.rawAccess.includes('expired') ? 'dim' : run.rawAccess.includes('7 days') ? 'warn' : ''}">${run.rawAccess}</span>
+            <span class="retention-pill good">${run.analyticsRetention}</span>
+          </div>
+        </button>
+      `).join('');
+
+      renderAnalysisDetail(selectedRun);
+
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedAnalysisFilter = btn.dataset.filter;
+          renderHistory();
+        });
+      });
+      document.querySelectorAll('.run-card').forEach(card => {
+        card.addEventListener('click', () => {
+          selectedAnalysisRunId = card.dataset.run;
+          if (selectedAnalysisRunId === 'noah-player' || selectedAnalysisRunId === 'usa-germany-team' || selectedAnalysisRunId === 'competition-scout') {
+            openWorkspace(selectedAnalysisRunId);
+            return;
+          }
+          renderHistory();
+        });
+      });
+    }
+
+    function bestBy(selector) {
+      return data.clips.reduce((best, clip) => selector(clip) > selector(best) ? clip : best, data.clips[0]);
+    }
+
+    function totalFootball(key) {
+      return data.clips.reduce((sum, clip) => sum + Number(clip.football[key] || 0), 0);
+    }
+
+    function cleanTrackedClips() {
+      const clean = data.clips.filter(c => c.lockStatus !== 'Needs Manual Lock' && c.trackConfidence >= 85);
+      return (clean.length >= 3 ? clean : data.clips).slice(0, 3);
+    }
+
+    function posterFor(clip) {
+      return `../posters/${clip.id}.jpg`;
+    }
+
+    function explain(clip, index) {
+      const next = data.clips[index + 1];
+      const gap = next ? Math.max(0, clip.impactScore - next.impactScore).toFixed(1) : 'last ranked rep';
+      const fb = clip.football;
+      return `
+        <div class="breakdown">
+          <b>Why ${clip.source} ranked #${index + 1}</b>
+          <p class="why">
+            Score ${clip.impactScore}. ${next ? `Gap to next rep: ${gap}.` : 'This is the final ranked rep.'}
+            This ranked as a ${fb.playLabel.toLowerCase()} from estimated yards, carry/touch read, contact windows,
+            burst speed, pursuit value, and confidence that the #42 lock stayed visible.
+          </p>
+          <div class="breakdown-grid">
+            ${metricMini('Tracker Yards', `${fb.estimatedYards}`)}
+            ${metricMini('Coach Yardage', yardageValue(clip))}
+            ${metricMini('Speed Read', speedValue(clip))}
+            ${metricMini('Carry/Touch Read', `${fb.carryTouchRead}`)}
+            ${metricMini('Tackle Windows', fb.tackleCandidateWindows)}
+            ${metricMini('Pursuit Read', `${fb.pursuitRead}`)}
+            ${metricMini('Track Confidence', `${clip.trackConfidence}%`)}
+          </div>
+          <p class="why">${fb.cameraAngleNote || clip.note} ${fb.fieldCalibration}.</p>
+        </div>
+      `;
+    }
+
+    function render(selected = data.clips[0].id) {
+      selectedId = selected;
+      const clip = data.clips.find(c => c.id === selectedId) || data.clips[0];
+      const fb = clip.football;
+      const fastest = bestBy(c => c.football.topSpeedMphEstimate);
+      const bestYards = bestBy(c => yardageNumber(c));
+      const bestContact = bestBy(c => c.football.tackleCandidateWindows);
+      player.src = posterFor(clip);
+      videoCaption.textContent = `${clip.source}: ${fb.playLabel}. Public still preview from the analysis board. Video clips stay private; ${clip.framesAnalyzed} frames analyzed, ${clip.trackConfidence}% lock confidence.`;
+
+      heroMetrics.innerHTML = [
+        metric('Fastest Burst Est.', `${fastest.football.topSpeedMphEstimate} mph`, `${fastest.source}, pre-calibration`),
+        metric('Best Yardage Read', yardageValue(bestYards), `${bestYards.source}, coach confirm`),
+        metric('Contact Windows', totalFootball('tackleCandidateWindows'), 'Possible tackle/contact moments'),
+        metric('Carry/Touch Reads', data.clips.filter(c => c.football.carryTouchRead >= 70).length, 'Reps worth ball/touch review')
+      ].join('');
+
+      selectedFootballStats.innerHTML = [
+        stat('Play Type', fb.playLabel, 'Best current coach label'),
+        stat('Yardage Read', yardageValue(clip), yardageDetail(clip)),
+        stat('Speed Read', speedValue(clip), speedDetail(clip)),
+        stat('Tackle Read', fb.tackleRead, 'Contact + traffic signal'),
+        stat('Pursuit Read', fb.pursuitRead, 'Movement into the play')
+      ].join('');
+
+      topTrackedVideos.innerHTML = cleanTrackedClips().map((c, i) => `
+        <button class="tracked-card ${c.id === selectedId ? 'active' : ''}" data-id="${c.id}">
+          <img src="${posterFor(c)}" alt="${c.source} still preview" />
+          <span class="tracked-body">
+            <span class="tracked-top">
+              <span class="tracked-rank">TRACK ${i + 1}</span>
+              <span class="tracked-score">${c.impactScore}</span>
+            </span>
+            <span class="tracked-title">${c.football.playLabel}</span>
+            <span class="tracked-sub">${c.source} | ${yardageValue(c)} | ${speedValue(c)}</span>
+            <span class="chip-row">
+              ${chip(`${c.football.tackleCandidateWindows} contact windows`)}
+              ${chip(`${c.football.carryTouchRead} carry read`)}
+              ${chip(`${c.trackConfidence}% lock`)}
+              ${angleBadge(c)}
+              ${c.lockStatus === 'Needs Manual Lock' ? chip('manual lock') : ''}
+            </span>
+          </span>
+        </button>
+      `).join('');
+
+      scoutCard.innerHTML = `
+        <div class="tags">
+          <span class="tag gold">Selected Rep</span>
+          <span class="tag good">${fb.playLabel}</span>
+        </div>
+        <h3>${clip.source}</h3>
+        <p>
+          Noah #42 generated a ${clip.impactScore} impact score on this tracked rep.
+          The board shows ${yardageValue(clip)} as the coach yardage read, ${fb.tackleCandidateWindows} contact windows,
+          and ${isAngleLimited(clip) ? 'an angle-limited speed read' : `a ${fb.topSpeedMphEstimate} mph top speed estimate`} before field calibration.
+        </p>
+        <div class="scout-score">
+          <div>
+            <label>Impact Score</label>
+            <strong>${clip.impactScore}</strong>
+          </div>
+          <span>${clip.lockStatus}<br>${clip.trackConfidence}% track lock</span>
+        </div>
+        <div class="scout-meta">
+          ${metricMini('Carry/Touch Read', fb.carryTouchRead)}
+          ${metricMini('Tackle Read', fb.tackleRead)}
+          ${metricMini('Pursuit Read', fb.pursuitRead)}
+          ${metricMini('Traffic Read', fb.trafficRead)}
+        </div>
+      `;
+
+      footballBoard.innerHTML = [
+        metricTile('Yardage Read', yardageValue(clip), yardageDetail(clip), 'gold'),
+        metricTile('Speed Read', speedValue(clip), speedDetail(clip), 'blue'),
+        metricTile('Tackle Windows', fb.tackleCandidateWindows, 'Contact moments for coach review', 'red'),
+        metricTile('Fastest Rep', `${fastest.football.topSpeedMphEstimate} mph`, fastest.source, 'blue'),
+        metricTile('Best Yard Rep', yardageValue(bestYards), bestYards.source, 'gold'),
+        metricTile('Track Lock', `${clip.trackConfidence}%`, clip.lockStatus),
+        metricTile('Carry/Touch Read', fb.carryTouchRead, 'Ball involvement likelihood'),
+        metricTile('Pursuit Read', fb.pursuitRead, 'Movement into the play'),
+        metricTile('Frames Checked', clip.framesAnalyzed, `${clip.duration}s clip length`)
+      ].join('');
+
+      clipList.innerHTML = data.clips.map((c, i) => `
+        <button class="clip-row ${c.id === selectedId ? 'active' : ''}" data-id="${c.id}">
+          <span class="rank">#${i + 1}</span>
+          <span>
+            <span class="clip-name">${c.source}</span>
+            <span class="clip-meta">${c.football.playLabel} | ${yardageValue(c)} | ${speedValue(c)} | ${c.lockStatus}</span>
+          </span>
+          <span class="score">${c.impactScore}</span>
+        </button>
+        ${c.id === selectedId ? explain(c, i) : ''}
+      `).join('');
+
+      reviewList.innerHTML = data.clips.slice(0, 8).map((c, i) => `
+        <div class="review-card">
+          <span class="time">#${i + 1}</span>
+          <span>
+            <b>${c.source}</b>
+            <p>${c.football.playLabel}: ${yardageValue(c)}, ${c.football.tackleCandidateWindows} contact windows, ${speedValue(c)} speed read.</p>
+          </span>
+          <span class="pct">${c.impactScore}</span>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.clip-row').forEach(row => {
+        row.addEventListener('click', () => render(row.dataset.id));
+      });
+      document.querySelectorAll('.tracked-card').forEach(card => {
+        card.addEventListener('click', () => render(card.dataset.id));
+      });
+    }
+
+    backToCommand.addEventListener('click', showCommandCenter);
+    archiveButton.addEventListener('click', () => {
+      selectedAnalysisFilter = 'archived';
+      renderHistory();
+    });
+    toggleOutputPack.addEventListener('click', () => {
+      outputPackExpanded = !outputPackExpanded;
+      renderOpponentWorkspace();
+    });
+    resetOpponentOutputs.addEventListener('click', () => {
+      selectedOpponentOutputs = new Set(defaultOpponentOutputs);
+      renderOpponentWorkspace();
+    });
+
+    const dataFile = requestedDataset === 'v2' ? '../data/noah-analysis-v2.json' : '../data/noah-analysis.json';
+    fetch(dataFile)
+      .then(r => r.json())
+      .then(json => {
+        data = json;
+        if (requestedFilter && analysisFilterDefs.some(filter => filter.id === requestedFilter)) {
+          selectedAnalysisFilter = requestedFilter;
+        }
+        if (requestedAnalysisType && analysisTypes.some(type => type.id === requestedAnalysisType)) {
+          selectedAnalysisType = requestedAnalysisType;
+        }
+        if (expandOutputsOnLoad) {
+          outputPackExpanded = true;
+        }
+        setWorkspaceMode('player');
+        render();
+        renderHistory();
+        if (requestedRunId) {
+          const requestedRun = buildAnalysisHistory().find(run => run.id === requestedRunId);
+          if (requestedRun) openWorkspace(requestedRunId);
+        }
+      })
+      .catch(err => {
+        document.querySelector('.content').innerHTML = `<section class="panel"><div class="readout">Could not load Noah analysis JSON: ${err.message}</div></section>`;
+      });
+  </script>
+</body>
+</html>
