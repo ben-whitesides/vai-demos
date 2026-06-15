@@ -532,7 +532,7 @@
       letter-spacing: 0;
     }
 
-    video, img { width: 100%; display: block; background: #000; aspect-ratio: 16 / 9; object-fit: cover; }
+    video { width: 100%; display: block; background: #000; aspect-ratio: 16 / 9; }
     .media-console {
       background:
         radial-gradient(circle at 50% 20%, rgba(99, 223, 159, .08), transparent 34%),
@@ -540,8 +540,7 @@
       padding: 16px;
       border-bottom: 1px solid var(--line);
     }
-    .media-console video,
-    .media-console img {
+    .media-console video {
       border: 1px solid rgba(255, 255, 255, .08);
       border-radius: 8px;
       overflow: hidden;
@@ -708,8 +707,7 @@
       border-color: rgba(99, 223, 159, .58);
       background: rgba(18, 31, 24, .92);
     }
-    .tracked-card video,
-    .tracked-card img {
+    .tracked-card video {
       aspect-ratio: 16 / 9;
       object-fit: cover;
       border-bottom: 1px solid var(--line);
@@ -1470,7 +1468,7 @@
               <span class="info" data-tip="The green box follows the strongest estimated maroon-uniform track in each clip. Because this is youth phone film, a coach should confirm the player lock before treating metrics as official.">?</span>
             </div>
             <div class="media-console">
-              <img id="player" alt="Selected Noah Film Room still preview" />
+              <video id="player" controls muted playsinline></video>
             </div>
             <div class="video-caption" id="videoCaption"></div>
             <div class="football-strip" id="selectedFootballStats"></div>
@@ -2464,8 +2462,9 @@
       const fastest = bestBy(c => c.football.topSpeedMphEstimate);
       const bestYards = bestBy(c => yardageNumber(c));
       const bestContact = bestBy(c => c.football.tackleCandidateWindows);
-      player.src = posterFor(clip);
-      videoCaption.textContent = `${clip.source}: ${fb.playLabel}. Public still preview from the analysis board. Video clips stay private; ${clip.framesAnalyzed} frames analyzed, ${clip.trackConfidence}% lock confidence.`;
+      player.src = `../${clip.overlay}`;
+      player.poster = posterFor(clip);
+      videoCaption.textContent = `${clip.source}: ${fb.playLabel}. Estimated Noah #42 overlay, ${clip.duration}s clip, ${clip.framesAnalyzed} frames analyzed, ${clip.trackConfidence}% lock confidence.`;
 
       heroMetrics.innerHTML = [
         metric('Fastest Burst Est.', `${fastest.football.topSpeedMphEstimate} mph`, `${fastest.source}, pre-calibration`),
@@ -2484,7 +2483,7 @@
 
       topTrackedVideos.innerHTML = cleanTrackedClips().map((c, i) => `
         <button class="tracked-card ${c.id === selectedId ? 'active' : ''}" data-id="${c.id}">
-          <img src="${posterFor(c)}" alt="${c.source} still preview" />
+          <video src="../${c.overlay}" poster="${posterFor(c)}" muted playsinline preload="metadata"></video>
           <span class="tracked-body">
             <span class="tracked-top">
               <span class="tracked-rank">TRACK ${i + 1}</span>
