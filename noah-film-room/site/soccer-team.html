@@ -1,0 +1,1127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GAME OS Film Room - USA Team Analysis</title>
+  <style>
+    :root {
+      --bg: #050607;
+      --side: #08090a;
+      --panel: #121315;
+      --panel-2: #17191c;
+      --line: #2a2d33;
+      --text: #f5f5f2;
+      --muted: #a8a8b3;
+      --dim: #777783;
+      --gold: #f5a331;
+      --green: #63df9f;
+      --red: #ef5d58;
+      --blue: #76a9ff;
+      --usa: #3b82f6;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .app { display: grid; grid-template-columns: 286px 1fr; min-height: 100vh; }
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid var(--line);
+      background: var(--side);
+      padding: 28px 20px;
+    }
+    .brand { display: flex; gap: 12px; align-items: center; font-weight: 900; letter-spacing: .12em; }
+    .mark {
+      width: 28px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--gold), #f47b20);
+      clip-path: polygon(0 0, 42% 24%, 42% 100%, 0 74%, 0 0, 100% 0, 58% 24%, 58% 100%, 100% 74%, 100% 0);
+    }
+    .role { margin-top: 34px; color: var(--muted); font-weight: 700; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 6px 12px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(245, 163, 49, .45);
+      color: var(--gold);
+      background: rgba(245, 163, 49, .12);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    nav { margin-top: 30px; }
+    .nav-title { margin: 24px 0 12px; color: #8b8b96; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 46px;
+      padding: 0 10px;
+      border-radius: 8px;
+      color: #81818e;
+      font-weight: 800;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #6c6d77; }
+    .nav-item.active { color: var(--green); background: rgba(64, 196, 128, .13); border: 1px solid rgba(99, 223, 159, .35); }
+    .nav-item.active .dot { background: var(--green); }
+
+    main { min-width: 0; }
+    .topbar {
+      height: 58px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: #08090a;
+    }
+    .status { display: flex; align-items: center; gap: 10px; color: var(--gold); font-size: 12px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+    .status::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px var(--green); }
+
+    .content { max-width: 1640px; margin: 0 auto; padding: 32px; }
+    .workspace-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    }
+    .ghost-btn {
+      min-height: 42px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+      color: var(--text);
+      padding: 0 14px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .ghost-btn.primary { color: var(--green); border-color: rgba(99, 223, 159, .42); background: rgba(99, 223, 159, .08); }
+    .workspace-title { display: grid; gap: 3px; min-width: 0; }
+    .workspace-title strong { font-size: 16px; font-weight: 950; }
+    .workspace-title span { color: var(--muted); font-size: 12px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(430px, .65fr);
+      gap: 24px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 10% 8%, rgba(59, 130, 246, .24), transparent 34%),
+        radial-gradient(circle at 80% 16%, rgba(99, 223, 159, .12), transparent 28%),
+        linear-gradient(135deg, rgba(37, 99, 235, .22), rgba(13, 17, 20, .92) 44%, rgba(6, 8, 9, .96));
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .03) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: .55;
+      pointer-events: none;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .tag {
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255, 255, 255, .04);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .tag.good { color: var(--green); border-color: rgba(99, 223, 159, .38); background: rgba(99, 223, 159, .1); }
+    .tag.gold { color: var(--gold); border-color: rgba(245, 163, 49, .38); background: rgba(245, 163, 49, .1); }
+    .tag.blue { color: #9fc2ff; border-color: rgba(118, 169, 255, .40); background: rgba(118, 169, 255, .10); }
+    h1 { margin: 0; max-width: 940px; font-size: clamp(38px, 4vw, 66px); line-height: 1.03; letter-spacing: 0; }
+    .sub { max-width: 930px; margin: 18px 0 0; color: #c6c6cc; font-size: 18px; line-height: 1.55; }
+    .source-note { margin-top: 16px; color: #9ea0ac; font-size: 13px; line-height: 1.45; }
+    .source-note a { color: #9fc2ff; text-decoration: none; }
+
+    .metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .metric {
+      position: relative;
+      overflow: hidden;
+      min-height: 118px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .012));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+    .metric::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--green);
+      opacity: .85;
+    }
+    .metric.gold::before { background: var(--gold); }
+    .metric.blue::before { background: var(--blue); }
+    .metric label { display: block; color: #8f8f99; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+    .metric strong { display: block; margin-top: 10px; font-size: 34px; line-height: 1; }
+    .metric span { display: block; margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.35; }
+
+    .grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(390px, .8fr); gap: 24px; margin-top: 24px; align-items: start; }
+    .film-grid { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(390px, .82fr); gap: 24px; margin-top: 24px; align-items: start; }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #151619, #101113);
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel h2 { margin: 0; font-size: 24px; line-height: 1.05; }
+    .eyebrow { margin-top: 3px; color: #8b8b96; font-size: 12px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+    .info {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-weight: 900;
+      cursor: help;
+      flex: 0 0 auto;
+    }
+    .info:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      z-index: 8;
+      right: 0;
+      top: calc(100% + 10px);
+      width: 300px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #202126;
+      color: #d7d7de;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+      box-shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+
+    .film-stage {
+      position: relative;
+      min-height: 540px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,.025) 1px, transparent 1px),
+        radial-gradient(circle at 68% 42%, rgba(99,223,159,.14), transparent 28%),
+        linear-gradient(135deg, #0b2418, #0d3321 52%, #092016);
+      background-size: 62px 62px, 62px 62px, auto, auto;
+    }
+    .film-stage.video-stage {
+      display: grid;
+      place-items: center;
+      min-height: auto;
+      padding: 0;
+      background: #000;
+    }
+    .film-stage.video-stage::before,
+    .film-stage.video-stage::after {
+      display: none;
+    }
+    .tracked-video {
+      width: 100%;
+      display: block;
+      background: #000;
+      aspect-ratio: 16 / 9;
+    }
+    .film-stage::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border: 2px solid rgba(255,255,255,.24);
+      border-radius: 4px;
+    }
+    .film-stage::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 22px;
+      bottom: 22px;
+      border-left: 2px solid rgba(255,255,255,.20);
+    }
+    .film-scorebug {
+      position: absolute;
+      left: 22px;
+      top: 22px;
+      z-index: 4;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      max-width: calc(100% - 44px);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 8px;
+      background: rgba(5,6,7,.86);
+      padding: 9px 11px;
+      box-shadow: 0 14px 28px rgba(0,0,0,.26);
+    }
+    .film-scorebug strong { color: var(--text); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .film-scorebug span { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .film-pill {
+      display: inline-flex;
+      min-height: 22px;
+      align-items: center;
+      border: 1px solid rgba(99,223,159,.35);
+      border-radius: 999px;
+      color: var(--green);
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .track-player {
+      --x: 40%;
+      --y: 50%;
+      --dx: 0px;
+      --dy: 0px;
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      z-index: 3;
+      transform: translate(-50%, -50%);
+      animation: drift 5.6s ease-in-out infinite alternate;
+      animation-delay: var(--delay, 0s);
+    }
+    .track-player .bubble {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 2px solid rgba(255,255,255,.88);
+      border-radius: 50%;
+      background: #1d4ed8;
+      color: white;
+      font-size: 12px;
+      font-weight: 950;
+      box-shadow: 0 12px 24px rgba(0,0,0,.34), 0 0 0 5px rgba(118,169,255,.12);
+    }
+    .track-player.focus .bubble {
+      background: #047857;
+      box-shadow: 0 12px 24px rgba(0,0,0,.34), 0 0 0 7px rgba(99,223,159,.18);
+    }
+    .track-player.risk .bubble {
+      background: #b91c1c;
+      box-shadow: 0 12px 24px rgba(0,0,0,.34), 0 0 0 7px rgba(239,93,88,.14);
+    }
+    .track-player .name {
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 8px);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 6px;
+      background: rgba(5,6,7,.88);
+      color: #f0f0f3;
+      padding: 5px 7px;
+      font-size: 11px;
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(0,0,0,.24);
+    }
+    .trace {
+      position: absolute;
+      z-index: 2;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(245,163,49,.92));
+      transform-origin: left center;
+      opacity: .9;
+    }
+    .trace.left { left: 25%; top: 31%; width: 32%; transform: rotate(-10deg); }
+    .trace.press { left: 50%; top: 45%; width: 23%; transform: rotate(16deg); background: linear-gradient(90deg, transparent, rgba(99,223,159,.92)); }
+    .trace.risk { left: 64%; top: 59%; width: 22%; transform: rotate(-26deg); background: linear-gradient(90deg, transparent, rgba(239,93,88,.92)); }
+    .ball {
+      position: absolute;
+      left: 63%;
+      top: 38%;
+      z-index: 5;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #f5f5f2;
+      box-shadow: 0 0 0 5px rgba(245,245,242,.12), 0 0 20px rgba(245,245,242,.38);
+      animation: ballmove 5.4s ease-in-out infinite alternate;
+    }
+    .film-caption {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border-top: 1px solid var(--line);
+      background: rgba(0,0,0,.20);
+    }
+    .clip-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+    .clip-tab {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.03);
+      color: #cfcfd6;
+      min-height: 34px;
+      padding: 5px 11px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .clip-tab.active { color: var(--green); border-color: rgba(99,223,159,.42); background: rgba(99,223,159,.08); }
+    .film-caption p { margin: 0; color: #c3c3cb; line-height: 1.45; }
+    @keyframes drift {
+      from { transform: translate(-50%, -50%) translate(0, 0); }
+      to { transform: translate(-50%, -50%) translate(var(--dx), var(--dy)); }
+    }
+    @keyframes ballmove {
+      from { transform: translate(0, 0); }
+      to { transform: translate(-112px, 76px); }
+    }
+
+    .pitch-wrap { padding: 18px; background: #08090a; }
+    .pitch {
+      position: relative;
+      min-height: 520px;
+      border: 1px solid rgba(255,255,255,.20);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, #0d2b1c, #103723 50%, #0d2b1c);
+      background-size: 72px 72px, 72px 72px, auto;
+    }
+    .pitch::before {
+      content: "";
+      position: absolute;
+      inset: 8% 8%;
+      border: 2px solid rgba(255,255,255,.28);
+      border-radius: 2px;
+    }
+    .halfway { position: absolute; left: 50%; top: 8%; bottom: 8%; border-left: 2px solid rgba(255,255,255,.28); }
+    .circle { position: absolute; left: 50%; top: 50%; width: 128px; height: 128px; transform: translate(-50%, -50%); border: 2px solid rgba(255,255,255,.28); border-radius: 50%; }
+    .box-left, .box-right { position: absolute; top: 28%; width: 15%; height: 44%; border: 2px solid rgba(255,255,255,.28); }
+    .box-left { left: 8%; }
+    .box-right { right: 8%; }
+    .lane {
+      position: absolute;
+      border: 1px solid rgba(245,163,49,.70);
+      background: rgba(245,163,49,.12);
+      border-radius: 999px;
+      transform-origin: left center;
+      box-shadow: 0 0 22px rgba(245,163,49,.12);
+    }
+    .lane.left-build { width: 42%; height: 22px; left: 18%; top: 29%; transform: rotate(-9deg); }
+    .lane.press { width: 30%; height: 20px; left: 58%; top: 45%; transform: rotate(18deg); border-color: rgba(99,223,159,.70); background: rgba(99,223,159,.12); }
+    .lane.danger { width: 23%; height: 20px; left: 67%; top: 58%; transform: rotate(-24deg); border-color: rgba(239,93,88,.75); background: rgba(239,93,88,.13); }
+    .player {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 2px solid rgba(255,255,255,.80);
+      border-radius: 50%;
+      background: #1d4ed8;
+      color: white;
+      font-size: 11px;
+      font-weight: 950;
+      box-shadow: 0 8px 22px rgba(0,0,0,.30);
+    }
+    .player.good { background: #047857; }
+    .player.warn { background: #b45309; }
+    .player.risk { background: #b91c1c; }
+    .opp {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 2px solid rgba(255,255,255,.70);
+      border-radius: 50%;
+      background: #26262c;
+      color: #d7d7de;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 950;
+    }
+    .moment-card {
+      position: absolute;
+      max-width: 310px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 8px;
+      background: rgba(5,6,7,.88);
+      backdrop-filter: blur(6px);
+      padding: 12px;
+      box-shadow: 0 18px 34px rgba(0,0,0,.28);
+    }
+    .moment-card strong { display: block; font-size: 13px; }
+    .moment-card span { color: var(--muted); display: block; margin-top: 5px; font-size: 12px; line-height: 1.35; }
+    .moment-card.one { left: 22px; top: 20px; border-left: 4px solid var(--red); }
+    .moment-card.two { left: 30%; top: 70%; border-left: 4px solid var(--green); }
+    .moment-card.three { right: 22px; top: 18px; border-left: 4px solid var(--gold); }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      padding: 16px;
+      border-top: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .026) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, .018) 1px, transparent 1px);
+      background-size: 56px 56px;
+    }
+    .stat-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 118px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(255,255,255,.025);
+    }
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--green);
+    }
+    .stat-card.gold::before { background: var(--gold); }
+    .stat-card.blue::before { background: var(--blue); }
+    .stat-card.red::before { background: var(--red); }
+    .stat-card label { display: block; color: var(--muted); font-size: 11px; font-weight: 950; letter-spacing: .13em; text-transform: uppercase; }
+    .stat-card strong { display: block; margin-top: 10px; font-size: 28px; line-height: 1.05; }
+    .stat-card span { display: block; margin-top: 8px; color: #a9a9b2; font-size: 12px; line-height: 1.35; }
+
+    .rank-list { display: grid; gap: 10px; padding: 16px; }
+    .rank-row {
+      width: 100%;
+      min-height: 72px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      display: grid;
+      grid-template-columns: 54px minmax(150px, 1.1fr) 92px minmax(160px, 1fr) 72px;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+    }
+    .rank-row:hover, .rank-row.active { border-color: rgba(99,223,159,.45); background: rgba(99,223,159,.07); }
+    .rank { color: var(--gold); font-weight: 950; font-size: 20px; }
+    .rank-title strong { display: block; font-size: 15px; line-height: 1.1; }
+    .rank-title span { color: var(--muted); display: block; margin-top: 5px; font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .fill { height: 100%; background: var(--green); }
+    .score { color: var(--green); font-size: 22px; font-weight: 950; text-align: right; }
+
+    .rank-detail {
+      margin: 0 16px 16px;
+      border: 1px solid rgba(99,223,159,.26);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(99,223,159,.13), transparent 38%),
+        rgba(99,223,159,.045);
+      padding: 16px;
+    }
+    .breakdown-head { display: flex; justify-content: space-between; gap: 16px; align-items: start; margin-bottom: 14px; }
+    .breakdown-head strong { display: block; font-size: 18px; }
+    .breakdown-head p { color: #bebec7; margin: 5px 0 0; line-height: 1.4; }
+    .breakdown-score { color: var(--green); font-size: 36px; font-weight: 950; line-height: 1; }
+    .score-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .score-card { border: 1px solid var(--line); border-radius: 8px; background: rgba(0,0,0,.18); padding: 12px; }
+    .score-card label { color: var(--muted); display: block; font-size: 10px; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
+    .score-card strong { display: block; font-size: 20px; margin-top: 6px; }
+    .score-card span { color: #aaaab3; display: block; font-size: 11px; line-height: 1.35; margin-top: 5px; }
+
+    .readout { display: grid; gap: 12px; padding: 16px; }
+    .readout-item { border-left: 4px solid var(--green); padding: 8px 0 8px 14px; }
+    .readout-item.gold { border-left-color: var(--gold); }
+    .readout-item.red { border-left-color: var(--red); }
+    .readout-item.blue { border-left-color: var(--blue); }
+    .readout-item strong { display: block; margin-bottom: 5px; }
+    .readout-item p { margin: 0; color: #c8c8d0; line-height: 1.45; }
+
+    .event-list { display: grid; gap: 12px; padding: 16px; max-height: 610px; overflow: auto; }
+    .event {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.025);
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 70px 1fr 58px;
+      gap: 12px;
+    }
+    .event .time { color: var(--gold); font-weight: 950; font-size: 15px; }
+    .event strong { display: block; font-size: 14px; }
+    .event p { margin: 5px 0 0; color: #bdbdc6; font-size: 13px; line-height: 1.4; }
+    .event .conf { color: var(--green); font-weight: 950; text-align: right; }
+
+    .toolbelt { margin-top: 24px; }
+    .tool-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; padding: 16px; }
+    .tool {
+      min-height: 150px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.025);
+      padding: 14px;
+    }
+    .tool strong { display: block; font-size: 15px; }
+    .tool label { display: inline-flex; margin-top: 8px; color: var(--green); font-size: 11px; font-weight: 950; letter-spacing: .10em; text-transform: uppercase; }
+    .tool p { color: #b9b9c2; margin: 10px 0 0; line-height: 1.45; font-size: 13px; }
+
+    @media (max-width: 1180px) {
+      .app { grid-template-columns: 1fr; }
+      aside { display: none; }
+      .hero, .grid, .film-grid { grid-template-columns: 1fr; }
+      .stat-strip, .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .rank-row { grid-template-columns: 44px minmax(0, 1fr) 70px; }
+      .rank-row .bar, .rank-row .score { display: none; }
+    }
+    @media (max-width: 760px) {
+      .content { padding: 18px; }
+      .hero { padding: 20px; }
+      .metric-grid, .stat-strip, .tool-grid, .score-grid { grid-template-columns: 1fr; }
+      .pitch { min-height: 430px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand"><span class="mark"></span><span><span style="color:var(--gold)">GAME</span> OS</span></div>
+      <div class="role">Coach<br /><span class="pill">Prototype</span></div>
+      <nav>
+        <div class="nav-title">Club OS</div>
+        <div class="nav-item"><span class="dot"></span>Dashboard</div>
+        <div class="nav-item"><span class="dot"></span>Athletes</div>
+        <div class="nav-item"><span class="dot"></span>Roster</div>
+        <div class="nav-item"><span class="dot"></span>Formation</div>
+        <div class="nav-title">Live Ops</div>
+        <div class="nav-item"><span class="dot"></span>Live Scoring</div>
+        <div class="nav-item active" role="button" tabindex="0" onclick="window.location.href='noah.html'" onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='noah.html'}"><span class="dot"></span>Film Room</div>
+        <div class="nav-item"><span class="dot"></span>Tournaments</div>
+      </nav>
+    </aside>
+    <main>
+      <div class="topbar">
+        <div class="status">AVANTI Film Room</div>
+        <span class="tag good">Team Analysis</span>
+      </div>
+
+      <div class="content">
+        <div class="workspace-bar">
+          <button class="ghost-btn" onclick="window.location.href='noah.html'">Back To Command Center</button>
+          <div class="workspace-title">
+            <strong>USA vs Germany - Team Film Room</strong>
+            <span>Compacted game readout | official facts + coach-review candidates</span>
+          </div>
+          <button class="ghost-btn primary" onclick="document.querySelector('#reviewProcess').scrollIntoView({ behavior: 'smooth' })">How It Works</button>
+        </div>
+
+        <section class="hero">
+          <div>
+            <div class="tags">
+              <span class="tag blue">Soccer</span>
+              <span class="tag good">USA team report</span>
+              <span class="tag gold">Coach confirm required</span>
+              <span class="tag">Coach review mode</span>
+            </div>
+            <h1>USA team analysis from the Germany friendly.</h1>
+            <p class="sub">
+              This compacted Team Analysis view turns a recent USMNT match into a coach-facing board:
+              tactical phases, team workload, chance creation, set-piece pressure, transition risk,
+              player-role lanes, and the review moments a staff would click first.
+            </p>
+            <p class="source-note">
+              Truth layer: USA 1-2 Germany, Soldier Field, June 6, 2026. Goals: Havertz 2',
+              Antonee Robinson 37', Sane 57'. Sources:
+              <a href="https://www.ussoccer.com/stories/2026/06/usmnt/match-recap-antonee-robinson-goal-highlights-vs-germany" target="_blank" rel="noreferrer">U.S. Soccer recap</a>
+              and
+              <a href="https://www.skysports.com/football/united-states-of-america-vs-germany/teams/550810" target="_blank" rel="noreferrer">Sky Sports lineups</a>.
+            </p>
+          </div>
+          <div class="metric-grid">
+            <div class="metric blue">
+              <label>Field Frames Read</label>
+              <strong>1,051</strong>
+              <span>Tracking only runs when the play is on the green field; broadcast cuts are paused.</span>
+            </div>
+            <div class="metric gold">
+              <label>On-Field Players</label>
+              <strong>18.9 avg</strong>
+              <span>Capped at 22 total player candidates so the stands and benches do not drive the readout.</span>
+            </div>
+            <div class="metric">
+              <label>Ball Windows</label>
+              <strong>1,031</strong>
+              <span>Small-ball candidate moments on the field that can become touch and possession reviews.</span>
+            </div>
+            <div class="metric gold">
+              <label>Review Moments</label>
+              <strong>9</strong>
+              <span>Three high-priority clips plus six tactical phase candidates for coach confirmation.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="film-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Film Player</h2>
+                <div class="eyebrow">Compacted tracking preview + named player markers</div>
+              </div>
+              <span class="info" data-tip="This is real highlight footage with a prototype tracking layer. The coach should confirm player labels before treating any metric as final.">?</span>
+            </div>
+            <div class="film-stage video-stage" aria-label="USA vs Germany actual tracked highlight video">
+              <video id="trackedVideo" class="tracked-video" controls preload="metadata" playsinline src="../clips/usa-germany-tracked-highlight.mp4"></video>
+            </div>
+            <div class="film-caption">
+              <div class="clip-tabs">
+                <button class="clip-tab active" type="button" data-jump="37">37' USA goal</button>
+                <button class="clip-tab" type="button" data-jump="2">2' early concession</button>
+                <button class="clip-tab" type="button" data-jump="57">57' transition goal</button>
+              </div>
+              <p>
+                This is actual highlight footage with a local tracking layer that stays on the field:
+                player candidates, ball candidates, movement trails, and coach-review windows. The readout
+                is built to help a coach find the moments worth reviewing, then confirm the player and phase labels.
+              </p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Player Track Readout</h2>
+                <div class="eyebrow">Names + numbers tied to team phases</div>
+              </div>
+              <span class="info" data-tip="Numbers and names come from lineup context. Tracking IDs become trustworthy only after roster matching and coach confirmation.">?</span>
+            </div>
+            <div class="rank-list">
+              <button class="rank-row active" type="button">
+                <span class="rank">#1</span>
+                <span class="rank-title"><strong>A. Robinson</strong><span>USA #5 | left-back attack</span></span>
+                <span>91</span><span class="bar"><span class="fill" style="width:91%"></span></span><span class="score">91</span>
+              </button>
+              <button class="rank-row" type="button">
+                <span class="rank">#2</span>
+                <span class="rank-title"><strong>C. Pulisic</strong><span>USA #10 | left-channel creator</span></span>
+                <span>87</span><span class="bar"><span class="fill" style="width:87%"></span></span><span class="score">87</span>
+              </button>
+              <button class="rank-row" type="button">
+                <span class="rank">#3</span>
+                <span class="rank-title"><strong>T. Adams</strong><span>USA #4 | midfield screen</span></span>
+                <span>78</span><span class="bar"><span class="fill" style="width:78%"></span></span><span class="score">78</span>
+              </button>
+              <button class="rank-row" type="button">
+                <span class="rank">#4</span>
+                <span class="rank-title"><strong>S. Dest</strong><span>USA #2 | transition recovery</span></span>
+                <span>66</span><span class="bar"><span class="fill" style="width:66%"></span></span><span class="score">66</span>
+              </button>
+            </div>
+            <div class="rank-detail">
+              <div class="breakdown-head">
+                <div>
+                  <strong>Why A. Robinson tracks highest</strong>
+                  <p>He is tied to the clearest positive outcome: the 37' equalizer, left-lane progression, box arrival, and set-piece recycle value.</p>
+                </div>
+                <div class="breakdown-score">91</div>
+              </div>
+              <div class="score-grid">
+                <div class="score-card"><label>Goal Impact</label><strong>High</strong><span>Official goal event anchors the score.</span></div>
+                <div class="score-card"><label>Lane Value</label><strong>Left</strong><span>Best USA attacking channel.</span></div>
+                <div class="score-card"><label>Tracking Trust</label><strong>Preview</strong><span>Needs video tracker + roster validation.</span></div>
+                <div class="score-card"><label>Coach Action</label><strong>Clip it</strong><span>Use as teachable repeat pattern.</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Compacted Game Board</h2>
+                <div class="eyebrow">Team shape + review windows</div>
+              </div>
+              <span class="info" data-tip="Team mode shows the whole team shape and key moments, not a single-athlete report. The final product uses roster, formation, schedule, and coach-confirmed labels from GAME OS.">?</span>
+            </div>
+            <div class="pitch-wrap">
+              <div class="pitch" aria-label="USA vs Germany tactical board">
+                <div class="halfway"></div>
+                <div class="circle"></div>
+                <div class="box-left"></div>
+                <div class="box-right"></div>
+                <div class="lane left-build"></div>
+                <div class="lane press"></div>
+                <div class="lane danger"></div>
+                <div class="moment-card one"><strong>2' defensive restart problem</strong><span>Germany scores early. Flag as rest-defense and mark/coverage review.</span></div>
+                <div class="moment-card two"><strong>37' set-piece second ball</strong><span>Robinson volley ties it. USA pressure converts from a recycled corner clearance.</span></div>
+                <div class="moment-card three"><strong>57' transition damage</strong><span>Sane winner. Review spacing after possession loss and weak-side recovery.</span></div>
+
+                <span class="player good" style="left:22%;top:29%;">5</span>
+                <span class="player" style="left:32%;top:38%;">10</span>
+                <span class="player" style="left:41%;top:52%;">4</span>
+                <span class="player" style="left:49%;top:43%;">8</span>
+                <span class="player" style="left:56%;top:34%;">17</span>
+                <span class="player" style="left:62%;top:48%;">20</span>
+                <span class="player warn" style="left:67%;top:61%;">2</span>
+                <span class="player" style="left:18%;top:54%;">13</span>
+                <span class="player risk" style="left:15%;top:66%;">12</span>
+                <span class="player" style="left:12%;top:43%;">16</span>
+                <span class="player" style="left:7%;top:50%;">24</span>
+
+                <span class="opp" style="left:77%;top:42%;">7</span>
+                <span class="opp" style="left:82%;top:54%;">9</span>
+                <span class="opp" style="left:70%;top:63%;">19</span>
+                <span class="opp" style="left:64%;top:28%;">10</span>
+                <span class="opp" style="left:52%;top:68%;">8</span>
+              </div>
+            </div>
+            <div class="stat-strip">
+              <div class="stat-card blue">
+                <label>Attack Lane</label>
+                <strong>Left side</strong>
+                <span>Best team pattern through Robinson and Pulisic.</span>
+              </div>
+              <div class="stat-card gold">
+                <label>Set-Piece Load</label>
+                <strong>High</strong>
+                <span>Corner/second-ball actions are a major review theme.</span>
+              </div>
+              <div class="stat-card">
+                <label>Press Window</label>
+                <strong>31'-45'</strong>
+                <span>Strongest USA spell before halftime.</span>
+              </div>
+              <div class="stat-card red">
+                <label>Risk Window</label>
+                <strong>0'-10'</strong>
+                <span>Slow start creates immediate scoreboard damage.</span>
+              </div>
+              <div class="stat-card gold">
+                <label>Transition Check</label>
+                <strong>Needs work</strong>
+                <span>57' winner points to spacing after loss.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Coach Readout</h2>
+                <div class="eyebrow">What matters from the team film</div>
+              </div>
+              <span class="info" data-tip="Coach Readout is AVANTI's plain-English layer. It turns detections, zones, roster context, and official events into what to review next.">?</span>
+            </div>
+            <div class="readout">
+              <div class="readout-item blue">
+                <strong>USA can create against elite pressure</strong>
+                <p>The left lane and set-piece second balls are real attacking weapons. The board would clip every Robinson/Pulisic progression and corner recycle.</p>
+              </div>
+              <div class="readout-item red">
+                <strong>Game-management issue: first ten minutes</strong>
+                <p>Early concession creates the staff question: are center backs and midfield screen connected before the match settles?</p>
+              </div>
+              <div class="readout-item gold">
+                <strong>Transition defense is the swing phase</strong>
+                <p>The 57' goal becomes the key teaching clip: possession loss, first pressure, midfield recovery lane, and weak-side tracking.</p>
+              </div>
+              <div class="readout-item">
+                <strong>Keep the screen coach-first</strong>
+                <p>The final product should show who was involved, what phase broke down, and which clip to review next.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Team Phase Ranking</h2>
+                <div class="eyebrow">Click a phase to see why it ranked there</div>
+              </div>
+              <span class="info" data-tip="A production score would blend tracking density, zone entries, possession windows, player load, event tags, and coach-confirmed outcomes.">?</span>
+            </div>
+            <div class="rank-list" id="rankList"></div>
+            <div class="rank-detail" id="rankDetail"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Plays To Review</h2>
+                <div class="eyebrow">Highest-value coaching clips</div>
+              </div>
+              <span class="info" data-tip="These are the clips a staff member should inspect first. Confidence is about review priority, not final automated truth.">?</span>
+            </div>
+            <div class="event-list">
+              <div class="event">
+                <div class="time">002'</div>
+                <div><strong>Germany early goal</strong><p>Rest-defense alignment, first pressure, and center-back mark handoff.</p></div>
+                <div class="conf">95</div>
+              </div>
+              <div class="event">
+                <div class="time">037'</div>
+                <div><strong>Robinson equalizer</strong><p>Corner recycle, second-ball positioning, left-back attacking value.</p></div>
+                <div class="conf">99</div>
+              </div>
+              <div class="event">
+                <div class="time">057'</div>
+                <div><strong>Sane winner</strong><p>Transition loss, recovery spacing, weak-side runner recognition.</p></div>
+                <div class="conf">97</div>
+              </div>
+              <div class="event">
+                <div class="time">31-45'</div>
+                <div><strong>Best USA control spell</strong><p>Pressing rhythm and field tilt before halftime.</p></div>
+                <div class="conf">84</div>
+              </div>
+              <div class="event">
+                <div class="time">60-75'</div>
+                <div><strong>Substitution reset</strong><p>Fresh legs change recovery lanes; compare before/after compactness.</p></div>
+                <div class="conf">72</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel toolbelt" id="reviewProcess">
+          <div class="panel-head">
+            <div>
+              <h2>How Film Room Gets Smarter</h2>
+              <div class="eyebrow">Plain-English workflow for coaches</div>
+            </div>
+            <span class="tag good">Coach first</span>
+          </div>
+          <div class="tool-grid">
+            <div class="tool">
+              <strong>Find the players</strong>
+              <label>Step 1</label>
+              <p>The film is scanned for players, the ball, and the parts of the field where the action matters.</p>
+            </div>
+            <div class="tool">
+              <strong>Match the roster</strong>
+              <label>Step 2</label>
+              <p>Player labels are matched to the roster and jersey numbers, then marked for coach confirmation.</p>
+            </div>
+            <div class="tool">
+              <strong>Follow the movement</strong>
+              <label>Step 3</label>
+              <p>The system keeps track of movement, pressure, touches, recoveries, and spacing over each clip.</p>
+            </div>
+            <div class="tool">
+              <strong>Flag the moments</strong>
+              <label>Step 4</label>
+              <p>The best coaching clips rise to the top: goals, breakdowns, transitions, set pieces, and pressure windows.</p>
+            </div>
+            <div class="tool">
+              <strong>Explain the why</strong>
+              <label>Coach readout</label>
+              <p>AVANTI turns the film into plain-language notes a coach can use in practice or Coach's Corner.</p>
+            </div>
+            <div class="tool">
+              <strong>Keep the history</strong>
+              <label>Command Center</label>
+              <p>Every run stays in Film Room history so a coach can compare player, team, opponent, and game reports.</p>
+            </div>
+            <div class="tool">
+              <strong>Use GAME OS data</strong>
+              <label>Connected</label>
+              <p>Roster, formation, schedule, opponent, team, and athlete pages all feed the same analysis record.</p>
+            </div>
+            <div class="tool">
+              <strong>AVANTI</strong>
+              <label>Assistant</label>
+              <p>Summarizes what changed, what needs review, and which players or team phases deserve attention.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const phases = [
+      {
+        rank: 1,
+        title: "Left-side chance creation",
+        meta: "Robinson + Pulisic lane",
+        score: 91,
+        bar: 91,
+        detail: "Best USA pattern. It creates the 37' goal sequence and gives the staff a repeatable attacking identity.",
+        cards: [
+          ["Progressions", "High", "Multiple entries through left channel and second balls."],
+          ["End Product", "Goal", "Robinson finish from recycled set-piece pressure."],
+          ["Repeatability", "Strong", "This is the phase to build around in opponent prep."],
+          ["Coach Action", "Clip every entry", "Review timing between wide runner, inside support, and box occupation."]
+        ]
+      },
+      {
+        rank: 2,
+        title: "Set-piece second balls",
+        meta: "Corner/recycle pressure",
+        score: 88,
+        bar: 88,
+        detail: "The equalizer shows why second-ball positioning matters. Film Room should tag first clearance, rebound zone, and finishing lanes.",
+        cards: [
+          ["First Contact", "Review", "Who attacks first ball and who sits on the clearance lane."],
+          ["Rebound Shape", "Positive", "Robinson arrives in the right pocket."],
+          ["Threat Level", "High", "Set-piece load is a day-one soccer metric."],
+          ["Coach Action", "Build template", "Create a repeatable corner recycle model."]
+        ]
+      },
+      {
+        rank: 3,
+        title: "Midfield pressure window",
+        meta: "31'-45' best spell",
+        score: 82,
+        bar: 82,
+        detail: "The strongest USA run came before halftime, when the midfield screen and attacking pressure connected better.",
+        cards: [
+          ["Timing", "Good", "Pressure and support arrive closer together."],
+          ["Field Tilt", "Positive", "More actions take place in Germany's half."],
+          ["Risk", "Moderate", "Still vulnerable if first pressure gets broken."],
+          ["Coach Action", "Compare windows", "Show 0'-10' beside 31'-45' to teach the difference."]
+        ]
+      },
+      {
+        rank: 4,
+        title: "Rest-defense spacing",
+        meta: "Early goal + winner review",
+        score: 66,
+        bar: 66,
+        detail: "This is the phase that loses the match. It needs player-specific responsibilities attached to formation data.",
+        cards: [
+          ["First Goal", "Problem", "Coverage and mark handoff need review."],
+          ["Winner", "Problem", "Weak-side recovery and pressure after loss are not clean enough."],
+          ["Data Need", "Formation spine", "Must know team shape and player assignments."],
+          ["Coach Action", "Assign responsibility", "Tag role failures without guessing from video alone."]
+        ]
+      },
+      {
+        rank: 5,
+        title: "Substitution reset",
+        meta: "60'-75' shape change",
+        score: 62,
+        bar: 62,
+        detail: "Useful for staff, but not the first story. Production should compare team compactness before and after substitutions.",
+        cards: [
+          ["Fresh Legs", "Useful", "Better recovery speed may appear after changes."],
+          ["Continuity", "Mixed", "Role clarity can drop during the reset."],
+          ["Data Need", "Roster + event feed", "Substitutions must be machine-readable."],
+          ["Coach Action", "Before/after report", "Show team spacing delta by five-minute windows."]
+        ]
+      }
+    ];
+
+    let activePhase = 0;
+
+    function renderRanks() {
+      const list = document.getElementById("rankList");
+      list.innerHTML = phases.map((phase, index) => `
+        <button class="rank-row ${index === activePhase ? "active" : ""}" onclick="selectPhase(${index})">
+          <span class="rank">#${phase.rank}</span>
+          <span class="rank-title"><strong>${phase.title}</strong><span>${phase.meta}</span></span>
+          <span>${phase.score}</span>
+          <span class="bar"><span class="fill" style="width:${phase.bar}%"></span></span>
+          <span class="score">${phase.score}</span>
+        </button>
+      `).join("");
+      renderDetail();
+    }
+
+    function renderDetail() {
+      const phase = phases[activePhase];
+      document.getElementById("rankDetail").innerHTML = `
+        <div class="breakdown-head">
+          <div>
+            <strong>Why ${phase.title} ranked #${phase.rank}</strong>
+            <p>${phase.detail}</p>
+          </div>
+          <div class="breakdown-score">${phase.score}</div>
+        </div>
+        <div class="score-grid">
+          ${phase.cards.map(([label, value, note]) => `
+            <div class="score-card">
+              <label>${label}</label>
+              <strong>${value}</strong>
+              <span>${note}</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function selectPhase(index) {
+      activePhase = index;
+      renderRanks();
+    }
+
+    document.querySelectorAll("[data-jump]").forEach(button => {
+      button.addEventListener("click", () => {
+        const video = document.getElementById("trackedVideo");
+        document.querySelectorAll("[data-jump]").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        video.currentTime = Number(button.dataset.jump || 0);
+        video.play().catch(() => {});
+      });
+    });
+
+    renderRanks();
+  </script>
+</body>
+</html>
