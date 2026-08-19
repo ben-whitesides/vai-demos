@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>vai.app — Who It's For (dark drop-in preview)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  /* ── preview scaffold only (NOT part of the drop-in) ── */
+  body{margin:0;background:#0C0A09;min-height:100vh}
+  .preview-note{font:700 11px/1.4 'Geist Mono',monospace;letter-spacing:1px;color:#57534E;text-align:center;padding:18px 20px 0;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="preview-note">Preview · everything below is one self-contained block for a Divi Code module on vai.app</div>
+
+<!-- ══════════════════ VAI · WHO IT'S FOR — DIVI CODE MODULE DROP-IN (copy from here) ══════════════════ -->
+<section class="vw-who">
+<style>
+  .vw-who{--ink:#0C0A09;--card:#191613;--line:#2A2622;--txt:#DDD7D1;--body:#BCB4AC;--mut:#878797;--orange:#F7941E;--green:#34D399;
+    font-family:'Geist',ui-sans-serif,system-ui,-apple-system,sans-serif;background:transparent;color:var(--txt);
+    padding:72px 24px;max-width:1240px;margin:0 auto;box-sizing:border-box}
+  .vw-who *,.vw-who *::before,.vw-who *::after{box-sizing:border-box;margin:0;padding:0}
+  .vw-who .vw-eyebrow{font:700 12px/1 'Geist Mono',monospace;letter-spacing:3px;text-transform:uppercase;color:var(--orange);text-align:center;margin-bottom:16px}
+  .vw-who h2.vw-title{font-weight:900;font-size:clamp(34px,5vw,54px);line-height:1.05;letter-spacing:-1.5px;color:#fff;text-align:center}
+  .vw-who .vw-sub{font-size:18px;line-height:1.55;color:var(--body);text-align:center;max-width:60ch;margin:18px auto 0}
+  .vw-who .vw-sub b{color:var(--green);font-weight:700}
+
+  /* parent hero card */
+  .vw-who .vw-hero{position:relative;background:linear-gradient(180deg,#1D1915,#171310);border:1px solid var(--line);border-top:2px solid var(--orange);
+    border-radius:18px;padding:38px 40px;margin:48px 0 18px;overflow:hidden}
+  .vw-who .vw-hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(600px 220px at 18% 0%,rgba(247,148,30,.10),transparent 60%)}
+  .vw-who .vw-hero .vw-tag{display:inline-block;font:700 11px/1 'Geist Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:var(--orange);border:1px solid rgba(247,148,30,.45);border-radius:100px;padding:7px 14px;margin-bottom:18px}
+  .vw-who .vw-hero h3{font-size:clamp(26px,3.4vw,38px);font-weight:900;letter-spacing:-1px;line-height:1.1;color:#fff;max-width:24ch}
+  .vw-who .vw-hero h3 span{color:var(--orange)}
+  .vw-who .vw-hero .vw-lede{font-size:16.5px;line-height:1.6;color:var(--body);max-width:66ch;margin-top:14px}
+  .vw-who .vw-kp{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 28px;margin-top:26px;position:relative;z-index:1}
+  .vw-who .vw-kp .k{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.5;color:var(--body)}
+  .vw-who .vw-kp .k svg{flex:0 0 17px;width:17px;height:17px;margin-top:3px;color:var(--green)}
+  .vw-who .vw-kp .k b{color:var(--txt);font-weight:700}
+  .vw-who .vw-hero .vw-cta{display:inline-block;margin-top:26px;background:var(--orange);color:#1A1005;font-weight:800;font-size:15px;
+    padding:14px 30px;border-radius:100px;text-decoration:none;letter-spacing:.2px}
+  .vw-who .vw-hero .vw-cta:hover{filter:brightness(1.08)}
+  .vw-who .vw-hero .vw-free{font:600 13px/1 'Geist',sans-serif;color:var(--mut);margin-left:16px}
+
+  /* persona cards */
+  .vw-who .vw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px}
+  .vw-who .vw-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 24px;display:flex;flex-direction:column;
+    transition:transform .15s ease,border-color .15s ease;text-decoration:none}
+  .vw-who .vw-card:hover{transform:translateY(-3px);border-color:rgba(247,148,30,.5)}
+  .vw-who .vw-ico{width:40px;height:40px;border-radius:10px;background:rgba(52,211,153,.12);display:flex;align-items:center;justify-content:center;color:var(--green);margin-bottom:16px}
+  .vw-who .vw-ico.o{background:rgba(247,148,30,.12);color:var(--orange)}
+  .vw-who .vw-ico svg{width:21px;height:21px}
+  .vw-who .vw-card h4{font-size:19px;font-weight:800;letter-spacing:-.3px;color:#fff;margin-bottom:4px}
+  .vw-who .vw-card .d{font-size:13px;font-weight:600;color:var(--mut);margin-bottom:14px}
+  .vw-who .vw-card ul{list-style:none;display:grid;gap:8px;margin-bottom:18px}
+  .vw-who .vw-card li{font-size:13.5px;line-height:1.5;color:var(--body);padding-left:18px;position:relative}
+  .vw-who .vw-card li::before{content:"";position:absolute;left:2px;top:7px;width:6px;height:6px;border-radius:50%;background:var(--green)}
+  .vw-who .vw-card .go{margin-top:auto;font-size:13.5px;font-weight:800;color:var(--orange);letter-spacing:.3px}
+  .vw-who .vw-av{color:var(--green);font-weight:800}
+
+  @media(max-width:1020px){.vw-who .vw-grid{grid-template-columns:repeat(2,1fr)}.vw-who .vw-kp{grid-template-columns:1fr 1fr}}
+  @media(max-width:640px){.vw-who{padding:56px 18px}.vw-who .vw-grid{grid-template-columns:1fr}.vw-who .vw-kp{grid-template-columns:1fr}.vw-who .vw-hero{padding:30px 24px}}
+</style>
+
+  <div class="vw-eyebrow">Who It's For</div>
+  <h2 class="vw-title">Built around the person<br/>running it all.</h2>
+  <p class="vw-sub">Athletes play. Coaches coach. Trainers train. But one person holds the calendar, the payments, and every decision — <b>VAI starts there.</b></p>
+
+  <!-- PARENT HERO -->
+  <div class="vw-hero">
+    <span class="vw-tag">Parents &amp; Families</span>
+    <h3>You run the show. <span>Now you have a front office.</span></h3>
+    <p class="vw-lede">Every team, every schedule, every payment, every coach and trainer you choose — and your athlete's future — in one app that keeps the whole family on the same page.</p>
+    <div class="vw-kp">
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>My Children</b> — every kid's teams &amp; progress in one place</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>Group messaging</b> — no more GroupMe + Remind + email</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>One calendar</b>, synced to your phone</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>Pay everything in-app</b> — Venmo, PayPal, or card</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>Book the trainers you choose</b> — see slots, book, done</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>Recruiting tools</b> — a real path to college coaches</span></div>
+    </div>
+    <a class="vw-cta" href="parents.html">See what families get</a><span class="vw-free">Free to start · whole family, one account</span>
+  </div>
+
+  <!-- PERSONA CARDS -->
+  <div class="vw-grid">
+
+    <a class="vw-card" href="athlete.html">
+      <span class="vw-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg></span>
+      <h4>Athletes</h4>
+      <div class="d">Get better. Get seen. Free.</div>
+      <ul>
+        <li>A profile built to get you seen — stats, highlights, combine numbers</li>
+        <li><span class="vw-av">AVANTI</span>, your AI coach — any time, any question</li>
+        <li>Recruiting search across college coaches</li>
+      </ul>
+      <span class="go">For athletes →</span>
+    </a>
+
+    <a class="vw-card" href="coaches.html">
+      <span class="vw-ico o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8a4 4 0 1 1-2.5 7.1L4 18l1-3.5A4 4 0 0 1 14 8z"/><path d="M16 7V4l4-1v3"/></svg></span>
+      <h4>Coaches</h4>
+      <div class="d">One Group runs your team. Free.</div>
+      <ul>
+        <li>Players + parents in one Group — schedule, chat, team feed</li>
+        <li>Post once, everyone gets the push</li>
+        <li>Payments collected in-app — Venmo &amp; PayPal</li>
+      </ul>
+      <span class="go">For coaches →</span>
+    </a>
+
+    <a class="vw-card" href="trainers.html">
+      <span class="vw-ico o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg></span>
+      <h4>Trainers &amp; Gyms</h4>
+      <div class="d">They book and pay. You coach.</div>
+      <ul>
+        <li>Post slots — athletes self-book</li>
+        <li>Paid at booking, nothing to chase</li>
+        <li>Clients in Groups, <span class="vw-av">AVANTI</span> between sessions</li>
+      </ul>
+      <span class="go">For trainers →</span>
+    </a>
+
+    <a class="vw-card" href="clubs-orgs.html">
+      <span class="vw-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/></svg></span>
+      <h4>Clubs &amp; Orgs</h4>
+      <div class="d">Run the season. Fund the club.</div>
+      <ul>
+        <li><b style="color:var(--txt)">GAME OS</b> — registration, finance, facilities, tournaments</li>
+        <li>Org-wide channels, push to every phone</li>
+        <li>The club's link earns recurring revenue</li>
+      </ul>
+      <span class="go">For organizations →</span>
+    </a>
+
+  </div>
+</section>
+<!-- ══════════════════ END DROP-IN ══════════════════ -->
+
+</body>
+</html>

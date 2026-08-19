@@ -1,0 +1,30 @@
+/* VAI sales — WEB-LANE light skin. Load AFTER style.css.
+   Matches vai.app's LIGHT sections ($40B / cost-of-playing): cream distressed paper bg + Geist.
+   Same texture asset the live site + branded emails use. */
+body{
+  font-family:'Geist',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  background-color:#F2EEE8;
+  background-image:url('texture-smooth.jpg');
+  background-size:cover;
+  background-position:center top;
+  background-attachment:fixed;
+}
+/* white cards pop on the paper texture, same as the site's stat cards */
+.b,.price,.navcard,.plusband{background:#FFFFFF}
+.why{background:#0C0A09}
+/* site-light-section accent: orange top rule on the emphasis band (like the VAI-Basic callout) */
+.plusband{border-top:3px solid var(--orange)}
+
+/* print/PDF fidelity */
+@page{size:1140px 1475px;margin:0}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* texture STAYS in print — Ben's call, matches the Feature Overview PDF */
+  /* !important: Chrome's print engine evaluates media queries at ~paper width (<760px),
+     which triggers the mobile collapse — including page-local inline styles that load
+     after this sheet. Force the desktop layout unconditionally in print. */
+  .spot,.spot.rev{grid-template-columns:250px 1fr !important;break-inside:avoid}
+  .spot.rev{grid-template-columns:1fr 250px !important}
+  .spot .phone img{width:100% !important}
+  .b,.plusband,.why,.deskshot,.frame,.navcard,.tierlabel,.cta{break-inside:avoid}
+}

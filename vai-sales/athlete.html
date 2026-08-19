@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VAI — For Athletes</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="style-web.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  .tierlabel{display:flex;align-items:center;gap:14px;margin:14px 0 2px}
+  .tierlabel .pill2{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border-radius:100px}
+  .pill2.free{background:#DCF5EC;color:var(--green-ink)}
+  .pill2.plus{background:#FDEBD5;color:#B4650A}
+  .tierlabel h2{font-size:24px;letter-spacing:-.5px;color:var(--ink);font-weight:800}
+  .tierlabel .price2{margin-left:auto;font-size:14px;font-weight:800;color:var(--muted)}
+  .tierlabel .price2 b{color:var(--ink)}
+  .plusband{background:var(--card);border:1.5px solid var(--orange);border-radius:18px;padding:26px;margin-top:14px;box-shadow:var(--lift)}
+  .plusband .benefits{padding:16px 0 0}
+  .free3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:900px){.free3{grid-template-columns:1fr}}
+  .showcase{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:30px 0 6px}
+  .showcase figure{margin:0;text-align:center;width:212px}
+  .showcase img{width:100%;border-radius:22px;border:1px solid var(--line);box-shadow:var(--lift);display:block}
+  .showcase figcaption{font-size:12px;font-weight:800;color:var(--muted);margin-top:10px;letter-spacing:.4px;text-transform:uppercase}
+  .spot{display:grid;grid-template-columns:250px 1fr;gap:44px;align-items:center;padding:30px 0;border-top:1px solid var(--line)}
+  .spot.first{border-top:none;padding-top:36px}
+  .spot.rev{grid-template-columns:1fr 250px}
+  .spot .phone img{width:100%;border-radius:26px;border:1px solid var(--line);box-shadow:var(--lift);display:block}
+  .spot .txt h3{font-size:28px;letter-spacing:-.7px;color:var(--ink);font-weight:800;margin-bottom:12px}
+  .spot .txt p{font-size:16.5px;color:var(--body);line-height:1.6;max-width:54ch}
+  .spot .txt .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--green-ink);background:#DCF5EC;border-radius:6px;padding:3px 9px;margin-left:10px;vertical-align:middle}
+  @media(max-width:760px){.spot,.spot.rev{grid-template-columns:1fr;gap:22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div>
+      <div class="kick">Why VAI · 2026</div>
+      <img src="vai-logo.png" alt="VAI" class="logomark" />
+    </div>
+    <div class="forwho">For <b>Athletes</b></div>
+  </div>
+
+  <div class="hero">
+    <h1>Free to start. <span class="g">Everything you need to get better — and get seen.</span></h1>
+    <div class="rule"></div>
+    <p>Download VAI and your account is free. An AI coach, your team, your schedule, and a recruiting profile — no cost, no catch. Then unlock AVANTI when you're ready to take it further.</p>
+  </div>
+
+  <!-- FREE -->
+  <div class="tierlabel">
+    <span class="pill2 free">Free account</span>
+    <h2>What every athlete gets</h2>
+    <span class="price2"><b>$0</b> · forever</span>
+  </div>
+
+  <div class="spot first">
+    <div class="phone"><img src="caleb-profile.png" alt="Caleb Whitesides — VAI athlete profile" /></div>
+    <div class="txt">
+      <h3>Your profile — built to get you seen</h3>
+      <p>Bio, positions, and your combine numbers on a poster-style card college coaches remember — with highlights, ability, and stats one tap away. Share it with a single link.</p>
+    </div>
+  </div>
+
+  <div class="spot rev">
+    <div class="txt">
+      <h3>Get recruited</h3>
+      <p>Search the college coaches recruiting your sport, gender, and division — and track every outreach in one place. Your profile gets you seen; Connect gets you in front of the right coaches.</p>
+    </div>
+    <div class="phone"><img src="recruiting-connect.png" alt="AVANTI Connect — recruiting" /></div>
+  </div>
+
+  <div class="spot">
+    <div class="phone"><img src="https://vai.app/wp-content/uploads/avanti.jpeg" alt="AVANTI AI coach" /></div>
+    <div class="txt">
+      <h3>Your own AI coach<span class="tag">AVANTI</span></h3>
+      <p>AVANTI knows your position and your goals. Ask for a workout, pre-game mindset, or a post-game breakdown — any time of day, right in the app.</p>
+    </div>
+  </div>
+
+  <div class="spot rev">
+    <div class="txt">
+      <h3>Your stats &amp; abilities, tracked</h3>
+      <p>Every game logged and every combine number tracked over time — speed, strength, agility, and more. Real progress you can see, and show.</p>
+    </div>
+    <div class="phone"><img src="https://vai.app/wp-content/uploads/vai-stats.png" alt="VAI stats" /></div>
+  </div>
+
+  <div class="benefits free3">
+    <div class="b">
+      <div class="ico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12"/><path d="m7 9 5-5 5 5"/><path d="M5 14v5h14v-5"/></svg></div>
+      <h3>Highlights in one spot</h3>
+      <p>Keep all your film together — every clip, easy to access and easy to share.</p>
+    </div>
+    <div class="b">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg></div>
+      <h3>Team, messages &amp; schedule</h3>
+      <p>Team channels, group chats, and your full schedule — synced to your phone's calendar.</p>
+    </div>
+    <div class="b">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+      <h3>Book a trainer in seconds</h3>
+      <p>Find open sessions, grab a time, and you're on the schedule — right in the app.</p>
+    </div>
+  </div>
+
+  <!-- PAID -->
+  <div class="tierlabel">
+    <span class="pill2 plus">VAI+</span>
+    <h2>Unlock AVANTI, in full</h2>
+    <span class="price2"><b>$9.95</b> / month</span>
+  </div>
+
+  <div class="plusband">
+    <p style="font-size:15px;color:var(--body);max-width:70ch">When an athlete is serious about the next level, VAI+ turns AVANTI into a full-time coach and sharpens the tools that get them recruited.</p>
+    <div class="benefits">
+      <div class="b">
+        <div class="ico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v4M12 16v4M4 12h4M16 12h4"/><path d="m6 6 2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg></div>
+        <h3>Priority AVANTI</h3>
+        <p>Deeper, always-on coaching — faster answers, richer workout plans, and personalized next steps whenever you need them.</p>
+      </div>
+      <div class="b">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg></div>
+        <h3>Enhanced recruiting profile</h3>
+        <p>A stronger profile built to stand out to college coaches — more of your story, front and center.</p>
+      </div>
+      <div class="b span">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V8M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3>Advanced ability tracking</h3>
+        <p>Go deeper on the numbers that define your game — the detail serious athletes use to prove they're improving.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="why">
+    <h2>Why athletes choose VAI</h2>
+    <div class="rows">
+      <div class="r"><div class="k">Free is actually free</div><p>A real AI coach, your profile, and your team — at no cost. Upgrade only when you want more.</p></div>
+      <div class="r"><div class="k">Elite guidance, no elite price</div><p>Private coaching runs $75–150/hr. AVANTI knows you — free, or $9.95/mo for the full experience.</p></div>
+      <div class="r"><div class="k">It's yours</div><p>Your profile and your progress travel with you — season to season, team to team.</p></div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div class="big">Start free. <span>Go further with AVANTI.</span></div>
+    <div class="pricebar">
+      <div class="price"><b>Basic</b> <span>Free</span></div>
+      <div class="price"><b>VAI+</b> <span>$9.95/mo</span></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>VAI.APP · CONFIDENTIAL · FOR AUTHORIZED USE ONLY</span>
+    <span>vai.app · August 2026</span>
+  </div>
+
+</div>
+</body>
+</html>

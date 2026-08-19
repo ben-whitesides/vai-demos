@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VAI — Who It's For</title>
+<link rel="stylesheet" href="style.css" />
+<style>
+  /* parent hero card */
+  .parenthero{background:var(--card);border:1.5px solid var(--orange);border-radius:18px;padding:30px 32px;margin-top:26px;box-shadow:var(--lift)}
+  .parenthero .eyebrow{font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);margin-bottom:8px}
+  .parenthero h2{font-size:30px;letter-spacing:-.8px;color:var(--ink);font-weight:800;margin-bottom:10px}
+  .parenthero .sub{font-size:16.5px;color:var(--body);max-width:64ch;line-height:1.6}
+  .kp{display:grid;grid-template-columns:1fr 1fr;gap:10px 26px;padding:20px 0 4px}
+  @media(max-width:760px){.kp{grid-template-columns:1fr}}
+  .kp .k{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--body);line-height:1.5}
+  .kp .k svg{flex:0 0 18px;width:18px;height:18px;margin-top:2px;color:var(--green-ink)}
+  .kp .k b{color:var(--ink)}
+  .herocta{display:flex;align-items:center;gap:14px;margin-top:16px;flex-wrap:wrap}
+  .herocta .pill{font-size:14px;padding:12px 24px}
+  .herocta .note{font-size:13px;color:var(--muted);font-weight:700}
+
+  /* persona cards (click → key points) */
+  .personas{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:26px 0 8px}
+  @media(max-width:760px){.personas{grid-template-columns:1fr}}
+  details.pcard{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--lift);overflow:hidden}
+  details.pcard summary{list-style:none;cursor:pointer;padding:22px 24px;display:flex;align-items:center;gap:14px}
+  details.pcard summary::-webkit-details-marker{display:none}
+  details.pcard summary .pico{width:40px;height:40px;border-radius:10px;background:#FDEBD5;display:flex;align-items:center;justify-content:center;color:#C0740F;flex:0 0 40px}
+  details.pcard summary .pico.g{background:#DCF5EC;color:#0B6B4F}
+  details.pcard summary .pico svg{width:21px;height:21px}
+  details.pcard summary .t{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.3px}
+  details.pcard summary .d{font-size:13.5px;color:var(--body);margin-top:2px}
+  details.pcard summary .chev{margin-left:auto;color:var(--orange);transition:transform .15s ease;flex:0 0 auto}
+  details.pcard[open] summary .chev{transform:rotate(90deg)}
+  details.pcard .body{padding:2px 24px 22px}
+  details.pcard .body ul{list-style:none;display:grid;gap:8px;padding:0 0 14px}
+  details.pcard .body li{font-size:14.5px;color:var(--body);line-height:1.5;padding-left:22px;position:relative}
+  details.pcard .body li::before{content:"";position:absolute;left:2px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--green)}
+  details.pcard .body li b{color:var(--ink)}
+  .golink{display:inline-block;font-size:13.5px;font-weight:800;color:var(--orange);text-decoration:none;letter-spacing:.3px}
+  .golink:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div>
+      <div class="kick">vai.app · 2026</div>
+      <img src="vai-logo.png" alt="VAI" class="logomark" />
+    </div>
+    <div class="forwho">Who's it <b>for?</b></div>
+  </div>
+
+  <div class="hero">
+    <h1>One app for your whole sports life. <span class="g">Built around the person running it.</span></h1>
+    <div class="rule"></div>
+    <p>Athletes play. Coaches coach. Trainers train. But one person holds the calendar, the payments, and every decision that makes it all happen. VAI starts there.</p>
+  </div>
+
+  <!-- PARENT — the moneyball -->
+  <div class="parenthero">
+    <div class="eyebrow">For Parents &amp; Families</div>
+    <h2>You run the show. Now you have a front office.</h2>
+    <p class="sub">Every team, every schedule, every payment, every coach and trainer you choose — and your athlete's future — in one app that keeps the whole family on the same page.</p>
+    <div class="kp">
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>My Children</b> — every kid's teams, schedules, and progress in one place</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>Group messaging</b> with teams and coaches — no more GroupMe + Remind + email chains</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>One calendar</b>, synced to your phone — games, practices, and what's due</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>Pay everything in-app</b> — dues, camps, trainers — Venmo, PayPal, or card</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>Book the trainers you choose</b> — see availability, book, done</span></div>
+      <div class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg><span><b>Recruiting tools</b> — a real profile and college-coach search for your athlete</span></div>
+    </div>
+    <div class="herocta">
+      <a class="pill" href="parents.html">See the Parent page →</a>
+      <span class="note">Free to start · the whole family on one account</span>
+    </div>
+  </div>
+
+  <!-- OTHER PERSONAS -->
+  <div class="personas">
+
+    <details class="pcard">
+      <summary>
+        <span class="pico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg></span>
+        <span><span class="t">Athletes</span><div class="d">Get better. Get seen. Free to start.</div></span>
+        <span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
+      </summary>
+      <div class="body">
+        <ul>
+          <li><b>A profile built to get you seen</b> — poster-style card with your positions, combine numbers, and highlights</li>
+          <li><b>AVANTI, your AI coach</b> — workouts, pre-game mindset, post-game breakdowns, any time</li>
+          <li><b>Stats &amp; abilities tracked</b> over time — real progress you can show</li>
+          <li><b>Highlights in one spot</b>, easy to share</li>
+          <li><b>Recruiting search</b> — find the college coaches recruiting your sport and division</li>
+          <li><b>VAI+ $9.95/mo</b> when you're ready to take it further</li>
+        </ul>
+        <a class="golink" href="athlete.html">Full Athlete page →</a>
+      </div>
+    </details>
+
+    <details class="pcard">
+      <summary>
+        <span class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8a4 4 0 1 1-2.5 7.1L4 18l1-3.5A4 4 0 0 1 14 8z"/><path d="M16 7V4l4-1v3"/></svg></span>
+        <span><span class="t">Coaches</span><div class="d">One Group runs your whole team. Free.</div></span>
+        <span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
+      </summary>
+      <div class="body">
+        <ul>
+          <li><b>Your team as a Group</b> — players and parents, schedule, chat, and a team feed in one place</li>
+          <li><b>Post once</b> — everyone gets the push notification</li>
+          <li><b>Let the Team Mom collect payments</b> — Venmo, PayPal, card</li>
+          <li><b>Recruiting tools for every kid</b> on the roster, not just the top five</li>
+          <li><b>AVANTI for every athlete</b> — development that doesn't stop at practice</li>
+          <li><b>Free to coach with</b> — Mentor when you want to earn from your own training</li>
+        </ul>
+        <a class="golink" href="coaches.html">Full Coach page →</a>
+      </div>
+    </details>
+
+    <details class="pcard">
+      <summary>
+        <span class="pico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg></span>
+        <span><span class="t">Trainers &amp; Gyms</span><div class="d">Post slots. They book and pay. You coach.</div></span>
+        <span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
+      </summary>
+      <div class="body">
+        <ul>
+          <li><b>Post your open slots</b> — athletes book themselves in</li>
+          <li><b>Paid at booking</b> — no invoicing, no chasing, no Venmo screenshots</li>
+          <li><b>Every session tracked</b> — pending, confirmed, past, all marked paid</li>
+          <li><b>Clients organized into Groups</b> — one message reaches everyone</li>
+          <li><b>See every athlete's profile</b> and progress — coach to what they need</li>
+          <li><b>AVANTI between sessions</b> — a value-add no other trainer has · $49.95/mo</li>
+        </ul>
+        <a class="golink" href="trainers.html">Full Trainer page →</a>
+      </div>
+    </details>
+
+    <details class="pcard">
+      <summary>
+        <span class="pico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/></svg></span>
+        <span><span class="t">Clubs &amp; Organizations</span><div class="d">Run the season. Fund the club.</div></span>
+        <span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
+      </summary>
+      <div class="body">
+        <ul>
+          <li><b>GAME OS</b> — the whole organization run from one screen</li>
+          <li><b>Registration &amp; collection at scale</b> — plans, waivers, every payment method</li>
+          <li><b>Every dollar tracked</b> — revenue, collection by team, budget vs. actuals</li>
+          <li><b>Team channels org-wide</b> — push notifications to every athlete's phone</li>
+          <li><b>Facilities, tournaments, and the full season calendar</b></li>
+          <li><b>A revenue stream</b> — the club's link earns ongoing subscription revenue</li>
+        </ul>
+        <a class="golink" href="clubs-orgs.html">Full Clubs &amp; Orgs page →</a>
+      </div>
+    </details>
+
+  </div>
+
+  <div class="why">
+    <h2>Why VAI</h2>
+    <div class="rows">
+      <div class="r"><div class="k">One app replaces four</div><p>Messaging, scheduling, payments, booking, and recruiting — one login for the whole family.</p></div>
+      <div class="r"><div class="k">AI that knows your athlete</div><p>AVANTI coaches every kid — workouts, mindset, and progress that carries season to season.</p></div>
+      <div class="r"><div class="k">Free is actually free</div><p>Start at no cost. Upgrade only when you want more.</p></div>
+    </div>
+  </div>
+
+  <div class="cta">
+    <div class="big">Pick your lane. <span>Start free today.</span></div>
+    <div class="pricebar">
+      <div class="price"><b>Athlete / Parent</b> <span>Free</span></div>
+      <div class="price"><b>VAI+</b> <span>$9.95/mo</span></div>
+      <div class="price"><b>Mentor</b> <span>$49.95/mo</span></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>VAI.APP · CONFIDENTIAL · FOR AUTHORIZED USE ONLY</span>
+    <span>vai.app · August 2026</span>
+  </div>
+
+</div>
+</body>
+</html>
