@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VAI · Orbit family — 7 surfaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#08090B;--ground:#0B0D10;--card:#12161B;--line:#1D242B;--line2:#272F38;--ink:#F4F2EE;--muted:#8B929B;--faint:#575E67;--mint:#5FE3C0;--mint-d:#128B74;--ember:#F0A75E;--cardiac:#FF5A5F;--sans:'Inter',-apple-system,system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}html{-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;padding:52px clamp(20px,4vw,64px) 90px}
+  .eyebrow{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--mint);font-weight:700}
+  h1.pg{font-weight:800;font-size:clamp(30px,5vw,52px);line-height:1;letter-spacing:-.025em;margin:12px 0 16px}
+  .lede{max-width:72ch;color:#B4BAC3;font-size:15.5px}.lede b{color:var(--ink);font-weight:600}
+  .deck{display:flex;gap:30px;overflow-x:auto;padding:34px 2px 20px;scroll-snap-type:x mandatory}
+  .col{flex:0 0 auto;scroll-snap-align:start;width:340px}
+  .cap{display:flex;gap:9px;align-items:baseline;margin-bottom:14px}.cap .n{font-weight:800;font-size:15px}.cap .n b{color:var(--mint)}.cap .t{font-size:12px;color:var(--faint)}
+  .phone{width:340px;height:736px;border-radius:42px;padding:10px;background:linear-gradient(#23272d,#0c0e11);box-shadow:0 36px 70px -28px rgba(0,0,0,.9),0 0 0 1px #23282f}
+  .screen{position:relative;width:100%;height:100%;border-radius:33px;overflow:hidden;background:var(--ground);display:flex;flex-direction:column}
+  .screen::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 50% at 50% 30%,rgba(95,227,192,.06),transparent 62%);z-index:0}
+  .stat{display:flex;justify-content:space-between;align-items:center;padding:15px 22px 4px;font-size:13.5px;font-weight:600;z-index:3;position:relative}.stat .r{font-size:11px;opacity:.85}
+  .hd{display:flex;align-items:center;justify-content:space-between;padding:6px 22px 2px;position:relative;z-index:3}.hd .bk{color:var(--muted);font-size:19px}.hd .tt{font-size:14.5px;font-weight:600;letter-spacing:.03em}
+  .lock{font-size:10px;color:var(--mint);border:1px solid rgba(95,227,192,.26);background:rgba(95,227,192,.06);border-radius:999px;padding:4px 8px;font-weight:600}
+  .body{flex:1;overflow-y:auto;padding:0 20px 16px;position:relative;z-index:2}.body::-webkit-scrollbar{display:none}
+  .oh{text-align:center;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:18px 0 0}
+  .orb{position:relative;height:300px;margin:2px auto 0;width:300px}
+  .ring{position:absolute;inset:60px;border-radius:50%;border:1.5px solid var(--line2)}
+  .ring2{position:absolute;inset:22px;border-radius:50%;border:1px dashed #202832}
+  .core{position:absolute;inset:92px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#14201d,#0b100e);border:1px solid rgba(95,227,192,.3);display:grid;place-items:center;text-align:center;box-shadow:0 0 44px -10px rgba(95,227,192,.35)}
+  .core.card{background:radial-gradient(circle at 40% 35%,#201415,#120b0c);border-color:rgba(255,90,95,.32);box-shadow:0 0 44px -10px rgba(255,90,95,.3)}
+  .core .cn{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}.core .cn.c{color:var(--cardiac)}
+  .core .cn.sm{font-size:26px;line-height:1.05}
+  .core .cl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mint);font-weight:700;margin-top:3px}
+  .node{position:absolute;text-align:center;transform:translate(-50%,-50%)}
+  .node .nv{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}.node .nv.c{color:var(--cardiac)}.node .nv.e{color:var(--ember)}
+  .node .nl{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .p1{left:50%;top:6%}.p2{left:89%;top:32%}.p3{left:80%;top:80%}.p4{left:20%;top:80%}.p5{left:11%;top:32%}
+  .caption{text-align:center;font-size:14px;color:#AAB0B8;margin:4px 6px 0;line-height:1.5}.caption b{color:var(--ink);font-weight:600}
+  .av{margin:14px 0 6px;border:1px solid rgba(95,227,192,.2);background:linear-gradient(180deg,rgba(95,227,192,.06),rgba(95,227,192,.015));border-radius:18px;padding:14px}
+  .av .h{display:flex;align-items:center;gap:8px;margin-bottom:8px}.sp{width:20px;height:20px;border-radius:6px;background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));display:grid;place-items:center;color:#04140f;font-size:11px;font-weight:800}
+  .av .nm2{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mint);font-weight:700}.av .rd{margin-left:auto;font-size:9.5px;color:var(--faint)}
+  .av .sy{font-size:13.5px;line-height:1.48;color:#D9DDE2}.av .sy b{color:#fff;font-weight:600}
+  .ask{margin-top:11px;display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:#0A0D10;border-radius:999px;padding:9px 11px}
+  .ask .pl{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:pu 2.4s infinite}.ask .ph{flex:1;font-size:12.5px;color:var(--faint)}.ask .go{width:24px;height:24px;border-radius:50%;background:var(--mint);color:#04140f;display:grid;place-items:center;font-weight:800;font-size:13px}
+  @keyframes pu{0%{box-shadow:0 0 0 0 rgba(95,227,192,.5)}70%{box-shadow:0 0 0 6px rgba(95,227,192,0)}100%{box-shadow:0 0 0 0 rgba(95,227,192,0)}}
+  .nav{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:2px;background:rgba(18,22,27,.85);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;padding:7px 9px;z-index:5}
+  .nav i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--faint);font-size:13px;font-style:normal}.nav i.on{color:var(--mint)}.nav i.ai{background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));color:#04140f;font-weight:800}
+  .pad{height:60px}.foot{margin-top:52px;border-top:1px solid var(--line);padding-top:18px;color:var(--faint);font-size:12.5px}
+  @media (prefers-reduced-motion:reduce){.ask .pl{animation:none}}
+</style></head><body>
+  <p class="eyebrow">VAI · Wearables · Family 4</p>
+  <h1 class="pg">One family. Orbit.</h1>
+  <p class="lede">The same design language across all seven surfaces: <b>a core read with its contributing metrics orbiting it, one caption line, AVANTI reading it live.</b> The gamified, game-layer look. Swipe →</p>
+  <div class="deck">
+
+  <div class="col"><div class="cap"><span class="n"><b>1</b> Home</span><span class="t">the daily read</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">☰</span><span class="tt">Today</span><span class="lock">Private</span></div>
+  <div class="body"><p class="oh">Sunday 6:45 AM · everything in balance</p>
+  <div class="orb"><div class="ring2"></div><div class="ring"></div>
+  <div class="core"><div><div class="cn">82</div><div class="cl">Ready</div></div></div>
+  <div class="node p1"><div class="nv c">58</div><div class="nl">Rest HR</div></div>
+  <div class="node p2"><div class="nv">68</div><div class="nl">HRV</div></div>
+  <div class="node p3"><div class="nv">87</div><div class="nl">Sleep</div></div>
+  <div class="node p4"><div class="nv">24</div><div class="nl">Stress</div></div>
+  <div class="node p5"><div class="nv">0.94</div><div class="nl">Load</div></div></div>
+  <p class="caption">Everything points the same way — <b>a green morning.</b></p>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read all surfaces</span></div>
+  <p class="sy"><b>Easy 30-min aerobic run, under 142 bpm.</b> Save the hard work for tomorrow.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI anything…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i class="on">⌂</i><i>❤</i><i>◐</i><i>✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>2</b> Vitals</span><span class="t">spot-checks</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Vitals</span><span class="lock">Only you &amp; AVANTI</span></div>
+  <div class="body"><p class="oh">Eight vitals read · all but one in range</p>
+  <div class="orb"><div class="ring2"></div><div class="ring"></div>
+  <div class="core"><div><div class="cn sm">Steady</div><div class="cl">In range</div></div></div>
+  <div class="node p1"><div class="nv">97</div><div class="nl">SpO₂</div></div>
+  <div class="node p2"><div class="nv c">58</div><div class="nl">Rest HR</div></div>
+  <div class="node p3"><div class="nv">14.2</div><div class="nl">Resp</div></div>
+  <div class="node p4"><div class="nv e">+0.6</div><div class="nl">Temp Δ</div></div>
+  <div class="node p5"><div class="nv">118/76</div><div class="nl">BP</div></div></div>
+  <p class="caption">One moved — skin temp — <b>reads like your room, not you.</b></p>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read 8 vitals</span></div>
+  <p class="sy"><b>Keep tonight easy and re-check in the morning.</b> Normal resting HR with warm skin points to environment.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about vitals…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i class="on">❤</i><i>◐</i><i>✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>3</b> Sleep</span><span class="t">last night</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Sleep</span><span class="lock">Private</span></div>
+  <div class="body"><p class="oh">Last night · 7h 42m · woke on your own</p>
+  <div class="orb"><div class="ring2"></div><div class="ring"></div>
+  <div class="core"><div><div class="cn">84</div><div class="cl">Restful</div></div></div>
+  <div class="node p1"><div class="nv">20%</div><div class="nl">Deep</div></div>
+  <div class="node p2"><div class="nv">23%</div><div class="nl">REM</div></div>
+  <div class="node p3"><div class="nv">52%</div><div class="nl">Light</div></div>
+  <div class="node p4"><div class="nv c">54</div><div class="nl">Low HR</div></div>
+  <div class="node p5"><div class="nv">87%</div><div class="nl">Effic.</div></div></div>
+  <p class="caption">Longest REM came right before waking — <b>strong.</b></p>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read sleep + recovery</span></div>
+  <p class="sy">A rebuild night — <b>this earns tomorrow's threshold session.</b> Same bedtime tonight.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about sleep…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i>❤</i><i class="on">◐</i><i>✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>4</b> Recovery</span><span class="t">readiness</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Recovery</span><span class="lock">Private</span></div>
+  <div class="body"><p class="oh">This morning · 3rd day optimal</p>
+  <div class="orb"><div class="ring2"></div><div class="ring"></div>
+  <div class="core"><div><div class="cn">68<span style="font-size:16px;color:var(--muted)">ms</span></div><div class="cl">Optimal</div></div></div>
+  <div class="node p1"><div class="nv">87%</div><div class="nl">Sleep eff</div></div>
+  <div class="node p2"><div class="nv c">58</div><div class="nl">Rest HR</div></div>
+  <div class="node p3"><div class="nv e">45%</div><div class="nl">Hydration</div></div>
+  <div class="node p4"><div class="nv">Mod</div><div class="nl">Strain</div></div>
+  <div class="node p5"><div class="nv">+6</div><div class="nl">vs base</div></div></div>
+  <p class="caption">The green window's real — <b>don't sit still.</b></p>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read recovery drivers</span></div>
+  <p class="sy">Biggest lift left is water — <b>1L before lunch.</b> Easy run before noon.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about recovery…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i>❤</i><i>◐</i><i class="on">✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>5</b> Heart Rate</span><span class="t">cardiac</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Heart Rate</span><span class="lock">Private</span></div>
+  <div class="body"><p class="oh">This morning · fitness climbing</p>
+  <div class="orb"><div class="ring2"></div><div class="ring"></div>
+  <div class="core card"><div><div class="cn c">58</div><div class="cl" style="color:var(--cardiac)">Resting</div></div></div>
+  <div class="node p1"><div class="nv">68</div><div class="nl">HRV</div></div>
+  <div class="node p2"><div class="nv c">168</div><div class="nl">Peak</div></div>
+  <div class="node p3"><div class="nv">52</div><div class="nl">Low</div></div>
+  <div class="node p4"><div class="nv">3:24</div><div class="nl">Z2+ hrs</div></div>
+  <div class="node p5"><div class="nv">↓3</div><div class="nl">this wk</div></div></div>
+  <p class="caption">Resting rate down three — <b>the base work is paying off.</b></p>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read HR + recovery</span></div>
+  <p class="sy">Low resting HR with HRV up means <b>you're primed.</b> Aerobic today; threshold tomorrow.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about your heart…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i class="on">❤</i><i>◐</i><i>✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>6</b> Workout</span><span class="t">session recap</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Session</span><span class="lock">Private</span></div>
+  <div class="body"><p class="oh">Mon 7:12 AM · run graded</p>
+  <div class="orb"><div class="ring2"></div><div class="ring"></div>
+  <div class="core"><div><div class="cn e">B</div><div class="cl" style="color:var(--ember)">72/100</div></div></div>
+  <div class="node p1"><div class="nv">8.12</div><div class="nl">km</div></div>
+  <div class="node p2"><div class="nv c">151</div><div class="nl">Avg HR</div></div>
+  <div class="node p3"><div class="nv e">55%</div><div class="nl">Z2 time</div></div>
+  <div class="node p4"><div class="nv">68</div><div class="nl">Load</div></div>
+  <div class="node p5"><div class="nv">5:36</div><div class="nl">Pace</div></div></div>
+  <p class="caption">Left Z2 early on the km-5 hill — <b>close, not today's plan.</b></p>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">graded vs plan</span></div>
+  <p class="sy"><b>Tomorrow's threshold 6×3 is the one that matters</b> — keep gas in the tank.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about this run…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i>❤</i><i>◐</i><i class="on">✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>7</b> AVANTI</span><span class="t">the coach surface</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">AVANTI</span><span class="lock">Reading everything</span></div>
+  <div class="body"><p class="oh">The morning briefing · built from your data</p>
+  <div class="orb"><div class="ring2"></div><div class="ring"></div>
+  <div class="core"><div><div class="cn sm">Go<br>easy</div><div class="cl">Today's call</div></div></div>
+  <div class="node p1"><div class="nv">68</div><div class="nl">HRV +6</div></div>
+  <div class="node p2"><div class="nv c">58</div><div class="nl">RHR −2</div></div>
+  <div class="node p3"><div class="nv">87</div><div class="nl">Sleep +4</div></div>
+  <div class="node p4"><div class="nv">Z2</div><div class="nl">zone</div></div>
+  <div class="node p5"><div class="nv">35m</div><div class="nl">length</div></div></div>
+  <p class="caption"><b>Easy 35-min Z2 run before noon</b> — HR under 142.</p>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">the take</span></div>
+  <p class="sy">You slept well, your body's ready — <b>don't waste it going hard.</b> This rebuild is for tomorrow's threshold work.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI anything…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i>❤</i><i>◐</i><i>✷</i><i class="ai on" style="background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));color:#04140f">✦</i></div></div></div></div>
+
+  </div>
+  <p class="foot">VAI · Orbit family · one style across 7 surfaces · core read + orbiting metrics · AVANTI reads all data &amp; speaks live · private-by-default · red = cardiac.</p>
+</body></html>
