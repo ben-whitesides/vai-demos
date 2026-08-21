@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VAI · Editorial family — 7 surfaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08090B;--ground:#0B0D10;--card:#12161B;--card2:#0F1317;
+    --line:#1D242B;--ink:#F4F2EE;--muted:#8B929B;--faint:#575E67;
+    --mint:#5FE3C0;--mint-d:#128B74;--ember:#F0A75E;--cardiac:#FF5A5F;
+    --sans:'Inter',-apple-system,system-ui,sans-serif;--serif:'Fraunces',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;padding:52px clamp(20px,4vw,64px) 90px}
+  .eyebrow{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--ember);font-weight:700}
+  h1.pg{font-family:var(--serif);font-weight:600;font-size:clamp(30px,5vw,54px);line-height:1;letter-spacing:-.02em;margin:12px 0 16px}
+  h1.pg em{font-style:italic;color:var(--mint)}
+  .lede{max-width:72ch;color:#B4BAC3;font-size:15.5px}
+  .lede b{color:var(--ink);font-weight:600}
+
+  .deck{display:flex;gap:30px;overflow-x:auto;padding:34px 2px 20px;scroll-snap-type:x mandatory}
+  .col{flex:0 0 auto;scroll-snap-align:start;width:340px}
+  .cap{display:flex;gap:9px;align-items:baseline;margin-bottom:14px}
+  .cap .n{font-weight:800;font-size:15px}.cap .n b{color:var(--ember)}
+  .cap .t{font-size:12px;color:var(--faint)}
+
+  .phone{width:340px;height:736px;border-radius:42px;padding:10px;background:linear-gradient(#23272d,#0c0e11);box-shadow:0 36px 70px -28px rgba(0,0,0,.9),0 0 0 1px #23282f}
+  .screen{position:relative;width:100%;height:100%;border-radius:33px;overflow:hidden;background:var(--ground);display:flex;flex-direction:column}
+  .screen::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 42% at 50% -4%,rgba(240,167,94,.05),transparent 60%);z-index:0}
+  .screen.card::before{background:radial-gradient(120% 42% at 50% -4%,rgba(255,90,95,.06),transparent 60%)}
+  .stat{display:flex;justify-content:space-between;align-items:center;padding:15px 22px 4px;font-size:13.5px;font-weight:600;z-index:3;position:relative}
+  .stat .r{font-size:11px;letter-spacing:.06em;opacity:.85}
+  .hd{display:flex;align-items:center;justify-content:space-between;padding:6px 22px 2px;position:relative;z-index:3}
+  .hd .bk{color:var(--muted);font-size:19px}.hd .tt{font-size:14.5px;font-weight:600;letter-spacing:.03em}
+  .lock{font-size:10px;color:var(--mint);border:1px solid rgba(95,227,192,.26);background:rgba(95,227,192,.06);border-radius:999px;padding:4px 8px;letter-spacing:.03em;font-weight:600}
+  .body{flex:1;overflow-y:auto;padding:0 22px 16px;position:relative;z-index:2}
+  .body::-webkit-scrollbar{display:none}
+
+  /* editorial components — repeated across all 7 surfaces = the family */
+  .k{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ember);font-weight:700;margin-top:18px}
+  .k.c{color:var(--cardiac)}
+  .num{font-weight:700;font-size:72px;line-height:.84;letter-spacing:-.04em;margin:8px 0 1px;font-variant-numeric:tabular-nums}
+  .num.e{color:var(--ember)}.num.c{color:var(--cardiac)}.num.m{color:var(--ink)}
+  .num .u{font-size:24px;color:var(--muted)}
+  .sub{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .head{font-family:var(--serif);font-weight:500;font-size:28px;line-height:1.05;letter-spacing:-.01em;margin:18px 0 11px}
+  .head em{font-style:italic;color:var(--mint)}
+  .p{color:#AAB0B8;font-size:14px;line-height:1.55}.p b{color:var(--ink);font-weight:600}
+  .list{margin:18px 0 4px;border-top:1px solid var(--line)}
+  .li{display:flex;justify-content:space-between;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line)}
+  .li .nm{font-size:13.5px;font-weight:500}.li .nm .a{font-size:10.5px;color:var(--faint);font-weight:400;margin-top:1px}
+  .li .vv{text-align:right;font-variant-numeric:tabular-nums}
+  .li .vv .v{font-size:16px;font-weight:700}.li .vv .v.c{color:var(--cardiac)}
+  .li .vv .b{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mint);font-weight:700}
+  .li .vv .b.w{color:var(--ember)}
+  .bar{height:3px;border-radius:2px;background:#222a31;margin-top:6px;overflow:hidden}
+  .bar > span{display:block;height:100%;background:var(--mint)}
+  .bar.e > span{background:var(--ember)} .bar.c > span{background:var(--cardiac)}
+
+  .av{margin:16px 0 6px;border:1px solid rgba(95,227,192,.2);background:linear-gradient(180deg,rgba(95,227,192,.06),rgba(95,227,192,.015));border-radius:18px;padding:14px}
+  .av .h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .sp{width:20px;height:20px;border-radius:6px;background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));display:grid;place-items:center;color:#04140f;font-size:11px;font-weight:800}
+  .av .nm2{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mint);font-weight:700}
+  .av .rd{margin-left:auto;font-size:9.5px;color:var(--faint)}
+  .av .sy{font-size:13.5px;line-height:1.48;color:#D9DDE2}.av .sy b{color:#fff;font-weight:600}
+  .ask{margin-top:11px;display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:#0A0D10;border-radius:999px;padding:9px 11px}
+  .ask .pl{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:pu 2.4s infinite}
+  .ask .ph{flex:1;font-size:12.5px;color:var(--faint)}
+  .ask .go{width:24px;height:24px;border-radius:50%;background:var(--mint);color:#04140f;display:grid;place-items:center;font-weight:800;font-size:13px}
+  @keyframes pu{0%{box-shadow:0 0 0 0 rgba(95,227,192,.5)}70%{box-shadow:0 0 0 6px rgba(95,227,192,0)}100%{box-shadow:0 0 0 0 rgba(95,227,192,0)}}
+
+  .nav{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:2px;background:rgba(18,22,27,.85);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;padding:7px 9px;z-index:5}
+  .nav i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--faint);font-size:13px;font-style:normal}
+  .nav i.on{color:var(--mint)}
+  .nav i.ai{background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));color:#04140f;font-weight:800}
+  .pad{height:66px}
+  .foot{margin-top:52px;border-top:1px solid var(--line);padding-top:18px;color:var(--faint);font-size:12.5px}
+  @media (prefers-reduced-motion:reduce){.ask .pl{animation:none}}
+</style>
+</head>
+<body>
+  <p class="eyebrow">VAI · Wearables · Family 3</p>
+  <h1 class="pg">This is <em>one family.</em> Editorial.</h1>
+  <p class="lede">The same design language — <b>ember kicker, big hero read, a Fraunces serif headline in the coach's voice, an honest data list, AVANTI reading it live</b> — repeated across all seven surfaces. Pick this family once and every screen looks like this. Swipe →</p>
+
+  <div class="deck">
+
+    <!-- 1 HOME -->
+    <div class="col">
+      <div class="cap"><span class="n"><b>1</b> Home</span><span class="t">the daily read</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+        <div class="hd"><span class="bk">☰</span><span class="tt">Today</span><span class="lock">Private</span></div>
+        <div class="body">
+          <p class="k">Sunday · April 20 · 6:45 AM</p>
+          <h2 class="head" style="margin-top:10px">Good morning, Alex.<br>You woke up <em>ready.</em></h2>
+          <p class="p">Three nights of solid sleep rebuilt your baseline. Everything points the same direction today — <b>train easy, save the hard work for tomorrow.</b></p>
+          <div class="list">
+            <div class="li"><div class="nm">Recovery<div class="a">HRV up 6 from baseline</div></div><div class="vv"><div class="v">82</div><div class="b">Optimal</div></div></div>
+            <div class="li"><div class="nm">Resting heart rate<div class="a">within 2 of your average</div></div><div class="vv"><div class="v c">58</div><div class="b">Optimal</div></div></div>
+            <div class="li"><div class="nm">Sleep<div class="a">7h 42m · 22% deep</div></div><div class="vv"><div class="v">87</div><div class="b">Strong</div></div></div>
+            <div class="li"><div class="nm">Training load<div class="a">acute : chronic 0.94</div></div><div class="vv"><div class="v">Bal.</div><div class="b">Steady</div></div></div>
+          </div>
+          <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read all surfaces</span></div>
+            <p class="sy"><b>Easy 30-minute aerobic run, under 142 bpm.</b> Your nervous system supports it — and it keeps tomorrow's threshold session sharp.</p>
+            <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI anything…</span><span class="go">↑</span></div></div>
+          <div class="pad"></div>
+        </div>
+        <div class="nav"><i class="on">⌂</i><i>❤</i><i>◐</i><i>✷</i><i class="ai">✦</i></div>
+      </div></div>
+    </div>
+
+    <!-- 2 VITALS -->
+    <div class="col">
+      <div class="cap"><span class="n"><b>2</b> Vitals</span><span class="t">what moved</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+        <div class="hd"><span class="bk">‹</span><span class="tt">Vitals</span><span class="lock">Only you &amp; AVANTI</span></div>
+        <div class="body">
+          <p class="k">Skin temperature · above baseline</p>
+          <div class="num e">+0.6<span class="u">°C</span></div>
+          <div class="sub">last night · 3rd warm night</div>
+          <h2 class="head">One reading moved.<br>The rest <em>held steady.</em></h2>
+          <p class="p">Blood oxygen, breathing and blood pressure are all in your normal range — usually a warm room or a late drink, <b>not illness.</b></p>
+          <div class="list">
+            <div class="li"><div class="nm">Blood oxygen<div class="a">SpO₂ · 2h ago</div></div><div class="vv"><div class="v">97%</div><div class="b">In range</div></div></div>
+            <div class="li"><div class="nm">Resting heart rate<div class="a">this morning</div></div><div class="vv"><div class="v c">58</div><div class="b">Optimal</div></div></div>
+            <div class="li"><div class="nm">Skin temp Δ<div class="a">last night</div></div><div class="vv"><div class="v" style="color:var(--ember)">+0.6</div><div class="b w">Watching</div></div></div>
+            <div class="li"><div class="nm">Blood pressure<div class="a">yesterday · manual</div></div><div class="vv"><div class="v">118/76</div><div class="b">In range</div></div></div>
+          </div>
+          <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read 6 vitals + sleep</span></div>
+            <p class="sy">Keep tonight easy and re-check in the morning. Normal resting HR with warm skin <b>points to your room, not you.</b></p>
+            <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about your vitals…</span><span class="go">↑</span></div></div>
+          <div class="pad"></div>
+        </div>
+        <div class="nav"><i>⌂</i><i class="on">❤</i><i>◐</i><i>✷</i><i class="ai">✦</i></div>
+      </div></div>
+    </div>
+
+    <!-- 3 SLEEP -->
+    <div class="col">
+      <div class="cap"><span class="n"><b>3</b> Sleep</span><span class="t">last night</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+        <div class="hd"><span class="bk">‹</span><span class="tt">Sleep</span><span class="lock">Private</span></div>
+        <div class="body">
+          <p class="k">Last night · bed 10:48 → woke 6:30</p>
+          <div class="num m">84</div>
+          <div class="sub">restful · +6 vs your week</div>
+          <h2 class="head">Seven hours, forty-two —<br>and you woke <em>on your own.</em></h2>
+          <p class="p">Heart rate fell to 54 by midnight. Your longest REM block came just before waking — <b>memory consolidation was strong.</b></p>
+          <div class="list">
+            <div class="li"><div class="nm">Deep<div class="a">1h 32m</div></div><div class="vv"><div class="v">20%</div></div></div>
+            <div class="li"><div class="nm">REM<div class="a">1h 48m</div></div><div class="vv"><div class="v">23%</div></div></div>
+            <div class="li"><div class="nm">Light<div class="a">3h 58m</div></div><div class="vv"><div class="v">52%</div></div></div>
+            <div class="li"><div class="nm">Awake<div class="a">24m · one brief stir</div></div><div class="vv"><div class="v">5%</div></div></div>
+            <div class="li"><div class="nm">Lowest heart rate<div class="a">11:42 PM</div></div><div class="vv"><div class="v c">54</div><div class="b">Deep rest</div></div></div>
+          </div>
+          <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read sleep + recovery</span></div>
+            <p class="sy">A rebuild night. <b>This is the sleep that earns tomorrow's threshold session</b> — protect the same 10:30 bedtime tonight.</p>
+            <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about your sleep…</span><span class="go">↑</span></div></div>
+          <div class="pad"></div>
+        </div>
+        <div class="nav"><i>⌂</i><i>❤</i><i class="on">◐</i><i>✷</i><i class="ai">✦</i></div>
+      </div></div>
+    </div>
+
+    <!-- 4 RECOVERY -->
+    <div class="col">
+      <div class="cap"><span class="n"><b>4</b> Recovery</span><span class="t">readiness</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+        <div class="hd"><span class="bk">‹</span><span class="tt">Recovery</span><span class="lock">Private</span></div>
+        <div class="body">
+          <p class="k">This morning · HRV</p>
+          <div class="num m">68<span class="u">ms</span></div>
+          <div class="sub">+6 vs baseline · 3rd day optimal</div>
+          <h2 class="head">Your nervous system<br><em>slept well.</em></h2>
+          <p class="p">Three straight mornings in the optimal band. The green window is real — <b>don't waste it sitting still.</b></p>
+          <div class="list">
+            <div class="li"><div class="nm">Sleep efficiency<div class="a">7h 42m · 87%</div></div><div class="vv"><div class="v">87%</div><div class="b">Strong</div><div class="bar"><span style="width:87%"></span></div></div></div>
+            <div class="li"><div class="nm">Resting heart rate<div class="a">−3 vs baseline</div></div><div class="vv"><div class="v c">58</div><div class="b">Optimal</div><div class="bar c"><span style="width:84%"></span></div></div></div>
+            <div class="li"><div class="nm">Training strain<div class="a">Z2 focus yesterday</div></div><div class="vv"><div class="v">Mod.</div><div class="b w">Room</div><div class="bar e"><span style="width:62%"></span></div></div></div>
+            <div class="li"><div class="nm">Hydration<div class="a">1.1L of 2.5L target</div></div><div class="vv"><div class="v">45%</div><div class="b w">Low</div><div class="bar e"><span style="width:45%"></span></div></div></div>
+          </div>
+          <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read recovery drivers</span></div>
+            <p class="sy">Biggest lift left on the table is water — <b>1L before lunch</b> and tomorrow reads even higher. Easy run before noon.</p>
+            <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about recovery…</span><span class="go">↑</span></div></div>
+          <div class="pad"></div>
+        </div>
+        <div class="nav"><i>⌂</i><i>❤</i><i>◐</i><i class="on">✷</i><i class="ai">✦</i></div>
+      </div></div>
+    </div>
+
+    <!-- 5 HEART RATE -->
+    <div class="col">
+      <div class="cap"><span class="n"><b>5</b> Heart Rate</span><span class="t">cardiac</span></div>
+      <div class="phone"><div class="screen card">
+        <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+        <div class="hd"><span class="bk">‹</span><span class="tt">Heart Rate</span><span class="lock">Private</span></div>
+        <div class="body">
+          <p class="k c">This morning · resting</p>
+          <div class="num c">58<span class="u">bpm</span></div>
+          <div class="sub">↓3 this week · climbing fitness</div>
+          <h2 class="head">Your heart is<br><em>quiet</em> this morning.</h2>
+          <p class="p">Resting rate down three from last week. That drop is aerobic fitness showing up — <b>the base work is paying off.</b></p>
+          <div class="list">
+            <div class="li"><div class="nm">HRV<div class="a">this morning</div></div><div class="vv"><div class="v">68<span style="font-size:11px;color:var(--muted)">ms</span></div><div class="b">Optimal</div></div></div>
+            <div class="li"><div class="nm">Today's peak<div class="a">7:42 AM · Z4 run</div></div><div class="vv"><div class="v c">168</div><div class="b w">4-min spike</div></div></div>
+            <div class="li"><div class="nm">Overnight low<div class="a">3:00 AM</div></div><div class="vv"><div class="v">52</div><div class="b">Deep rest</div></div></div>
+            <div class="li"><div class="nm">Time in Z2+<div class="a">cardio zones today</div></div><div class="vv"><div class="v">3h 24m</div></div></div>
+          </div>
+          <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read HR + recovery</span></div>
+            <p class="sy">A resting HR this low with HRV up means <b>you're primed.</b> Hold today aerobic; the threshold session tomorrow is where this pays off.</p>
+            <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about your heart…</span><span class="go">↑</span></div></div>
+          <div class="pad"></div>
+        </div>
+        <div class="nav"><i>⌂</i><i class="on">❤</i><i>◐</i><i>✷</i><i class="ai">✦</i></div>
+      </div></div>
+    </div>
+
+    <!-- 6 WORKOUT -->
+    <div class="col">
+      <div class="cap"><span class="n"><b>6</b> Workout</span><span class="t">session recap</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+        <div class="hd"><span class="bk">‹</span><span class="tt">Session</span><span class="lock">Private</span></div>
+        <div class="body">
+          <p class="k">Mon · Apr 20 · 7:12 AM · outdoor run</p>
+          <div class="num m">8.12<span class="u">km</span></div>
+          <div class="sub">45:28 · 5:36 /km avg</div>
+          <h2 class="head">Eight kilometers<br>before <em>work.</em></h2>
+          <p class="p">You ran aerobic for the first four, then let it drift on the climb at km 5 — eight minutes in Zone 4. <b>Not wrong. Just not today's plan.</b></p>
+          <div class="list">
+            <div class="li"><div class="nm">Average heart rate<div class="a">peak 168 · km 5</div></div><div class="vv"><div class="v c">151</div><div class="b w">Z3 drift</div></div></div>
+            <div class="li"><div class="nm">Time in Zone 2<div class="a">target was 80%</div></div><div class="vv"><div class="v">55%</div><div class="b w">Under</div></div></div>
+            <div class="li"><div class="nm">Elevation gain<div class="a">the km-5 climb</div></div><div class="vv"><div class="v">142m</div></div></div>
+            <div class="li"><div class="nm">Training load<div class="a">this session</div></div><div class="vv"><div class="v">68</div><div class="b">Moderate</div></div></div>
+          </div>
+          <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">graded vs today's plan</span></div>
+            <p class="sy"><b>B · 72/100.</b> Solid effort, left Z2 early on the hill. Tomorrow's threshold 6×3 is the one that matters — keep gas in the tank.</p>
+            <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about this run…</span><span class="go">↑</span></div></div>
+          <div class="pad"></div>
+        </div>
+        <div class="nav"><i>⌂</i><i>❤</i><i>◐</i><i class="on">✷</i><i class="ai">✦</i></div>
+      </div></div>
+    </div>
+
+    <!-- 7 AVANTI -->
+    <div class="col">
+      <div class="cap"><span class="n"><b>7</b> AVANTI</span><span class="t">the coach surface</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+        <div class="hd"><span class="bk">‹</span><span class="tt">AVANTI</span><span class="lock">Reading everything</span></div>
+        <div class="body">
+          <p class="k">The morning briefing · Apr 20</p>
+          <h2 class="head" style="margin-top:12px">You slept well. Your body's<br>ready. <em>Don't waste it.</em></h2>
+          <p class="p">Three nights of consistent sleep rebuilt your baseline. HRV is the highest it's been in nine days. The temptation is to go hard — <b>don't. Tomorrow's session is what benefits from this.</b></p>
+          <div class="list">
+            <div class="li"><div class="nm">HRV<div class="a">+6 vs base</div></div><div class="vv"><div class="v">68</div><div class="b">High</div></div></div>
+            <div class="li"><div class="nm">Resting HR<div class="a">−2 vs base</div></div><div class="vv"><div class="v c">58</div><div class="b">Low·good</div></div></div>
+            <div class="li"><div class="nm">Sleep<div class="a">+4 vs base</div></div><div class="vv"><div class="v">87</div><div class="b">Strong</div></div></div>
+          </div>
+          <div class="av" style="margin-top:18px"><div class="h"><span class="sp">✦</span><span class="nm2">Today's call</span><span class="rd">built from your data</span></div>
+            <p class="sy"><b>Easy 35-min Z2 · before noon.</b> HR under 142, cadence 175+. I'll load carbs into lunch to prep tomorrow's threshold work.</p>
+            <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI anything…</span><span class="go">↑</span></div></div>
+          <div class="pad"></div>
+        </div>
+        <div class="nav"><i>⌂</i><i>❤</i><i>◐</i><i>✷</i><i class="ai on" style="background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));color:#04140f">✦</i></div>
+      </div></div>
+    </div>
+
+  </div>
+
+  <p class="foot">VAI · Editorial family · one style across 7 surfaces · this is what picking a family gets you · AVANTI reads all data &amp; speaks, live · private-by-default · red = cardiac.</p>
+</body>
+</html>
