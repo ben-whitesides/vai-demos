@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VITALS · Connect — one UI, three sources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Morganite:ital,wght@0,600;0,700;1,700&family=Roboto:ital,wght@0,400;0,500;0,700&display=swap" rel="stylesheet">
+<style>
+  /* ============ CANON BASE — cloned verbatim from vitals-connect-tc.html @75f47c9 ============ */
+  :root{--bg:#0a0a0c;--card:#131315;--card2:#0f0f11;--line:#242427;--ink:#f4f4f5;--muted:#9a9aa0;--faint:#6a6a70;
+    --theme:#38e39b;--theme-d:#0f9d63;--ember:#F5871F;--cardiac:#ff5a5f;
+    --roboto:'Roboto',system-ui,sans-serif;--morg:'Morganite',Impact,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}html{-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:var(--roboto);line-height:1.5;padding:50px clamp(20px,4vw,64px) 90px}
+  .eyebrow{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--ember);font-weight:700}
+  h1.pg{font-family:var(--morg);font-weight:700;font-style:italic;font-size:clamp(38px,6vw,62px);line-height:.9;letter-spacing:.01em;margin:8px 0 12px;text-transform:uppercase}
+  .lede{max-width:74ch;color:#b7b7bd;font-size:15px}.lede b{color:#fff}
+  .note{margin-top:10px;font-size:12.5px;color:var(--faint)}.note b{color:var(--theme)}
+  .deck{display:flex;gap:30px;overflow-x:auto;padding:32px 2px 20px;scroll-snap-type:x mandatory}
+  .col{flex:0 0 auto;scroll-snap-align:start;width:344px}
+  .cap{margin-bottom:12px}.cap .n{font-weight:700;font-size:15px}.cap .n b{color:var(--ember)}.cap .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .phone{width:344px;height:744px;border-radius:44px;padding:9px;background:linear-gradient(#232326,#0c0c0e);box-shadow:0 36px 70px -28px rgba(0,0,0,.9),0 0 0 1px #242427}
+  .screen{position:relative;width:100%;height:100%;border-radius:36px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column}
+  .stat{display:flex;justify-content:space-between;align-items:center;padding:15px 22px 4px;font-size:14px;font-weight:500}.stat .r{font-size:11px;opacity:.85}
+  .hd{display:flex;align-items:center;justify-content:center;position:relative;padding:8px 20px 10px}
+  .hd .back{position:absolute;left:16px;color:#2f9bff;font-size:16px;font-weight:500}
+  .hd .tt{font-size:17px;font-weight:700}
+  .body{flex:1;overflow-y:auto;padding:2px 20px 20px;position:relative}.body::-webkit-scrollbar{display:none}
+
+  .h2{font-family:var(--morg);font-weight:700;font-style:italic;text-transform:uppercase;font-size:34px;margin:16px 0 4px}
+  .sub{font-size:13.5px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+  .srow{display:flex;align-items:center;gap:14px;padding:16px 2px;border-bottom:1px solid var(--line)}
+  .srow:first-of-type{border-top:1px solid var(--line)}
+  .srow .ic{width:34px;height:34px;flex:0 0 34px;border-radius:10px;display:grid;place-items:center;font-size:17px;background:#0e0e10;border:1px solid var(--line)}
+  .srow .st{flex:1;min-width:0}.srow .st .a{font-size:15.5px;font-weight:500;display:flex;align-items:center;gap:8px}.srow .st .b{font-size:12px;color:var(--muted);margin-top:1px}
+  .prem{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--ember);border:1px solid rgba(245,135,31,.4);border-radius:999px;padding:2px 7px;font-weight:700}
+  .connbtn{font-size:13px;font-weight:700;color:var(--theme);border:1px solid rgba(56,227,155,.4);border-radius:999px;padding:8px 16px}
+  .footnote{font-size:12px;color:var(--faint);margin-top:16px;display:flex;gap:7px;align-items:flex-start;line-height:1.5}
+
+  /* dim + modal */
+  .dim{position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:4}
+  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:5;background:var(--card);border-top-left-radius:26px;border-top-right-radius:26px;border-top:1px solid var(--line);padding:8px 20px 22px;max-height:88%;overflow-y:auto}
+  .sheet::-webkit-scrollbar{display:none}
+  .grab{width:38px;height:5px;border-radius:3px;background:#33333a;margin:8px auto 14px}
+  .mhead{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+  .mic{width:38px;height:38px;flex:0 0 38px;border-radius:11px;background:linear-gradient(135deg,#101f1a,#0c100e);border:1px solid rgba(56,227,155,.35);display:grid;place-items:center}
+  .mhead .mt{font-weight:700;font-size:18px}.mhead .ms{font-size:11.5px;color:var(--theme);letter-spacing:.02em;margin-top:1px}
+  .msec{margin-top:14px}
+  .mlabel{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-size:12px;color:var(--ink);border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:6px 11px}
+  .chip .d{color:var(--theme)}
+  .mdesc{font-size:13px;color:#c3c3c9;line-height:1.5}.mdesc b{color:#fff}
+  .privrow{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:#c3c3c9;line-height:1.45;margin-top:7px}
+  .privrow .k{color:var(--theme);flex:0 0 16px}
+  .link{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card2);font-size:13.5px;font-weight:500}
+  .link .u{color:var(--theme)}
+  .check{display:flex;gap:12px;align-items:flex-start;margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--card2)}
+  .box{width:24px;height:24px;flex:0 0 24px;border-radius:7px;border:2px solid #444;margin-top:1px;display:grid;place-items:center;font-size:14px;color:#04140f;font-weight:800}
+  .box.on{background:var(--theme);border-color:var(--theme)}
+  .check .ct{font-size:12.5px;color:#c8c8ce;line-height:1.45}.check .ct b{color:#fff}
+  .cta{display:block;text-align:center;border-radius:999px;padding:15px;margin-top:16px;font-weight:700;font-size:15px}
+  .cta.off{background:#1e1e22;color:#5a5a60}
+  .cta.on{background:var(--theme);color:#04140f}
+  .osnote{margin-top:12px;text-align:center;font-size:12px;color:var(--faint);display:flex;gap:7px;align-items:center;justify-content:center}
+  .foot{margin-top:50px;border-top:1px solid var(--line);padding-top:18px;color:var(--faint);font-size:12.5px}
+
+  /* ============ ADDITIONS for this render (canon untouched above) ============ */
+  :root{--whoop:#57C7FF;--hc:#7bd88a}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .pill{font-size:13px;font-weight:700;letter-spacing:.03em;color:var(--muted);border:1px solid var(--line);background:var(--card2);border-radius:999px;padding:10px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:color .15s,border-color .15s}
+  .pill .pd{width:7px;height:7px;border-radius:50%;background:#3a3a40}
+  .pill.on{color:var(--ink);border-color:rgba(56,227,155,.5)}
+  .pill.on .pd{background:var(--theme);box-shadow:0 0 7px var(--theme)}
+  .togglenote{margin-top:10px;font-size:12.5px;color:var(--faint);max-width:74ch}.togglenote b{color:var(--theme)}
+  .ownkey{margin-top:14px;display:flex;flex-wrap:wrap;gap:16px;font-size:12px;color:var(--muted)}
+  .ownkey .k{display:inline-flex;align-items:center;gap:7px}
+  .ok-vai{width:10px;height:10px;border-radius:3px;background:var(--theme)}
+  .ok-vend{width:10px;height:10px;border-radius:3px;background:#4a4a52;border:1px solid #6a6a72}
+
+  .provrow{margin-top:44px;scroll-margin-top:24px;border-top:1px solid var(--line);padding-top:26px;transition:opacity .25s}
+  .provrow.dimrow{opacity:.32}
+  .rowhead{display:flex;align-items:baseline;flex-wrap:wrap;gap:12px}
+  .rowhead .rt{font-family:var(--morg);font-weight:700;font-style:italic;text-transform:uppercase;font-size:36px;line-height:.9}
+  .rowhead .rs{font-size:13px;color:var(--muted)}
+  .rowhead .rb{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;border-radius:999px;padding:4px 10px}
+  .rb.apple{color:var(--cardiac);border:1px solid rgba(255,90,95,.4)}
+  .rb.hc{color:var(--hc);border:1px solid rgba(123,216,138,.4)}
+  .rb.whoop{color:var(--whoop);border:1px solid rgba(87,199,255,.4)}
+
+  .own{display:inline-block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;border-radius:999px;padding:3px 9px;margin-top:5px}
+  .own.vai{color:var(--theme);border:1px solid rgba(56,227,155,.4)}
+  .own.shared{color:var(--theme);border:1px solid rgba(56,227,155,.4);background:rgba(56,227,155,.07)}
+  .own.vendor{color:#b7b7bd;border:1px dashed #55555e;background:#101014}
+
+  /* vendor-owned grant screens — deliberately OFF-canon: system fonts, not ours */
+  .vwrap{flex:1;display:flex;flex-direction:column;font-family:-apple-system,'Segoe UI',system-ui,sans-serif;position:relative}
+  .vtag{position:absolute;left:0;right:0;bottom:0;z-index:6;text-align:center;font-size:10.5px;letter-spacing:.06em;font-weight:700;color:#0a0a0c;background:repeating-linear-gradient(45deg,#8a8a92,#8a8a92 8px,#9c9ca4 8px,#9c9ca4 16px);padding:7px 10px;font-family:var(--roboto)}
+  .ios{background:#f2f2f7;color:#111;flex:1;display:flex;flex-direction:column}
+  .ios .ibar{display:flex;justify-content:space-between;padding:14px 16px 8px;font-size:15px;color:#007aff}
+  .ios .ibar b{color:#111;font-weight:600}
+  .ios .ihead{text-align:center;padding:4px 22px 10px}
+  .ios .ihead .hic{width:54px;height:54px;margin:6px auto 10px;border-radius:13px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.12);display:grid;place-items:center;font-size:28px}
+  .ios .ihead .ht{font-size:16.5px;font-weight:600;line-height:1.35}
+  .ios .ihead .hs{font-size:12.5px;color:#6d6d72;margin-top:6px;line-height:1.4}
+  .ios .igroup{background:#fff;border-radius:12px;margin:8px 14px;overflow:hidden}
+  .ios .irow{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;border-bottom:1px solid #e5e5ea;font-size:14.5px}
+  .ios .irow:last-child{border-bottom:0}
+  .ios .irow .all{color:#007aff}
+  .itog{width:44px;height:26px;border-radius:14px;background:#34c759;position:relative;flex:0 0 44px}
+  .itog::after{content:"";position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+  .ios .ifoot{margin-top:auto;padding:0 14px 40px}
+  .ios .ibtn{display:block;text-align:center;background:#007aff;color:#fff;font-weight:600;font-size:15.5px;border-radius:12px;padding:13px;margin-top:8px}
+
+  .hcs{background:#1b1f22;color:#e6e9ec;flex:1;display:flex;flex-direction:column;padding:18px 16px 40px}
+  .hcs .hlogo{width:46px;height:46px;border-radius:50%;background:#28td;background:#2b3136;display:grid;place-items:center;font-size:22px;margin:14px auto 12px}
+  .hcs .hct{text-align:center;font-size:17px;font-weight:500;line-height:1.4;padding:0 8px}
+  .hcs .hcs2{text-align:center;font-size:12.5px;color:#9aa2aa;margin-top:8px;line-height:1.45}
+  .hcs .hcs2 a{color:#a4c9fd}
+  .hcs .hgroup{background:#22272b;border-radius:14px;margin-top:14px;overflow:hidden}
+  .hcs .hrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #2c3237;font-size:14px}
+  .hcs .hrow:last-child{border-bottom:0}
+  .hcb{width:19px;height:19px;flex:0 0 19px;border-radius:4px;background:#a4c9fd;color:#141a1e;display:grid;place-items:center;font-size:12px;font-weight:800}
+  .hcs .hbtns{margin-top:auto;display:flex;gap:10px;padding-top:16px}
+  .hcs .hbtn{flex:1;text-align:center;border-radius:999px;padding:12px;font-size:14px;font-weight:500}
+  .hcs .hbtn.pri{background:#a4c9fd;color:#141a1e}
+  .hcs .hbtn.sec{border:1px solid #3a4147;color:#cfd5da}
+  .playnote{margin:12px 14px 0;border:1px dashed #55555e;border-radius:12px;padding:10px 12px;font-size:11.5px;color:#9aa2aa;line-height:1.45;font-family:var(--roboto)}
+
+  .brow{background:#101418;flex:1;display:flex;flex-direction:column}
+  .brow .url{margin:14px 14px 0;background:#1c2228;border-radius:999px;padding:9px 15px;font-size:12.5px;color:#9aa2aa;display:flex;align-items:center;gap:8px}
+  .brow .url .lk{color:var(--whoop)}
+  .wpage{flex:1;margin:12px 14px 40px;background:#0b0f13;border:1px solid #1f262d;border-radius:16px;padding:20px 16px;display:flex;flex-direction:column}
+  .wpage .wl{text-align:center;font-weight:800;letter-spacing:.28em;font-size:15px;color:#fff;margin:8px 0 4px}
+  .wpage .wsub{text-align:center;font-size:12.5px;color:#8a929b;margin-bottom:14px;line-height:1.45}
+  .wfield{background:#141a20;border:1px solid #242c34;border-radius:10px;padding:11px 13px;font-size:13px;color:#7d858e;margin-top:8px}
+  .wscopes{margin-top:14px;border-top:1px solid #1f262d;padding-top:12px}
+  .wscopes .wt2{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8a929b;font-weight:700;margin-bottom:8px}
+  .wsc{display:flex;gap:8px;align-items:center;font-size:12.5px;color:#c3cad1;margin-top:6px}
+  .wsc .k{color:var(--whoop)}
+  .wbtn{margin-top:auto;text-align:center;background:var(--whoop);color:#06202e;font-weight:700;font-size:14px;border-radius:999px;padding:12px;margin-top:16px}
+
+  /* verify + manage helpers (VAI screens, on canon) */
+  .okpanel{border:1px solid rgba(56,227,155,.35);background:linear-gradient(180deg,rgba(56,227,155,.07),rgba(56,227,155,.015));border-radius:16px;padding:15px;margin-top:6px}
+  .okpanel .oh{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15.5px}
+  .okpanel .oh .dot{width:9px;height:9px;border-radius:50%;background:var(--theme);box-shadow:0 0 8px var(--theme)}
+  .okpanel .os{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .grants{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px}
+  .grant{display:flex;gap:7px;align-items:center;font-size:12.5px;color:#c8c8ce}
+  .grant .k{color:var(--theme);font-weight:700}
+  .fallback{border:1px solid rgba(245,135,31,.4);background:linear-gradient(180deg,rgba(245,135,31,.06),rgba(245,135,31,.012));border-radius:16px;padding:15px;margin-top:14px}
+  .fallback .fh{font-weight:700;font-size:15.5px;display:flex;gap:9px;align-items:center}
+  .fallback .fh .w{color:var(--ember)}
+  .fallback .fd{font-size:12.5px;color:#c3c3c9;margin-top:7px;line-height:1.5}.fallback .fd b{color:#fff}
+  .btn2{display:block;text-align:center;border-radius:999px;padding:13px;margin-top:12px;font-weight:700;font-size:14px}
+  .btn2.pri{background:var(--theme);color:#04140f}
+  .btn2.sec{border:1px solid var(--line);color:var(--ink)}
+  .mrow{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card2);font-size:13px;font-weight:500}
+  .mrow .u{color:var(--theme)}
+  .mrow.danger{border-color:rgba(255,90,95,.35)}.mrow.danger .u{color:var(--cardiac)}
+  .mnote{font-size:11.5px;color:var(--faint);margin-top:8px;line-height:1.45}
+  .synced2{font-size:11px;color:var(--faint);margin-left:8px}
+  .srcchip{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:5px 10px}
+  .srcchip .dot{width:5px;height:5px;border-radius:50%}
+  .srcchip.a{color:var(--cardiac);border:1px solid rgba(255,90,95,.3)}.srcchip.a .dot{background:var(--cardiac)}
+  .srcchip.h{color:var(--hc);border:1px solid rgba(123,216,138,.3)}.srcchip.h .dot{background:var(--hc)}
+  .srcchip.w{color:var(--whoop);border:1px solid rgba(87,199,255,.3)}.srcchip.w .dot{background:var(--whoop);box-shadow:0 0 6px var(--whoop)}
+  .prelist{margin-top:4px}
+  .prelist .privrow .k{flex:0 0 18px}
+
+  /* verdict footer */
+  .verdict{margin-top:54px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .vcard{border:1px solid var(--line);border-radius:16px;background:var(--card2);padding:18px}
+  .vcard.sh{border-color:rgba(56,227,155,.35)}
+  .vcard .vt{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+  .vcard.sh .vt{color:var(--theme)}.vcard .vt{color:var(--ember)}
+  .vcard .vd{font-size:13px;color:#c3c3c9;line-height:1.55}.vcard .vd b{color:#fff}
+  @media (max-width:600px){.rowhead .rt{font-size:30px}}
+</style></head><body>
+  <p class="eyebrow">VAI · Wearables · Connect flow · one UI, three sources</p>
+  <h1 class="pg">One connect UI.<br>Three sources.</h1>
+  <p class="lede">The same six-step VAI connect flow serves <b>Apple Health</b>, <b>Health Connect</b> and <b>WHOOP</b>. Scan any column top-to-bottom: <b>steps 1–2 are pixel-identical</b> — one VAI design. Steps 3–6 carry the per-source differences: each vendor's own un-restylable grant screen (step 4, not ours to design) and three different "did it work?" truth models (step 5).</p>
+  <p class="note">Accent shown in <b>your theme color</b> (green here) — it inherits each user's custom profile theme, not a hardcoded color.</p>
+
+  <div class="pills" id="pills">
+    <span class="pill on" data-row="row-apple"><span class="pd"></span>Apple Health</span>
+    <span class="pill" data-row="row-hc"><span class="pd"></span>Health Connect</span>
+    <span class="pill" data-row="row-whoop"><span class="pd"></span>WHOOP</span>
+  </div>
+  <p class="togglenote">In the app this is one screen with a source picker — flipping the source <b>re-renders only steps 3–6</b>; steps 1–2 never change. Here all three lanes are laid out so the shared-vs-different contrast is visible at a glance. Tap a pill to spotlight a lane.</p>
+  <div class="ownkey">
+    <span class="k"><span class="ok-vai"></span>VAI-designed screen</span>
+    <span class="k"><span class="ok-vend"></span>Vendor-owned screen — we trigger it, we don't design it</span>
+  </div>
+
+  <!-- ================= APPLE HEALTH ================= -->
+  <section class="provrow" id="row-apple">
+    <div class="rowhead"><span class="rt">Apple Health</span><span class="rb apple">iPhone</span><span class="rs">steps 1–2 identical in all lanes · 3–6 Apple-specific · swipe →</span></div>
+    <div class="deck">
+
+      <!-- A1 pick source (SHARED) -->
+      <div class="col"><div class="cap"><div class="n"><b>1</b> Pick a source</div><div class="d">Same screen in every lane — you just tap Apple Health</div><span class="own shared">Shared · identical all 3</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Vitals</span><span class="tt">Connect</span></div>
+        <div class="body">
+          <div class="h2">Connect your wearable</div>
+          <div class="sub">AVANTI reads your recovery, sleep &amp; heart data to coach you — private to you. You'll approve exactly what's shared.</div>
+          <div class="srow"><span class="ic" style="color:var(--cardiac)">♥</span><span class="st"><div class="a">Apple Health</div><div class="b">iPhone · heart rate, HRV, sleep, SpO₂…</div></span><span class="connbtn">Connect</span></div>
+          <div class="srow"><span class="ic" style="color:var(--theme)">✚</span><span class="st"><div class="a">Health Connect</div><div class="b">Android · same data types</div></span><span class="connbtn">Connect</span></div>
+          <div class="srow"><span class="ic">⌚</span><span class="st"><div class="a">WHOOP <span class="prem">Premium</span></div><div class="b">Real Recovery &amp; Strain scores</div></span><span class="connbtn">Connect</span></div>
+          <div class="footnote"><span>🔒</span><span>Nothing is read until you confirm on the next screen. Only you &amp; AVANTI ever see this data.</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- A2 T&C (SHARED) -->
+      <div class="col"><div class="cap"><div class="n"><b>2</b> VAI T&amp;C + consent</div><div class="d">Same sheet in every lane — only the source name swaps</div><span class="own shared">Shared · identical all 3</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Vitals</span><span class="tt">Connect</span></div>
+        <div class="body" style="filter:brightness(.6)">
+          <div class="h2">Connect your wearable</div>
+          <div class="sub">AVANTI reads your recovery, sleep &amp; heart data…</div>
+        </div>
+        <div class="dim"></div>
+        <div class="sheet">
+          <div class="grab"></div>
+          <div class="mhead"><span class="mic"><svg width="20" height="16" viewBox="0 0 22 16" fill="none"><path d="M1 8h4.2l1.8-5.4 3 11.4 3-13.2 2 7.2h6" stroke="#38e39b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="mt">Connect Apple Health</div><div class="ms">VITALS · powered by AVANTI</div></div></div>
+          <div class="msec"><div class="mlabel">AVANTI will read</div><div class="chips"><span class="chip">Heart rate</span><span class="chip">HRV</span><span class="chip">Sleep</span><span class="chip">SpO₂</span><span class="chip">Respiratory</span><span class="chip">Workouts</span></div></div>
+          <div class="msec"><div class="mlabel">Your privacy</div>
+            <div class="privrow"><span class="k">✓</span><span>Only <b style="color:#fff">you &amp; AVANTI</b> · never sold, ads, or shared · delete anytime</span></div>
+          </div>
+          <div class="link"><span>Terms &amp; Conditions · Privacy Policy</span><span class="u">›</span></div>
+          <div class="check" style="border-color:rgba(56,227,155,.35)"><span class="box on">✓</span><span class="ct">I agree to VAI's <b>Terms &amp; Conditions and Privacy Policy</b>, and allow AVANTI to read and use my wearable data as described.</span></div>
+          <div class="cta on">Agree &amp; Connect</div>
+          <div class="osnote"><span>→</span><span>Next: the source's own permission screen</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- A3 pre-frame -->
+      <div class="col"><div class="cap"><div class="n"><b>3</b> Pre-frame</div><div class="d">Shared shell · Apple-specific body</div><span class="own vai">VAI screen</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Connect</span><span class="tt">Apple Health</span></div>
+        <div class="body">
+          <div class="h2">Before Apple asks</div>
+          <div class="sub">Next you'll see <b style="color:#fff">Apple's own Health access sheet</b> — it belongs to iOS, not VAI.</div>
+          <div class="msec"><div class="mlabel">What to expect</div>
+            <div class="prelist">
+              <div class="privrow"><span class="k">1</span><span>A system sheet lists the data types AVANTI asked to read — heart rate, HRV, sleep, SpO₂, respiratory, workouts</span></div>
+              <div class="privrow"><span class="k">2</span><span>Turn the categories on, then tap <b style="color:#fff">Allow</b></span></div>
+              <div class="privrow"><span class="k">3</span><span>You can change any of it later in the Apple Health app</span></div>
+            </div>
+          </div>
+          <div class="msec"><div class="mlabel">AVANTI will read</div><div class="chips"><span class="chip">Heart rate</span><span class="chip">HRV</span><span class="chip">Sleep</span><span class="chip">SpO₂</span><span class="chip">Respiratory</span><span class="chip">Workouts</span></div></div>
+          <div class="cta on" style="margin-top:22px">Open Apple's sheet</div>
+          <div class="osnote"><span>→</span><span>The next screen is <b style="color:#c8c8ce">Apple's</b> — VAI can't restyle it</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- A4 grant (VENDOR) -->
+      <div class="col"><div class="cap"><div class="n"><b>4</b> Grant screen</div><div class="d">Native iOS Health permission sheet — stylized mock</div><span class="own vendor">Apple's screen — not ours</span></div>
+      <div class="phone"><div class="screen">
+        <div class="vwrap">
+          <div class="ios">
+            <div class="ibar"><span>Cancel</span><b>Health Access</b><span style="visibility:hidden">Cancel</span></div>
+            <div class="ihead">
+              <div class="hic">❤️</div>
+              <div class="ht">"VAI" would like to access your Health data</div>
+              <div class="hs">Choose the data this app is allowed to read.</div>
+            </div>
+            <div class="igroup"><div class="irow"><span class="all">Turn On All</span><span></span></div></div>
+            <div class="igroup">
+              <div class="irow"><span>Heart Rate</span><span class="itog"></span></div>
+              <div class="irow"><span>Heart Rate Variability</span><span class="itog"></span></div>
+              <div class="irow"><span>Sleep Analysis</span><span class="itog"></span></div>
+              <div class="irow"><span>Blood Oxygen</span><span class="itog"></span></div>
+              <div class="irow"><span>Respiratory Rate</span><span class="itog"></span></div>
+              <div class="irow"><span>Workouts</span><span class="itog"></span></div>
+            </div>
+            <div class="ifoot"><span class="ibtn">Allow</span></div>
+          </div>
+          <div class="vtag">APPLE'S SCREEN — VAI doesn't design this</div>
+        </div>
+      </div></div></div>
+
+      <!-- A5 verify: probe + honest fallback -->
+      <div class="col"><div class="cap"><div class="n"><b>5</b> Return + verify</div><div class="d">Apple can't confirm the grant → probe the data, honest fallback</div><span class="own vai">VAI screen</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Connect</span><span class="tt">Apple Health</span></div>
+        <div class="body">
+          <div class="h2">Checking your data</div>
+          <div class="sub">Apple doesn't tell apps whether read access was granted — so VAI looks for your <b style="color:#fff">data</b> instead. The moment it appears, you're live.</div>
+          <div class="fallback">
+            <div class="fh"><span class="w">◔</span><span>Not seeing data yet</span></div>
+            <div class="fd">This usually means the categories weren't turned on. Apple keeps that private by design, so VAI can't check for you — <b>open Apple Health and switch them on</b>, then come back.</div>
+            <span class="btn2 pri">Open Health</span>
+            <span class="btn2 sec">Try again</span>
+          </div>
+          <div class="footnote"><span>ℹ️</span><span>Honest fallback: an empty read and a denied read look identical to any app — that's Apple's rule, so we say so instead of guessing.</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- A6 manage -->
+      <div class="col"><div class="cap"><div class="n"><b>6</b> Live / manage</div><div class="d">Shared shell · permissions change happens in Apple Health</div><span class="own vai">VAI screen</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Vitals</span><span class="tt">Sources</span></div>
+        <div class="body">
+          <div class="h2">Connected</div>
+          <div class="sub"><span class="srcchip a"><span class="dot"></span>Apple Health</span><span class="synced2">synced 12 min ago</span></div>
+          <div class="okpanel">
+            <div class="oh"><span class="dot"></span>Data flowing</div>
+            <div class="os">Heart rate · HRV · sleep · SpO₂ · respiratory · workouts</div>
+          </div>
+          <div class="msec"><div class="mlabel">Manage</div>
+            <div class="mrow"><span>Change permissions in Apple Health</span><span class="u">›</span></div>
+            <div class="mrow danger"><span>Disconnect from VAI</span><span class="u">›</span></div>
+            <div class="mnote">Apple doesn't let apps change Health permissions from inside — that lives in the Apple Health app, so VAI deep-links you there.</div>
+          </div>
+        </div>
+      </div></div></div>
+
+    </div>
+  </section>
+
+  <!-- ================= HEALTH CONNECT ================= -->
+  <section class="provrow" id="row-hc">
+    <div class="rowhead"><span class="rt">Health Connect</span><span class="rb hc">Android</span><span class="rs">steps 1–2 identical in all lanes · 3–6 Android-specific · swipe →</span></div>
+    <div class="deck">
+
+      <!-- H1 pick source (SHARED, identical) -->
+      <div class="col"><div class="cap"><div class="n"><b>1</b> Pick a source</div><div class="d">Same screen in every lane — you just tap Health Connect</div><span class="own shared">Shared · identical all 3</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Vitals</span><span class="tt">Connect</span></div>
+        <div class="body">
+          <div class="h2">Connect your wearable</div>
+          <div class="sub">AVANTI reads your recovery, sleep &amp; heart data to coach you — private to you. You'll approve exactly what's shared.</div>
+          <div class="srow"><span class="ic" style="color:var(--cardiac)">♥</span><span class="st"><div class="a">Apple Health</div><div class="b">iPhone · heart rate, HRV, sleep, SpO₂…</div></span><span class="connbtn">Connect</span></div>
+          <div class="srow"><span class="ic" style="color:var(--theme)">✚</span><span class="st"><div class="a">Health Connect</div><div class="b">Android · same data types</div></span><span class="connbtn">Connect</span></div>
+          <div class="srow"><span class="ic">⌚</span><span class="st"><div class="a">WHOOP <span class="prem">Premium</span></div><div class="b">Real Recovery &amp; Strain scores</div></span><span class="connbtn">Connect</span></div>
+          <div class="footnote"><span>🔒</span><span>Nothing is read until you confirm on the next screen. Only you &amp; AVANTI ever see this data.</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- H2 T&C (SHARED) -->
+      <div class="col"><div class="cap"><div class="n"><b>2</b> VAI T&amp;C + consent</div><div class="d">Same sheet in every lane — only the source name swaps</div><span class="own shared">Shared · identical all 3</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Vitals</span><span class="tt">Connect</span></div>
+        <div class="body" style="filter:brightness(.6)">
+          <div class="h2">Connect your wearable</div>
+          <div class="sub">AVANTI reads your recovery, sleep &amp; heart data…</div>
+        </div>
+        <div class="dim"></div>
+        <div class="sheet">
+          <div class="grab"></div>
+          <div class="mhead"><span class="mic"><svg width="20" height="16" viewBox="0 0 22 16" fill="none"><path d="M1 8h4.2l1.8-5.4 3 11.4 3-13.2 2 7.2h6" stroke="#38e39b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="mt">Connect Health Connect</div><div class="ms">VITALS · powered by AVANTI</div></div></div>
+          <div class="msec"><div class="mlabel">AVANTI will read</div><div class="chips"><span class="chip">Heart rate</span><span class="chip">HRV</span><span class="chip">Sleep</span><span class="chip">SpO₂</span><span class="chip">Respiratory</span><span class="chip">Workouts</span></div></div>
+          <div class="msec"><div class="mlabel">Your privacy</div>
+            <div class="privrow"><span class="k">✓</span><span>Only <b style="color:#fff">you &amp; AVANTI</b> · never sold, ads, or shared · delete anytime</span></div>
+          </div>
+          <div class="link"><span>Terms &amp; Conditions · Privacy Policy</span><span class="u">›</span></div>
+          <div class="check" style="border-color:rgba(56,227,155,.35)"><span class="box on">✓</span><span class="ct">I agree to VAI's <b>Terms &amp; Conditions and Privacy Policy</b>, and allow AVANTI to read and use my wearable data as described.</span></div>
+          <div class="cta on">Agree &amp; Connect</div>
+          <div class="osnote"><span>→</span><span>Next: the source's own permission screen</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- H3 pre-frame + rationale -->
+      <div class="col"><div class="cap"><div class="n"><b>3</b> Pre-frame + rationale</div><div class="d">Shared shell · carries the required privacy-policy line</div><span class="own vai">VAI screen</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Connect</span><span class="tt">Health Connect</span></div>
+        <div class="body">
+          <div class="h2">Before Android asks</div>
+          <div class="sub">Next you'll see the <b style="color:#fff">Health Connect permissions screen</b> — it belongs to Android, not VAI.</div>
+          <div class="msec"><div class="mlabel">What to expect</div>
+            <div class="prelist">
+              <div class="privrow"><span class="k">1</span><span>Android lists each data type AVANTI asked to read</span></div>
+              <div class="privrow"><span class="k">2</span><span>Tick the types, then tap <b style="color:#fff">Allow</b></span></div>
+              <div class="privrow"><span class="k">3</span><span>Change or revoke any of it later — right here in VAI</span></div>
+            </div>
+          </div>
+          <div class="msec"><div class="mlabel">Why VAI needs this</div>
+            <div class="mdesc">AVANTI reads these types to build your <b>workouts, meals &amp; recovery calls</b> — never for ads, never shared. Full details in our privacy policy.</div>
+            <div class="link"><span>How VAI uses health data · Privacy Policy</span><span class="u">›</span></div>
+            <div class="mnote">This explanation is also linked from the Health Connect permissions screen itself — a Play requirement for health apps.</div>
+          </div>
+          <div class="cta on" style="margin-top:18px">Open Health Connect</div>
+        </div>
+      </div></div></div>
+
+      <!-- H4 grant (VENDOR) -->
+      <div class="col"><div class="cap"><div class="n"><b>4</b> Grant screen</div><div class="d">Native Health Connect permissions screen — stylized mock</div><span class="own vendor">Android's screen — not ours</span></div>
+      <div class="phone"><div class="screen">
+        <div class="vwrap">
+          <div class="hcs">
+            <div class="hlogo">✚</div>
+            <div class="hct">Allow <b>VAI</b> to access Health Connect?</div>
+            <div class="hcs2">Choose the data VAI can read. <a>How VAI uses this data</a></div>
+            <div class="hgroup">
+              <div class="hrow"><span class="hcb">✓</span><span>Heart rate</span></div>
+              <div class="hrow"><span class="hcb">✓</span><span>Heart rate variability</span></div>
+              <div class="hrow"><span class="hcb">✓</span><span>Sleep</span></div>
+              <div class="hrow"><span class="hcb">✓</span><span>Oxygen saturation</span></div>
+              <div class="hrow"><span class="hcb">✓</span><span>Respiratory rate</span></div>
+              <div class="hrow"><span class="hcb">✓</span><span>Exercise</span></div>
+            </div>
+            <div class="playnote">Android 13 &amp; lower: this step may first open the Play Store to install or update the Health Connect app. Android 14+ has it built in.</div>
+            <div class="hbtns"><span class="hbtn sec">Don't allow</span><span class="hbtn pri">Allow</span></div>
+          </div>
+          <div class="vtag">ANDROID'S SCREEN — VAI doesn't design this</div>
+        </div>
+      </div></div></div>
+
+      <!-- H5 verify: deterministic -->
+      <div class="col"><div class="cap"><div class="n"><b>5</b> Return + verify</div><div class="d">Android reports exactly what was granted — clean confirm</div><span class="own vai">VAI screen</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Connect</span><span class="tt">Health Connect</span></div>
+        <div class="body">
+          <div class="h2">You're connected</div>
+          <div class="sub">Health Connect tells VAI exactly which permissions you granted — no guessing.</div>
+          <div class="okpanel">
+            <div class="oh"><span class="dot"></span>Connected · 8 of 8 data types</div>
+            <div class="os">Every requested read permission granted</div>
+            <div class="grants">
+              <span class="grant"><span class="k">✓</span>Heart rate</span>
+              <span class="grant"><span class="k">✓</span>HRV</span>
+              <span class="grant"><span class="k">✓</span>Sleep</span>
+              <span class="grant"><span class="k">✓</span>SpO₂</span>
+              <span class="grant"><span class="k">✓</span>Respiratory</span>
+              <span class="grant"><span class="k">✓</span>Workouts</span>
+              <span class="grant"><span class="k">✓</span>Resting HR</span>
+              <span class="grant"><span class="k">✓</span>Skin temp</span>
+            </div>
+          </div>
+          <div class="cta on" style="margin-top:20px">Go to Vitals</div>
+          <div class="footnote"><span>ℹ️</span><span>If you'd granted only some types, this screen would list exactly which — and offer to re-ask for the rest.</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- H6 manage -->
+      <div class="col"><div class="cap"><div class="n"><b>6</b> Live / manage</div><div class="d">Shared shell · in-app revoke + settings deep-link</div><span class="own vai">VAI screen</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Vitals</span><span class="tt">Sources</span></div>
+        <div class="body">
+          <div class="h2">Connected</div>
+          <div class="sub"><span class="srcchip h"><span class="dot"></span>Health Connect</span><span class="synced2">synced 12 min ago</span></div>
+          <div class="okpanel">
+            <div class="oh"><span class="dot"></span>8 of 8 data types granted</div>
+            <div class="os">Heart rate · HRV · sleep · SpO₂ · respiratory · workouts · resting HR · skin temp</div>
+          </div>
+          <div class="msec"><div class="mlabel">Manage</div>
+            <div class="mrow"><span>Open Health Connect settings</span><span class="u">›</span></div>
+            <div class="mrow danger"><span>Disconnect — revoke all permissions</span><span class="u">›</span></div>
+            <div class="mnote">Android lets VAI revoke its own permissions in-app — disconnecting here really disconnects, instantly.</div>
+          </div>
+        </div>
+      </div></div></div>
+
+    </div>
+  </section>
+
+  <!-- ================= WHOOP ================= -->
+  <section class="provrow" id="row-whoop">
+    <div class="rowhead"><span class="rt">WHOOP</span><span class="rb whoop">Hosted sign-in</span><span class="rs">steps 1–2 identical in all lanes · 3–6 WHOOP-specific · swipe →</span></div>
+    <div class="deck">
+
+      <!-- W1 pick source (SHARED, identical) -->
+      <div class="col"><div class="cap"><div class="n"><b>1</b> Pick a source</div><div class="d">Same screen in every lane — you just tap WHOOP</div><span class="own shared">Shared · identical all 3</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Vitals</span><span class="tt">Connect</span></div>
+        <div class="body">
+          <div class="h2">Connect your wearable</div>
+          <div class="sub">AVANTI reads your recovery, sleep &amp; heart data to coach you — private to you. You'll approve exactly what's shared.</div>
+          <div class="srow"><span class="ic" style="color:var(--cardiac)">♥</span><span class="st"><div class="a">Apple Health</div><div class="b">iPhone · heart rate, HRV, sleep, SpO₂…</div></span><span class="connbtn">Connect</span></div>
+          <div class="srow"><span class="ic" style="color:var(--theme)">✚</span><span class="st"><div class="a">Health Connect</div><div class="b">Android · same data types</div></span><span class="connbtn">Connect</span></div>
+          <div class="srow"><span class="ic">⌚</span><span class="st"><div class="a">WHOOP <span class="prem">Premium</span></div><div class="b">Real Recovery &amp; Strain scores</div></span><span class="connbtn">Connect</span></div>
+          <div class="footnote"><span>🔒</span><span>Nothing is read until you confirm on the next screen. Only you &amp; AVANTI ever see this data.</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- W2 T&C (SHARED) -->
+      <div class="col"><div class="cap"><div class="n"><b>2</b> VAI T&amp;C + consent</div><div class="d">Same sheet in every lane — only the source name swaps</div><span class="own shared">Shared · identical all 3</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Vitals</span><span class="tt">Connect</span></div>
+        <div class="body" style="filter:brightness(.6)">
+          <div class="h2">Connect your wearable</div>
+          <div class="sub">AVANTI reads your recovery, sleep &amp; heart data…</div>
+        </div>
+        <div class="dim"></div>
+        <div class="sheet">
+          <div class="grab"></div>
+          <div class="mhead"><span class="mic"><svg width="20" height="16" viewBox="0 0 22 16" fill="none"><path d="M1 8h4.2l1.8-5.4 3 11.4 3-13.2 2 7.2h6" stroke="#38e39b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><div class="mt">Connect WHOOP</div><div class="ms">VITALS · powered by AVANTI</div></div></div>
+          <div class="msec"><div class="mlabel">AVANTI will read</div><div class="chips"><span class="chip">Heart rate</span><span class="chip">HRV</span><span class="chip">Sleep</span><span class="chip">SpO₂</span><span class="chip">Respiratory</span><span class="chip">Workouts</span></div></div>
+          <div class="msec"><div class="mlabel">Your privacy</div>
+            <div class="privrow"><span class="k">✓</span><span>Only <b style="color:#fff">you &amp; AVANTI</b> · never sold, ads, or shared · delete anytime</span></div>
+          </div>
+          <div class="link"><span>Terms &amp; Conditions · Privacy Policy</span><span class="u">›</span></div>
+          <div class="check" style="border-color:rgba(56,227,155,.35)"><span class="box on">✓</span><span class="ct">I agree to VAI's <b>Terms &amp; Conditions and Privacy Policy</b>, and allow AVANTI to read and use my wearable data as described.</span></div>
+          <div class="cta on">Agree &amp; Connect</div>
+          <div class="osnote"><span>→</span><span>Next: the source's own permission screen</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- W3 pre-frame -->
+      <div class="col"><div class="cap"><div class="n"><b>3</b> Pre-frame</div><div class="d">Shared shell · "you'll sign in to WHOOP in a browser"</div><span class="own vai">VAI screen</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Connect</span><span class="tt">WHOOP</span></div>
+        <div class="body">
+          <div class="h2">Sign in to WHOOP</div>
+          <div class="sub">You'll leave VAI for a moment — <b style="color:#fff">WHOOP's own sign-in page opens in your browser</b>. Approve access there and you'll bounce straight back.</div>
+          <div class="msec"><div class="mlabel">What to expect</div>
+            <div class="prelist">
+              <div class="privrow"><span class="k">1</span><span>Log in with your WHOOP credentials — on WHOOP's page, never in VAI</span></div>
+              <div class="privrow"><span class="k">2</span><span>WHOOP shows what VAI asked for — approve it there</span></div>
+              <div class="privrow"><span class="k">3</span><span>You're returned to VAI automatically</span></div>
+            </div>
+          </div>
+          <div class="msec"><div class="mlabel">VAI is requesting</div><div class="chips"><span class="chip">Recovery</span><span class="chip">Sleep</span><span class="chip">Workouts</span><span class="chip">Cycles</span><span class="chip">Profile</span><span class="chip">Body measurements</span></div></div>
+          <div class="cta on" style="margin-top:20px">Continue to WHOOP</div>
+          <div class="osnote"><span>→</span><span>The next page is <b style="color:#c8c8ce">WHOOP's</b> — it opens in your browser</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- W4 grant (VENDOR — hosted web) -->
+      <div class="col"><div class="cap"><div class="n"><b>4</b> Grant screen</div><div class="d">WHOOP's hosted login + scope approval — stylized mock</div><span class="own vendor">WHOOP's page — not ours</span></div>
+      <div class="phone"><div class="screen">
+        <div class="vwrap">
+          <div class="brow">
+            <div class="url"><span>🔒</span><span class="lk">api.prod.whoop.com</span><span style="margin-left:auto">⟳</span></div>
+            <div class="wpage">
+              <div class="wl">WHOOP</div>
+              <div class="wsub">Log in to authorize <b style="color:#fff">VAI</b></div>
+              <div class="wfield">Email</div>
+              <div class="wfield">Password</div>
+              <div class="wscopes">
+                <div class="wt2">VAI is requesting access to</div>
+                <div class="wsc"><span class="k">✓</span><span>Recovery scores &amp; HRV</span></div>
+                <div class="wsc"><span class="k">✓</span><span>Sleep</span></div>
+                <div class="wsc"><span class="k">✓</span><span>Workouts &amp; strain</span></div>
+                <div class="wsc"><span class="k">✓</span><span>Physiological cycles</span></div>
+                <div class="wsc"><span class="k">✓</span><span>Profile &amp; body measurements</span></div>
+              </div>
+              <div class="wbtn">Authorize</div>
+            </div>
+          </div>
+          <div class="vtag">WHOOP'S PAGE — a web sign-in, VAI doesn't design this</div>
+        </div>
+      </div></div></div>
+
+      <!-- W5 verify: token + scopes -->
+      <div class="col"><div class="cap"><div class="n"><b>5</b> Return + verify</div><div class="d">Verified by sign-in itself — approved scopes come back with it</div><span class="own vai">VAI screen</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Connect</span><span class="tt">WHOOP</span></div>
+        <div class="body">
+          <div class="h2">Signed in to WHOOP</div>
+          <div class="sub">The sign-in itself is the proof — WHOOP handed VAI secure access with your approved scopes attached.</div>
+          <div class="okpanel">
+            <div class="oh"><span class="dot"></span>Signed in · syncing…</div>
+            <div class="os">Access secured · pulling your first Recovery, Sleep &amp; Strain</div>
+            <div class="grants">
+              <span class="grant"><span class="k">✓</span>Recovery</span>
+              <span class="grant"><span class="k">✓</span>Sleep</span>
+              <span class="grant"><span class="k">✓</span>Workouts</span>
+              <span class="grant"><span class="k">✓</span>Cycles</span>
+              <span class="grant"><span class="k">✓</span>Profile</span>
+              <span class="grant"><span class="k">✓</span>Body measurements</span>
+            </div>
+          </div>
+          <div class="cta on" style="margin-top:20px">Go to Vitals</div>
+          <div class="footnote"><span>ℹ️</span><span>VAI keeps this connection alive in the background — you won't sign in again.</span></div>
+        </div>
+      </div></div></div>
+
+      <!-- W6 manage -->
+      <div class="col"><div class="cap"><div class="n"><b>6</b> Live / manage</div><div class="d">Shared shell · disconnect removes VAI's access</div><span class="own vai">VAI screen</span></div>
+      <div class="phone"><div class="screen">
+        <div class="stat"><span>9:41</span><span class="r">●●● 📶 🔋</span></div>
+        <div class="hd"><span class="back">‹ Vitals</span><span class="tt">Sources</span></div>
+        <div class="body">
+          <div class="h2">Connected</div>
+          <div class="sub"><span class="srcchip w"><span class="dot"></span>WHOOP connected</span><span class="synced2">synced 12 min ago</span></div>
+          <div class="okpanel" style="border-color:rgba(87,199,255,.3);background:linear-gradient(180deg,rgba(87,199,255,.06),rgba(87,199,255,.012))">
+            <div class="oh"><span class="dot" style="background:var(--whoop);box-shadow:0 0 8px var(--whoop)"></span>Live</div>
+            <div class="os">Recovery · Sleep · Strain · cycles · profile</div>
+          </div>
+          <div class="msec"><div class="mlabel">Manage</div>
+            <div class="mrow danger"><span>Disconnect WHOOP — remove VAI's access</span><span class="u">›</span></div>
+            <div class="mnote">Disconnecting deletes the access VAI holds. You can also revoke VAI from your WHOOP account at any time.</div>
+          </div>
+        </div>
+      </div></div></div>
+
+    </div>
+  </section>
+
+  <!-- ================= VERDICT ================= -->
+  <div class="verdict">
+    <div class="vcard sh"><div class="vt">One shared design</div><div class="vd">Steps <b>1–2 are one UI, pixel-identical</b> across all three sources. Steps 3 &amp; 6 reuse a <b>shared layout shell</b> — only the body copy and manage actions swap per source.</div></div>
+    <div class="vcard"><div class="vt">The real per-source cost</div><div class="vd"><b>Three vendor grant screens</b> (step 4 — Apple's sheet, Android's permissions screen, WHOOP's hosted sign-in; none are ours to design) + <b>three verify models</b> (step 5) + per-source copy. <b>Not</b> three distinct VAI screen sets.</div></div>
+    <div class="vcard"><div class="vt">Three truth models at step 5</div><div class="vd"><b>Apple</b> never reports a read grant → probe the data, honest fallback. <b>Health Connect</b> reports granted permissions → deterministic confirm. <b>WHOOP</b> proves itself by the sign-in → approved scopes come back with it.</div></div>
+  </div>
+
+  <p class="foot">VAI · Connect flow — one UI, three sources · steps 1–2 fully shared · 3 &amp; 6 shared shell with per-source bodies · step 4 = the vendor's own un-restylable screen (depicted as labeled stylized mocks) · step 5 = three verify models (probe-with-honest-fallback / deterministic grant list / sign-in + scopes) · canon: Morganite + Roboto, user-theme accent, pulse icon · concept render.</p>
+
+  <script>
+    (function(){
+      var pills=document.querySelectorAll('.pill');
+      var rows={'row-apple':document.getElementById('row-apple'),'row-hc':document.getElementById('row-hc'),'row-whoop':document.getElementById('row-whoop')};
+      pills.forEach(function(p){
+        p.addEventListener('click',function(){
+          pills.forEach(function(q){q.classList.remove('on')});
+          p.classList.add('on');
+          var id=p.getAttribute('data-row');
+          Object.keys(rows).forEach(function(k){rows[k].classList.toggle('dimrow',k!==id)});
+          rows[id].scrollIntoView({behavior:'smooth',block:'start'});
+        });
+      });
+    })();
+  </script>
+</body></html>
