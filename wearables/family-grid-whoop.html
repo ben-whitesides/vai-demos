@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VAI · Grid family — WHOOP variant · 7 surfaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#08090B;--ground:#0B0D10;--card:#12161B;--line:#1D242B;--ink:#F4F2EE;--muted:#8B929B;--faint:#575E67;--mint:#5FE3C0;--mint-d:#128B74;--ember:#F0A75E;--cardiac:#FF5A5F;--whoop:#57C7FF;--sans:'Inter',-apple-system,system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}html{-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;padding:52px clamp(20px,4vw,64px) 90px}
+  .eyebrow{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--whoop);font-weight:700}
+  h1.pg{font-weight:800;font-size:clamp(30px,5vw,52px);line-height:1;letter-spacing:-.025em;margin:12px 0 16px}
+  .lede{max-width:74ch;color:#B4BAC3;font-size:15.5px}.lede b{color:var(--ink);font-weight:600}.lede .wl{color:var(--whoop);font-weight:600}
+  .deck{display:flex;gap:30px;overflow-x:auto;padding:34px 2px 20px;scroll-snap-type:x mandatory}
+  .col{flex:0 0 auto;scroll-snap-align:start;width:340px}
+  .cap{display:flex;gap:9px;align-items:baseline;margin-bottom:14px}.cap .n{font-weight:800;font-size:15px}.cap .n b{color:var(--whoop)}.cap .t{font-size:12px;color:var(--faint)}
+  .phone{width:340px;height:736px;border-radius:42px;padding:10px;background:linear-gradient(#23272d,#0c0e11);box-shadow:0 36px 70px -28px rgba(0,0,0,.9),0 0 0 1px #23282f}
+  .screen{position:relative;width:100%;height:100%;border-radius:33px;overflow:hidden;background:var(--ground);display:flex;flex-direction:column}
+  .screen::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 42% at 50% -4%,rgba(87,199,255,.06),transparent 60%);z-index:0}
+  .stat{display:flex;justify-content:space-between;align-items:center;padding:15px 22px 4px;font-size:13.5px;font-weight:600;z-index:3;position:relative}.stat .r{font-size:11px;opacity:.85}
+  .hd{display:flex;align-items:center;justify-content:space-between;padding:6px 22px 2px;position:relative;z-index:3}.hd .bk{color:var(--muted);font-size:19px}.hd .tt{font-size:14.5px;font-weight:600;letter-spacing:.03em}
+  .lock{font-size:10px;color:var(--mint);border:1px solid rgba(95,227,192,.26);background:rgba(95,227,192,.06);border-radius:999px;padding:4px 8px;font-weight:600}
+  .body{flex:1;overflow-y:auto;padding:0 20px 16px;position:relative;z-index:2}.body::-webkit-scrollbar{display:none}
+  .gh{font-weight:700;font-size:21px;letter-spacing:-.02em;margin:14px 0 2px}
+  .gs{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .srcbar{display:flex;align-items:center;gap:7px;margin:0 0 12px}
+  .whoopchip{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--whoop);border:1px solid rgba(87,199,255,.3);background:rgba(87,199,255,.07);border-radius:999px;padding:4px 9px}
+  .whoopchip .dot{width:5px;height:5px;border-radius:50%;background:var(--whoop);box-shadow:0 0 6px var(--whoop)}
+  .synced{font-size:9.5px;color:var(--faint)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid.g3{grid-template-columns:1fr 1fr 1fr}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px;position:relative}
+  .tile.wide{grid-column:1 / -1}
+  .tile.wsrc{border-color:rgba(87,199,255,.28);background:linear-gradient(180deg,rgba(87,199,255,.05),rgba(87,199,255,.012))}
+  .wtag{position:absolute;top:11px;right:11px;font-size:8px;letter-spacing:.12em;font-weight:800;color:var(--whoop);opacity:.9}
+  .tl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .tv{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-top:7px;font-variant-numeric:tabular-nums}.tv.c{color:var(--cardiac)}.tv.e{color:var(--ember)}.tv.w{color:var(--whoop)}.tv .u{font-size:12px;color:var(--muted);font-weight:500}
+  .tvsm{font-size:20px}
+  .tg{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--mint);margin-top:5px}.tg.w{color:var(--ember)}.tg.b{color:var(--whoop)}
+  .ta{font-size:10px;color:var(--faint);margin-top:3px}
+  .refresh{margin:12px 0 2px;display:flex;align-items:center;gap:9px;border:1px solid rgba(87,199,255,.28);background:rgba(87,199,255,.05);border-radius:12px;padding:10px 13px}
+  .refresh .ic{width:22px;height:22px;border-radius:50%;border:1px solid rgba(87,199,255,.4);color:var(--whoop);display:grid;place-items:center;font-size:13px}
+  .refresh .rx{flex:1}.refresh .r1{font-size:12px;font-weight:600;color:#DCE9F2}.refresh .r2{font-size:9.5px;color:var(--faint);margin-top:1px}
+  .av{margin:14px 0 6px;border:1px solid rgba(95,227,192,.2);background:linear-gradient(180deg,rgba(95,227,192,.06),rgba(95,227,192,.015));border-radius:18px;padding:14px}
+  .av .h{display:flex;align-items:center;gap:8px;margin-bottom:8px}.sp{width:20px;height:20px;border-radius:6px;background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));display:grid;place-items:center;color:#04140f;font-size:11px;font-weight:800}
+  .av .nm2{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mint);font-weight:700}.av .rd{margin-left:auto;font-size:9.5px;color:var(--faint)}
+  .av .sy{font-size:13.5px;line-height:1.48;color:#D9DDE2}.av .sy b{color:#fff;font-weight:600}
+  .ask{margin-top:11px;display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:#0A0D10;border-radius:999px;padding:9px 11px}
+  .ask .pl{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:pu 2.4s infinite}.ask .ph{flex:1;font-size:12.5px;color:var(--faint)}.ask .go{width:24px;height:24px;border-radius:50%;background:var(--mint);color:#04140f;display:grid;place-items:center;font-weight:800;font-size:13px}
+  @keyframes pu{0%{box-shadow:0 0 0 0 rgba(95,227,192,.5)}70%{box-shadow:0 0 0 6px rgba(95,227,192,0)}100%{box-shadow:0 0 0 0 rgba(95,227,192,0)}}
+  .nav{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:2px;background:rgba(18,22,27,.85);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;padding:7px 9px;z-index:5}
+  .nav i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--faint);font-size:13px;font-style:normal}.nav i.on{color:var(--mint)}.nav i.ai{background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));color:#04140f;font-weight:800}
+  .pad{height:64px}.foot{margin-top:52px;border-top:1px solid var(--line);padding-top:18px;color:var(--faint);font-size:12.5px;max-width:100ch}
+  .foot b{color:var(--whoop)}
+  @media (prefers-reduced-motion:reduce){.ask .pl{animation:none}}
+</style></head><body>
+  <p class="eyebrow">VAI · Wearables · Grid family · WHOOP connected</p>
+  <h1 class="pg">Same Grid. Now on WHOOP.</h1>
+  <p class="lede">The identical Grid visual language — but the connected source is <span class="wl">WHOOP</span>, so the surfaces gain WHOOP's real scores: <b>Recovery %, Day Strain (0–21), Sleep Performance, and HRV as RMSSD</b>, each tagged <span class="wl">WHOOP</span> at its source. Native (Apple Health / Health Connect) users never see Strain — WHOOP users do. A <span class="wl">Refresh — get latest</span> control pulls live WHOOP data on demand; between refreshes VAI stores only the derived daily summary. Swipe →</p>
+  <div class="deck">
+
+  <div class="col"><div class="cap"><span class="n"><b>1</b> Home</span><span class="t">the daily read</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">☰</span><span class="tt">Today</span><span class="lock">Private</span></div>
+  <div class="body"><div class="gh">Good morning, Alex</div><div class="gs">Sunday · 6:45 AM · everything in one look</div>
+  <div class="srcbar"><span class="whoopchip"><span class="dot"></span>WHOOP connected</span><span class="synced">synced 12 min ago</span></div>
+  <div class="grid"><div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Recovery</div><div class="tv w">86<span class="u">%</span></div><div class="tg b">Green</div><div class="ta">HRV +7 rmssd</div></div>
+  <div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Day Strain</div><div class="tv">9.4</div><div class="tg">Optimal</div><div class="ta">target 8–13</div></div>
+  <div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Sleep perf.</div><div class="tv">88<span class="u">%</span></div><div class="tg">Strong</div><div class="ta">7h 42m</div></div>
+  <div class="tile"><div class="tl">Resting HR</div><div class="tv c">54<span class="u">bpm</span></div><div class="tg">Optimal</div><div class="ta">−3 wk</div></div>
+  <div class="tile wide"><div class="tl">Training load</div><div class="tv tvsm">Balanced <span class="u">· acute:chronic 0.94</span></div><div class="tg">Steady</div></div></div>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">reads WHOOP + all surfaces</span></div>
+  <p class="sy"><b>Recovery green at 86% — today can carry real strain.</b> Push the threshold set you saved for tomorrow to right now if you feel it.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI anything…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i class="on">⌂</i><i>❤</i><i>◐</i><i>✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>2</b> Vitals</span><span class="t">spot-checks</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Vitals</span><span class="lock">Only you &amp; AVANTI</span></div>
+  <div class="body"><div class="gh">Spot-checks</div><div class="gs">Each tile shows when it was taken</div>
+  <div class="srcbar"><span class="whoopchip"><span class="dot"></span>WHOOP + Apple Health</span></div>
+  <div class="grid"><div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Blood oxygen</div><div class="tv">97<span class="u">%</span></div><div class="tg">In range</div><div class="ta">SpO₂ · overnight</div></div>
+  <div class="tile"><div class="tl">Resting HR</div><div class="tv c">54<span class="u">bpm</span></div><div class="tg">Optimal</div><div class="ta">this AM</div></div>
+  <div class="tile"><div class="tl">Respiratory</div><div class="tv">14.2</div><div class="tg">Steady</div><div class="ta">last night</div></div>
+  <div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Skin temp Δ</div><div class="tv e">+0.4<span class="u">°C</span></div><div class="tg w">Watching</div><div class="ta">last night</div></div>
+  <div class="tile"><div class="tl">Blood pressure</div><div class="tv tvsm">118/76</div><div class="tg">In range</div><div class="ta">yesterday</div></div>
+  <div class="tile"><div class="tl">Glucose</div><div class="tv">104</div><div class="tg">In range</div><div class="ta">fasting 5h</div></div></div>
+  <div class="refresh"><span class="ic">⟳</span><div class="rx"><div class="r1">Refresh — get latest from WHOOP</div><div class="r2">Live pull · display only · not stored past WHOOP's cache</div></div></div>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read 6 vitals</span></div>
+  <p class="sy">Five of six in range. <b>Skin temp's the one to watch</b> — likely your room, not you. Keep tonight easy.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about vitals…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i class="on">❤</i><i>◐</i><i>✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>3</b> Sleep</span><span class="t">last night</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Sleep</span><span class="lock">Private</span></div>
+  <div class="body"><div class="gh">7h 42m · perf. 88%</div><div class="gs">Bed 10:48 · woke 6:30 on your own</div>
+  <div class="srcbar"><span class="whoopchip"><span class="dot"></span>WHOOP sleep</span><span class="synced">need met 88%</span></div>
+  <div class="grid"><div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Sleep need</div><div class="tv tvsm">8h 44m</div><div class="tg">got 88%</div></div>
+  <div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Consistency</div><div class="tv">74<span class="u">%</span></div><div class="tg w">±38 min</div></div>
+  <div class="tile"><div class="tl">Deep (SWS)</div><div class="tv tvsm">1:32</div><div class="tg">20%</div></div>
+  <div class="tile"><div class="tl">REM</div><div class="tv tvsm">1:48</div><div class="tg">23%</div></div>
+  <div class="tile"><div class="tl">Lowest HR</div><div class="tv c">50</div><div class="ta">2:14 AM</div></div>
+  <div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Efficiency</div><div class="tv">91<span class="u">%</span></div><div class="tg">Strong</div></div></div>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read WHOOP sleep + recovery</span></div>
+  <p class="sy">You hit 88% of your need and efficiency's up to 91%. <b>This is the sleep that earned today's green recovery.</b> Same 10:30 bedtime tonight.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about sleep…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i>❤</i><i class="on">◐</i><i>✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>4</b> Recovery</span><span class="t">WHOOP's home turf</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Recovery</span><span class="lock">Private</span></div>
+  <div class="body"><div class="gh">Recovery 86% · Green</div><div class="gs">WHOOP score · HRV +7 vs baseline · day 3 in band</div>
+  <div class="srcbar"><span class="whoopchip"><span class="dot"></span>WHOOP primary</span><span class="synced">summary stored · refresh for live</span></div>
+  <div class="grid"><div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">HRV (rmssd)</div><div class="tv w">96<span class="u">ms</span></div><div class="tg b">Strong</div></div>
+  <div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Day Strain</div><div class="tv">9.4</div><div class="tg">Room to 13</div></div>
+  <div class="tile"><div class="tl">Resting HR</div><div class="tv c">54</div><div class="tg">Optimal</div></div>
+  <div class="tile"><div class="tl">Hydration</div><div class="tv e">45<span class="u">%</span></div><div class="tg w">Low</div></div>
+  <div class="tile wide"><div class="tl">30-day recovery trend</div><div class="tv tvsm">↗ Rising <span class="u">· 71 → 86 %</span></div><div class="tg">Building</div></div></div>
+  <div class="refresh"><span class="ic">⟳</span><div class="rx"><div class="r1">Refresh — get latest from WHOOP</div><div class="r2">Last summary 6:45 AM · pull live if you just trained</div></div></div>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read WHOOP recovery drivers</span></div>
+  <p class="sy">Green with strain still under 10 — <b>you've got a full hard session in the tank.</b> Water's the only drag; 1L before lunch.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about recovery…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i>❤</i><i>◐</i><i class="on">✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>5</b> Heart Rate</span><span class="t">cardiac</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Heart Rate</span><span class="lock">Private</span></div>
+  <div class="body"><div class="gh">Resting 54 bpm</div><div class="gs">↓3 this week · fitness climbing</div>
+  <div class="srcbar"><span class="whoopchip"><span class="dot"></span>WHOOP continuous HR</span></div>
+  <div class="grid"><div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">HRV (rmssd)</div><div class="tv w">96<span class="u">ms</span></div><div class="tg b">Strong</div></div>
+  <div class="tile"><div class="tl">Today's peak</div><div class="tv c">168</div><div class="tg w">Z4 · 7:42</div></div>
+  <div class="tile"><div class="tl">Overnight low</div><div class="tv">50</div><div class="tg">2:14 AM</div></div>
+  <div class="tile"><div class="tl">Z2+ time</div><div class="tv tvsm">3h 24m</div><div class="ta">cardio</div></div>
+  <div class="tile wide"><div class="tl">Resting HR · 7 days</div><div class="tv tvsm">62 → 54 <span class="u">bpm · steady fall</span></div><div class="tg">Improving</div></div></div>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">read HR + WHOOP recovery</span></div>
+  <p class="sy">Resting this low with RMSSD up near 100 means <b>you're primed.</b> Green light for the hard session today.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about your heart…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i class="on">❤</i><i>◐</i><i>✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>6</b> Workout</span><span class="t">session recap</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">Session</span><span class="lock">Private</span></div>
+  <div class="body"><div class="gh">Morning run · 8.12 km</div><div class="gs">Mon 7:12 AM · 45:28 · grade B</div>
+  <div class="srcbar"><span class="whoopchip"><span class="dot"></span>WHOOP workout strain</span></div>
+  <div class="grid"><div class="tile wsrc"><span class="wtag">WHOOP</span><div class="tl">Activity strain</div><div class="tv">11.6</div><div class="tg">Moderate</div></div>
+  <div class="tile"><div class="tl">Avg HR</div><div class="tv c">151</div><div class="tg w">Z3 drift</div></div>
+  <div class="tile"><div class="tl">Time in Z2</div><div class="tv">55<span class="u">%</span></div><div class="tg w">Under 80</div></div>
+  <div class="tile"><div class="tl">Avg pace</div><div class="tv tvsm">5:36<span class="u">/km</span></div></div>
+  <div class="tile"><div class="tl">Elevation</div><div class="tv tvsm">142<span class="u">m</span></div></div>
+  <div class="tile"><div class="tl">Grade</div><div class="tv e">B</div><div class="ta">72/100</div></div></div>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">graded vs plan · WHOOP strain</span></div>
+  <p class="sy">Strain 11.6 keeps your day right in the optimal band. <b>Tomorrow's threshold 6×3 is the one that matters</b> — this was the tune-up.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI about this run…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i>❤</i><i>◐</i><i class="on">✷</i><i class="ai">✦</i></div></div></div></div>
+
+  <div class="col"><div class="cap"><span class="n"><b>7</b> AVANTI</span><span class="t">the coach surface</span></div>
+  <div class="phone"><div class="screen"><div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+  <div class="hd"><span class="bk">‹</span><span class="tt">AVANTI</span><span class="lock">Reading everything</span></div>
+  <div class="body"><div class="gh">The morning briefing</div><div class="gs">Apr 20 · built from your WHOOP data</div>
+  <div class="srcbar"><span class="whoopchip"><span class="dot"></span>reading WHOOP live</span></div>
+  <div class="grid g3"><div class="tile wsrc"><span class="wtag">W</span><div class="tl">Recovery</div><div class="tv w tvsm">86%</div><div class="tg b">Green</div></div>
+  <div class="tile wsrc"><span class="wtag">W</span><div class="tl">Strain</div><div class="tv tvsm">9.4</div><div class="tg">Room</div></div>
+  <div class="tile wsrc"><span class="wtag">W</span><div class="tl">Sleep</div><div class="tv tvsm">88%</div><div class="tg">+4</div></div></div>
+  <div class="tile wide" style="margin-top:10px;background:linear-gradient(180deg,rgba(95,227,192,.07),rgba(95,227,192,.02));border-color:rgba(95,227,192,.22)"><div class="tl" style="color:var(--mint)">Today's call</div><div class="tv tvsm">Green light · threshold 6×3</div><div class="ta">strain target 14–16 · you're primed</div></div>
+  <div class="av"><div class="h"><span class="sp">✦</span><span class="nm2">AVANTI</span><span class="rd">the take</span></div>
+  <p class="sy">WHOOP has you green with strain to spare and sleep in the bank — <b>this is a day to spend it.</b> Bring the threshold session forward; recover hard tonight.</p>
+  <div class="ask"><span class="pl"></span><span class="ph">Ask AVANTI anything…</span><span class="go">↑</span></div></div><div class="pad"></div></div>
+  <div class="nav"><i>⌂</i><i>❤</i><i>◐</i><i>✷</i><i class="ai on" style="background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));color:#04140f">✦</i></div></div></div></div>
+
+  </div>
+  <p class="foot">VAI · Grid family · <b>WHOOP variant</b> · WHOOP-sourced tiles carry the <b>WHOOP</b> tag · Day Strain, Recovery %, Sleep Performance &amp; HRV-RMSSD are real WHOOP scores (native Apple Health / Health Connect users get honest-absence "Connect WHOOP for Strain" instead). <b>Refresh — get latest</b> pulls live WHOOP data for display only; between pulls VAI stores the derived daily summary, never raw WHOOP payloads (spec §6.8a). AVANTI reads it all &amp; speaks live · private-by-default · red = cardiac.</p>
+</body></html>
