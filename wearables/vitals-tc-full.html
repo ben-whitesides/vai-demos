@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VITALS — Health Data Terms & Privacy (DRAFT)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Morganite:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0B0D10;--card:#12161B;--line:#232a31;--ink:#EDEFF2;--muted:#9AA2AC;--faint:#6b727b;--accent:#38e39b;--warn:#F0A75E;--sans:'Roboto',-apple-system,system-ui,sans-serif;--disp:'Morganite',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}html{-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.62;font-size:16px;padding:0 0 80px}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
+  .draft{background:linear-gradient(180deg,rgba(240,167,94,.14),rgba(240,167,94,.05));border:1px solid rgba(240,167,94,.4);border-radius:14px;padding:16px 18px;margin:26px 0 8px}
+  .draft b{color:var(--warn)}
+  header{padding:40px 0 8px}
+  .eyebrow{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-family:var(--disp);font-weight:700;font-size:clamp(46px,9vw,74px);line-height:.94;letter-spacing:.01em;text-transform:uppercase;margin:10px 0 6px}
+  .sub{color:var(--muted);font-size:15px}
+  .meta{color:var(--faint);font-size:13px;margin-top:14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;display:flex;flex-wrap:wrap;gap:6px 22px}
+  h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:38px 0 6px}
+  h2 .n{color:var(--faint);margin-right:8px}
+  h3{font-size:16.5px;font-weight:700;margin:20px 0 4px;color:#fff}
+  p{margin:8px 0;color:#D5D9DE}
+  ul{margin:8px 0 8px 4px;padding-left:20px}li{margin:5px 0;color:#D5D9DE}
+  b,strong{color:#fff;font-weight:700}
+  .never{border:1px solid rgba(255,90,95,.3);background:rgba(255,90,95,.05);border-radius:14px;padding:6px 18px 12px;margin:14px 0}
+  .never h3{color:#FF7A7E}
+  .tbl{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  .tbl th,.tbl td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  .tbl th{background:var(--card);color:var(--muted);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+  .note{font-size:13.5px;color:var(--faint);font-style:italic}
+  code{background:#0A0D10;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:13.5px;color:var(--accent)}
+  footer{margin-top:44px;border-top:1px solid var(--line);padding-top:20px;color:var(--faint);font-size:13px}
+  a{color:var(--accent)}
+</style></head>
+<body><div class="wrap">
+<header>
+  <p class="eyebrow">VAI · VITALS · Health Data</p>
+  <h1>Vitals Data Terms<br>&amp; Privacy</h1>
+  <p class="sub">How VAI handles the health &amp; fitness data you connect from your wearable — Apple Health, Google Health Connect, and WHOOP.</p>
+  <div class="meta"><span>Applies to: the VITALS feature</span><span>Data controller: Next Level Athlete LLC (VAI)</span><span>Version: DRAFT · Effective date: —</span></div>
+</header>
+
+<div class="draft">
+  <p><b>⚠ DRAFT — NOT YET LEGAL COUNSEL-REVIEWED.</b> This document was assembled by VAI to cover the data-use and privacy requirements that Apple, Google, and WHOOP impose on apps that read wearable health data. It is <b>research to inform VAI's legal counsel, not legal advice, and not the final published policy.</b> A qualified attorney must review, correct, and finalize it — and independently pull the current Apple Developer Program License Agreement and WHOOP API Terms — before it is shown to users or published. Bracketed items marked <b>[counsel]</b> need a legal or factual decision.</p>
+</div>
+
+<h2><span class="n">1</span>What this covers</h2>
+<p>This document governs the health and fitness data you choose to connect to VAI through the <b>VITALS</b> feature. It sits alongside VAI's general Terms of Service and Privacy Policy; where this document is more specific about wearable health data, this document controls for that data.</p>
+<p>VITALS is <b>private by default</b>. The data described here is visible only to <b>you and AVANTI</b> (VAI's AI coaching assistant). Coaches, scouts, teammates, and anyone viewing your public VAI profile <b>do not see your VITALS data</b>.</p>
+
+<h2><span class="n">2</span>What data we collect — by source and metric</h2>
+<p>VAI reads only the data types you approve at connection, from the source you connect. We request the minimum needed to power the readouts and coaching you see in the app. Per source:</p>
+<table class="tbl">
+  <tr><th>Source</th><th>Data types we may read (with your permission)</th></tr>
+  <tr><td><b>Apple Health</b> (iOS)</td><td>Heart rate &amp; resting heart rate, heart-rate variability (SDNN), sleep analysis &amp; stages, blood oxygen (SpO₂), respiratory rate, body temperature, blood pressure, blood glucose, VO₂max, workouts &amp; workout route (GPS), active energy, distance, steps, and body measurements (weight, height, body fat) where present.</td></tr>
+  <tr><td><b>Google Health Connect</b> (Android)</td><td>The equivalent records: heart rate &amp; resting HR, HRV (RMSSD), sleep sessions &amp; stages, oxygen saturation, respiratory rate, skin temperature, blood pressure, blood glucose, VO₂max, hydration, exercise sessions, distance, speed, elevation, active calories, and body measurements.</td></tr>
+  <tr><td><b>WHOOP</b> (premium, optional)</td><td>Recovery score, day strain, sleep performance/efficiency/consistency, HRV (RMSSD), resting HR, SpO₂, and skin temperature, via WHOOP's authorized API.</td></tr>
+</table>
+<p class="note">You see the exact data types requested on the permission screen at connection, and you can grant or deny each one. Some readouts require a paired wearable; where a data type isn't available, VITALS shows an honest "no data yet" state rather than an estimate. <span class="note">(Checklist items 2, 3.)</span></p>
+
+<h2><span class="n">3</span>How we use it</h2>
+<p>We use your connected health data <b>only to provide the VITALS features you see in the app</b>:</p>
+<ul>
+  <li>Display your readings, trends, and history in your chosen VITALS style.</li>
+  <li>Let <b>AVANTI</b> read your data (with your consent) to generate coaching for you — recovery and readiness guidance, suggested workouts, meal and macro suggestions, and progress encouragement. Scores such as Recovery, Readiness, Stress, Training Load, and Workout Grade are <b>computed by VAI/AVANTI</b> from your data; they are not provided by the wearable.</li>
+  <li>Keep a private history so AVANTI can show your progress over time.</li>
+</ul>
+<p>This use is limited to improving your own health and fitness management and is <b>only ever surfaced to you in the app</b>. We do not use your health data for any purpose that isn't visible to you as a VITALS or AVANTI feature. <span class="note">(Checklist items 3, 5; Apple §5.1.3(i), Google G7.)</span></p>
+
+<h3>Third-party AI processing (important)</h3>
+<p>AVANTI's coaching is generated using an <b>AI service operated on VAI's behalf via Amazon Web Services (AWS Bedrock)</b>. To produce your coaching, relevant health data may be processed by that AI service. That processing is performed solely to generate the coaching output shown to you in VAI, under VAI's control and contractual data protections; the data is <b>not</b> used to train third-party models for other purposes, and is <b>not</b> repurposed or resold. <span class="note">(Checklist item 5; Apple §5.1.2(i) third-party-AI disclosure. [counsel]: confirm the AI processor name/contract terms to disclose.)</span></p>
+
+<h2><span class="n">4</span>What we never do</h2>
+<div class="never">
+<h3>Hard limits on your wearable data</h3>
+<ul>
+  <li>We <b>never</b> use your wearable health data for advertising, marketing, or use-based data mining — for you or through any third party (ad networks, analytics vendors, or data brokers).</li>
+  <li>We <b>never</b> sell, license, lease, or otherwise transfer your wearable health data to any third party — including data brokers, ad platforms, resellers, or recruiters — <b>even if you separately consent</b>. (WHOOP prohibits this without exception; we apply that same rule to all sources.)</li>
+  <li>We <b>never</b> build or sell a health profile of you, and we do not attempt to re-identify de-identified data.</li>
+  <li>We <b>never</b> use your data for credit, lending, or insurance decisions.</li>
+  <li>VITALS is <b>not</b> a medical device and is not for high-risk or life-critical use, and VAI is not a children-exclusive service.</li>
+</ul>
+</div>
+<p class="note">(Checklist item 4; Apple A4/A5/A9/A10, Google G5/G6, WHOOP W5.)</p>
+
+<h2><span class="n">5</span>Your consent</h2>
+<p>Before we read anything, you give <b>affirmative, explicit consent</b> by ticking the consent checkbox on the VITALS connect screen — immediately before the wearable's own permission screen. It is never pre-ticked and never bundled into general app terms. You then separately approve the specific data types on Apple's, Google's, or WHOOP's own permission screen.</p>
+<p>Your consent is <b>revocable at any time</b> from VITALS settings ("Disconnect"), and from the wearable's own settings. <b>Revoking never blocks unrelated paid features</b> — connecting a wearable is not a precondition of any other VAI+ or Mentor function. <span class="note">(Checklist item 3; Apple A3, Google G4.)</span></p>
+
+<h2><span class="n">6</span>Retention, deletion &amp; your data rights</h2>
+<ul>
+  <li><b>Delete on disconnect.</b> When you disconnect a source, VAI deletes the data derived from that source from VAI's systems [counsel: confirm exact scope + timing].</li>
+  <li><b>Retention.</b> While connected, VAI retains your data only as long as needed to power your history and progress views [counsel: set and state a specific retention period].</li>
+  <li><b>Access &amp; deletion on request.</b> You can ask VAI what wearable data it holds about you, and request deletion, at <a href="#">privacy@vai.app</a> [counsel: confirm address + process]. WHOOP-connected users may request the WHOOP data VAI holds.</li>
+</ul>
+<p class="note">(Checklist items 3, 6, 11; Apple A2, WHOOP W3.)</p>
+
+<h2><span class="n">7</span>WHOOP — special handling</h2>
+<p>WHOOP's API terms prohibit keeping permanent copies of WHOOP data beyond its cache window. Accordingly, for WHOOP-sourced data VAI stores <b>only derived daily summaries and trends</b> — never raw WHOOP payloads. When a summary isn't enough, a <b>"Refresh — get latest"</b> control pulls live WHOOP data on demand, for display only; that live detail is not stored beyond WHOOP's cache window. WHOOP data is never sold or shared with any third party under any circumstances. <span class="note">(Checklist item 4; WHOOP W5, W7 §4.2(b).)</span></p>
+
+<h2><span class="n">8</span>Who can see your data</h2>
+<p>VITALS is private to you and AVANTI. VAI will <b>not</b> surface any wearable metric to another person — a teammate, coach, leaderboard, or shared view — without a <b>separate, explicit opt-in</b> from you, distinct from the connect-time consent. Today, VITALS has no such sharing. <span class="note">(Checklist item 8; WHOOP W6.)</span></p>
+
+<h2><span class="n">9</span>Security</h2>
+<p>Wearable-sourced data is <b>encrypted in transit and at rest</b> using industry-accepted standards, stored in VAI's own secured infrastructure. VAI does <b>not</b> store Apple Health–sourced personal health information in Apple iCloud. If VAI becomes aware of unauthorized access to your data, VAI will notify affected users (and WHOOP, for WHOOP data) as required. <span class="note">(Checklist items 7, 9; Apple A7, Google G8, WHOOP W8.)</span></p>
+
+<h2><span class="n">10</span>Legal &amp; store compliance</h2>
+<ul>
+  <li>VAI (<b>Next Level Athlete LLC</b>), the legal entity providing the service, is the submitter of record on the Apple App Store and Google Play for this health-data feature. <span class="note">(Item 10; Apple A8.)</span></li>
+  <li>This privacy policy is published at a live, publicly accessible, non-PDF URL, identical wherever it is linked (in-app, App Store Connect, Play Console, and the connect-time consent screen). <span class="note">(Item 1; Apple A1/A2, Google G2.)</span></li>
+  <li>VAI files Google Play's Health apps declaration, and completes WHOOP's App Approval review before scaling WHOOP access beyond WHOOP's small-user cap. <span class="note">(Items 12–13; Google G1, WHOOP W9.)</span></li>
+  <li>VAI does not use wearable data in any way that qualifies it as a HIPAA covered entity or a regulated medical device. <span class="note">(Item 14; Google G9.)</span></li>
+</ul>
+
+<h2><span class="n">11</span>Changes &amp; contact</h2>
+<p>We'll update this document as VITALS evolves and will surface material changes in the app. Questions or requests about your VITALS data: <a href="#">privacy@vai.app</a> [counsel: confirm].</p>
+
+<footer>
+  <p><b>DRAFT for legal counsel review — not legal advice, not the final policy.</b> Assembled 2026-08-22 from the platform requirements of Apple HealthKit (App Review Guidelines §5.1 + Apple Developer Program License Agreement), Google Health Connect (Play Health apps policy + Google Health API Developer &amp; User Data Policy), and the WHOOP API Terms of Use. Some source terms (the ADPLA and WHOOP API Terms full text) are account-gated; counsel should pull the current primary text and verify every clause. Items marked <b>[counsel]</b> require a legal or factual decision before publication.</p>
+  <p style="margin-top:10px">VAI · VITALS · your body's dashboard, private to you.</p>
+</footer>
+</div></body></html>
