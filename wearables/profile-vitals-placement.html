@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VAI · VITALS in Profile — placement concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#08090B;--ground:#0B0D10;--card:#12161B;--card2:#0F1317;--line:#1D242B;--line2:#272F38;--ink:#F4F2EE;--muted:#8B929B;--faint:#575E67;--mint:#5FE3C0;--mint-d:#128B74;--ember:#F0A75E;--cardiac:#FF5A5F;--sans:'Inter',system-ui,sans-serif;--serif:'Fraunces',Georgia,serif}
+  *{box-sizing:border-box;margin:0;padding:0}html{-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;padding:52px clamp(20px,4vw,64px) 90px}
+  .eyebrow{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--ember);font-weight:700}
+  h1.pg{font-family:var(--serif);font-weight:600;font-size:clamp(30px,5vw,52px);line-height:1;letter-spacing:-.02em;margin:12px 0 14px}
+  h1.pg em{font-style:italic;color:var(--mint)}
+  .lede{max-width:74ch;color:#B4BAC3;font-size:15.5px}.lede b{color:var(--ink);font-weight:600}
+  .deck{display:flex;gap:30px;overflow-x:auto;padding:34px 2px 20px;scroll-snap-type:x mandatory}
+  .col{flex:0 0 auto;scroll-snap-align:start;width:340px}
+  .cap{margin-bottom:14px}.cap .n{font-weight:800;font-size:15px}.cap .n b{color:var(--ember)}.cap .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .phone{width:340px;height:736px;border-radius:42px;padding:10px;background:linear-gradient(#23272d,#0c0e11);box-shadow:0 36px 70px -28px rgba(0,0,0,.9),0 0 0 1px #23282f}
+  .screen{position:relative;width:100%;height:100%;border-radius:33px;overflow:hidden;background:var(--ground);display:flex;flex-direction:column}
+  .stat{display:flex;justify-content:space-between;align-items:center;padding:15px 22px 4px;font-size:13.5px;font-weight:600;z-index:3}.stat .r{font-size:11px;opacity:.85}
+  .hd{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 4px}.hd .bk{color:var(--muted);font-size:19px}.hd .tt{font-size:14.5px;font-weight:600;letter-spacing:.03em}.hd .cog{color:var(--muted);font-size:16px}
+  .body{flex:1;overflow-y:auto;padding:0 18px 22px}.body::-webkit-scrollbar{display:none}
+
+  /* profile header */
+  .phead{display:flex;align-items:center;gap:14px;padding:14px 4px 8px}
+  .ava{width:60px;height:60px;border-radius:18px;background:linear-gradient(135deg,#20303a,#0e1418);border:1px solid var(--line2);display:grid;place-items:center;font-family:var(--serif);font-size:24px;color:var(--mint);font-weight:600}
+  .pmeta{flex:1;min-width:0}
+  .pmeta .nm{font-weight:700;font-size:19px;letter-spacing:-.01em}
+  .pmeta .sub{font-size:12.5px;color:var(--muted);margin-top:1px}
+  .ovr{text-align:center}.ovr .v{font-weight:800;font-size:26px;color:var(--ember);letter-spacing:-.02em;line-height:1}.ovr .l{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:700}
+
+  .sectlbl{display:flex;align-items:center;gap:8px;margin:20px 4px 10px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  .sectlbl .pub{margin-left:auto;font-size:9px;color:var(--faint);letter-spacing:.08em;border:1px solid var(--line);border-radius:999px;padding:2px 7px;text-transform:none}
+  .sectlbl .prv{margin-left:auto;font-size:9px;color:var(--mint);letter-spacing:.08em;border:1px solid rgba(95,227,192,.3);background:rgba(95,227,192,.06);border-radius:999px;padding:2px 8px;text-transform:none;display:flex;gap:4px;align-items:center}
+
+  /* stats card (public) */
+  .statgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .scell{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 10px;text-align:center}
+  .scell .v{font-size:22px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .scell .l{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-top:3px}
+
+  /* VITALS card enabled (private) */
+  .vcard{background:linear-gradient(180deg,rgba(255,90,95,.05),rgba(95,227,192,.03) 60%,transparent),var(--card);border:1px solid var(--line2);border-radius:18px;padding:15px;position:relative;overflow:hidden}
+  .vtop{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+  .vtop .word{font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:-.01em}
+  .vtop .stateword{margin-left:auto;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--mint)}
+  .vrow{display:flex;gap:8px}
+  .vmini{flex:1;background:#0C0F13;border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center}
+  .vmini .v{font-size:19px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}.vmini .v.c{color:var(--cardiac)}
+  .vmini .l{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-top:2px}
+  .vavanti{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:12px;color:#C8CDD3;line-height:1.4}
+  .sp{width:20px;height:20px;flex:0 0 20px;border-radius:6px;background:radial-gradient(circle at 30% 30%,var(--mint),var(--mint-d));display:grid;place-items:center;color:#04140f;font-size:11px;font-weight:800}
+  .vavanti b{color:#fff;font-weight:600}
+  .vopen{display:flex;align-items:center;justify-content:space-between;margin-top:13px;padding-top:12px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mint);font-weight:600}
+  .privnote{font-size:10.5px;color:var(--faint);margin-top:9px;display:flex;gap:6px;align-items:center}
+
+  /* empty state */
+  .vempty{border:1px dashed var(--line2);border-radius:18px;padding:20px 16px;text-align:center;background:var(--card2)}
+  .vempty .ic{width:44px;height:44px;border-radius:14px;background:#0C0F13;border:1px solid var(--line);display:grid;place-items:center;margin:0 auto 12px;font-size:20px;color:var(--mint)}
+  .vempty .t{font-family:var(--serif);font-weight:500;font-size:19px;letter-spacing:-.01em}
+  .vempty .d{font-size:12.5px;color:var(--muted);margin:6px 0 14px;line-height:1.5}
+  .cta{display:inline-block;background:var(--ember);color:#1a1207;font-weight:700;font-size:13.5px;border-radius:999px;padding:10px 20px}
+
+  /* settings */
+  .srow{display:flex;align-items:center;gap:13px;padding:14px 4px;border-bottom:1px solid var(--line)}
+  .srow .si{width:32px;height:32px;flex:0 0 32px;border-radius:9px;background:#0C0F13;border:1px solid var(--line);display:grid;place-items:center;font-size:15px}
+  .srow .st{flex:1;min-width:0}.srow .st .a{font-size:14px;font-weight:600}.srow .st .b{font-size:11.5px;color:var(--muted);margin-top:1px}
+  .tog{width:42px;height:25px;border-radius:999px;flex:0 0 42px;position:relative;transition:.15s}
+  .tog.on{background:var(--mint)}.tog.off{background:#2a323b}
+  .tog::after{content:"";position:absolute;top:2.5px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.15s}
+  .tog.on::after{right:2.5px}.tog.off::after{left:2.5px}
+  .conn{font-size:11.5px;font-weight:700;color:var(--mint);border:1px solid rgba(95,227,192,.3);border-radius:999px;padding:6px 13px}
+  .connd{font-size:11.5px;font-weight:600;color:var(--faint);border:1px solid var(--line);border-radius:999px;padding:6px 13px}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin:10px 4px 4px}
+  .chip{font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:7px 12px;color:var(--muted)}
+  .chip.on{border-color:var(--mint);color:var(--mint);background:rgba(95,227,192,.06);font-weight:600}
+  .prem{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ember);border:1px solid rgba(240,167,94,.35);border-radius:999px;padding:2px 7px;font-weight:700}
+  .nav{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:2px;background:rgba(18,22,27,.85);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:999px;padding:7px 9px;z-index:5}
+  .nav i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--faint);font-size:13px;font-style:normal}.nav i.on{color:var(--ember)}
+  .pad{height:60px}
+  .foot{margin-top:52px;border-top:1px solid var(--line);padding-top:18px;color:var(--faint);font-size:12.5px}
+</style></head><body>
+  <p class="eyebrow">VAI · Wearables · Profile placement concept</p>
+  <h1 class="pg">VITALS on your <em>profile.</em></h1>
+  <p class="lede">Where it sits, how you turn it on, and how it looks next to STATS once enabled. The key idea: <b>STATS is your public athletic identity; VITALS is your private physiological one</b> — same neighborhood, opposite visibility. You set it up once in Profile Settings, pick your style family and sources, and it lives on your profile for your eyes (and AVANTI's) only.</p>
+
+  <div class="deck">
+
+    <!-- 1 · SETUP IN SETTINGS -->
+    <div class="col"><div class="cap"><div class="n"><b>1</b> Profile Settings · set it up</div><div class="d">Connect sources, pick a style, keep it private</div></div>
+    <div class="phone"><div class="screen">
+      <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+      <div class="hd"><span class="bk">‹</span><span class="tt">Set up VITALS</span><span class="cog"></span></div>
+      <div class="body">
+        <div class="sectlbl" style="margin-top:14px">Connect your data</div>
+        <div class="srow"><span class="si" style="color:var(--cardiac)">♥</span><span class="st"><div class="a">Apple Health</div><div class="b">Heart rate, HRV, sleep, SpO₂…</div></span><span class="conn">Connect</span></div>
+        <div class="srow"><span class="si" style="color:var(--mint)">✚</span><span class="st"><div class="a">Health Connect</div><div class="b">Android — same data types</div></span><span class="connd">Connect</span></div>
+        <div class="srow"><span class="si">⌚</span><span class="st"><div class="a">WHOOP <span class="prem">Premium</span></div><div class="b">Real Recovery &amp; Strain scores</div></span><span class="connd">Connect</span></div>
+
+        <div class="sectlbl">Your style</div>
+        <p style="font-size:12px;color:var(--muted);margin:0 4px 2px">Pick how every VITALS screen looks — you can change it anytime.</p>
+        <div class="chips"><span class="chip">Grid</span><span class="chip on">Editorial ✓</span><span class="chip">Signal</span><span class="chip">Orbit</span><span class="chip">Minimal</span></div>
+
+        <div class="sectlbl">Privacy</div>
+        <div class="srow"><span class="si" style="color:var(--mint)">🔒</span><span class="st"><div class="a">Only you &amp; AVANTI</div><div class="b">Never shown to other athletes or coaches</div></span><span class="tog on"></span></div>
+        <div class="srow"><span class="si">✦</span><span class="st"><div class="a">Let AVANTI use it</div><div class="b">Reads your data to build workouts &amp; meals</div></span><span class="tog on"></span></div>
+        <div class="srow" style="border-bottom:none"><span class="si">👁</span><span class="st"><div class="a">Show a VITALS tab on my profile</div><div class="b">Only visible to you when signed in</div></span><span class="tog on"></span></div>
+
+        <div style="margin-top:16px;text-align:center"><span class="cta">Enable VITALS</span></div>
+        <div class="pad"></div>
+      </div>
+    </div></div></div>
+
+    <!-- 2 · PROFILE — ENABLED, next to STATS -->
+    <div class="col"><div class="cap"><div class="n"><b>2</b> Your profile · VITALS enabled</div><div class="d">Sits right under STATS — public identity, then private</div></div>
+    <div class="phone"><div class="screen">
+      <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+      <div class="hd"><span class="bk">‹</span><span class="tt">Profile</span><span class="cog">⚙</span></div>
+      <div class="body">
+        <div class="phead">
+          <div class="ava">AR</div>
+          <div class="pmeta"><div class="nm">Alex Rivera</div><div class="sub">Soccer · Midfield · Next Level Academy</div></div>
+          <div class="ovr"><div class="v">87</div><div class="l">OVR</div></div>
+        </div>
+
+        <div class="sectlbl">Stats <span class="pub">Public</span></div>
+        <div class="statgrid">
+          <div class="scell"><div class="v">17.8</div><div class="l">Top mph</div></div>
+          <div class="scell"><div class="v">34</div><div class="l">Sprints</div></div>
+          <div class="scell"><div class="v">4.9</div><div class="l">Yd split</div></div>
+        </div>
+
+        <div class="sectlbl">Vitals <span class="prv">🔒 Only you &amp; AVANTI</span></div>
+        <div class="vcard">
+          <div class="vtop"><span class="sp">✦</span><span class="word">Vitals</span><span class="stateword">Steady &amp; ready</span></div>
+          <div class="vrow">
+            <div class="vmini"><div class="v c">58</div><div class="l">Rest HR</div></div>
+            <div class="vmini"><div class="v">68</div><div class="l">HRV</div></div>
+            <div class="vmini"><div class="v">97</div><div class="l">SpO₂</div></div>
+            <div class="vmini"><div class="v">84</div><div class="l">Sleep</div></div>
+          </div>
+          <div class="vavanti"><span class="sp">✦</span><span>AVANTI: <b>a green morning</b> — easy aerobic run before noon, you've got the headroom.</span></div>
+          <div class="vopen"><span>Open Vitals — Sleep · Recovery · Heart Rate…</span><span>›</span></div>
+        </div>
+        <div class="privnote">🔒 Private to you. Scouts and coaches viewing your profile never see this.</div>
+        <div class="pad"></div>
+      </div>
+      <div class="nav"><i>⌂</i><i>◱</i><i>✦</i><i>◐</i><i class="on">◍</i></div>
+    </div></div></div>
+
+    <!-- 3 · PROFILE — not set up yet -->
+    <div class="col"><div class="cap"><div class="n"><b>3</b> Before setup · the invite</div><div class="d">How VITALS appears until you enable it</div></div>
+    <div class="phone"><div class="screen">
+      <div class="stat"><span>9:41</span><span class="r">●●● ⌃ ▮</span></div>
+      <div class="hd"><span class="bk">‹</span><span class="tt">Profile</span><span class="cog">⚙</span></div>
+      <div class="body">
+        <div class="phead">
+          <div class="ava">AR</div>
+          <div class="pmeta"><div class="nm">Alex Rivera</div><div class="sub">Soccer · Midfield · Next Level Academy</div></div>
+          <div class="ovr"><div class="v">87</div><div class="l">OVR</div></div>
+        </div>
+
+        <div class="sectlbl">Stats <span class="pub">Public</span></div>
+        <div class="statgrid">
+          <div class="scell"><div class="v">17.8</div><div class="l">Top mph</div></div>
+          <div class="scell"><div class="v">34</div><div class="l">Sprints</div></div>
+          <div class="scell"><div class="v">4.9</div><div class="l">Yd split</div></div>
+        </div>
+
+        <div class="sectlbl">Vitals <span class="prv">🔒 Private</span></div>
+        <div class="vempty">
+          <div class="ic">✦</div>
+          <div class="t">Unlock your Vitals</div>
+          <div class="d">Connect your watch or band and AVANTI turns your recovery, sleep and heart data into daily training calls — private to you.</div>
+          <span class="cta">Set up VITALS</span>
+        </div>
+        <div class="privnote">Nothing here is ever shared. It's your body's dashboard, for you and AVANTI.</div>
+        <div class="pad"></div>
+      </div>
+      <div class="nav"><i>⌂</i><i>◱</i><i>✦</i><i>◐</i><i class="on">◍</i></div>
+    </div></div></div>
+
+  </div>
+  <p class="foot">VAI · VITALS profile placement · Settings setup (sources + style family + privacy) → enabled card under STATS → private-by-default · powered by AVANTI · concept render, not pixel-matched to live profile.</p>
+</body></html>
